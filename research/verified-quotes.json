@@ -1,0 +1,207 @@
+{
+  "_meta": {
+    "version": 1,
+    "policy": "Use only entries where quote.verified is true. Keep author visible when present. Keep source and context available for audit.",
+    "notes": [
+      "Quotes are intentionally short and source-traceable.",
+      "article_fit indicates how naturally the quote fits the article theme, not whether the quote itself is authentic.",
+      "source_quality distinguishes official, scholarly, and reputable secondary sources."
+    ]
+  },
+  "maison-coilliot-lille": {
+    "quote": {
+      "text": "Nature is a big book from which we can draw inspiration.",
+      "author": "Hector Guimard",
+      "attribution": "Architectural Record article, 1902",
+      "source": "Cooper Hewitt, Smithsonian Design Museum",
+      "source_url": "https://www.cooperhewitt.org/2023/02/09/hector-guimard-art-nouveau-to-modernism/",
+      "source_type": "museum",
+      "context": "Very strong fit for Guimard and for a facade read through organic Art Nouveau principles.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "high"
+    }
+  },
+  "lhuitriere-lille": {
+    "quote": {
+      "text": "the learned game, correct and magnificent, of forms assembled in the light",
+      "author": "Le Corbusier",
+      "attribution": "Vers une architecture / formulation reused by the Fondation Le Corbusier",
+      "source": "Fondation Le Corbusier",
+      "source_url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
+      "source_type": "foundation",
+      "context": "Good thematic fit for a facade article centered on composition, massing, and street presence, even though the quote is not specific to Art Deco.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "medium"
+    }
+  },
+  "maison-fernand-lefever-bruxelles": {
+    "quote": {
+      "text": "a house must reflect its dweller's life and be his portrait",
+      "author": "Victor Horta",
+      "attribution": "On the Winssinger House / memoir formulation",
+      "source": "TheArtStory",
+      "source_url": "https://www.theartstory.org/artist/horta-victor/",
+      "source_type": "reputable_secondary",
+      "context": "Strong fit for a Brussels domestic Art Nouveau article, especially where the facade is read as a precise urban presence.",
+      "verified": true,
+      "source_quality": "reputable_secondary",
+      "article_fit": "high"
+    }
+  },
+  "maison-des-hiboux-saint-gilles": {
+    "quote": {
+      "text": "A line is a force.",
+      "author": "Henry van de Velde",
+      "attribution": "Slogan first printed in 1902",
+      "source": "Nineteenth-Century Art Worldwide",
+      "source_url": "https://www.19thc-artworldwide.org/autumn13/van-nimmen-on-henry-van-de-velde-year-in-germany-and-belgium-part-one",
+      "source_type": "scholarly",
+      "context": "Very strong fit for a facade article structured by line, ascent, and controlled ornamental tension.",
+      "verified": true,
+      "source_quality": "scholarly",
+      "article_fit": "high"
+    }
+  },
+  "maison-lotus-anvers": {
+    "quote": {
+      "text": "Have nothing in your houses that you do not know to be useful or believe to be beautiful.",
+      "author": "William Morris",
+      "attribution": null,
+      "source": "Victoria and Albert Museum",
+      "source_url": "https://www.vam.ac.uk/collections/william-morris",
+      "source_type": "museum",
+      "context": "Good fit for a domestic facade where floral decoration is treated as part of the identity of the house rather than as an added flourish.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "high"
+    }
+  },
+  "maison-aux-tulipes-bratislava": {
+    "quote": {
+      "text": "Have nothing in your houses that you do not know to be useful or believe to be beautiful.",
+      "author": "William Morris",
+      "attribution": null,
+      "source": "Victoria and Albert Museum",
+      "source_url": "https://www.vam.ac.uk/collections/william-morris",
+      "source_type": "museum",
+      "context": "Good fit for an article about floral motif, domestic facade, and decorative order kept under control.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "medium_high"
+    }
+  },
+  "maison-strauven-tournai": {
+    "quote": {
+      "text": "I have loved my Art, my Intellectual Children more than Myself.",
+      "author": "Victor Horta",
+      "attribution": null,
+      "source": "Foundation Frison Horta",
+      "source_url": "https://www.foundation-frison-horta.be/photos/",
+      "source_type": "foundation",
+      "context": "Useful as a short, high-register Belgian Art Nouveau citation; fit is thematic rather than architect-specific to Strauven.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "medium"
+    }
+  },
+  "palais-de-la-secession-vienne": {
+    "quote": {
+      "text": "Der Zeit ihre Kunst. Der Kunst ihre Freiheit.",
+      "author": "Vienna Secession motto",
+      "attribution": "Facade inscription / To each era its art. To art its freedom.",
+      "source": "Secession",
+      "source_url": "https://secession.at/mission_en",
+      "source_type": "institution",
+      "context": "Ideal fit: this is the building's own inscription and one of the strongest possible editorial anchors for the article.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "very_high"
+    }
+  },
+  "maison-des-majoliques-vienne": {
+    "quote": {
+      "text": "Only that which is practical can be beautiful.",
+      "author": "Otto Wagner",
+      "attribution": "Modern Architecture, 1896",
+      "source": "Google Arts & Culture",
+      "source_url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
+      "source_type": "museum_platform",
+      "context": "Very strong fit for Otto Wagner and especially apt for the Majolikahaus, where decorative surface remains tied to architectural clarity.",
+      "verified": true,
+      "source_quality": "official_platform",
+      "article_fit": "very_high"
+    }
+  },
+  "casa-campanini-milan": {
+    "quote": {
+      "text": "Have nothing in your houses that you do not know to be useful or believe to be beautiful.",
+      "author": "William Morris",
+      "attribution": null,
+      "source": "Victoria and Albert Museum",
+      "source_url": "https://www.vam.ac.uk/collections/william-morris",
+      "source_type": "museum",
+      "context": "Good fit for Liberty architecture in Milan, especially where ornament and domestic dignity are both central to the reading.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "high"
+    }
+  },
+  "den-tijd-anvers": {
+    "quote": {
+      "text": "Is not a noble and simple dignity sufficient?",
+      "author": "Louis Sullivan",
+      "attribution": "Ornament in Architecture, 1892",
+      "source": "Chicago Architecture Center / Architecture.org",
+      "source_url": "https://www.architecture.org/online-resources/buildings-of-chicago/monadnock-building",
+      "source_type": "architecture_institution",
+      "context": "Strong fit for a facade article built on restraint, lettering, and composition rather than decorative overflow.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "high"
+    }
+  },
+  "aquarium-de-milan": {
+    "quote": {
+      "text": "Only that which is practical can be beautiful.",
+      "author": "Otto Wagner",
+      "attribution": "Modern Architecture, 1896",
+      "source": "Google Arts & Culture",
+      "source_url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
+      "source_type": "museum_platform",
+      "context": "Good fit for a public building article where civic function and architectural expression are read together.",
+      "verified": true,
+      "source_quality": "official_platform",
+      "article_fit": "high"
+    }
+  },
+  "ernest-delune-maitre-verrier": {
+    "quote": {
+      "text": "a house must reflect its dweller's life and be his portrait",
+      "author": "Victor Horta",
+      "attribution": "On the Winssinger House / memoir formulation",
+      "source": "TheArtStory",
+      "source_url": "https://www.theartstory.org/artist/horta-victor/",
+      "source_type": "reputable_secondary",
+      "context": "Good fit for an article where commanditaire, use, and facade reading are tightly linked.",
+      "verified": true,
+      "source_quality": "reputable_secondary",
+      "article_fit": "high"
+    }
+  },
+  "facade-art-deco-charleroi": {
+    "quote": {
+      "text": "the learned game, correct and magnificent, of forms assembled in the light",
+      "author": "Le Corbusier",
+      "attribution": "Vers une architecture / formulation reused by the Fondation Le Corbusier",
+      "source": "Fondation Le Corbusier",
+      "source_url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
+      "source_type": "foundation",
+      "context": "Useful as a general architecture quote for an Art Deco facade article focused on composition, framing, and visual presence. Building identification itself remains unresolved.",
+      "verified": true,
+      "source_quality": "official",
+      "article_fit": "medium"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "/",
+  "name": "Art Nouveau et Art Deco en Europe",
+  "short_name": "Art Nouveau",
+  "description": "Publication editoriale consacree aux facades, seuils et details ou l'Art Nouveau et l'Art Deco continuent d'agir a travers les villes d'Europe.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "minimal-ui",
+  "background_color": "#f4efe6",
+  "theme_color": "#f4efe6",
+  "categories": [
+    "education",
+    "travel",
+    "photography"
+  ],
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "16x16 32x32 48x48"
+    }
+  ]
+}

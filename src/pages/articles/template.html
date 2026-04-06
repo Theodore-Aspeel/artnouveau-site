@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirection · Art Nouveau et Art Déco</title>
+  <meta name="description" content="Cette page de compatibilité redirige vers l’article principal du site.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/styles/main.css">
+</head>
+<body>
+  <main class="error-page__main">
+    <section class="error-page__section">
+      <div class="container">
+        <div class="error-page__panel">
+          <p class="section__kicker">Article</p>
+          <h1>Redirection en cours</h1>
+          <p id="article-redirect-message">
+            Cette page de compatibilité renvoie vers l’article principal.
+          </p>
+          <a id="article-redirect-link" href="../index.html#galerie" class="btn btn--primary">Retour aux articles</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function redirectToCanonicalArticlePage() {
+      const message = document.getElementById('article-redirect-message');
+      const link = document.getElementById('article-redirect-link');
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+      const tag = params.get('tag');
+
+      if (slug) {
+        const href = '../article.html?slug=' + encodeURIComponent(slug);
+        link.href = href;
+        link.textContent = 'Ouvrir l’article';
+        message.textContent = 'Cette page de compatibilité renvoie vers l’article demandé.';
+        window.location.replace(href);
+        return;
+      }
+
+      if (tag) {
+        const href = '../index.html?tag=' + encodeURIComponent(tag) + '#galerie';
+        link.href = href;
+        link.textContent = 'Voir les articles';
+        message.textContent = 'Cette page de compatibilité renvoie vers la galerie filtrée.';
+        window.location.replace(href);
+        return;
+      }
+
+      link.href = '../index.html#galerie';
+      message.textContent = 'Aucun article précis n’a été demandé. Utilisez la galerie pour poursuivre.';
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "artnouveau-editorial-site",
+  "version": "0.1.0",
+  "description": "Vanilla HTML/CSS/JS editorial site about Art Nouveau and Art Deco in Europe, published as a deterministic static build.",
+  "private": true,
+  "keywords": [
+    "art-nouveau",
+    "art-deco",
+    "editorial-site",
+    "static-site",
+    "vanilla-js"
+  ],
+  "author": "Antoine",
+  "license": "MIT",
+  "scripts": {
+    "validate": "node scripts/validate-content.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

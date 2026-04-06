@@ -1,0 +1,285 @@
+{
+  "_meta": {
+    "version": 1,
+    "policy": "Only fields under confirmed should be integrated automatically into public article data. Fields under probable_or_pending must remain non-public until confirmed. Fields under do_not_integrate_as_fact must not be rendered as confirmed facts.",
+    "notes": [
+      "This file is a source of truth for facts already verified in prior research.",
+      "Rename article keys if needed to match actual slugs in src/data/articles.json."
+    ]
+  },
+  "maison-strauven-tournai": {
+    "confirmed": {
+      "display_title": "Maison Strauven, avenue Van Cutsem 27–29, Tournai",
+      "exact_name": null,
+      "address": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai",
+      "architect": [
+        "Gustave Strauven",
+        "Félix Strauven"
+      ],
+      "date": "1904",
+      "city": "Tournai",
+      "country": "Belgique"
+    },
+    "probable_or_pending": {
+      "client_or_commissioner": "Veuve Hiver",
+      "exact_name_note": "The official entry is primarily address-based rather than stabilized under a short patrimonial title."
+    },
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://gustavestrauven.brussels/fr/catalogue/avenue-van-cutsem-27-28-28b-29-rue-des-volontaires-1-tournai"
+    ]
+  },
+  "palais-de-la-secession-vienne": {
+    "confirmed": {
+      "display_title": "Palais de la Sécession, Vienne",
+      "exact_name": "Secession",
+      "address": "Friedrichstraße 12, 1010 Wien",
+      "architect": [
+        "Joseph Maria Olbrich"
+      ],
+      "date": "1897–1898",
+      "city": "Vienne",
+      "country": "Autriche",
+      "notes": [
+        "Premier grand bâtiment d’exposition consacré à l’art moderne en Europe centrale",
+        "Première pierre le 28 avril 1898",
+        "Bâtiment achevé le 29 octobre 1898"
+      ]
+    },
+    "probable_or_pending": {},
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://secession.at/gebaeude"
+    ]
+  },
+  "maison-lotus-anvers": {
+    "confirmed": {
+      "display_title": "Maison Lotus, Anvers",
+      "exact_name": "Maison Lotus",
+      "address": "Transvaalstraat 52, Berchem (Antwerpen)",
+      "architect": [
+        "Jos Bascourt"
+      ],
+      "date": "1901",
+      "style": "Art nouveau",
+      "city": "Anvers",
+      "country": "Belgique"
+    },
+    "probable_or_pending": {
+      "ensemble_name": "Lotus et Papyrus",
+      "ensemble_address": "Transvaalstraat 52–54, Berchem (Antwerpen)",
+      "editorial_note": "Use address 52 only if the article is about Lotus alone. Use 52–54 only if referring to the ensemble."
+    },
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://inventaris.onroerenderfgoed.be/erfgoedobjecten/11138"
+    ]
+  },
+  "maison-fernand-lefever-bruxelles": {
+    "confirmed": {
+      "display_title": "Maison Fernand Lefever, Bruxelles",
+      "exact_name": "Maison et atelier de l’architecte Fernand Lefever",
+      "address": "Avenue du Panthéon 59, Koekelberg",
+      "architect": [
+        "Fernand Lefever"
+      ],
+      "date": "1913",
+      "style": "Art nouveau",
+      "city": "Bruxelles",
+      "country": "Belgique",
+      "decor": [
+        "Sgraffites de Paul Cauchie"
+      ]
+    },
+    "probable_or_pending": {},
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://monument.heritage.brussels/fr/Koekelberg/Avenue_du_Pantheon/59/35671"
+    ]
+  },
+  "maison-des-hiboux-saint-gilles": {
+    "confirmed": {
+      "display_title": "Maison des Hiboux, Saint-Gilles",
+      "exact_name": "n°55. Les Hiboux",
+      "address": "Avenue Brugmann 55, Saint-Gilles",
+      "architect": [
+        "Édouard Pelseneer"
+      ],
+      "date": "1899",
+      "style": "Art nouveau géométrique",
+      "city": "Saint-Gilles",
+      "country": "Belgique"
+    },
+    "probable_or_pending": {
+      "context_note": "Dans l’Îlot Hannon"
+    },
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://monument.heritage.brussels/fr/buildings/1589"
+    ]
+  },
+  "maison-coilliot-lille": {
+    "confirmed": {
+      "display_title": "Maison Coilliot, Lille",
+      "exact_name": "Maison Coilliot, Lille",
+      "address": "14 rue de Fleurus, Lille",
+      "architect": [
+        "Hector Guimard"
+      ],
+      "date": "1898 ; 1900",
+      "city": "Lille",
+      "country": "France"
+    },
+    "probable_or_pending": {},
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://www.pop.culture.gouv.fr/notice/merimee/PA00107670"
+    ]
+  },
+  "lhuitriere-lille": {
+    "confirmed": {
+      "display_title": "L’Huitrière, Lille",
+      "exact_name": "Poissonnerie A l’Huîtrière",
+      "address": "3–7 rue des Chats-Bossus, Lille",
+      "architect": [
+        "Trannoy"
+      ],
+      "date": "1928 ; 1940",
+      "style": "Art déco",
+      "city": "Lille",
+      "country": "France",
+      "decor": [
+        "Mathurin Méheut"
+      ]
+    },
+    "probable_or_pending": {
+      "architect_detailed": "Gaston Trannoy + M. Montaudouin",
+      "initial_project_date": "1922",
+      "editorial_note": "The detailed co-signature and the year 1922 appear in secondary sources and should remain unconfirmed for now."
+    },
+    "do_not_integrate_as_fact": [
+      "Gaston Trannoy + M. Montaudouin (1922) as a fully confirmed attribution"
+    ],
+    "source_urls": [
+      "https://www.pop.culture.gouv.fr/notice/merimee/PA59000192"
+    ]
+  },
+  "maison-des-majoliques-vienne": {
+    "confirmed": {
+      "display_title": "Maison des Majoliques, Vienne",
+      "exact_name": "Majolikahaus",
+      "address": "Linke Wienzeile 40, 1060 Wien",
+      "architect": [
+        "Otto Wagner"
+      ],
+      "date": "1898–1899",
+      "city": "Vienne",
+      "country": "Autriche"
+    },
+    "probable_or_pending": {},
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://www.wien.info/de/kunst-kultur/jugendstil/architektur-jugendstil-339264"
+    ]
+  },
+  "casa-campanini-milan": {
+    "confirmed": {
+      "display_title": "Casa Campanini, Milan (1904)",
+      "exact_name": "Casa Campanini",
+      "address": "Via Vincenzo Bellini 11, angle Via Livorno, Milano",
+      "architect": [
+        "Alfredo Campanini"
+      ],
+      "date": "1904–1905",
+      "city": "Milan",
+      "country": "Italie"
+    },
+    "probable_or_pending": {
+      "editorial_note": "The article title may keep '(1904)', but 1904–1905 is the more precise dating."
+    },
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://www.lombardiabeniculturali.it/architetture/schede-complete/LMD80-00318/"
+    ]
+  },
+  "aquarium-de-milan": {
+    "confirmed": {
+      "display_title": "Aquarium de Milan (1906)",
+      "exact_name": "Acquario Civico di Milano",
+      "address": "Viale Gadio 2, Milano",
+      "architect": [
+        "Sebastiano Locati"
+      ],
+      "date": "1906",
+      "city": "Milan",
+      "country": "Italie",
+      "notes": [
+        "Seul pavillon de l’Exposition de 1906 conservé dans le parc Sempione"
+      ]
+    },
+    "probable_or_pending": {},
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://www2.comune.milano.it/web/acquario-civico-milano/calendario-eventi?_ricerca_INSTANCE_UFBEsWezzc09_cur=__REPLACE__PAGE_NUM__&_ricerca_INSTANCE_UFBEsWezzc09_firstLanding=false&_ricerca_INSTANCE_UFBEsWezzc09_resetCur=false&_ricerca_INSTANCE_UFBEsWezzc09_restrictCategoryId=0&_ricerca_INSTANCE_UFBEsWezzc09_searchText=&_ricerca_INSTANCE_UFBEsWezzc09_servizioOnline=false&_ricerca_INSTANCE_UFBEsWezzc09_sortBy=structureTitle&p_p_cacheability=cacheLevelPage&p_p_id=ricerca_INSTANCE_UFBEsWezzc09&p_p_lifecycle=2&p_p_mode=view&p_p_resource_id=searchResource&p_p_state=normal"
+    ]
+  },
+  "den-tijd-anvers": {
+    "confirmed": {
+      "display_title": "Den Tijd, Anvers",
+      "exact_name": "Den Tijd",
+      "address": "Waterloostraat 59, Berchem (Antwerpen)",
+      "architect": [
+        "A. Cols",
+        "A. Defever"
+      ],
+      "date": "1903",
+      "city": "Anvers",
+      "country": "Belgique"
+    },
+    "probable_or_pending": {
+      "ensemble_name": "De Morgend, Den Dag, Den Tijd, De Nacht en Den Avond",
+      "ensemble_address": "Waterloostraat 55–63, Berchem (Antwerpen)",
+      "editorial_note": "The address 59 is confirmed for Den Tijd. Architects and date are confirmed at ensemble level."
+    },
+    "do_not_integrate_as_fact": [],
+    "source_urls": [
+      "https://inventaris.onroerenderfgoed.be/aanduidingsobjecten/5272"
+    ]
+  },
+  "ernest-delune-maitre-verrier": {
+    "confirmed": {
+      "display_title": "Une maison d’Ernest Delune pour un maître verrier",
+      "exact_name": "Ancien atelier et habitation de Clas Grüner Sterner",
+      "address": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles",
+      "architect": [
+        "Ernest Delune"
+      ],
+      "date": "1902",
+      "city": "Ixelles",
+      "country": "Belgique"
+    },
+    "probable_or_pending": {
+      "initial_commissioner": "Victor Marchal",
+      "later_occupant": "Clas Grüner Sterner",
+      "editorial_note": "The official notice confirms the building as later occupied by Clas Grüner Sterner, but does not clearly support the claim that it was originally commissioned directly for a master glassmaker."
+    },
+    "do_not_integrate_as_fact": [
+      "Commissioned directly for a master glassmaker"
+    ],
+    "source_urls": [
+      "https://monument.heritage.brussels/fr/buildings/19656"
+    ]
+  },
+  "facade-art-deco-charleroi": {
+    "confirmed": {},
+    "probable_or_pending": {
+      "status": "Not identified with sufficient certainty from the screenshot alone."
+    },
+    "do_not_integrate_as_fact": [
+      "Any exact address",
+      "Any architect attribution",
+      "Any precise dating"
+    ],
+    "source_urls": []
+  }
+}
