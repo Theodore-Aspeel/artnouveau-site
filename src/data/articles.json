@@ -158,91 +158,163 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "lhuitriere-lille-art-deco",
       "slug": "lhuitriere-lille-art-deco",
-      "format": "article-complet",
-      "title": "L’Huitrière, Lille",
-      "quote": {
-        "text": {
-          "fr": "le jeu savant, correct et magnifique, des formes assemblées dans la lumière",
-          "en": "the learned game, correct and magnificent, of forms assembled in the light"
-        },
-        "author": {
-          "fr": "Le Corbusier",
-          "en": "Le Corbusier"
-        },
-        "attribution": {
-          "fr": "Vers une architecture / formulation reprise par la Fondation Le Corbusier",
-          "en": "Vers une architecture / formulation reused by the Fondation Le Corbusier"
-        },
-        "source": "Fondation Le Corbusier",
-        "source_url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
-        "source_type": "foundation",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 2,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/lhuitriere-lille-art-deco.png",
-      "support_images": [
-        "assets/images/articles/maison-coilliot-lille-hector-guimard.png",
-        "assets/images/articles/loge-maconnique-lumiere-du-nord-albert-baert-1914.png"
-      ],
-      "city": "Lille",
-      "country": "France",
-      "style": "Art Déco",
-      "tags": [
-        "Art Déco",
-        "Façade",
-        "Commerce"
-      ],
-      "gaps": [],
-      "chapeau": "L'Huîtrière montre très bien ce que l'Art déco change dans la rue. La façade garde une frontalité nette, plus cadrée, plus tenue. À hauteur de trottoir, le commerce n'y apparaît pas comme un simple usage. Il devient lui aussi une manière de donner forme à la ville.",
-      "sections": [
-        {
-          "heading": "Lire d'abord la façade, puis l'adresse",
-          "body": "Devant L'Huîtrière, le bon ordre de lecture consiste presque à oublier un instant le lieu que l'on connaît de nom. Il faut regarder d'abord ce que la façade fait dans la rue. Elle cadre son entrée, ordonne ses parties visibles, impose une frontalité nette. Le commerce n'y apparaît pas comme un simple usage. Il devient une présence urbaine à part entière.\n\nCette tenue est précieuse, parce qu'elle évite l'anecdote. Le bâtiment ne vit pas seulement de son enseigne ou de sa réputation. Il tient par une composition qui lui permet de durer dans le regard."
-        },
-        {
-          "heading": "Une écriture plus ferme",
-          "body": "Le passage de l'Art Nouveau à l'Art Déco se lit ici avec clarté. Les lignes semblent plus tenues, les rapports plus cadrés, les effets d'ornement mieux contenus. On sent moins une poussée continue qu'un goût pour la découpe, la mesure, la stabilité. Cela ne rend pas la façade plus froide. Cela change simplement son régime.\n\nC'est ce déplacement qui rend L'Huîtrière importante dans une lecture de Lille. À quelques rues de sujets plus souples ou plus sinueux, elle rappelle qu'une ville peut garder plusieurs façons de faire façade sans perdre sa cohérence."
-        },
-        {
-          "heading": "Ce qu'il faut retenir sur place",
-          "body": "Le plus utile est de commencer par l'ensemble, puis de revenir vers les matières, les motifs et la relation entre l'enseigne, les ouvertures et l'entrée. Cette progression évite de réduire le bâtiment à un détail séduisant. Elle permet de comprendre ce qu'il cherche vraiment à faire, tenir sa place dans la rue avec assez d'autorité pour rester en mémoire.\n\nDans Lille, L'Huîtrière dialogue naturellement avec la Maison Coilliot et avec la loge Lumière du Nord. La comparaison n'efface pas les différences. Elle les rend plus lisibles."
+      "identity": {
+        "type": "building",
+        "canonical_name": "L’Huîtrière",
+        "exact_name": "Poissonnerie A l’Huîtrière"
+      },
+      "taxonomy": {
+        "style_key": "art_deco",
+        "tag_keys": [
+          "art_deco",
+          "facade",
+          "commerce"
+        ],
+        "place_keys": {
+          "city": "lille",
+          "country": "fr"
         }
-      ],
-      "around": {
-        "relation_label": "Même ville",
-        "article_slug": "maison-coilliot-lille-hector-guimard",
-        "note": "À comparer : chez Coilliot, la façade se singularise davantage; ici, elle reste liée au commerce tout en gardant une netteté très ferme."
       },
-      "practical": {
-        "Ville": "Lille",
-        "Pays": "France",
-        "Style": "Art Déco",
-        "Adresse": "3–7 rue des Chats-Bossus, Lille",
-        "Datation": "1928 ; 1940",
-        "Accès": "Vieux Lille",
-        "Architecte": "Trannoy"
+      "facts": {
+        "location": {
+          "city": "Lille",
+          "country": "France",
+          "country_code": "FR",
+          "address": "3–7 rue des Chats-Bossus, Lille"
+        },
+        "dates": {
+          "built": "1928 ; 1940"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Trannoy"
+          }
+        ],
+        "notes": "Mathurin Méheut"
       },
-      "alt_text": "Façade Art déco de L’Huîtrière à Lille, au 3-7 rue des Chats-Bossus.",
-      "meta_description": "L’Huitrière à Lille. Une lecture de rue d’une façade Art déco, entre commerce, frontalité et tenue urbaine.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/lhuitriere-lille-art-deco.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/maison-coilliot-lille-hector-guimard.png",
+            "credit": null
+          },
+          {
+            "src": "assets/images/articles/loge-maconnique-lumiere-du-nord-albert-baert-1914.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "le jeu savant, correct et magnifique, des formes assemblées dans la lumière",
+            "en": "the learned game, correct and magnificent, of forms assembled in the light"
+          },
+          "author": {
+            "fr": "Le Corbusier",
+            "en": "Le Corbusier"
+          },
+          "attribution": {
+            "fr": "Vers une architecture / formulation reprise par la Fondation Le Corbusier",
+            "en": "Vers une architecture / formulation reused by the Fondation Le Corbusier"
+          },
+          "source": "Fondation Le Corbusier",
+          "url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
+          "type": "foundation",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "same_city",
+          "article_id": "maison-coilliot-lille-hector-guimard"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 2,
-      "epigraph": "Le commerce aussi peut laisser une façade en mémoire.",
-      "verified_info": {
-        "exact_name": "Poissonnerie A l’Huîtrière",
-        "architect": "Trannoy",
-        "date": "1928 ; 1940",
-        "style": "Art Déco",
-        "city": "Lille",
-        "country": "France",
-        "address": "3–7 rue des Chats-Bossus, Lille",
-        "notes": "Mathurin Méheut"
+      "content": {
+        "fr": {
+          "title": "L’Huitrière, Lille",
+          "dek": "L'Huîtrière montre très bien ce que l'Art déco change dans la rue. La façade garde une frontalité nette, plus cadrée, plus tenue. À hauteur de trottoir, le commerce n'y apparaît pas comme un simple usage. Il devient lui aussi une manière de donner forme à la ville.",
+          "epigraph": "Le commerce aussi peut laisser une façade en mémoire.",
+          "sections": [
+            {
+              "heading": "Lire d'abord la façade, puis l'adresse",
+              "body": "Devant L'Huîtrière, le bon ordre de lecture consiste presque à oublier un instant le lieu que l'on connaît de nom. Il faut regarder d'abord ce que la façade fait dans la rue. Elle cadre son entrée, ordonne ses parties visibles, impose une frontalité nette. Le commerce n'y apparaît pas comme un simple usage. Il devient une présence urbaine à part entière.\n\nCette tenue est précieuse, parce qu'elle évite l'anecdote. Le bâtiment ne vit pas seulement de son enseigne ou de sa réputation. Il tient par une composition qui lui permet de durer dans le regard."
+            },
+            {
+              "heading": "Une écriture plus ferme",
+              "body": "Le passage de l'Art Nouveau à l'Art Déco se lit ici avec clarté. Les lignes semblent plus tenues, les rapports plus cadrés, les effets d'ornement mieux contenus. On sent moins une poussée continue qu'un goût pour la découpe, la mesure, la stabilité. Cela ne rend pas la façade plus froide. Cela change simplement son régime.\n\nC'est ce déplacement qui rend L'Huîtrière importante dans une lecture de Lille. À quelques rues de sujets plus souples ou plus sinueux, elle rappelle qu'une ville peut garder plusieurs façons de faire façade sans perdre sa cohérence."
+            },
+            {
+              "heading": "Ce qu'il faut retenir sur place",
+              "body": "Le plus utile est de commencer par l'ensemble, puis de revenir vers les matières, les motifs et la relation entre l'enseigne, les ouvertures et l'entrée. Cette progression évite de réduire le bâtiment à un détail séduisant. Elle permet de comprendre ce qu'il cherche vraiment à faire, tenir sa place dans la rue avec assez d'autorité pour rester en mémoire.\n\nDans Lille, L'Huîtrière dialogue naturellement avec la Maison Coilliot et avec la loge Lumière du Nord. La comparaison n'efface pas les différences. Elle les rend plus lisibles."
+            }
+          ],
+          "seo": {
+            "meta_description": "L’Huitrière à Lille. Une lecture de rue d’une façade Art déco, entre commerce, frontalité et tenue urbaine."
+          },
+          "media": {
+            "hero_alt": "Façade Art déco de L’Huîtrière à Lille, au 3-7 rue des Chats-Bossus.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Lille"
+            },
+            {
+              "key": "country",
+              "value": "France"
+            },
+            {
+              "key": "style",
+              "value": "Art Déco"
+            },
+            {
+              "key": "architect",
+              "value": "Trannoy"
+            },
+            {
+              "key": "address",
+              "value": "3–7 rue des Chats-Bossus, Lille"
+            },
+            {
+              "key": "date",
+              "value": "1928 ; 1940"
+            },
+            {
+              "key": "access",
+              "value": "Vieux Lille"
+            }
+          ],
+          "around": {
+            "note": "À comparer : chez Coilliot, la façade se singularise davantage; ici, elle reste liée au commerce tout en gardant une netteté très ferme."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -1271,84 +1343,147 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "casa-campanini-milan-1904",
       "slug": "casa-campanini-milan-1904",
-      "format": "article-complet",
-      "title": "Casa Campanini, Milan (1904)",
-      "quote": {
-        "text": {
-          "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
-          "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
-        },
-        "author": {
-          "fr": "William Morris",
-          "en": "William Morris"
-        },
-        "attribution": null,
-        "source": "Victoria and Albert Museum",
-        "source_url": "https://www.vam.ac.uk/collections/william-morris",
-        "source_type": "museum",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 10,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/casa-campani-1904-liberty-milanais.png",
-      "support_images": [],
-      "city": "Milan",
-      "country": "Italie",
-      "style": "Liberty / Art Nouveau",
-      "tags": [
-        "Liberty",
-        "Seuil",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "Casa Campanini donne à Milan une entrée très juste. Datée de 1904-1905 et rattachée au Liberty milanais, elle tient d’abord par la façade et par le seuil. Le bâtiment n’a pas besoin d’être entouré de commentaires pour s’imposer. Il suffit de le lire à hauteur de rue, dans la relation entre l’ensemble, l’entrée et la densité de certains points d’appui.",
-      "sections": [
-        {
-          "heading": "Le Liberty milanais à hauteur de seuil",
-          "body": "L'intérêt de Casa Campanini tient à son échelle de lecture. Il ne faut pas commencer par Milan en général, mais par le bâtiment lui-même. La façade, le seuil, la façon dont l'entrée concentre une part de l'intensité du lieu donnent déjà beaucoup.\n\nLe Liberty milanais, tel qu'il se laisse ici deviner, travaille la façade comme un ensemble très réglé. Le décor existe, mais il sert surtout à distribuer les tensions et à donner au passage une densité particulière."
-        },
-        {
-          "heading": "Une façade qui ancre Milan autrement",
-          "body": "Avec Casa Campanini, Milan se laisse lire par une façade habitée, non par un bâtiment public ou par une vue trop générale. Cela change la qualité du regard. La ville devient plus tangible, plus proche, plus liée à la rue.\n\nLe bâtiment joue ce rôle avec une grande justesse. Il donne à Milan une adresse forte, assez nette pour qu'on puisse ensuite élargir vers d'autres formes sans perdre le point de départ."
-        },
-        {
-          "heading": "Ce qu'il faut lire sur place",
-          "body": "Il faut partir de la composition générale, puis revenir vers le seuil et les points où le bâtiment se resserre. L'ensemble doit rester lisible. C'est à cette condition qu'on comprend que le Liberty n'est pas un simple goût du motif, mais une façon d'organiser la façade.\n\nCasa Campanini gagne ensuite à être rapprochée de l'Aquarium. L'une installe un registre plus habité. L'autre élargit Milan vers le bâtiment public."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Casa Campanini",
+        "exact_name": "Casa Campanini"
+      },
+      "taxonomy": {
+        "style_key": "liberty_art_nouveau",
+        "tag_keys": [
+          "liberty",
+          "threshold",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "milan",
+          "country": "italie"
         }
-      ],
-      "around": {
-        "relation_label": "Autre échelle",
-        "article_slug": "aquarium-de-milan-1906",
-        "note": "À lire aussi : dans la même ville, le passage d’une façade habitée à un bâtiment public déplace nettement l’échelle du regard."
       },
-      "practical": {
-        "Ville": "Milan",
-        "Pays": "Italie",
-        "Style": "Liberty / Art Nouveau",
-        "Architecte": "Alfredo Campanini",
-        "Datation": "1904–1905",
-        "Adresse": "Via Vincenzo Bellini 11, angle Via Livorno, Milano"
+      "facts": {
+        "location": {
+          "city": "Milan",
+          "country": "Italie",
+          "country_code": "IT",
+          "address": "Via Vincenzo Bellini 11, angle Via Livorno, Milano"
+        },
+        "dates": {
+          "built": "1904–1905"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Alfredo Campanini"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Casa Campanini à Milan, façade Liberty datée de 1904 dans le corpus du projet.",
-      "meta_description": "Casa Campanini à Milan. Une lecture de façade et de seuil dans le Liberty milanais, avec 1904 comme repère disponible.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/casa-campani-1904-liberty-milanais.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
+            "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
+          },
+          "author": {
+            "fr": "William Morris",
+            "en": "William Morris"
+          },
+          "attribution": null,
+          "source": "Victoria and Albert Museum",
+          "url": "https://www.vam.ac.uk/collections/william-morris",
+          "type": "museum",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "other_scale",
+          "article_id": "aquarium-de-milan-1906"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 10,
-      "epigraph": "Une entrée bien tenue peut suffire à donner sa mesure à tout un bâtiment.",
-      "verified_info": {
-        "exact_name": "Casa Campanini",
-        "architect": "Alfredo Campanini",
-        "date": "1904–1905",
-        "style": "Liberty / Art Nouveau",
-        "city": "Milan",
-        "country": "Italie",
-        "address": "Via Vincenzo Bellini 11, angle Via Livorno, Milano",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Casa Campanini, Milan (1904)",
+          "dek": "Casa Campanini donne à Milan une entrée très juste. Datée de 1904-1905 et rattachée au Liberty milanais, elle tient d’abord par la façade et par le seuil. Le bâtiment n’a pas besoin d’être entouré de commentaires pour s’imposer. Il suffit de le lire à hauteur de rue, dans la relation entre l’ensemble, l’entrée et la densité de certains points d’appui.",
+          "epigraph": "Une entrée bien tenue peut suffire à donner sa mesure à tout un bâtiment.",
+          "sections": [
+            {
+              "heading": "Le Liberty milanais à hauteur de seuil",
+              "body": "L'intérêt de Casa Campanini tient à son échelle de lecture. Il ne faut pas commencer par Milan en général, mais par le bâtiment lui-même. La façade, le seuil, la façon dont l'entrée concentre une part de l'intensité du lieu donnent déjà beaucoup.\n\nLe Liberty milanais, tel qu'il se laisse ici deviner, travaille la façade comme un ensemble très réglé. Le décor existe, mais il sert surtout à distribuer les tensions et à donner au passage une densité particulière."
+            },
+            {
+              "heading": "Une façade qui ancre Milan autrement",
+              "body": "Avec Casa Campanini, Milan se laisse lire par une façade habitée, non par un bâtiment public ou par une vue trop générale. Cela change la qualité du regard. La ville devient plus tangible, plus proche, plus liée à la rue.\n\nLe bâtiment joue ce rôle avec une grande justesse. Il donne à Milan une adresse forte, assez nette pour qu'on puisse ensuite élargir vers d'autres formes sans perdre le point de départ."
+            },
+            {
+              "heading": "Ce qu'il faut lire sur place",
+              "body": "Il faut partir de la composition générale, puis revenir vers le seuil et les points où le bâtiment se resserre. L'ensemble doit rester lisible. C'est à cette condition qu'on comprend que le Liberty n'est pas un simple goût du motif, mais une façon d'organiser la façade.\n\nCasa Campanini gagne ensuite à être rapprochée de l'Aquarium. L'une installe un registre plus habité. L'autre élargit Milan vers le bâtiment public."
+            }
+          ],
+          "seo": {
+            "meta_description": "Casa Campanini à Milan. Une lecture de façade et de seuil dans le Liberty milanais, avec 1904 comme repère disponible."
+          },
+          "media": {
+            "hero_alt": "Casa Campanini à Milan, façade Liberty datée de 1904 dans le corpus du projet.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milan"
+            },
+            {
+              "key": "country",
+              "value": "Italie"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Alfredo Campanini"
+            },
+            {
+              "key": "address",
+              "value": "Via Vincenzo Bellini 11, angle Via Livorno, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1904–1905"
+            }
+          ],
+          "around": {
+            "note": "À lire aussi : dans la même ville, le passage d’une façade habitée à un bâtiment public déplace nettement l’échelle du regard."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -1497,87 +1632,150 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "aquarium-de-milan-1906",
       "slug": "aquarium-de-milan-1906",
-      "format": "article-complet",
-      "title": "Aquarium de Milan (1906)",
-      "quote": {
-        "text": {
-          "fr": "Seul ce qui est pratique peut être beau.",
-          "en": "Only that which is practical can be beautiful."
-        },
-        "author": {
-          "fr": "Otto Wagner",
-          "en": "Otto Wagner"
-        },
-        "attribution": {
-          "fr": "Architecture moderne, 1896",
-          "en": "Modern Architecture, 1896"
-        },
-        "source": "Google Arts & Culture",
-        "source_url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
-        "source_type": "museum_platform",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 12,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/aquarium-de-milan-1906.png",
-      "support_images": [],
-      "city": "Milan",
-      "country": "Italie",
-      "style": "Liberty / Art Nouveau",
-      "tags": [
-        "Liberty",
-        "Bâtiment public",
-        "Façade"
-      ],
-      "gaps": [],
-      "chapeau": "L'Aquarium de Milan déplace utilement le regard. Avec lui, le Liberty ne se lit plus seulement à l'échelle de la maison ou de la façade privée. Il apparaît aussi dans un bâtiment public, adressé à la ville entière. Daté de 1906 selon les données disponibles, le sujet tient d'abord par cette extension du regard, de l'ornement domestique vers une présence civique plus large.",
-      "sections": [
-        {
-          "heading": "Quand le Liberty sort de la maison",
-          "body": "Le premier intérêt de l'Aquarium est là. Il rappelle qu'un langage architectural ne s'arrête pas au logement ou à la façade privée. Ici, le décor et la composition se déplacent vers un édifice public. Cela change immédiatement l'échelle de lecture.\n\nLe regard ne cherche plus seulement un seuil domestique ou une entrée singulière. Il rencontre un bâtiment qui prend place dans la ville autrement, avec une adresse plus collective, une fonction plus large, une autre manière de tenir l'espace."
-        },
-        {
-          "heading": "Lire la fonction sans quitter la façade",
-          "body": "Dans un sujet comme celui-ci, la fonction compte parce qu'elle modifie la manière d'aborder le bâtiment. On ne lit pas un aquarium comme on lit une maison. Les attentes changent. Le rapport à la lisibilité publique, à la présence civique, à l'usage collectif devient plus sensible.\n\nMême avec une documentation partielle, ce point suffit à donner au texte sa direction. Il indique de quel registre il s'agit, puis il permet de revenir à la façade elle-même, à sa tenue, à ce qu'elle expose déjà."
-        },
-        {
-          "heading": "Ce qu'il ouvre dans Milan",
-          "body": "L'Aquarium gagne à être lu avec Casa Campanini. L'une ancre Milan dans une façade d'habitation très individualisée. L'autre élargit la ville vers un bâtiment public. Le rapprochement ne gomme pas les différences. Il les rend plus lisibles.\n\nEntre les deux, Milan cesse d'apparaître comme une image unique. La ville s'ouvre par plusieurs seuils, plusieurs usages, plusieurs façons de tenir une forme."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Aquarium de Milan",
+        "exact_name": "Acquario Civico di Milano"
+      },
+      "taxonomy": {
+        "style_key": "liberty_art_nouveau",
+        "tag_keys": [
+          "liberty",
+          "public_building",
+          "facade"
+        ],
+        "place_keys": {
+          "city": "milan",
+          "country": "italie"
         }
-      ],
-      "around": {
-        "relation_label": "Autre échelle",
-        "article_slug": "casa-campanini-milan-1904",
-        "note": "À lire ensuite : le retour à une façade habitée rend plus sensible l’écart entre registre domestique et présence civique."
       },
-      "practical": {
-        "Ville": "Milan",
-        "Pays": "Italie",
-        "Style": "Liberty / Art Nouveau",
-        "Datation": "1906",
-        "Architecte": "Sebastiano Locati",
-        "Adresse": "Viale Gadio 2, Milano"
+      "facts": {
+        "location": {
+          "city": "Milan",
+          "country": "Italie",
+          "country_code": "IT",
+          "address": "Viale Gadio 2, Milano"
+        },
+        "dates": {
+          "built": "1906"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Sebastiano Locati"
+          }
+        ],
+        "notes": "Seul pavillon de l’Exposition de 1906 conservé dans le parc Sempione"
       },
-      "alt_text": "Aquarium de Milan, monument Liberty daté de 1906 dans le corpus du projet.",
-      "meta_description": "Aquarium de Milan, 1906. Une lecture de bâtiment public où le Liberty milanais passe de la façade privée à la ville entière.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/aquarium-de-milan-1906.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "Seul ce qui est pratique peut être beau.",
+            "en": "Only that which is practical can be beautiful."
+          },
+          "author": {
+            "fr": "Otto Wagner",
+            "en": "Otto Wagner"
+          },
+          "attribution": {
+            "fr": "Architecture moderne, 1896",
+            "en": "Modern Architecture, 1896"
+          },
+          "source": "Google Arts & Culture",
+          "url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
+          "type": "museum_platform",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "other_scale",
+          "article_id": "casa-campanini-milan-1904"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 12,
-      "epigraph": "La ville ne garde pas ses formes les plus nettes seulement dans l'habitat.",
-      "verified_info": {
-        "exact_name": "Acquario Civico di Milano",
-        "architect": "Sebastiano Locati",
-        "date": "1906",
-        "style": "Liberty / Art Nouveau",
-        "city": "Milan",
-        "country": "Italie",
-        "address": "Viale Gadio 2, Milano",
-        "notes": "Seul pavillon de l’Exposition de 1906 conservé dans le parc Sempione"
+      "content": {
+        "fr": {
+          "title": "Aquarium de Milan (1906)",
+          "dek": "L'Aquarium de Milan déplace utilement le regard. Avec lui, le Liberty ne se lit plus seulement à l'échelle de la maison ou de la façade privée. Il apparaît aussi dans un bâtiment public, adressé à la ville entière. Daté de 1906 selon les données disponibles, le sujet tient d'abord par cette extension du regard, de l'ornement domestique vers une présence civique plus large.",
+          "epigraph": "La ville ne garde pas ses formes les plus nettes seulement dans l'habitat.",
+          "sections": [
+            {
+              "heading": "Quand le Liberty sort de la maison",
+              "body": "Le premier intérêt de l'Aquarium est là. Il rappelle qu'un langage architectural ne s'arrête pas au logement ou à la façade privée. Ici, le décor et la composition se déplacent vers un édifice public. Cela change immédiatement l'échelle de lecture.\n\nLe regard ne cherche plus seulement un seuil domestique ou une entrée singulière. Il rencontre un bâtiment qui prend place dans la ville autrement, avec une adresse plus collective, une fonction plus large, une autre manière de tenir l'espace."
+            },
+            {
+              "heading": "Lire la fonction sans quitter la façade",
+              "body": "Dans un sujet comme celui-ci, la fonction compte parce qu'elle modifie la manière d'aborder le bâtiment. On ne lit pas un aquarium comme on lit une maison. Les attentes changent. Le rapport à la lisibilité publique, à la présence civique, à l'usage collectif devient plus sensible.\n\nMême avec une documentation partielle, ce point suffit à donner au texte sa direction. Il indique de quel registre il s'agit, puis il permet de revenir à la façade elle-même, à sa tenue, à ce qu'elle expose déjà."
+            },
+            {
+              "heading": "Ce qu'il ouvre dans Milan",
+              "body": "L'Aquarium gagne à être lu avec Casa Campanini. L'une ancre Milan dans une façade d'habitation très individualisée. L'autre élargit la ville vers un bâtiment public. Le rapprochement ne gomme pas les différences. Il les rend plus lisibles.\n\nEntre les deux, Milan cesse d'apparaître comme une image unique. La ville s'ouvre par plusieurs seuils, plusieurs usages, plusieurs façons de tenir une forme."
+            }
+          ],
+          "seo": {
+            "meta_description": "Aquarium de Milan, 1906. Une lecture de bâtiment public où le Liberty milanais passe de la façade privée à la ville entière."
+          },
+          "media": {
+            "hero_alt": "Aquarium de Milan, monument Liberty daté de 1906 dans le corpus du projet.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milan"
+            },
+            {
+              "key": "country",
+              "value": "Italie"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Sebastiano Locati"
+            },
+            {
+              "key": "address",
+              "value": "Viale Gadio 2, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1906"
+            }
+          ],
+          "around": {
+            "note": "À lire ensuite : le retour à une façade habitée rend plus sensible l’écart entre registre domestique et présence civique."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
