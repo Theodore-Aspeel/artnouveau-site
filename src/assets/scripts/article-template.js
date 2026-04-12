@@ -293,11 +293,11 @@
   shell.appendChild(breadcrumb);
 
   const primaryImageEntry = media && typeof media.getPrimaryImageEntry === 'function'
-    ? media.getPrimaryImageEntry(article)
+    ? media.getPrimaryImageEntry(article, locale)
     : null;
   const primaryImage = primaryImageEntry ? primaryImageEntry.src : '';
   const supportImageEntries = media && typeof media.getSecondaryImageEntries === 'function'
-    ? media.getSecondaryImageEntries(article, 2)
+    ? media.getSecondaryImageEntries(article, 2, locale)
     : [];
   const articleTagEntries = taxonomy && typeof taxonomy.getArticleTagEntries === 'function'
     ? taxonomy.getArticleTagEntries(article, locale)

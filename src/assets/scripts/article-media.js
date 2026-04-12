@@ -28,9 +28,9 @@
     };
   }
 
-  function getImageEntries(article) {
+  function getImageEntries(article, locale = 'fr') {
     const articleMedia = access && typeof access.getArticleMedia === 'function'
-      ? access.getArticleMedia(article)
+      ? access.getArticleMedia(article, locale)
       : null;
     const entries = [];
     const heroEntry = articleMedia
@@ -57,20 +57,20 @@
     return entries;
   }
 
-  function getImageList(article) {
-    return getImageEntries(article).map((entry) => entry.src);
+  function getImageList(article, locale = 'fr') {
+    return getImageEntries(article, locale).map((entry) => entry.src);
   }
 
-  function getPrimaryImage(article) {
-    return getImageList(article)[0] || '';
+  function getPrimaryImage(article, locale = 'fr') {
+    return getImageList(article, locale)[0] || '';
   }
 
-  function getPrimaryImageEntry(article) {
-    return getImageEntries(article)[0] || null;
+  function getPrimaryImageEntry(article, locale = 'fr') {
+    return getImageEntries(article, locale)[0] || null;
   }
 
-  function getSecondaryImages(article, limit) {
-    const secondary = getImageList(article).slice(1);
+  function getSecondaryImages(article, limit, locale = 'fr') {
+    const secondary = getImageList(article, locale).slice(1);
 
     if (Number.isInteger(limit) && limit >= 0) {
       return secondary.slice(0, limit);
@@ -79,8 +79,8 @@
     return secondary;
   }
 
-  function getSecondaryImageEntries(article, limit) {
-    const secondary = getImageEntries(article).slice(1);
+  function getSecondaryImageEntries(article, limit, locale = 'fr') {
+    const secondary = getImageEntries(article, locale).slice(1);
 
     if (Number.isInteger(limit) && limit >= 0) {
       return secondary.slice(0, limit);

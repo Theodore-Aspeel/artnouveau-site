@@ -72,6 +72,10 @@
     return articleMedia.hero ? articleMedia.hero.src : '';
   }
 
+  function getCardImageAlt(article) {
+    return access.getArticleHeroAlt(article, currentLocale()) || access.getArticleTitle(article, currentLocale());
+  }
+
   function resolveCardImageSrc(imagePath) {
     const normalizedPath = normalizeText(imagePath);
     if (!normalizedPath) return '';
@@ -139,6 +143,7 @@
         date: getArticleDate(article),
         excerpt: getCardExcerpt(article),
         image: getCardImage(article),
+        imageAlt: getCardImageAlt(article),
         tags: getCardTagEntries(article),
       }));
   }
@@ -180,7 +185,7 @@
     if (item.image) {
       const img = document.createElement('img');
       img.src = resolveCardImageSrc(item.image);
-      img.alt = item.title;
+      img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       img.addEventListener('error', () => {
         img.remove();
@@ -263,7 +268,7 @@
       const img = document.createElement('img');
       img.className = 'home-curated__image';
       img.src = resolveCardImageSrc(item.image);
-      img.alt = item.title;
+      img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       mediaWrap.appendChild(img);
     } else {
