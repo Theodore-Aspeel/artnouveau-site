@@ -1,0 +1,18 @@
+model = "gpt-5.4"
+model_provider = "openai"
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "high"
+model_verbosity = "medium"
+
+web_search = "cached"
+
+[sandbox_workspace_write]
+writable_roots = []
+network_access = false
+
+[history]
+persistence = "save-all"

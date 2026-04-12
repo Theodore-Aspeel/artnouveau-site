@@ -1,0 +1,46 @@
+# code_review.md
+
+## Goal
+
+Review code and content-model changes for correctness, regressions, maintainability, and repository-specific conventions.
+
+## Review checklist
+
+1. Scope
+- Did the change stay within the requested scope?
+- Did it avoid opportunistic refactors?
+
+2. Backward compatibility
+- Does mixed v1/v2 behavior still work when required?
+- Are fallback paths still safe?
+
+3. Data-model discipline
+- Are visible texts inside content.fr / content.en when relevant?
+- Are stable technical keys kept outside localized content?
+- Is truth duplicated unnecessarily?
+
+4. Runtime safety
+- Did rendering logic move toward helper-based access instead of direct legacy field access?
+- Did the change avoid hidden breakage in gallery or article pages?
+
+5. Build and validation
+- Was `npm run validate` run?
+- Was `npm run build` run?
+- Were results stated explicitly?
+
+6. Diff quality
+- Is the diff small and readable?
+- Are comments minimal but useful?
+- Are unrelated file changes absent?
+
+7. Intentional omissions
+- Does the task clearly state what was not done?
+
+## Review output format
+
+Return:
+- files reviewed
+- issues found
+- risky patterns
+- recommended corrections
+- whether the task is acceptable as-is
