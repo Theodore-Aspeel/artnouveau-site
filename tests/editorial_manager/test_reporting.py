@@ -1,6 +1,7 @@
 import unittest
 
-from tools.editorial_manager.reporting import render_summary
+from tools.editorial_manager.checks import CheckIssue
+from tools.editorial_manager.reporting import render_check_report, render_summary
 
 
 class ReportingTests(unittest.TestCase):
@@ -16,6 +17,23 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("v1 articles: 1", output)
         self.assertIn("v2 articles: 1", output)
         self.assertIn("v2 without English content: 1", output)
+
+    def test_check_report_groups_errors_and_warnings(self):
+        output = render_check_report(
+            [
+                CheckIssue("ERROR", "missing-title-fr", "demo", "French title is missing."),
+                CheckIssue("WARNING", "missing-content-en", "demo", "content.en is missing or empty."),
+            ],
+            checked_count=1,
+        )
+
+        self.assertIn("Articles checked: 1", output)
+        self.assertIn("Errors: 1", output)
+        self.assertIn("Warnings: 1", output)
+        self.assertIn("Errors:", output)
+        self.assertIn("[missing-title-fr] demo", output)
+        self.assertIn("Warnings:", output)
+        self.assertIn("[missing-content-en] demo", output)
 
 
 if __name__ == "__main__":

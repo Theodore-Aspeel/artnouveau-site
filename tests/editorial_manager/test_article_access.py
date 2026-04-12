@@ -1,6 +1,8 @@
 import unittest
 
 from tools.editorial_manager.article_access import (
+    article_hero_image,
+    article_meta_description,
     article_model,
     article_publication_order,
     article_sections_count,
@@ -26,6 +28,20 @@ class ArticleAccessTests(unittest.TestCase):
             "content": {"fr": {"title": "Titre v2"}},
         }
         self.assertEqual(article_title(article), "Titre v2")
+
+    def test_hero_image_supports_v1_and_v2(self):
+        v1 = {"hero_image": "assets/images/demo.png"}
+        v2 = {"media": {"hero": {"src": "assets/images/v2.png"}}}
+
+        self.assertEqual(article_hero_image(v1), "assets/images/demo.png")
+        self.assertEqual(article_hero_image(v2), "assets/images/v2.png")
+
+    def test_meta_description_supports_v1_and_v2(self):
+        v1 = {"meta_description": "Legacy meta"}
+        v2 = {"content": {"fr": {"seo": {"meta_description": "Meta v2"}}}}
+
+        self.assertEqual(article_meta_description(v1), "Legacy meta")
+        self.assertEqual(article_meta_description(v2), "Meta v2")
 
     def test_publication_order_supports_v1_and_v2(self):
         self.assertEqual(article_publication_order({"publication_order_recommended": 3}), 3)

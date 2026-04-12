@@ -17,6 +17,7 @@ from .article_access import (
     article_title,
     has_english_content,
 )
+from .checks import CheckIssue
 
 
 Article = dict[str, Any]
@@ -83,6 +84,38 @@ def render_article_detail(article: Article) -> str:
         f"English content: {'yes' if has_english_content(article) else 'no'}",
     ]
     return "\n".join(lines)
+
+
+def render_check_report(issues: list[CheckIssue], checked_count: int) -> str:
+    errors = [issue for issue in issues if issue.severity == "ERROR"]
+    warnings = [issue for issue in issues if issue.severity == "WARNING"]
+
+    lines = [
+        "Editorial check",
+        f"Articles checked: {checked_count}",
+        f"Errors: {len(errors)}",
+        f"Warnings: {len(warnings)}",
+    ]
+
+    if not issues:
+        lines.append("No issues found.")
+        return "\n".join(lines)
+
+    if errors:
+        lines.append("")
+        lines.append("Errors:")
+        lines.extend(render_issue_lines(errors))
+
+    if warnings:
+        lines.append("")
+        lines.append("Warnings:")
+        lines.extend(render_issue_lines(warnings))
+
+    return "\n".join(lines)
+
+
+def render_issue_lines(issues: list[CheckIssue]) -> list[str]:
+    return [f"  - [{issue.code}] {issue.slug}: {issue.message}" for issue in issues]
 
 
 def render_table(headers: list[str], rows: list[list[str]]) -> str:

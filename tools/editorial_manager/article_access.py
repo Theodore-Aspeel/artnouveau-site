@@ -54,6 +54,20 @@ def article_dek(article: Article, locale: str = "fr") -> str:
     return normalize_text(content.get("dek")) or normalize_text(article.get("chapeau"))
 
 
+def article_hero_image(article: Article) -> str:
+    media = article.get("media")
+    hero = media.get("hero") if is_mapping(media) else None
+    hero_src = normalize_text(hero.get("src")) if is_mapping(hero) else ""
+    return hero_src or normalize_text(article.get("hero_image"))
+
+
+def article_meta_description(article: Article, locale: str = "fr") -> str:
+    content = locale_content(article, locale)
+    seo = content.get("seo") if content else None
+    meta_description = normalize_text(seo.get("meta_description")) if is_mapping(seo) else ""
+    return meta_description or normalize_text(article.get("meta_description"))
+
+
 def article_status(article: Article) -> str:
     return normalize_text(article.get("status")) or "unknown"
 
