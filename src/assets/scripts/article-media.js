@@ -1,6 +1,8 @@
 (function attachArticleMedia(global) {
   'use strict';
 
+  const access = global.ArticleAccess;
+
   function normalizeText(value) {
     return typeof value === 'string' ? value.trim() : '';
   }
@@ -27,15 +29,24 @@
   }
 
   function getImageEntries(article) {
+    const articleMedia = access && typeof access.getArticleMedia === 'function'
+      ? access.getArticleMedia(article)
+      : null;
     const entries = [];
-    const heroEntry = normalizeImageEntry(article && article.hero_image);
+    const heroEntry = articleMedia
+      ? normalizeImageEntry(articleMedia.hero)
+      : normalizeImageEntry(article && article.hero_image);
 
     if (heroEntry) {
       entries.push(heroEntry);
     }
 
-    if (Array.isArray(article && article.support_images)) {
-      article.support_images.forEach((image) => {
+    const supportImages = articleMedia
+      ? articleMedia.support
+      : (Array.isArray(article && article.support_images) ? article.support_images : []);
+
+    if (Array.isArray(supportImages)) {
+      supportImages.forEach((image) => {
         const normalized = normalizeImageEntry(image);
         if (normalized && !entries.some((entry) => entry.src === normalized.src)) {
           entries.push(normalized);

@@ -37,6 +37,28 @@ function getImagePath(entry) {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
+function getArticleImageEntries(article) {
+  const entries = [];
+  const media = article && typeof article === 'object' && !Array.isArray(article)
+    ? article.media
+    : null;
+
+  if (media && typeof media === 'object' && !Array.isArray(media)) {
+    entries.push(media.hero);
+    if (Array.isArray(media.support)) {
+      entries.push(...media.support);
+    }
+    return entries;
+  }
+
+  entries.push(article?.hero_image);
+  if (Array.isArray(article?.support_images)) {
+    entries.push(...article.support_images);
+  }
+
+  return entries;
+}
+
 function rewritePageForDist(relativeTargetPath, content) {
   if (relativeTargetPath === 'index.html') {
     return content
@@ -109,17 +131,10 @@ async function copyRuntimeImages() {
   const runtimeImagePaths = new Set();
 
   for (const article of Array.isArray(data.articles) ? data.articles : []) {
-    const heroPath = getImagePath(article?.hero_image);
-    if (heroPath) {
-      runtimeImagePaths.add(heroPath);
-    }
-
-    if (Array.isArray(article?.support_images)) {
-      for (const image of article.support_images) {
-        const imagePath = getImagePath(image);
-        if (imagePath) {
-          runtimeImagePaths.add(imagePath);
-        }
+    for (const image of getArticleImageEntries(article)) {
+      const imagePath = getImagePath(image);
+      if (imagePath) {
+        runtimeImagePaths.add(imagePath);
       }
     }
   }

@@ -3,6 +3,7 @@
 
   const media = window.ArticleMedia;
   const taxonomy = window.ArticleTags;
+  const access = window.ArticleAccess;
   const grid = document.getElementById('gallery-grid');
   const paginationEl = document.getElementById('gallery-pagination');
   const stateEl = document.getElementById('gallery-state');
@@ -29,6 +30,10 @@
   let galleryItems = [];
   let allTags = [];
 
+  function currentLocale() {
+    return access.normalizeLocale(document.documentElement.lang || 'fr');
+  }
+
   function buildArticleHref(slug) {
     const normalizedSlug = normalizeText(slug);
     if (!normalizedSlug) return 'article.html';
@@ -44,21 +49,12 @@
   }
 
   function getCardExcerpt(article) {
-    const chapeau = normalizeText(article.chapeau);
-    if (chapeau) return chapeau;
-
-    const metaDescription = normalizeText(article.meta_description);
-    if (metaDescription) return metaDescription;
-
-    return '';
+    return access.getArticleDek(article, currentLocale()) || access.getArticleMetaDescription(article, currentLocale());
   }
 
   function getCardImage(article) {
-    if (media && typeof media.getPrimaryImage === 'function') {
-      return media.getPrimaryImage(article);
-    }
-
-    return normalizeText(article.hero_image);
+    const articleMedia = access.getArticleMedia(article, currentLocale());
+    return articleMedia.hero ? articleMedia.hero.src : '';
   }
 
   function resolveCardImageSrc(imagePath) {
@@ -81,23 +77,12 @@
   }
 
   function getCardStyle(article) {
-    if (taxonomy && typeof taxonomy.getArticleStyle === 'function') {
-      return taxonomy.getArticleStyle(article);
-    }
-
-    return normalizeText(article && article.style);
+    return access.getArticleTaxonomy(article, currentLocale()).styleLabel;
   }
 
   function getArticleDate(article) {
-    if (article && article.verified_info && typeof article.verified_info.date === 'string' && article.verified_info.date.trim()) {
-      return article.verified_info.date.trim();
-    }
-
-    if (article && article.practical && typeof article.practical.Datation === 'string' && article.practical.Datation.trim()) {
-      return article.practical.Datation.trim();
-    }
-
-    return '';
+    const dateItem = access.getArticlePracticalItems(article, currentLocale()).find((item) => item.key === 'date');
+    return dateItem && dateItem.value ? dateItem.value : '';
   }
 
   function deriveGalleryItems(articles) {
@@ -106,26 +91,28 @@
     return articles
       .filter((article) => {
         const slug = normalizeText(article.slug);
-        const title = normalizeText(article.title);
+        const title = access.getArticleTitle(article, currentLocale());
 
         if (!slug || !title || seenSlugs.has(slug)) return false;
         seenSlugs.add(slug);
         return true;
       })
       .sort((left, right) => {
-        const leftOrder = Number.isFinite(left.publication_order_recommended) ? left.publication_order_recommended : Number.MAX_SAFE_INTEGER;
-        const rightOrder = Number.isFinite(right.publication_order_recommended) ? right.publication_order_recommended : Number.MAX_SAFE_INTEGER;
+        const leftOrder = access.getArticlePublicationOrder(left);
+        const rightOrder = access.getArticlePublicationOrder(right);
 
         if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-        return normalizeText(left.title).localeCompare(normalizeText(right.title), 'fr');
+        const leftTitle = access.getArticleTitle(left, currentLocale());
+        const rightTitle = access.getArticleTitle(right, currentLocale());
+        return leftTitle.localeCompare(rightTitle, currentLocale());
       })
       .map((article) => ({
         slug: article.slug,
-        title: article.title,
-        country: article.country || '',
-        city: article.city || '',
+        title: access.getArticleTitle(article, currentLocale()),
+        country: access.getArticleTaxonomy(article, currentLocale()).country,
+        city: access.getArticleTaxonomy(article, currentLocale()).city,
         style: getCardStyle(article),
-        format: article.format || '',
+        format: access.getArticleFormat(article),
         date: getArticleDate(article),
         excerpt: getCardExcerpt(article),
         image: getCardImage(article),

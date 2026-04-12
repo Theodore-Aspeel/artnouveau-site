@@ -1,91 +1,160 @@
 {
   "articles": [
     {
+      "schema_version": 2,
+      "id": "maison-coilliot-lille-hector-guimard",
       "slug": "maison-coilliot-lille-hector-guimard",
-      "format": "article-complet",
-      "title": "Maison Coilliot, Lille",
-      "quote": {
-        "text": {
-          "fr": "La nature est un grand livre dans lequel nous pouvons puiser notre inspiration.",
-          "en": "Nature is a big book from which we can draw inspiration."
-        },
-        "author": {
-          "fr": "Hector Guimard",
-          "en": "Hector Guimard"
-        },
-        "attribution": {
-          "fr": "article de l’Architectural Record, 1902",
-          "en": "Architectural Record article, 1902"
-        },
-        "source": "Cooper Hewitt, Smithsonian Design Museum",
-        "source_url": "https://www.cooperhewitt.org/2023/02/09/hector-guimard-art-nouveau-to-modernism/",
-        "source_type": "museum",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 1,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-coilliot-lille-hector-guimard.png",
-      "support_images": [
-        "assets/images/articles/lhuitriere-lille-art-deco.png",
-        "assets/images/articles/loge-maconnique-lumiere-du-nord-albert-baert-1914.png"
-      ],
-      "city": "Lille",
-      "country": "France",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Façade",
-        "Seuil"
-      ],
-      "gaps": [],
-      "chapeau": "La Maison Coilliot fait partie de ces bâtiments que l'on comprend d'abord par la rue. Avant même d'en savoir davantage, on voit qu'ici la façade ne se contente pas d'occuper son alignement. Elle le déplace. Le nom d'Hector Guimard donne un repère sûr. Le reste tient à une sensation plus directe, celle d'une surface qui semble travailler de l'intérieur et donner à la rue une autre mesure.",
-      "sections": [
-        {
-          "heading": "Une présence qui ne demande pas d'explication préalable",
-          "body": "La force du lieu tient à sa lisibilité immédiate. Même lorsque la documentation reste partielle, on perçoit qu'il ne s'agit pas d'une façade pensée comme un simple devant. Les lignes, les reliefs, l'entrée, la façon dont les pleins et les ouvertures se répondent composent déjà une lecture. Le regard n'a pas besoin d'être guidé longtemps. Il comprend que l'ornement n'a pas été ajouté après coup. Il fait partie de la structure sensible du bâtiment.\n\nC'est souvent ainsi que l'Art Nouveau s'impose le plus justement. Non comme un catalogue de motifs, mais comme une manière de mettre la façade en mouvement sans la dissoudre. Rien n'est agité. Rien n'est sec non plus. Tout semble tenu par un rythme qui oblige à ralentir."
-        },
-        {
-          "heading": "Guimard comme repère, la rue comme preuve",
-          "body": "L'association avec Hector Guimard compte, bien sûr. Elle suffit à situer le bâtiment dans une histoire plus large. Mais, devant la Maison Coilliot, le plus juste reste encore de partir de ce que la rue donne. Ce n'est pas seulement un nom d'architecte que l'on lit ici. C'est une façon de faire tenir ensemble l'élan, la matière et la continuité de l'élévation.\n\nLe regard circule sans se perdre. Il revient vers le seuil, repart vers les parties hautes, s'arrête sur une tension locale, puis reprend l'ensemble. Cette circulation est décisive. Elle rappelle qu'une bonne façade Art Nouveau ne se réduit ni à sa signature ni à son décor. Elle installe une discipline du regard."
-        },
-        {
-          "heading": "Ce qu'il faut lire sur place",
-          "body": "Le premier point d'attention reste l'entrée. Dans ce type d'architecture, le seuil concentre souvent quelque chose de la logique générale du bâtiment. Ensuite, il faut revenir à l'ensemble et regarder comment la façade se distingue de ses voisines sans rompre complètement avec elles. C'est dans cet écart que la lecture devient la plus précise.\n\nÀ Lille, la Maison Coilliot trouve un prolongement naturel avec L'Huîtrière et avec la loge Lumière du Nord. Les trois sujets n'appartiennent pas au même moment ni au même vocabulaire, mais ils montrent une même exigence. Celle d'une façade qui ne laisse pas la rue tout à fait intacte."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison Coilliot",
+        "exact_name": "Maison Coilliot, Lille"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "facade",
+          "threshold"
+        ],
+        "place_keys": {
+          "city": "lille",
+          "country": "fr"
         }
-      ],
-      "around": {
-        "relation_label": "Même ville",
-        "article_slug": "lhuitriere-lille-art-deco",
-        "note": "À comparer : deux manières très différentes de tenir une façade, l’une plus singulière, l’autre plus commerciale mais tout aussi nette."
       },
-      "practical": {
-        "Ville": "Lille",
-        "Pays": "France",
-        "Style": "Art Nouveau",
-        "Architecte": "Hector Guimard",
-        "Adresse": "14 rue de Fleurus, Lille",
-        "Datation": "1898 ; 1900",
-        "Accès": "Observation depuis la rue"
+      "facts": {
+        "location": {
+          "city": "Lille",
+          "country": "France",
+          "country_code": "FR",
+          "address": "14 rue de Fleurus, Lille"
+        },
+        "dates": {
+          "built": "1898 ; 1900"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Hector Guimard"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Façade Art Nouveau de la Maison Coilliot à Lille, bâtiment associé à Hector Guimard.",
-      "meta_description": "Maison Coilliot à Lille. Une lecture de rue de la façade associée à Hector Guimard, entre seuil, rythme et présence urbaine.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-coilliot-lille-hector-guimard.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/lhuitriere-lille-art-deco.png",
+            "credit": null
+          },
+          {
+            "src": "assets/images/articles/loge-maconnique-lumiere-du-nord-albert-baert-1914.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "La nature est un grand livre dans lequel nous pouvons puiser notre inspiration.",
+            "en": "Nature is a big book from which we can draw inspiration."
+          },
+          "author": "Hector Guimard",
+          "attribution": {
+            "fr": "article de l’Architectural Record, 1902",
+            "en": "Architectural Record article, 1902"
+          },
+          "source": "Cooper Hewitt, Smithsonian Design Museum",
+          "url": "https://www.cooperhewitt.org/2023/02/09/hector-guimard-art-nouveau-to-modernism/",
+          "type": "museum",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "same_city",
+          "article_id": "lhuitriere-lille-art-deco"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 1,
-      "epigraph": "Certaines façades changent tout de suite la tenue d'une rue.",
-      "verified_info": {
-        "exact_name": "Maison Coilliot, Lille",
-        "architect": "Hector Guimard",
-        "date": "1898 ; 1900",
-        "style": "Art Nouveau",
-        "city": "Lille",
-        "country": "France",
-        "address": "14 rue de Fleurus, Lille",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison Coilliot, Lille",
+          "dek": "La Maison Coilliot fait partie de ces bâtiments que l'on comprend d'abord par la rue. Avant même d'en savoir davantage, on voit qu'ici la façade ne se contente pas d'occuper son alignement. Elle le déplace. Le nom d'Hector Guimard donne un repère sûr. Le reste tient à une sensation plus directe, celle d'une surface qui semble travailler de l'intérieur et donner à la rue une autre mesure.",
+          "epigraph": "Certaines façades changent tout de suite la tenue d'une rue.",
+          "sections": [
+            {
+              "heading": "Une présence qui ne demande pas d'explication préalable",
+              "body": "La force du lieu tient à sa lisibilité immédiate. Même lorsque la documentation reste partielle, on perçoit qu'il ne s'agit pas d'une façade pensée comme un simple devant. Les lignes, les reliefs, l'entrée, la façon dont les pleins et les ouvertures se répondent composent déjà une lecture. Le regard n'a pas besoin d'être guidé longtemps. Il comprend que l'ornement n'a pas été ajouté après coup. Il fait partie de la structure sensible du bâtiment.\n\nC'est souvent ainsi que l'Art Nouveau s'impose le plus justement. Non comme un catalogue de motifs, mais comme une manière de mettre la façade en mouvement sans la dissoudre. Rien n'est agité. Rien n'est sec non plus. Tout semble tenu par un rythme qui oblige à ralentir."
+            },
+            {
+              "heading": "Guimard comme repère, la rue comme preuve",
+              "body": "L'association avec Hector Guimard compte, bien sûr. Elle suffit à situer le bâtiment dans une histoire plus large. Mais, devant la Maison Coilliot, le plus juste reste encore de partir de ce que la rue donne. Ce n'est pas seulement un nom d'architecte que l'on lit ici. C'est une façon de faire tenir ensemble l'élan, la matière et la continuité de l'élévation.\n\nLe regard circule sans se perdre. Il revient vers le seuil, repart vers les parties hautes, s'arrête sur une tension locale, puis reprend l'ensemble. Cette circulation est décisive. Elle rappelle qu'une bonne façade Art Nouveau ne se réduit ni à sa signature ni à son décor. Elle installe une discipline du regard."
+            },
+            {
+              "heading": "Ce qu'il faut lire sur place",
+              "body": "Le premier point d'attention reste l'entrée. Dans ce type d'architecture, le seuil concentre souvent quelque chose de la logique générale du bâtiment. Ensuite, il faut revenir à l'ensemble et regarder comment la façade se distingue de ses voisines sans rompre complètement avec elles. C'est dans cet écart que la lecture devient la plus précise.\n\nÀ Lille, la Maison Coilliot trouve un prolongement naturel avec L'Huîtrière et avec la loge Lumière du Nord. Les trois sujets n'appartiennent pas au même moment ni au même vocabulaire, mais ils montrent une même exigence. Celle d'une façade qui ne laisse pas la rue tout à fait intacte."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Coilliot à Lille. Une lecture de rue de la façade associée à Hector Guimard, entre seuil, rythme et présence urbaine."
+          },
+          "media": {
+            "hero_alt": "Façade Art Nouveau de la Maison Coilliot à Lille, bâtiment associé à Hector Guimard.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Lille"
+            },
+            {
+              "key": "country",
+              "value": "France"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Hector Guimard"
+            },
+            {
+              "key": "address",
+              "value": "14 rue de Fleurus, Lille"
+            },
+            {
+              "key": "date",
+              "value": "1898 ; 1900"
+            },
+            {
+              "key": "access",
+              "value": "Observation depuis la rue"
+            }
+          ],
+          "around": {
+            "note": "À comparer : deux manières très différentes de tenir une façade, l’une plus singulière, l’autre plus commerciale mais tout aussi nette."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -1003,79 +1072,138 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-ernest-delune-maitre-verrier",
       "slug": "maison-ernest-delune-maitre-verrier",
-      "format": "article-court",
-      "title": "Une maison d’Ernest Delune pour un maître verrier",
-      "quote": {
-        "text": {
-          "fr": "une maison doit refléter la vie de celui qui l’habite et être son portrait",
-          "en": "a house must reflect its dweller's life and be his portrait"
-        },
-        "author": {
-          "fr": "Victor Horta",
-          "en": "Victor Horta"
-        },
-        "attribution": {
-          "fr": "à propos de la maison Winssinger / formulation reprise des mémoires",
-          "en": "On the Winssinger House / memoir formulation"
-        },
-        "source": "TheArtStory",
-        "source_url": "https://www.theartstory.org/artist/horta-victor/",
-        "source_type": "reputable_secondary",
-        "verified": true
+      "status": "draft",
+      "format": "short",
+      "publication": {
+        "order": 13,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-ernest-delune-maitre-verrier.png",
-      "support_images": [],
-      "city": "Ixelles",
-      "country": "Belgique",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Seuil",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "Cette maison d’Ernest Delune demande une lecture simple et nette. À Ixelles, en 1902, elle tient d’abord par la relation entre atelier, habitation et façade. Le sujet n’a pas besoin d’être élargi davantage pour justifier une note courte.",
-      "sections": [
-        {
-          "heading": "Atelier et habitation",
-          "body": "Savoir qu’il s’agit d’un ancien atelier et d’une habitation change immédiatement la lecture. On devient plus attentif à la place des baies, au rapport entre usage et façade, à la manière dont le seuil organise déjà une présence plus mixte dans la rue.\n\nLe nom d’Ernest Delune donne au sujet sa fermeté. Il permet de rester au plus près du bâtiment, sans lui demander un récit plus large que ce que les données confirmées autorisent."
-        },
-        {
-          "heading": "Rester à la juste échelle",
-          "body": "Ce sujet ne demande pas un long article. Une note courte, tenue, vaut mieux ici qu’un texte qui voudrait surinterpréter le bâtiment. L’essentiel est déjà là, une relation entre façade, usage et regard, assez précise pour justifier sa place.\n\nLe texte peut donc rester à cette échelle. Il accompagne la lecture sans forcer le bâtiment à dire plus que ce qu’il donne."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Ancien atelier et habitation de Clas Grüner Sterner",
+        "exact_name": "Ancien atelier et habitation de Clas Grüner Sterner"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "threshold",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "ixelles",
+          "country": "belgique"
         }
-      ],
-      "around": null,
-      "practical": {
-        "Ville": "Ixelles",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau",
-        "Architecte": "Ernest Delune",
-        "Datation": "1902",
-        "Adresse": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles"
       },
-      "alt_text": "Maison Art Nouveau d’Ernest Delune à Ixelles, ancien atelier et habitation de Clas Grüner Sterner.",
-      "meta_description": "Une maison d’Ernest Delune à Ixelles. Une note courte sur un ancien atelier et habitation, entre usage, façade et lecture de rue.",
+      "facts": {
+        "location": {
+          "city": "Ixelles",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles"
+        },
+        "dates": {
+          "built": "1902"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Ernest Delune"
+          }
+        ],
+        "notes": null
+      },
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-ernest-delune-maitre-verrier.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "une maison doit refléter la vie de celui qui l’habite et être son portrait",
+            "en": "a house must reflect its dweller's life and be his portrait"
+          },
+          "author": "Victor Horta",
+          "attribution": {
+            "fr": "à propos de la maison Winssinger / formulation reprise des mémoires",
+            "en": "On the Winssinger House / memoir formulation"
+          },
+          "source": "TheArtStory",
+          "url": "https://www.theartstory.org/artist/horta-victor/",
+          "type": "reputable_secondary",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": null
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 13,
-      "epigraph": "Parfois le commanditaire suffit à déplacer la manière de lire une façade.",
-      "verified_info": {
-        "exact_name": "Ancien atelier et habitation de Clas Grüner Sterner",
-        "architect": "Ernest Delune",
-        "date": "1902",
-        "style": "Art Nouveau",
-        "city": "Ixelles",
-        "country": "Belgique",
-        "address": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Une maison d’Ernest Delune pour un maître verrier",
+          "dek": "Cette maison d’Ernest Delune demande une lecture simple et nette. À Ixelles, en 1902, elle tient d’abord par la relation entre atelier, habitation et façade. Le sujet n’a pas besoin d’être élargi davantage pour justifier une note courte.",
+          "epigraph": "Parfois le commanditaire suffit à déplacer la manière de lire une façade.",
+          "sections": [
+            {
+              "heading": "Atelier et habitation",
+              "body": "Savoir qu’il s’agit d’un ancien atelier et d’une habitation change immédiatement la lecture. On devient plus attentif à la place des baies, au rapport entre usage et façade, à la manière dont le seuil organise déjà une présence plus mixte dans la rue.\n\nLe nom d’Ernest Delune donne au sujet sa fermeté. Il permet de rester au plus près du bâtiment, sans lui demander un récit plus large que ce que les données confirmées autorisent."
+            },
+            {
+              "heading": "Rester à la juste échelle",
+              "body": "Ce sujet ne demande pas un long article. Une note courte, tenue, vaut mieux ici qu’un texte qui voudrait surinterpréter le bâtiment. L’essentiel est déjà là, une relation entre façade, usage et regard, assez précise pour justifier sa place.\n\nLe texte peut donc rester à cette échelle. Il accompagne la lecture sans forcer le bâtiment à dire plus que ce qu’il donne."
+            }
+          ],
+          "seo": {
+            "meta_description": "Une maison d’Ernest Delune à Ixelles. Une note courte sur un ancien atelier et habitation, entre usage, façade et lecture de rue."
+          },
+          "media": {
+            "hero_alt": "Maison Art Nouveau d’Ernest Delune à Ixelles, ancien atelier et habitation de Clas Grüner Sterner.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Ixelles"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Ernest Delune"
+            },
+            {
+              "key": "date",
+              "value": "1902"
+            },
+            {
+              "key": "address",
+              "value": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles"
+            }
+          ],
+          "around": null,
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -1157,5 +1285,10 @@
         "notes": null
       }
     }
-  ]
+  ],
+  "_meta": {
+    "schema_version": 2,
+    "migration": "progressive-v1-v2",
+    "note": "Articles may temporarily mix legacy flat v1 entries and schema_version=2 entries. Reader-facing strings belong under content.<locale>; stable facts, media, taxonomy, sources, relations and editorial metadata stay outside content."
+  }
 }

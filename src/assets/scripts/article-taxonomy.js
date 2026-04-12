@@ -1,6 +1,8 @@
 (function attachArticleTags(global) {
   'use strict';
 
+  const access = global.ArticleAccess;
+
   const CANONICAL_STYLES = {
     'art nouveau': 'Art Nouveau',
     'art nouveau geometrique': 'Art Nouveau géométrique',
@@ -55,6 +57,11 @@
   function getArticleStyle(article) {
     if (!article || typeof article !== 'object') return '';
 
+    if (access && typeof access.getArticleTaxonomy === 'function') {
+      const articleTaxonomy = access.getArticleTaxonomy(article);
+      if (articleTaxonomy.styleLabel) return articleTaxonomy.styleLabel;
+    }
+
     const directStyle = normalizeStyle(article.style);
     if (directStyle) return directStyle;
 
@@ -71,6 +78,21 @@
   }
 
   function getArticleTags(article) {
+    if (access && typeof access.getArticleTaxonomy === 'function') {
+      const articleTaxonomy = access.getArticleTaxonomy(article);
+      if (Array.isArray(articleTaxonomy.tagLabels) && articleTaxonomy.tagLabels.length) {
+        const seen = new Set();
+        return articleTaxonomy.tagLabels
+          .map((tag) => normalizeTag(tag))
+          .filter((tag) => {
+            const slug = slugifyTag(tag);
+            if (!tag || !slug || seen.has(slug)) return false;
+            seen.add(slug);
+            return true;
+          });
+      }
+    }
+
     if (!Array.isArray(article && article.tags)) return [];
 
     const seen = new Set();

@@ -14,6 +14,7 @@ const REQUIRED_SOURCE_FILES = [
   'src/pages/article-redirect.html',
   'src/pages/articles/template.html',
   'src/assets/styles/main.css',
+  'src/assets/scripts/article-access.js',
   'src/assets/scripts/main.js',
   'src/assets/scripts/gallery.js',
   'src/assets/scripts/article-media.js',
@@ -35,6 +36,7 @@ const REQUIRED_DIST_FILES = [
   'article.html',
   'articles/template.html',
   'assets/styles/main.css',
+  'assets/scripts/article-access.js',
   'assets/scripts/main.js',
   'assets/scripts/gallery.js',
   'assets/scripts/article-media.js',
@@ -81,6 +83,45 @@ const CONTROLLED_AROUND_RELATIONS = new Set([
   'Autre échelle',
 ]);
 
+const CONTROLLED_STYLE_KEYS = new Set([
+  'art_nouveau',
+  'art_nouveau_geometric',
+  'art_deco',
+  'liberty_art_nouveau',
+  'vienna_secession',
+]);
+
+const CONTROLLED_TAG_KEYS = new Set([
+  'art_nouveau',
+  'art_deco',
+  'public_building',
+  'commerce',
+  'facade',
+  'habitat',
+  'liberty',
+  'floral_motif',
+  'threshold',
+  'vienna_secession',
+  'urban_lettering',
+]);
+
+const CONTROLLED_RELATION_KEYS = new Set([
+  'same_city',
+  'counterpoint',
+  'other_scale',
+]);
+
+const CONTROLLED_PRACTICAL_KEYS = new Set([
+  'exact_name',
+  'city',
+  'country',
+  'style',
+  'architect',
+  'address',
+  'date',
+  'access',
+]);
+
 const SOURCE_TEXT_FILES = [
   'src/pages/index.html',
   'src/pages/about.html',
@@ -88,6 +129,7 @@ const SOURCE_TEXT_FILES = [
   'src/pages/404.html',
   'src/pages/article-redirect.html',
   'src/pages/articles/template.html',
+  'src/assets/scripts/article-access.js',
   'src/assets/scripts/main.js',
   'src/assets/scripts/gallery.js',
   'src/assets/scripts/article-media.js',
@@ -192,22 +234,27 @@ function collectArticleAssetRefs(articles) {
       ? article.slug.trim()
       : `article#${index + 1}`;
 
-    const heroImagePath = getImagePath(article.hero_image);
+    const articleMedia = isPlainObject(article.media) ? article.media : null;
+    const heroImagePath = getImagePath(articleMedia ? articleMedia.hero : article.hero_image);
     if (heroImagePath) {
       refs.push({
         article: articleLabel,
-        field: 'hero_image',
+        field: articleMedia ? 'media.hero' : 'hero_image',
         path: heroImagePath,
       });
     }
 
-    if (Array.isArray(article.support_images)) {
-      article.support_images.forEach((item, supportIndex) => {
+    const supportImages = articleMedia && Array.isArray(articleMedia.support)
+      ? articleMedia.support
+      : article.support_images;
+
+    if (Array.isArray(supportImages)) {
+      supportImages.forEach((item, supportIndex) => {
         const imagePath = getImagePath(item);
         if (imagePath) {
           refs.push({
             article: articleLabel,
-            field: `support_images[${supportIndex}]`,
+            field: articleMedia ? `media.support[${supportIndex}]` : `support_images[${supportIndex}]`,
             path: imagePath,
           });
         }
@@ -327,6 +374,152 @@ function validateImageEntry(entry, fieldLabel, articleLabel, errors) {
   }
 }
 
+function validateArticleSchemaV2(article, articleLabel, errors, publicationOrders, slugSet) {
+  const slug = normalizeText(article.slug);
+  if (!slug) {
+    errors.push(`${articleLabel}: slug is required.`);
+  } else if (slugSet.has(slug)) {
+    errors.push(`${articleLabel}: slug must be unique.`);
+  } else {
+    slugSet.add(slug);
+  }
+
+  const id = normalizeText(article.id);
+  if (!id) {
+    errors.push(`${articleLabel}: id is required for v2 articles.`);
+  } else if (id !== slug) {
+    errors.push(`${articleLabel}: id must match slug during the progressive v2 migration.`);
+  }
+
+  if (!['long', 'short', 'article-complet', 'article-court'].includes(normalizeText(article.format))) {
+    errors.push(`${articleLabel}: format must be long/short or a legacy article format during migration.`);
+  }
+
+  const publication = isPlainObject(article.publication) ? article.publication : {};
+  if (!Number.isInteger(publication.order) || publication.order < 1) {
+    errors.push(`${articleLabel}: publication.order must be a positive integer.`);
+  } else if (publicationOrders.has(publication.order)) {
+    errors.push(`${articleLabel}: publication.order duplicates ${publicationOrders.get(publication.order)}.`);
+  } else {
+    publicationOrders.set(publication.order, articleLabel);
+  }
+
+  if ('taxonomy' in article && article.taxonomy !== null) {
+    if (!isPlainObject(article.taxonomy)) {
+      errors.push(`${articleLabel}: taxonomy must be an object when provided.`);
+    } else {
+      const styleKey = normalizeText(article.taxonomy.style_key);
+      if (styleKey && !CONTROLLED_STYLE_KEYS.has(styleKey)) {
+        errors.push(`${articleLabel}: taxonomy.style_key must be one of ${Array.from(CONTROLLED_STYLE_KEYS).join(', ')}.`);
+      }
+
+      if ('tag_keys' in article.taxonomy) {
+        if (!Array.isArray(article.taxonomy.tag_keys)) {
+          errors.push(`${articleLabel}: taxonomy.tag_keys must be an array when provided.`);
+        } else {
+          article.taxonomy.tag_keys.forEach((tagKey, tagIndex) => {
+            if (!CONTROLLED_TAG_KEYS.has(normalizeText(tagKey))) {
+              errors.push(`${articleLabel}: taxonomy.tag_keys[${tagIndex}] must be one of ${Array.from(CONTROLLED_TAG_KEYS).join(', ')}.`);
+            }
+          });
+        }
+      }
+    }
+  }
+
+  if (!isPlainObject(article.media) && !getImagePath(article.hero_image)) {
+    errors.push(`${articleLabel}: media.hero is required for v2 articles unless a legacy hero_image fallback is present.`);
+  } else if (isPlainObject(article.media)) {
+    validateImageEntry(article.media.hero || article.hero_image, 'media.hero', articleLabel, errors);
+    if (!Array.isArray(article.media.support)) {
+      errors.push(`${articleLabel}: media.support must be an array.`);
+    } else {
+      article.media.support.forEach((entry, imageIndex) => {
+        validateImageEntry(entry, `media.support[${imageIndex}]`, articleLabel, errors);
+      });
+    }
+  }
+
+  const content = isPlainObject(article.content) ? article.content : {};
+  const fr = isPlainObject(content.fr) ? content.fr : {};
+  if (!isPlainObject(content.fr)) {
+    errors.push(`${articleLabel}: content.fr is required for v2 articles.`);
+  }
+
+  if (!normalizeText(fr.title)) errors.push(`${articleLabel}: content.fr.title is required.`);
+  if (!normalizeText(fr.dek)) errors.push(`${articleLabel}: content.fr.dek is required.`);
+  if (!normalizeText(fr.epigraph)) errors.push(`${articleLabel}: content.fr.epigraph is required.`);
+  if (!isPlainObject(fr.seo) || !normalizeText(fr.seo.meta_description)) {
+    errors.push(`${articleLabel}: content.fr.seo.meta_description is required.`);
+  }
+  if (!isPlainObject(fr.media) || !normalizeText(fr.media.hero_alt)) {
+    errors.push(`${articleLabel}: content.fr.media.hero_alt is required.`);
+  }
+  if (!Array.isArray(fr.sections) || !fr.sections.length) {
+    errors.push(`${articleLabel}: content.fr.sections must contain at least one section.`);
+  } else {
+    fr.sections.forEach((section, sectionIndex) => {
+      if (!isPlainObject(section)) {
+        errors.push(`${articleLabel}: content.fr.sections[${sectionIndex}] must be an object.`);
+        return;
+      }
+      if (!normalizeText(section.heading)) errors.push(`${articleLabel}: content.fr.sections[${sectionIndex}].heading is required.`);
+      if (!normalizeText(section.body)) errors.push(`${articleLabel}: content.fr.sections[${sectionIndex}].body is required.`);
+    });
+  }
+
+  if (Array.isArray(fr.practical_items)) {
+    fr.practical_items.forEach((item, itemIndex) => {
+      if (!isPlainObject(item)) {
+        errors.push(`${articleLabel}: content.fr.practical_items[${itemIndex}] must be an object.`);
+        return;
+      }
+      if (!CONTROLLED_PRACTICAL_KEYS.has(normalizeText(item.key))) {
+        errors.push(`${articleLabel}: content.fr.practical_items[${itemIndex}].key must be a stable practical key.`);
+      }
+      if (!normalizeText(item.value)) {
+        errors.push(`${articleLabel}: content.fr.practical_items[${itemIndex}].value is required.`);
+      }
+    });
+  }
+
+  const around = isPlainObject(article.relations) ? article.relations.around : null;
+  if (around !== undefined && around !== null) {
+    if (!isPlainObject(around)) {
+      errors.push(`${articleLabel}: relations.around must be null or an object.`);
+    } else if (!CONTROLLED_RELATION_KEYS.has(normalizeText(around.relation_key))) {
+      errors.push(`${articleLabel}: relations.around.relation_key must be one of ${Array.from(CONTROLLED_RELATION_KEYS).join(', ')}.`);
+    }
+  }
+
+  if (isPlainObject(article.sources) && isPlainObject(article.sources.quote)) {
+    const quote = article.sources.quote;
+    if (!isLocalizedString(quote.text)) errors.push(`${articleLabel}: sources.quote.text must contain at least one localized string.`);
+    if (!isLocalizedString(quote.author)) errors.push(`${articleLabel}: sources.quote.author must contain at least one localized string.`);
+    if ('url' in quote && quote.url !== null && (typeof quote.url !== 'string' || !/^https?:\/\//i.test(quote.url.trim()))) {
+      errors.push(`${articleLabel}: sources.quote.url must be an absolute http(s) URL when provided.`);
+    }
+    if (typeof quote.verified !== 'boolean') errors.push(`${articleLabel}: sources.quote.verified must be a boolean.`);
+  }
+
+  for (const value of [
+    fr.title,
+    fr.dek,
+    fr.epigraph,
+    fr.seo?.meta_description,
+    article.sources?.quote?.text?.fr,
+    article.sources?.quote?.author?.fr,
+    article.sources?.quote?.attribution?.fr,
+  ]) {
+    if (hasMojibake(value)) {
+      errors.push(`${articleLabel}: contains mojibake-corrupted text.`);
+    }
+    if (hasSuspiciousQuestionMark(value)) {
+      errors.push(`${articleLabel}: contains suspicious replacement "?" in editorial text.`);
+    }
+  }
+}
+
 function validateArticleSchema(articles) {
   const errors = [];
   const warnings = [];
@@ -340,6 +533,11 @@ function validateArticleSchema(articles) {
 
     if (!isPlainObject(article)) {
       errors.push(`${articleLabel}: article entry must be an object.`);
+      return;
+    }
+
+    if (article.schema_version === 2 || isPlainObject(article.content)) {
+      validateArticleSchemaV2(article, articleLabel, errors, publicationOrders, slugSet);
       return;
     }
 
@@ -581,6 +779,13 @@ function validateArticleSchema(articles) {
       const targetSlug = normalizeText(article.around.article_slug);
       if (targetSlug && !slugSet.has(targetSlug)) {
         errors.push(`${articleLabel}: around.article_slug must reference an existing article slug.`);
+      }
+    }
+
+    if (isPlainObject(article?.relations?.around)) {
+      const targetSlug = normalizeText(article.relations.around.article_id || article.relations.around.article_slug);
+      if (targetSlug && !slugSet.has(targetSlug)) {
+        errors.push(`${articleLabel}: relations.around.article_id must reference an existing article slug.`);
       }
     }
   });

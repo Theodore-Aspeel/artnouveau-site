@@ -3,6 +3,7 @@
 
   const media = window.ArticleMedia;
   const taxonomy = window.ArticleTags;
+  const access = window.ArticleAccess;
   const instagramUrl = 'https://www.instagram.com/artnouveauetdeco';
   const root = document.getElementById('article-root');
   const script = document.currentScript;
@@ -14,7 +15,7 @@
   const articleHrefBase = script?.dataset.articleHrefBase || 'article.html?slug=';
   const slug = new URLSearchParams(window.location.search).get('slug');
 
-  if (!root) return;
+  if (!root || !access) return;
 
   function make(tag, className, text) {
     const el = document.createElement(tag);
@@ -149,33 +150,6 @@
     return capitalizeLeadingText(normalized);
   }
 
-  function factValue(articleData, key) {
-    const verifiedValue = articleData.verified_info && typeof articleData.verified_info === 'object'
-      ? articleData.verified_info[key]
-      : '';
-
-    if (typeof verifiedValue === 'string' && verifiedValue.trim()) {
-      return verifiedValue.trim();
-    }
-
-    if (articleData.practical && typeof articleData.practical === 'object') {
-      const practicalKeys = {
-        date: 'Datation',
-        address: 'Adresse',
-        architect: 'Architecte',
-        city: 'Ville',
-        country: 'Pays',
-        style: 'Style',
-      };
-      const practicalValue = articleData.practical[practicalKeys[key]];
-      if (typeof practicalValue === 'string' && practicalValue.trim()) {
-        return practicalValue.trim();
-      }
-    }
-
-    return '';
-  }
-
   function makeImageCaption(entry) {
     if (!entry || (!entry.caption && !entry.credit)) {
       return null;
@@ -242,15 +216,24 @@
     return;
   }
 
+  const locale = currentLocale();
+  const articleTitle = access.getArticleTitle(article, locale);
+  const articleDek = access.getArticleDek(article, locale);
+  const articleEpigraph = access.getArticleEpigraph(article, locale);
+  const articleMetaDescription = access.getArticleMetaDescription(article, locale);
+  const articleFormat = access.getArticleFormat(article);
+
   const orderedArticles = data.articles
     .filter((item) => item && item.slug)
     .slice()
     .sort((left, right) => {
-      const leftOrder = Number.isFinite(left.publication_order_recommended) ? left.publication_order_recommended : Number.MAX_SAFE_INTEGER;
-      const rightOrder = Number.isFinite(right.publication_order_recommended) ? right.publication_order_recommended : Number.MAX_SAFE_INTEGER;
+      const leftOrder = access.getArticlePublicationOrder(left);
+      const rightOrder = access.getArticlePublicationOrder(right);
 
       if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-      return left.title.localeCompare(right.title, 'fr');
+      const leftTitle = access.getArticleTitle(left, locale);
+      const rightTitle = access.getArticleTitle(right, locale);
+      return leftTitle.localeCompare(rightTitle, locale);
     });
   const articleIndex = orderedArticles.findIndex((item) => item.slug === article.slug);
   const previousArticle = articleIndex > 0 ? orderedArticles[articleIndex - 1] : null;
@@ -258,30 +241,30 @@
     ? orderedArticles[articleIndex + 1]
     : null;
 
-  document.getElementById('page-title').textContent = article.title + ' · Art Nouveau et Art Déco';
+  document.getElementById('page-title').textContent = articleTitle + ' · Art Nouveau et Art Déco';
   const metaEl = document.getElementById('page-description');
-  if (metaEl && article.meta_description) {
-    metaEl.setAttribute('content', article.meta_description);
+  if (metaEl && articleMetaDescription) {
+    metaEl.setAttribute('content', articleMetaDescription);
   }
 
   const ogTitleEl = document.getElementById('og-title');
   if (ogTitleEl) {
-    ogTitleEl.setAttribute('content', article.title + ' · Art Nouveau et Art Déco');
+    ogTitleEl.setAttribute('content', articleTitle + ' · Art Nouveau et Art Déco');
   }
 
   const ogDescriptionEl = document.getElementById('og-description');
-  if (ogDescriptionEl && article.meta_description) {
-    ogDescriptionEl.setAttribute('content', article.meta_description);
+  if (ogDescriptionEl && articleMetaDescription) {
+    ogDescriptionEl.setAttribute('content', articleMetaDescription);
   }
 
   const twitterTitleEl = document.getElementById('twitter-title');
   if (twitterTitleEl) {
-    twitterTitleEl.setAttribute('content', article.title + ' · Art Nouveau et Art Déco');
+    twitterTitleEl.setAttribute('content', articleTitle + ' · Art Nouveau et Art Déco');
   }
 
   const twitterDescriptionEl = document.getElementById('twitter-description');
-  if (twitterDescriptionEl && article.meta_description) {
-    twitterDescriptionEl.setAttribute('content', article.meta_description);
+  if (twitterDescriptionEl && articleMetaDescription) {
+    twitterDescriptionEl.setAttribute('content', articleMetaDescription);
   }
 
   const shell = make('article', 'container');
@@ -297,26 +280,24 @@
       <li aria-current="page"></li>
     </ol>
   `;
-  breadcrumb.querySelector('[aria-current="page"]').textContent = article.title;
+  breadcrumb.querySelector('[aria-current="page"]').textContent = articleTitle;
   shell.appendChild(breadcrumb);
 
   const primaryImageEntry = media && typeof media.getPrimaryImageEntry === 'function'
     ? media.getPrimaryImageEntry(article)
-    : (article.hero_image ? { src: article.hero_image, alt: '', caption: '', credit: '' } : null);
+    : null;
   const primaryImage = primaryImageEntry ? primaryImageEntry.src : '';
   const supportImageEntries = media && typeof media.getSecondaryImageEntries === 'function'
     ? media.getSecondaryImageEntries(article, 2)
-    : (article.support_images || []).filter(Boolean).slice(0, 2).map((src) => ({ src, alt: '', caption: '', credit: '' }));
+    : [];
   const articleTags = taxonomy && typeof taxonomy.getArticleTags === 'function'
     ? taxonomy.getArticleTags(article)
     : [];
   const articleStyle = taxonomy && typeof taxonomy.getArticleStyle === 'function'
     ? taxonomy.getArticleStyle(article)
-    : cleanText(article.style);
-  const verifiedQuote = article.quote && article.quote.verified && localizedValue(article.quote.text) ? article.quote : null;
-  const verifiedInfoEntries = article.verified_info && typeof article.verified_info === 'object'
-    ? Object.entries(article.verified_info).filter(([key, value]) => key !== 'notes' && typeof value === 'string' && value.trim())
-    : [];
+    : access.getArticleTaxonomy(article, locale).styleLabel;
+  const sourceQuote = article.sources && article.sources.quote ? article.sources.quote : article.quote;
+  const verifiedQuote = sourceQuote && sourceQuote.verified && localizedValue(sourceQuote.text) ? sourceQuote : null;
   const editorial = article.editorial && typeof article.editorial === 'object' ? article.editorial : {};
   const bylineText = cleanText(editorial.author);
   const publishedOn = cleanText(editorial.published_on);
@@ -324,24 +305,30 @@
   const imageCredit = cleanText(editorial.image_credit);
   const sourceNote = cleanText(editorial.source_note);
   const methodNote = cleanText(editorial.method_note);
-  const factualDate = factValue(article, 'date');
+  const factualDateItem = access && typeof access.getArticlePracticalItems === 'function'
+    ? access.getArticlePracticalItems(article, locale).find((item) => item.key === 'date')
+    : null;
+  const factualDate = factualDateItem ? factualDateItem.value : '';
   const hasEditorialMeta = Boolean(bylineText || publishedOn || updatedOn || factualDate || imageCredit || sourceNote || methodNote);
-  const sections = Array.isArray(article.sections) ? article.sections : [];
+  const sections = access.getArticleSections(article, locale);
 
   const intake = make('div', 'article-intake' + (primaryImage ? '' : ' article-intake--no-image'));
-  if (article.format === 'article-court') {
+  if (articleFormat === 'article-court') {
     intake.classList.add('article-intake--compact');
   }
 
   const intakeHeader = make('header', 'article-intake__header article-header');
 
   const category = make('span', 'article-header__category');
-  category.textContent = [article.city, article.country].filter(Boolean).join(' · ');
+  const articleTaxonomy = access && typeof access.getArticleTaxonomy === 'function'
+    ? access.getArticleTaxonomy(article, locale)
+    : { city: '', country: '' };
+  category.textContent = [articleTaxonomy.city, articleTaxonomy.country].filter(Boolean).join(' · ');
   intakeHeader.appendChild(category);
 
-  intakeHeader.appendChild(make('h1', 'article-header__title', article.title));
+  intakeHeader.appendChild(make('h1', 'article-header__title', articleTitle));
 
-  const headerMetaValues = [articleStyle, article.country]
+  const headerMetaValues = [articleStyle, articleTaxonomy.country]
     .concat(articleTags)
     .filter(Boolean)
     .filter((value, index, values) => values.indexOf(value) === index);
@@ -356,14 +343,14 @@
     intakeHeader.appendChild(meta);
   }
 
-  if (article.chapeau) {
+  if (articleDek) {
     const intro = make('div', 'article-intro');
-    intro.appendChild(make('p', '', article.chapeau));
+    intro.appendChild(make('p', '', articleDek));
     intakeHeader.appendChild(intro);
   }
 
-  if (article.epigraph && !verifiedQuote) {
-    intakeHeader.appendChild(make('div', 'article-epigraph', article.epigraph));
+  if (articleEpigraph && !verifiedQuote) {
+    intakeHeader.appendChild(make('div', 'article-epigraph', articleEpigraph));
   }
 
   intake.appendChild(intakeHeader);
@@ -373,7 +360,9 @@
     const image = document.createElement('img');
     image.className = 'article-intake__image';
     image.src = imgSrc(primaryImage);
-    image.alt = primaryImageEntry && primaryImageEntry.alt ? primaryImageEntry.alt : (article.alt_text || article.title);
+    image.alt = primaryImageEntry && primaryImageEntry.alt
+      ? primaryImageEntry.alt
+      : access.getArticleHeroAlt(article, locale);
     image.loading = 'eager';
     image.addEventListener('error', () => {
       figure.remove();
@@ -392,7 +381,7 @@
   shell.appendChild(intake);
 
   const layout = make('div', 'article-layout');
-  if (article.format === 'article-court') {
+  if (articleFormat === 'article-court') {
     layout.classList.add('article-layout--compact');
   }
 
@@ -474,19 +463,17 @@
       });
       body.appendChild(sec);
 
-      if (index === 0 && article.format !== 'article-court') {
+      if (index === 0 && articleFormat !== 'article-court') {
         appendSupportGallery();
       }
     });
   }
 
-  if (!sections.length || article.format === 'article-court') {
+  if (!sections.length || articleFormat === 'article-court') {
     appendSupportGallery();
   }
 
-  const resources = Array.isArray(article.resources)
-    ? article.resources.filter((item) => item && typeof item === 'object' && item.title && item.href)
-    : [];
+  const resources = access.getArticleResources(article, locale);
 
   if (resources.length) {
     const resourcesBlock = make('section', 'article-resources');
@@ -534,8 +521,10 @@
       link.href = articleHrefBase + encodeURIComponent(item.slug);
 
       const eyebrow = make('span', 'article-sequence__eyebrow', direction);
-      const title = make('span', 'article-sequence__title', item.title);
-      const metaText = [item.city, item.country].filter(Boolean).join(' · ');
+      const sequenceTitle = access.getArticleTitle(item, locale);
+      const sequenceTaxonomy = access.getArticleTaxonomy(item, locale);
+      const title = make('span', 'article-sequence__title', sequenceTitle);
+      const metaText = [sequenceTaxonomy.city, sequenceTaxonomy.country].filter(Boolean).join(' · ');
 
       link.appendChild(eyebrow);
       link.appendChild(title);
@@ -559,35 +548,16 @@
     content.appendChild(continuation);
   }
 
-  const practicalEntries = article.practical ? Object.entries(article.practical) : [];
-  const factLabels = {
-    exact_name: 'Nom exact',
-    architect: 'Architecte',
-    date: 'Datation',
-    style: 'Style',
-    city: 'Ville',
-    country: 'Pays',
-    address: 'Adresse',
-  };
-  const mergedFacts = new Map();
+  const practicalItems = access.getArticlePracticalItems(article, locale);
 
-  verifiedInfoEntries.forEach(([key, val]) => {
-    mergedFacts.set(factLabels[key] || key, key === 'exact_name' ? normalizedCompactExactName(val, article) : val);
-  });
-
-  practicalEntries.forEach(([key, val]) => {
-    if (!mergedFacts.has(key)) {
-      mergedFacts.set(key, val);
-    }
-  });
-
-  if (mergedFacts.size) {
+  if (practicalItems.length) {
     const block = make('div', 'article-tpl__facts');
-    block.appendChild(make('p', 'article-tpl__block-label', 'Repères'));
+    block.appendChild(make('p', 'article-tpl__block-label', 'Rep?res'));
     const dl = document.createElement('dl');
-    mergedFacts.forEach((val, key) => {
-      dl.appendChild(make('dt', '', key));
-      dl.appendChild(make('dd', '', val));
+    practicalItems.forEach((item) => {
+      const value = item.key === 'exact_name' ? normalizedCompactExactName(item.value, article) : item.value;
+      dl.appendChild(make('dt', '', item.label));
+      dl.appendChild(make('dd', '', value));
     });
     block.appendChild(dl);
 
@@ -641,27 +611,29 @@
     sidebar.appendChild(editorialBlock);
   }
 
-  const aroundItem = article.around && typeof article.around === 'object' ? article.around : null;
-  const aroundTarget = aroundItem && aroundItem.article_slug
-    ? data.articles.find((item) => item.slug === aroundItem.article_slug)
+  const aroundItem = access.getArticleAround(article, locale);
+  const aroundTarget = aroundItem && aroundItem.articleSlug
+    ? data.articles.find((item) => item.slug === aroundItem.articleSlug)
     : null;
+  const articleGaps = access.getArticleGaps(article);
 
-  if (aroundItem || (Array.isArray(article.gaps) && article.gaps.length) || instagramUrl) {
+  if (aroundItem || articleGaps.length || instagramUrl) {
     const block = make('div', 'article-tpl__around');
-    const hasEditorialAside = Boolean(aroundItem) || (Array.isArray(article.gaps) && article.gaps.length);
+    const hasEditorialAside = Boolean(aroundItem) || articleGaps.length;
     block.appendChild(make('p', 'article-tpl__block-label', hasEditorialAside ? 'Autour' : 'Instagram'));
 
     if (aroundItem) {
-      if (aroundItem.relation_label) {
-        block.appendChild(make('p', 'article-tpl__around-relation', aroundItem.relation_label));
+      if (aroundItem.relationLabel) {
+        block.appendChild(make('p', 'article-tpl__around-relation', aroundItem.relationLabel));
       }
 
       if (aroundTarget) {
-        const aroundLink = make('a', 'article-tpl__around-link', aroundTarget.title);
+        const aroundTitle = access.getArticleTitle(aroundTarget, locale);
+        const aroundLink = make('a', 'article-tpl__around-link', aroundTitle);
         aroundLink.href = articleHrefBase + encodeURIComponent(aroundTarget.slug);
         block.appendChild(aroundLink);
-      } else if (aroundItem.article_title) {
-        block.appendChild(make('p', 'article-tpl__around-link article-tpl__around-link--static', aroundItem.article_title));
+      } else if (aroundItem.articleTitle) {
+        block.appendChild(make('p', 'article-tpl__around-link article-tpl__around-link--static', aroundItem.articleTitle));
       }
 
       if (aroundItem.note) {
@@ -669,17 +641,17 @@
       }
     }
 
-    if (Array.isArray(article.gaps) && article.gaps.length) {
-      const note = make('p', 'article-tpl__subhead', 'À confirmer');
+    if (articleGaps.length) {
+      const note = make('p', 'article-tpl__subhead', '? confirmer');
       block.appendChild(note);
       const ul = document.createElement('ul');
       ul.className = 'article-tpl__gaps-list';
-      article.gaps.forEach((gap) => ul.appendChild(make('li', '', gap)));
+      articleGaps.forEach((gap) => ul.appendChild(make('li', '', gap)));
       block.appendChild(ul);
     }
 
     const sidebarInstagram = make('p', 'article-tpl__instagram-inline');
-    sidebarInstagram.appendChild(document.createTextNode('Photographies et repérages sur '));
+    sidebarInstagram.appendChild(document.createTextNode('Photographies et rep?rages sur '));
     const sidebarInstagramLink = make('a', 'article-tpl__instagram-link', '@artnouveauetdeco');
     sidebarInstagramLink.href = instagramUrl;
     sidebarInstagramLink.target = '_blank';
