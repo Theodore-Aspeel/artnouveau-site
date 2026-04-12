@@ -24,6 +24,7 @@ Use this template for tasks that are multi-step, risky, cross-file, or architect
 5. Validation
    - Which commands must pass?
    - What manual checks are required?
+   - For read-only reviews, is source inspection or `npm run validate` enough instead of `npm run build`?
 
 6. Out of scope
    - What is explicitly not part of this task?
@@ -38,5 +39,6 @@ Use this template for tasks that are multi-step, risky, cross-file, or architect
 - Do not mix data-model work with visual redesign.
 - Do not migrate all articles at once unless explicitly requested.
 - Keep v1/v2 compatibility when working on article-model migration.
-- Use helpers instead of direct legacy field access when available.
+- Use helpers instead of direct legacy field access when available; tolerate direct access only when no helper exists yet and the fallback stays local.
 - Preserve FR fallback unless the task is explicitly about real EN behavior.
+- Keep internal workflow metadata out of public runtime data unless it is deliberately publishable.

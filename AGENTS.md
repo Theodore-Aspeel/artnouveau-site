@@ -40,6 +40,8 @@ Published artifact:
 
 Never move research-only notes, prompts, workflow notes, or internal metadata into the public runtime payload unless explicitly requested.
 
+If a field is present in runtime content, assume it may become inspectable by users or tooling. Keep internal workflow metadata out of `src/data/articles.json`; fields such as `editorial`, `gaps`, `method_note`, and `source_note` must either be deliberately publishable or kept in `research/`. Do not use runtime article data as a private notebook.
+
 ---
 
 ## Current article model status
@@ -107,6 +109,10 @@ Examples of intended separation:
 - technical keys like `style_key`, `tag_keys`, `relation_key` are preferred over display labels
 - `relation_label` should be derived, not treated as primary stored truth
 - avoid duplicating style text in `facts` if `taxonomy.style_key` already expresses it
+
+`resources` follows the same separation:
+- stable resource ids, URLs, archive identifiers, and source types stay outside localized content
+- visible labels, descriptions, notes, and link text belong under `content.fr` / `content.en` or another clearly localized resource-content block
 
 ---
 
@@ -181,6 +187,8 @@ When updating rendering logic:
 - keep v1/v2 coexistence intact
 - do not break current FR output
 
+Direct article-field access is tolerated only when no compatibility helper exists yet. In that case, keep the access local, preserve v1/v2 fallbacks, and avoid spreading a new pattern that future helpers would have to unwind.
+
 ---
 
 ## Validation discipline
@@ -192,6 +200,8 @@ Minimum expected checks for content/model work:
 - `npm run build`
 
 If a task changes rendering behavior significantly, also check local preview if available.
+
+For read-only audits or reviews, do not run `npm run build` unless the user asks or the review needs a generated artifact. Prefer source inspection plus `npm run validate` when validation is relevant and does not alter the reviewed scope.
 
 Never claim a task is complete if validation was not run, unless you explicitly state what could not be executed.
 
@@ -240,6 +250,10 @@ Do not change site styling during data-model or compatibility tasks unless:
 
 If a CSS file changes incidentally during a non-visual task, verify whether the diff is necessary.
 If not necessary, revert it.
+
+External runtime dependencies that already exist, such as Google Fonts, are acceptable at this stage. Do not remove or replace them unless the task is explicitly about dependency policy, privacy, performance, or offline behavior.
+
+Historical or non-normalized assets may remain in the repository as long as they are not used by the published runtime. Normalize, delete, or relocate them only when the task explicitly covers asset cleanup or publication risk.
 
 ---
 

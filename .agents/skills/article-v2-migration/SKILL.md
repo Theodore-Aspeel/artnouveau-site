@@ -24,7 +24,10 @@ Typical trigger phrases:
 - `content.en` may remain empty or partial.
 - Keep reader-visible content under `content.fr` / `content.en`.
 - Keep stable technical keys outside localized content.
+- Keep internal workflow notes out of runtime data unless they are deliberately publishable.
+- In `resources`, keep stable URLs and identifiers separate from localized visible labels and notes.
 - Use helper-based runtime access where possible.
+- Direct runtime field access is acceptable only when no helper exists yet and the fallback stays local.
 - Do not mix this task with visual redesign.
 
 ## Expected process

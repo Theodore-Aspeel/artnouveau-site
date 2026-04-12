@@ -1,3 +1,5 @@
+# Project-level Codex configuration, intentionally versioned for this repository.
+
 model = "gpt-5.4"
 model_provider = "openai"
 

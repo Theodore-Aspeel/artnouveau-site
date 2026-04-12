@@ -18,14 +18,18 @@ Review code and content-model changes for correctness, regressions, maintainabil
 - Are visible texts inside content.fr / content.en when relevant?
 - Are stable technical keys kept outside localized content?
 - Is truth duplicated unnecessarily?
+- Are internal notes such as gaps, method notes, source notes, or editorial workflow metadata kept out of public runtime data unless deliberately publishable?
+- Do v2 resources keep stable URLs/identifiers separate from localized visible labels and notes?
 
 4. Runtime safety
 - Did rendering logic move toward helper-based access instead of direct legacy field access?
+- If direct field access remains, is it local, fallback-safe, and only present because no helper exists yet?
 - Did the change avoid hidden breakage in gallery or article pages?
 
 5. Build and validation
 - Was `npm run validate` run?
 - Was `npm run build` run?
+- For read-only reviews, was `npm run build` skipped unless a generated artifact was needed?
 - Were results stated explicitly?
 
 6. Diff quality
