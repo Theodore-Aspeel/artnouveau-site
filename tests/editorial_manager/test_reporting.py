@@ -1,7 +1,7 @@
 import unittest
 
-from tools.editorial_manager.checks import CheckIssue
-from tools.editorial_manager.reporting import render_check_report, render_summary
+from tools.editorial_manager.checks import CheckIssue, PublicationCheckItem
+from tools.editorial_manager.reporting import render_check_report, render_publication_check_report, render_summary
 
 
 class ReportingTests(unittest.TestCase):
@@ -34,6 +34,26 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("[missing-title-fr] demo", output)
         self.assertIn("Warnings:", output)
         self.assertIn("[missing-content-en] demo", output)
+
+    def test_publication_check_report_renders_checklist_items(self):
+        output = render_publication_check_report(
+            [
+                PublicationCheckItem("OK", "title-fr", "demo", "French title is present."),
+                PublicationCheckItem("WARNING", "content-en", "demo", "English content is missing or empty."),
+                PublicationCheckItem("ERROR", "hero-image", "demo", "hero image is missing."),
+            ],
+            checked_count=1,
+        )
+
+        self.assertIn("Publication checklist", output)
+        self.assertIn("Articles checked: 1", output)
+        self.assertIn("OK: 1", output)
+        self.assertIn("Errors: 1", output)
+        self.assertIn("Warnings: 1", output)
+        self.assertIn("Article: demo", output)
+        self.assertIn("OK [title-fr]", output)
+        self.assertIn("WARNING [content-en]", output)
+        self.assertIn("ERROR [hero-image]", output)
 
 
 if __name__ == "__main__":

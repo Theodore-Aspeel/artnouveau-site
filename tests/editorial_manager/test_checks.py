@@ -1,6 +1,6 @@
 import unittest
 
-from tools.editorial_manager.checks import check_article, check_articles
+from tools.editorial_manager.checks import check_article, check_articles, publication_check_article, publication_check_articles
 
 
 class CheckTests(unittest.TestCase):
@@ -72,6 +72,72 @@ class CheckTests(unittest.TestCase):
 
         self.assertGreater(len(issues), 0)
         self.assertTrue(all(issue.slug == "one" for issue in issues))
+
+    def test_publication_check_complete_ready_article_has_only_ok_items(self):
+        article = {
+            "schema_version": 2,
+            "slug": "demo",
+            "status": "ready",
+            "format": "long",
+            "publication": {"order": 1},
+            "media": {"hero": {"src": "assets/images/demo.png"}},
+            "content": {
+                "fr": {
+                    "title": "Demo",
+                    "dek": "Demo dek.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Demo meta."},
+                    "media": {"hero_alt": "Demo alt."},
+                },
+                "en": {"title": "Demo"},
+            },
+        }
+
+        items = publication_check_article(article)
+
+        self.assertTrue(items)
+        self.assertTrue(all(item.status == "OK" for item in items))
+
+    def test_publication_check_reports_missing_publication_fields(self):
+        items = publication_check_article({"slug": "demo", "format": "long"})
+        errors = [item.code for item in items if item.status == "ERROR"]
+        warnings = [item.code for item in items if item.status == "WARNING"]
+
+        self.assertIn("title-fr", errors)
+        self.assertIn("dek-fr", errors)
+        self.assertIn("meta-description-fr", errors)
+        self.assertIn("hero-image", errors)
+        self.assertIn("hero-alt-fr", errors)
+        self.assertIn("sections-fr", errors)
+        self.assertIn("publication-order", errors)
+        self.assertIn("publication-status", warnings)
+        self.assertIn("content-en", warnings)
+
+    def test_publication_check_treats_empty_english_as_warning(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {}},
+        }
+
+        items = publication_check_article(article)
+
+        self.assertIn("content-en", [item.code for item in items if item.status == "WARNING"])
+
+    def test_publication_check_articles_collects_items_for_all_articles(self):
+        items = publication_check_articles([
+            {"slug": "one", "status": "ready"},
+            {"slug": "two", "status": "unknown-status"},
+        ])
+
+        self.assertEqual({item.slug for item in items}, {"one", "two"})
+        self.assertIn("publication-status", [item.code for item in items if item.status == "ERROR"])
 
 
 if __name__ == "__main__":

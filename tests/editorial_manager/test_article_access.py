@@ -1,6 +1,7 @@
 import unittest
 
 from tools.editorial_manager.article_access import (
+    article_hero_alt,
     article_hero_image,
     article_meta_description,
     article_model,
@@ -35,6 +36,13 @@ class ArticleAccessTests(unittest.TestCase):
 
         self.assertEqual(article_hero_image(v1), "assets/images/demo.png")
         self.assertEqual(article_hero_image(v2), "assets/images/v2.png")
+
+    def test_hero_alt_supports_v1_and_v2(self):
+        v1 = {"alt_text": "Legacy alt"}
+        v2 = {"content": {"fr": {"media": {"hero_alt": "Alt v2"}}}}
+
+        self.assertEqual(article_hero_alt(v1), "Legacy alt")
+        self.assertEqual(article_hero_alt(v2), "Alt v2")
 
     def test_meta_description_supports_v1_and_v2(self):
         v1 = {"meta_description": "Legacy meta"}

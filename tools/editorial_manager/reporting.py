@@ -17,7 +17,7 @@ from .article_access import (
     article_title,
     has_english_content,
 )
-from .checks import CheckIssue
+from .checks import CheckIssue, PublicationCheckItem
 
 
 Article = dict[str, Any]
@@ -110,6 +110,34 @@ def render_check_report(issues: list[CheckIssue], checked_count: int) -> str:
         lines.append("")
         lines.append("Warnings:")
         lines.extend(render_issue_lines(warnings))
+
+    return "\n".join(lines)
+
+
+def render_publication_check_report(items: list[PublicationCheckItem], checked_count: int) -> str:
+    errors = [item for item in items if item.status == "ERROR"]
+    warnings = [item for item in items if item.status == "WARNING"]
+    ok_items = [item for item in items if item.status == "OK"]
+
+    lines = [
+        "Publication checklist",
+        f"Articles checked: {checked_count}",
+        f"OK: {len(ok_items)}",
+        f"Errors: {len(errors)}",
+        f"Warnings: {len(warnings)}",
+    ]
+
+    if not items:
+        lines.append("No publication checks were run.")
+        return "\n".join(lines)
+
+    current_slug = None
+    for item in items:
+        if item.slug != current_slug:
+            current_slug = item.slug
+            lines.append("")
+            lines.append(f"Article: {item.slug}")
+        lines.append(f"  - {item.status} [{item.code}] {item.message}")
 
     return "\n".join(lines)
 

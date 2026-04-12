@@ -4,9 +4,15 @@ from __future__ import annotations
 
 import argparse
 
-from .checks import check_article, check_articles
+from .checks import check_article, check_articles, publication_check_article, publication_check_articles
 from .repository import find_article_by_slug, load_articles
-from .reporting import render_article_detail, render_article_list, render_check_report, render_summary
+from .reporting import (
+    render_article_detail,
+    render_article_list,
+    render_check_report,
+    render_publication_check_report,
+    render_summary,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -24,6 +30,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     check_parser = subparsers.add_parser("check", help="Run simple read-only editorial checks.")
     check_parser.add_argument("slug", nargs="?", help="Optional article slug to check.")
+
+    publication_check_parser = subparsers.add_parser(
+        "publication-check",
+        help="Run a read-only publication preparation checklist.",
+    )
+    publication_check_parser.add_argument("slug", nargs="?", help="Optional article slug to check.")
 
     return parser
 
@@ -59,6 +71,18 @@ def main(argv: list[str] | None = None) -> int:
             issues = check_articles(articles)
             print(render_check_report(issues, len(articles)))
         return 1 if any(issue.severity == "ERROR" for issue in issues) else 0
+
+    if args.command == "publication-check":
+        if args.slug:
+            article = find_article_by_slug(articles, args.slug)
+            if article is None:
+                parser.error(f"unknown article slug: {args.slug}")
+            items = publication_check_article(article)
+            print(render_publication_check_report(items, 1))
+        else:
+            items = publication_check_articles(articles)
+            print(render_publication_check_report(items, len(articles)))
+        return 1 if any(item.status == "ERROR" for item in items) else 0
 
     parser.error(f"unknown command: {args.command}")
     return 2
