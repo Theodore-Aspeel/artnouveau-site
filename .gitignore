@@ -20,6 +20,8 @@ pnpm-debug.log*
 /.parcel-cache/
 /.turbo/
 /.sass-cache/
+__pycache__/
+*.py[cod]
 *.tmp
 *.temp
 
