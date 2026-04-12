@@ -441,7 +441,7 @@
       .filter((entry) => entry.items.length >= 2)
       .sort((left, right) => {
         if (right.items.length !== left.items.length) return right.items.length - left.items.length;
-        return left.city.localeCompare(right.city, 'fr');
+        return left.city.localeCompare(right.city, currentLocale());
       })
       .slice(0, 3)
       .forEach((entry) => {
@@ -458,15 +458,15 @@
 
     [
       {
-        label: 'Parcours développés',
-        title: 'Prendre le temps d’une façade',
-        intro: 'Des textes plus amples, quand le lieu demande plusieurs reprises du regard.',
+        label: t('home.rhythm.long.label'),
+        title: t('home.rhythm.long.title'),
+        intro: t('home.rhythm.long.intro'),
         items: longReads,
       },
       {
-        label: 'Notes brèves',
-        title: 'Rester à la juste échelle',
-        intro: 'Des sujets plus courts, quand une adresse ou un détail suffisent à tenir la lecture.',
+        label: t('home.rhythm.short.label'),
+        title: t('home.rhythm.short.title'),
+        intro: t('home.rhythm.short.intro'),
         items: shortNotes,
       },
     ].forEach((group) => {

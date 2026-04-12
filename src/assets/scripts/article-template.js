@@ -86,14 +86,14 @@
   function capitalizeLeadingText(value) {
     const text = cleanText(value);
     if (!text) return '';
-    return text.charAt(0).toLocaleUpperCase('fr') + text.slice(1);
+    return text.charAt(0).toLocaleUpperCase(currentLocale()) + text.slice(1);
   }
 
   function formatQuoteText(value) {
     const text = cleanText(value);
     if (!text) return '';
 
-    const capitalized = text.charAt(0).toLocaleUpperCase('fr') + text.slice(1);
+    const capitalized = text.charAt(0).toLocaleUpperCase(currentLocale()) + text.slice(1);
     return /["»”]$/.test(capitalized) ? capitalized : capitalized + '”';
   }
 
