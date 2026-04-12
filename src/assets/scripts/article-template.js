@@ -4,6 +4,7 @@
   const media = window.ArticleMedia;
   const taxonomy = window.ArticleTags;
   const access = window.ArticleAccess;
+  const i18n = window.SiteI18n;
   const instagramUrl = 'https://www.instagram.com/artnouveauetdeco';
   const root = document.getElementById('article-root');
   const script = document.currentScript;
@@ -43,8 +44,16 @@
   }
 
   function currentLocale() {
+    if (i18n && typeof i18n.resolveLocale === 'function') {
+      return i18n.resolveLocale();
+    }
+
     const lang = (document.documentElement.lang || 'fr').trim().toLowerCase();
     return lang.split('-')[0] || 'fr';
+  }
+
+  function t(key, params) {
+    return i18n && typeof i18n.t === 'function' ? i18n.t(key, params, currentLocale()) : key;
   }
 
   function localizedValue(value) {
@@ -183,11 +192,11 @@
   }
 
   function renderNotFound() {
-    document.title = 'Article introuvable · Art Nouveau et Art Déco';
+    document.title = t('article.notFound.title') + ' · Art Nouveau et Art Déco';
     const wrap = make('div', 'article-tpl__not-found');
-    const h1 = make('h1', '', 'Article introuvable');
-    const p = make('p', '', 'Le slug demandé ne correspond à aucun article publié. ');
-    const a = make('a', '', 'Retour à l’accueil');
+    const h1 = make('h1', '', t('article.notFound.title'));
+    const p = make('p', '', t('article.notFound.description'));
+    const a = make('a', '', t('article.notFound.home'));
     a.href = homeHref;
     p.appendChild(a);
     wrap.appendChild(h1);
@@ -272,11 +281,11 @@
 
   const breadcrumb = document.createElement('nav');
   breadcrumb.className = 'breadcrumb';
-  breadcrumb.setAttribute('aria-label', 'Fil d’Ariane');
+  breadcrumb.setAttribute('aria-label', t('article.breadcrumb.aria'));
   breadcrumb.innerHTML = `
     <ol>
-      <li><a href="${homeHref}">Accueil</a></li>
-      <li><a href="${galleryHref}">Articles</a></li>
+      <li><a href="${homeHref}">${t('article.breadcrumb.home')}</a></li>
+      <li><a href="${galleryHref}">${t('article.breadcrumb.articles')}</a></li>
       <li aria-current="page"></li>
     </ol>
   `;
@@ -290,11 +299,19 @@
   const supportImageEntries = media && typeof media.getSecondaryImageEntries === 'function'
     ? media.getSecondaryImageEntries(article, 2)
     : [];
-  const articleTags = taxonomy && typeof taxonomy.getArticleTags === 'function'
-    ? taxonomy.getArticleTags(article)
+  const articleTagEntries = taxonomy && typeof taxonomy.getArticleTagEntries === 'function'
+    ? taxonomy.getArticleTagEntries(article, locale)
     : [];
+  const articleTags = articleTagEntries.length
+    ? articleTagEntries.map((tag) => tag.label)
+    : taxonomy && typeof taxonomy.getArticleTags === 'function'
+      ? taxonomy.getArticleTags(article, locale)
+      : [];
+  const articleTagFilters = articleTagEntries.length
+    ? articleTagEntries
+    : articleTags;
   const articleStyle = taxonomy && typeof taxonomy.getArticleStyle === 'function'
-    ? taxonomy.getArticleStyle(article)
+    ? taxonomy.getArticleStyle(article, locale)
     : access.getArticleTaxonomy(article, locale).styleLabel;
   const sourceQuote = article.sources && article.sources.quote ? article.sources.quote : article.quote;
   const verifiedQuote = sourceQuote && sourceQuote.verified && localizedValue(sourceQuote.text) ? sourceQuote : null;
@@ -329,15 +346,19 @@
   intakeHeader.appendChild(make('h1', 'article-header__title', articleTitle));
 
   const headerMetaValues = [articleStyle, articleTaxonomy.country]
-    .concat(articleTags)
     .filter(Boolean)
-    .filter((value, index, values) => values.indexOf(value) === index);
+    .map((label) => ({ label, filter: label }))
+    .concat(articleTagFilters.map((tag) => (tag && typeof tag === 'object'
+      ? { label: tag.label, filter: tag }
+      : { label: tag, filter: tag })))
+    .filter((value) => value.label)
+    .filter((value, index, values) => values.findIndex((item) => item.label === value.label) === index);
 
   if (headerMetaValues.length) {
     const meta = make('div', 'article-header__meta tag-list');
     headerMetaValues.forEach((value) => {
-      const chip = make('a', 'tag-chip tag-chip--muted article-header__chip', value);
-      chip.href = articleTagHref(value);
+      const chip = make('a', 'tag-chip tag-chip--muted article-header__chip', value.label);
+      chip.href = articleTagHref(value.filter);
       meta.appendChild(chip);
     });
     intakeHeader.appendChild(meta);
@@ -388,7 +409,7 @@
   const content = make('div', 'article-content');
   const body = make('div', 'article-body');
   const sidebar = make('aside', 'article-sidebar');
-  sidebar.setAttribute('aria-label', 'Informations complémentaires');
+  sidebar.setAttribute('aria-label', t('article.sidebar.aria'));
   layout.appendChild(content);
   layout.appendChild(sidebar);
   content.appendChild(body);
@@ -396,7 +417,7 @@
 
   if (verifiedQuote) {
     const quoteBlock = make('section', 'article-verified-quote');
-    quoteBlock.appendChild(make('p', 'article-verified-quote__label', 'Citation'));
+    quoteBlock.appendChild(make('p', 'article-verified-quote__label', t('article.quote')));
 
     const figure = document.createElement('figure');
     figure.className = 'article-verified-quote__figure';
@@ -477,8 +498,8 @@
 
   if (resources.length) {
     const resourcesBlock = make('section', 'article-resources');
-    resourcesBlock.appendChild(make('p', 'article-resources__label', 'Ressources'));
-    resourcesBlock.appendChild(make('h2', 'article-resources__title', 'Pour prolonger'));
+    resourcesBlock.appendChild(make('p', 'article-resources__label', t('article.resources')));
+    resourcesBlock.appendChild(make('h2', 'article-resources__title', t('article.resources.more')));
 
     const list = make('div', 'article-resources__list');
 
@@ -511,8 +532,8 @@
 
   if (previousArticle || nextArticle) {
     const continuation = make('nav', 'article-sequence');
-    continuation.setAttribute('aria-label', 'Continuer la lecture');
-    continuation.appendChild(make('p', 'article-sequence__label', 'Continuer la lecture'));
+    continuation.setAttribute('aria-label', t('article.continue'));
+    continuation.appendChild(make('p', 'article-sequence__label', t('article.continue')));
 
     const links = make('div', 'article-sequence__grid');
 
@@ -537,11 +558,11 @@
     }
 
     if (previousArticle) {
-      links.appendChild(buildSequenceCard(previousArticle, 'Article précédent'));
+      links.appendChild(buildSequenceCard(previousArticle, t('article.previous')));
     }
 
     if (nextArticle) {
-      links.appendChild(buildSequenceCard(nextArticle, 'Article suivant'));
+      links.appendChild(buildSequenceCard(nextArticle, t('article.next')));
     }
 
     continuation.appendChild(links);
@@ -552,7 +573,7 @@
 
   if (practicalItems.length) {
     const block = make('div', 'article-tpl__facts');
-    block.appendChild(make('p', 'article-tpl__block-label', 'Repères'));
+    block.appendChild(make('p', 'article-tpl__block-label', t('article.facts')));
     const dl = document.createElement('dl');
     practicalItems.forEach((item) => {
       const value = item.key === 'exact_name' ? normalizedCompactExactName(item.value, article) : item.value;
@@ -570,36 +591,36 @@
     }
 
     const editorialBlock = make('div', 'article-tpl__facts article-tpl__facts--editorial');
-    editorialBlock.appendChild(make('p', 'article-tpl__block-label', 'Cadre éditorial'));
+    editorialBlock.appendChild(make('p', 'article-tpl__block-label', t('article.editorial.frame')));
     const dl = document.createElement('dl');
 
     if (bylineText) {
-      dl.appendChild(make('dt', '', 'Auteur'));
+      dl.appendChild(make('dt', '', t('article.author')));
       dl.appendChild(make('dd', '', bylineText));
     }
 
     if (publishedOn) {
-      dl.appendChild(make('dt', '', 'Publication'));
+      dl.appendChild(make('dt', '', t('article.publication')));
       dl.appendChild(make('dd', '', publishedOn));
     }
 
     if (updatedOn) {
-      dl.appendChild(make('dt', '', 'Révision'));
+      dl.appendChild(make('dt', '', t('article.revision')));
       dl.appendChild(make('dd', '', updatedOn));
     }
 
     if (imageCredit) {
-      dl.appendChild(make('dt', '', 'Crédit image'));
+      dl.appendChild(make('dt', '', t('article.imageCredit')));
       dl.appendChild(make('dd', '', imageCredit));
     }
 
     if (sourceNote) {
-      dl.appendChild(make('dt', '', 'Source'));
+      dl.appendChild(make('dt', '', t('article.source')));
       dl.appendChild(make('dd', '', sourceNote));
     }
 
     if (methodNote) {
-      dl.appendChild(make('dt', '', 'Méthode'));
+      dl.appendChild(make('dt', '', t('article.method')));
       dl.appendChild(make('dd', '', methodNote));
     }
 
@@ -607,7 +628,7 @@
       editorialBlock.appendChild(dl);
     }
 
-    editorialBlock.appendChild(make('p', 'article-tpl__rigor-note', 'Les repères factuels visibles ici s’appuient sur les données vérifiées du corpus. Quand une information reste incertaine, elle demeure signalée comme telle.'));
+    editorialBlock.appendChild(make('p', 'article-tpl__rigor-note', t('article.editorial.rigorNote')));
     sidebar.appendChild(editorialBlock);
   }
 
@@ -620,7 +641,7 @@
   if (aroundItem || articleGaps.length || instagramUrl) {
     const block = make('div', 'article-tpl__around');
     const hasEditorialAside = Boolean(aroundItem) || articleGaps.length;
-    block.appendChild(make('p', 'article-tpl__block-label', hasEditorialAside ? 'Autour' : 'Instagram'));
+    block.appendChild(make('p', 'article-tpl__block-label', hasEditorialAside ? t('article.around') : t('article.instagram')));
 
     if (aroundItem) {
       if (aroundItem.relationLabel) {
@@ -642,7 +663,7 @@
     }
 
     if (articleGaps.length) {
-      const note = make('p', 'article-tpl__subhead', 'À confirmer');
+      const note = make('p', 'article-tpl__subhead', t('article.toConfirm'));
       block.appendChild(note);
       const ul = document.createElement('ul');
       ul.className = 'article-tpl__gaps-list';
@@ -651,12 +672,12 @@
     }
 
     const sidebarInstagram = make('p', 'article-tpl__instagram-inline');
-    sidebarInstagram.appendChild(document.createTextNode('Photographies et repérages sur '));
+    sidebarInstagram.appendChild(document.createTextNode(t('article.instagram.prefix')));
     const sidebarInstagramLink = make('a', 'article-tpl__instagram-link', '@artnouveauetdeco');
     sidebarInstagramLink.href = instagramUrl;
     sidebarInstagramLink.target = '_blank';
     sidebarInstagramLink.rel = 'noopener noreferrer';
-    sidebarInstagramLink.setAttribute('aria-label', 'Ouvrir Instagram @artnouveauetdeco');
+    sidebarInstagramLink.setAttribute('aria-label', t('article.instagram.aria'));
     sidebarInstagram.appendChild(sidebarInstagramLink);
     block.appendChild(sidebarInstagram);
 

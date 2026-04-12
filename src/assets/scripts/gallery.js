@@ -4,6 +4,7 @@
   const media = window.ArticleMedia;
   const taxonomy = window.ArticleTags;
   const access = window.ArticleAccess;
+  const i18n = window.SiteI18n;
   const grid = document.getElementById('gallery-grid');
   const paginationEl = document.getElementById('gallery-pagination');
   const stateEl = document.getElementById('gallery-state');
@@ -31,7 +32,21 @@
   let allTags = [];
 
   function currentLocale() {
+    if (i18n && typeof i18n.resolveLocale === 'function') {
+      return i18n.resolveLocale();
+    }
+
     return access.normalizeLocale(document.documentElement.lang || 'fr');
+  }
+
+  function t(key, params) {
+    return i18n && typeof i18n.t === 'function' ? i18n.t(key, params, currentLocale()) : key;
+  }
+
+  function articleCountLabel(count) {
+    return i18n && typeof i18n.articleCountLabel === 'function'
+      ? i18n.articleCountLabel(count, currentLocale())
+      : 'article' + (Number(count) > 1 ? 's' : '');
   }
 
   function buildArticleHref(slug) {
@@ -68,9 +83,17 @@
     return new URL(candidate, window.location.href).href;
   }
 
-  function getCardTags(article) {
+  function getCardTagEntries(article) {
+    if (taxonomy && typeof taxonomy.getArticleTagEntries === 'function') {
+      return taxonomy.getArticleTagEntries(article, currentLocale());
+    }
+
     if (taxonomy && typeof taxonomy.getArticleTags === 'function') {
-      return taxonomy.getArticleTags(article);
+      return taxonomy.getArticleTags(article, currentLocale()).map((label) => ({
+        key: taxonomy.slugifyTag(label),
+        label,
+        slug: taxonomy.slugifyTag(label),
+      }));
     }
 
     return [];
@@ -116,7 +139,7 @@
         date: getArticleDate(article),
         excerpt: getCardExcerpt(article),
         image: getCardImage(article),
-        tags: getCardTags(article),
+        tags: getCardTagEntries(article),
       }));
   }
 
@@ -127,17 +150,18 @@
 
     const placeholder = document.createElement('span');
     placeholder.className = 'card__placeholder';
-    placeholder.textContent = item.city || item.country || item.style || 'Article';
+    placeholder.textContent = item.city || item.country || item.style || t('gallery.placeholder');
     imageWrapper.appendChild(placeholder);
   }
 
   function buildTagChip(tag, className, isActive) {
     const link = document.createElement('a');
+    const label = tag && typeof tag === 'object' ? tag.label : tag;
     link.className = className + (isActive ? ' tag-chip--active' : '');
     link.href = taxonomy && typeof taxonomy.buildTagHref === 'function'
       ? taxonomy.buildTagHref(tag, 'index.html')
       : 'index.html#galerie';
-    link.textContent = tag;
+    link.textContent = label;
     return link;
   }
 
@@ -148,7 +172,7 @@
     const link = document.createElement('a');
     link.className = 'card__link';
     link.href = buildArticleHref(item.slug);
-    link.setAttribute('aria-label', 'Lire l’article : ' + item.title);
+    link.setAttribute('aria-label', t('gallery.readArticle.aria', { title: item.title }));
 
     const imageWrapper = document.createElement('div');
     imageWrapper.className = 'card__image-wrapper';
@@ -211,7 +235,7 @@
       const tagList = document.createElement('div');
       tagList.className = 'tag-list card__tags';
       item.tags.slice(0, 3).forEach((tag) => {
-        const isActive = activeTag && taxonomy && taxonomy.slugifyTag(tag) === activeTag.slug;
+        const isActive = activeTag && tag.slug === activeTag.slug;
         tagList.appendChild(buildTagChip(tag, 'tag-chip tag-chip--muted', isActive));
       });
       article.appendChild(tagList);
@@ -245,7 +269,7 @@
     } else {
       const placeholder = document.createElement('div');
       placeholder.className = 'home-curated__placeholder';
-      placeholder.textContent = item.city || item.country || 'Article';
+      placeholder.textContent = item.city || item.country || t('gallery.placeholder');
       mediaWrap.appendChild(placeholder);
     }
 
@@ -254,7 +278,7 @@
 
     const eyebrow = document.createElement('p');
     eyebrow.className = 'home-curated__eyebrow';
-    eyebrow.textContent = index === 0 ? 'À lire d’abord' : 'Puis poursuivre';
+    eyebrow.textContent = index === 0 ? t('home.curated.first') : t('home.curated.next');
     body.appendChild(eyebrow);
 
     const title = document.createElement('h3');
@@ -294,7 +318,10 @@
 
     const count = document.createElement('p');
     count.className = 'home-paths__count';
-    count.textContent = cityEntry.items.length + ' article' + (cityEntry.items.length > 1 ? 's' : '');
+    count.textContent = t('home.path.count', {
+      count: cityEntry.items.length,
+      articleLabel: articleCountLabel(cityEntry.items.length),
+    });
     header.appendChild(count);
 
     article.appendChild(header);
@@ -314,7 +341,7 @@
 
       const label = document.createElement('span');
       label.className = 'home-paths__item-label';
-      label.textContent = index === 0 ? 'Commencer' : 'Ensuite';
+      label.textContent = index === 0 ? t('home.path.first') : t('home.path.next');
 
       const itemTitle = document.createElement('span');
       itemTitle.className = 'home-paths__item-title';
@@ -452,23 +479,26 @@
     const allLink = document.createElement('a');
     allLink.className = 'tag-chip tag-chip--ghost' + (activeTag ? '' : ' tag-chip--active');
     allLink.href = 'index.html#galerie';
-    allLink.textContent = 'Tous';
+    allLink.textContent = t('gallery.all');
     tagsEl.appendChild(allLink);
 
     allTags.forEach((tag) => {
       const isActive = activeTag && tag.slug === activeTag.slug;
-      tagsEl.appendChild(buildTagChip(tag.label, 'tag-chip tag-chip--ghost', isActive));
+      tagsEl.appendChild(buildTagChip(tag, 'tag-chip tag-chip--ghost', isActive));
     });
   }
 
   function renderState() {
     if (titleEl) {
-      titleEl.textContent = activeTag ? 'Autour de ' + activeTag.label : defaultTitle;
+      titleEl.textContent = activeTag ? t('gallery.filteredTitle', { tag: activeTag.label }) : defaultTitle;
     }
 
     if (introEl) {
       introEl.textContent = activeTag
-        ? galleryItems.length + ' article' + (galleryItems.length > 1 ? 's' : '') + ' à lire à partir de ce repère.'
+        ? t('gallery.filteredIntro', {
+          count: galleryItems.length,
+          articleLabel: articleCountLabel(galleryItems.length),
+        })
         : defaultIntro;
     }
 
@@ -485,7 +515,7 @@
 
     const eyebrow = document.createElement('span');
     eyebrow.className = 'gallery-state__label';
-    eyebrow.textContent = 'Tag actif';
+    eyebrow.textContent = t('gallery.activeTag');
 
     const title = document.createElement('p');
     title.className = 'gallery-state__title';
@@ -493,12 +523,12 @@
 
     const meta = document.createElement('p');
     meta.className = 'gallery-state__meta';
-    meta.textContent = galleryItems.length + ' article' + (galleryItems.length > 1 ? 's' : '');
+    meta.textContent = galleryItems.length + ' ' + articleCountLabel(galleryItems.length);
 
     const reset = document.createElement('a');
     reset.className = 'gallery-state__reset';
     reset.href = 'index.html#galerie';
-    reset.textContent = 'Voir tous les articles';
+    reset.textContent = t('gallery.reset');
 
     stateEl.appendChild(eyebrow);
     stateEl.appendChild(title);
@@ -525,18 +555,18 @@
     }
 
     paginationEl.appendChild(
-      makeBtn('Prec.', 'Page précédente', () => goTo(currentPage - 1), activePage === 0, false)
+      makeBtn(t('gallery.previousPage'), t('gallery.previousPage.aria'), () => goTo(currentPage - 1), activePage === 0, false)
     );
 
     for (let i = 0; i < totalPages; i += 1) {
       const page = i;
       paginationEl.appendChild(
-        makeBtn(String(i + 1), 'Page ' + (i + 1), () => goTo(page), false, i === activePage)
+        makeBtn(String(i + 1), t('gallery.page.aria', { page: i + 1 }), () => goTo(page), false, i === activePage)
       );
     }
 
     paginationEl.appendChild(
-      makeBtn('Suiv.', 'Page suivante', () => goTo(currentPage + 1), activePage === totalPages - 1, false)
+      makeBtn(t('gallery.nextPage'), t('gallery.nextPage.aria'), () => goTo(currentPage + 1), activePage === totalPages - 1, false)
     );
   }
 
@@ -570,14 +600,14 @@
 
     const data = await response.json();
     const articles = Array.isArray(data.articles) ? data.articles : [];
-    allTags = taxonomy && typeof taxonomy.collectTags === 'function' ? taxonomy.collectTags(articles) : [];
+    allTags = taxonomy && typeof taxonomy.collectTags === 'function' ? taxonomy.collectTags(articles, currentLocale()) : [];
     activeTag = requestedTag && taxonomy && typeof taxonomy.findTagBySlug === 'function'
-      ? taxonomy.findTagBySlug(articles, requestedTag)
+      ? taxonomy.findTagBySlug(articles, requestedTag, currentLocale())
       : null;
     const allItems = deriveGalleryItems(articles);
 
     const filteredArticles = activeTag
-      ? articles.filter((article) => getCardTags(article).some((tag) => taxonomy.slugifyTag(tag) === activeTag.slug))
+      ? articles.filter((article) => getCardTagEntries(article).some((tag) => tag.key === activeTag.key || tag.slug === activeTag.slug))
       : articles;
 
     galleryItems = deriveGalleryItems(filteredArticles);
@@ -597,8 +627,8 @@
 
     if (!galleryItems.length) {
       renderEmpty(activeTag
-        ? 'Aucun article ne correspond à ce tag pour le moment.'
-        : 'Les articles ne peuvent pas être chargés pour le moment.');
+        ? t('gallery.empty.filtered')
+        : t('gallery.empty.load'));
       return;
     }
 
@@ -606,6 +636,6 @@
   } catch (error) {
     renderTagNav();
     renderState();
-    renderEmpty('Les articles ne peuvent pas être chargés pour le moment.');
+    renderEmpty(t('gallery.empty.load'));
   }
 })();

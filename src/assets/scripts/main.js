@@ -1,18 +1,23 @@
 const toggle = document.querySelector('.site-nav__toggle');
 const menu = document.querySelector('.site-nav__list');
+const i18n = window.SiteI18n;
+
+function t(key, params) {
+  return i18n && typeof i18n.t === 'function' ? i18n.t(key, params) : key;
+}
 
 if (toggle && menu) {
   toggle.addEventListener('click', () => {
     const isOpen = menu.classList.toggle('is-open');
     toggle.setAttribute('aria-expanded', String(isOpen));
-    toggle.textContent = isOpen ? 'Fermer' : 'Menu';
+    toggle.textContent = isOpen ? t('nav.close') : t('nav.menu');
   });
 
   document.addEventListener('click', (event) => {
     if (!toggle.contains(event.target) && !menu.contains(event.target)) {
       menu.classList.remove('is-open');
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.textContent = 'Menu';
+      toggle.textContent = t('nav.menu');
     }
   });
 
@@ -20,7 +25,7 @@ if (toggle && menu) {
     link.addEventListener('click', () => {
       menu.classList.remove('is-open');
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.textContent = 'Menu';
+      toggle.textContent = t('nav.menu');
     });
   });
 }
@@ -64,10 +69,10 @@ if (toggle && menu) {
   overlay.className = 'lightbox';
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
-  overlay.setAttribute('aria-label', 'Image en plein écran');
+  overlay.setAttribute('aria-label', t('overlay.image.aria'));
   overlay.setAttribute('hidden', '');
   overlay.innerHTML = `
-    <button class="lightbox__close" aria-label="Fermer">&times;</button>
+    <button class="lightbox__close" aria-label="${t('overlay.close')}">&times;</button>
     <figure class="lightbox__figure">
       <img class="lightbox__img" src="" alt="">
       <figcaption class="lightbox__caption"></figcaption>
