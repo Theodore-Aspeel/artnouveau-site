@@ -183,7 +183,8 @@ function hasMojibake(value) {
 }
 
 function hasSuspiciousQuestionMark(value) {
-  return typeof value === 'string' && (/[A-Za-zÀ-ÿ]\?[A-Za-zÀ-ÿ]/.test(value) || /^\?\s/.test(value));
+  return typeof value === 'string'
+    && (/[A-Za-zÀ-ÿ]\?[A-Za-zÀ-ÿ]+(?![A-Za-zÀ-ÿ]*=)/.test(value) || /['"`]\?\s/.test(value) || /^\?\s/.test(value));
 }
 
 function getExpectedStyleTags(style) {
@@ -336,6 +337,9 @@ async function collectCorruptedTextInFiles(rootDir, relativePaths) {
     lines.forEach((line, index) => {
       if (hasMojibake(line)) {
         hits.push(`${relativePath}:${index + 1}: suspicious mojibake sequence`);
+      }
+      if (hasSuspiciousQuestionMark(line)) {
+        hits.push(`${relativePath}:${index + 1}: suspicious replacement "?" in visible static text`);
       }
     });
   }

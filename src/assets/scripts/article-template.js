@@ -552,7 +552,7 @@
 
   if (practicalItems.length) {
     const block = make('div', 'article-tpl__facts');
-    block.appendChild(make('p', 'article-tpl__block-label', 'Rep?res'));
+    block.appendChild(make('p', 'article-tpl__block-label', 'Repères'));
     const dl = document.createElement('dl');
     practicalItems.forEach((item) => {
       const value = item.key === 'exact_name' ? normalizedCompactExactName(item.value, article) : item.value;
@@ -642,7 +642,7 @@
     }
 
     if (articleGaps.length) {
-      const note = make('p', 'article-tpl__subhead', '? confirmer');
+      const note = make('p', 'article-tpl__subhead', 'À confirmer');
       block.appendChild(note);
       const ul = document.createElement('ul');
       ul.className = 'article-tpl__gaps-list';
@@ -651,7 +651,7 @@
     }
 
     const sidebarInstagram = make('p', 'article-tpl__instagram-inline');
-    sidebarInstagram.appendChild(document.createTextNode('Photographies et rep?rages sur '));
+    sidebarInstagram.appendChild(document.createTextNode('Photographies et repérages sur '));
     const sidebarInstagramLink = make('a', 'article-tpl__instagram-link', '@artnouveauetdeco');
     sidebarInstagramLink.href = instagramUrl;
     sidebarInstagramLink.target = '_blank';
