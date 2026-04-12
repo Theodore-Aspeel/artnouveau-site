@@ -30,6 +30,7 @@ src/
 public/                 Files copied to dist root
 research/               Internal research, never published
 scripts/                Build / validate / preview scripts
+tools/                  Internal Python tools, including Editorial Manager
 dist/                   Generated publication artifact
 ```
 
@@ -52,6 +53,10 @@ npm run preview
 - `validate`: checks required files and runtime asset references
 - `build`: recreates `dist/`, copies the public runtime, rewrites page paths, then validates the published artifact
 - `preview`: serves `dist/` locally on `http://localhost:4173`
+
+## Internal Tools
+
+- `tools/editorial_manager/`: read-only Python helper for inspecting and checking the article dataset. See `tools/editorial_manager/README.md`.
 
 ## Publication Model
 
