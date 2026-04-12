@@ -246,87 +246,147 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-fernand-lefever-bruxelles",
       "slug": "maison-fernand-lefever-bruxelles",
-      "format": "article-complet",
-      "title": "Maison Fernand Lefever, Bruxelles",
-      "quote": {
-        "text": {
-          "fr": "une maison doit refléter la vie de celui qui l’habite et être son portrait",
-          "en": "a house must reflect its dweller's life and be his portrait"
-        },
-        "author": {
-          "fr": "Victor Horta",
-          "en": "Victor Horta"
-        },
-        "attribution": {
-          "fr": "à propos de la maison Winssinger / formulation reprise des mémoires",
-          "en": "On the Winssinger House / memoir formulation"
-        },
-        "source": "TheArtStory",
-        "source_url": "https://www.theartstory.org/artist/horta-victor/",
-        "source_type": "reputable_secondary",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 3,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-fernand-lefever-bruxelles.png",
-      "support_images": [],
-      "city": "Bruxelles",
-      "country": "Belgique",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Façade",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "La Maison Fernand Lefever rappelle une chose très simple. À Bruxelles, l’Art nouveau n’apparaît pas seulement dans les rues déjà célèbres. Il peut aussi tenir dans une façade prise dans un tissu serré, actif, presque pressé. Avenue du Panthéon, à Koekelberg, cette maison montre comment une élévation bien tenue suffit à changer la lecture d’une rue.",
-      "sections": [
-        {
-          "heading": "Une façade prise dans la continuité de la ville",
-          "body": "La première qualité de cette maison est son ancrage. Elle ne se détache pas comme un objet posé à part. Elle prend place dans une rue déjà chargée d'usages, de circulation, de rythme. C'est précisément pour cela qu'elle compte. L'Art Nouveau y apparaît moins comme une exception que comme une manière d'intensifier l'ordinaire.\n\nLa façade ne cherche pas à écraser ce qui l'entoure. Elle introduit autre chose, plus de tension dans le dessin, plus d'attention dans la montée du regard, une présence qui ne rompt pas la rue mais la rend plus lisible."
-        },
-        {
-          "heading": "Monter du seuil vers le haut",
-          "body": "Pour la regarder justement, il faut commencer bas. Le seuil, les baies, la relation entre les premières lignes et le reste de l'élévation donnent déjà le ton. Ensuite seulement, le regard peut remonter. Cette progression compte. Elle permet de sentir comment la façade s'organise par accents successifs, sans se réduire à un seul motif fort.\n\nMême avec une documentation encore incomplète, cette lecture tient. Elle ne demande pas d'inventer davantage. Il suffit de suivre ce que le bâtiment donne réellement, sa mesure, sa montée, sa façon de rester dense sans devenir pesant."
-        },
-        {
-          "heading": "Ce qu'elle ouvre dans Bruxelles",
-          "body": "La Maison Fernand Lefever permet d'entrer dans Bruxelles par une échelle juste. Ni monument, ni détail perdu. Une façade assez précise pour tenir seule, assez retenue aussi pour laisser la ville autour d'elle continuer d'exister.\n\nElle gagne à être rapprochée de la Maison des Hiboux. L'une agit par continuité, l'autre par signe plus net. Entre les deux, on perçoit mieux ce que Bruxelles garde encore à hauteur de rue."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison et atelier de l’architecte Fernand Lefever",
+        "exact_name": "Maison et atelier de l’architecte Fernand Lefever"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "facade",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "bruxelles",
+          "country": "belgique"
         }
-      ],
-      "around": {
-        "relation_label": "Contrepoint",
-        "article_slug": "maison-des-hiboux-saint-gilles",
-        "note": "À comparer : l’une agit par continuité de rue, l’autre par un signe plus net, sans quitter la même tenue bruxelloise."
       },
-      "practical": {
-        "Ville": "Bruxelles",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau",
-        "Architecte": "Fernand Lefever",
-        "Datation": "1913",
-        "Adresse": "Avenue du Panthéon 59, Koekelberg"
+      "facts": {
+        "location": {
+          "city": "Bruxelles",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Avenue du Panthéon 59, Koekelberg"
+        },
+        "dates": {
+          "built": "1913"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Fernand Lefever"
+          }
+        ],
+        "notes": "Sgraffites de Paul Cauchie"
       },
-      "alt_text": "Façade Art nouveau de la Maison Fernand Lefever à Bruxelles, avenue du Panthéon à Koekelberg.",
-      "meta_description": "Maison Fernand Lefever à Bruxelles. Une lecture de rue d’une façade Art nouveau à Koekelberg, entre continuité urbaine et précision du regard.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-fernand-lefever-bruxelles.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "une maison doit refléter la vie de celui qui l’habite et être son portrait",
+            "en": "a house must reflect its dweller's life and be his portrait"
+          },
+          "author": "Victor Horta",
+          "attribution": {
+            "fr": "à propos de la maison Winssinger / formulation reprise des mémoires",
+            "en": "On the Winssinger House / memoir formulation"
+          },
+          "source": "TheArtStory",
+          "url": "https://www.theartstory.org/artist/horta-victor/",
+          "type": "reputable_secondary",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "counterpoint",
+          "article_id": "maison-des-hiboux-saint-gilles"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 3,
-      "epigraph": "Dans une rue dense, une façade peut encore faire lever les yeux.",
-      "verified_info": {
-        "exact_name": "Maison et atelier de l’architecte Fernand Lefever",
-        "architect": "Fernand Lefever",
-        "date": "1913",
-        "style": "Art Nouveau",
-        "city": "Bruxelles",
-        "country": "Belgique",
-        "address": "Avenue du Panthéon 59, Koekelberg",
-        "notes": "Sgraffites de Paul Cauchie"
+      "content": {
+        "fr": {
+          "title": "Maison Fernand Lefever, Bruxelles",
+          "dek": "La Maison Fernand Lefever rappelle une chose très simple. À Bruxelles, l’Art nouveau n’apparaît pas seulement dans les rues déjà célèbres. Il peut aussi tenir dans une façade prise dans un tissu serré, actif, presque pressé. Avenue du Panthéon, à Koekelberg, cette maison montre comment une élévation bien tenue suffit à changer la lecture d’une rue.",
+          "epigraph": "Dans une rue dense, une façade peut encore faire lever les yeux.",
+          "sections": [
+            {
+              "heading": "Une façade prise dans la continuité de la ville",
+              "body": "La première qualité de cette maison est son ancrage. Elle ne se détache pas comme un objet posé à part. Elle prend place dans une rue déjà chargée d'usages, de circulation, de rythme. C'est précisément pour cela qu'elle compte. L'Art Nouveau y apparaît moins comme une exception que comme une manière d'intensifier l'ordinaire.\n\nLa façade ne cherche pas à écraser ce qui l'entoure. Elle introduit autre chose, plus de tension dans le dessin, plus d'attention dans la montée du regard, une présence qui ne rompt pas la rue mais la rend plus lisible."
+            },
+            {
+              "heading": "Monter du seuil vers le haut",
+              "body": "Pour la regarder justement, il faut commencer bas. Le seuil, les baies, la relation entre les premières lignes et le reste de l'élévation donnent déjà le ton. Ensuite seulement, le regard peut remonter. Cette progression compte. Elle permet de sentir comment la façade s'organise par accents successifs, sans se réduire à un seul motif fort.\n\nMême avec une documentation encore incomplète, cette lecture tient. Elle ne demande pas d'inventer davantage. Il suffit de suivre ce que le bâtiment donne réellement, sa mesure, sa montée, sa façon de rester dense sans devenir pesant."
+            },
+            {
+              "heading": "Ce qu'elle ouvre dans Bruxelles",
+              "body": "La Maison Fernand Lefever permet d'entrer dans Bruxelles par une échelle juste. Ni monument, ni détail perdu. Une façade assez précise pour tenir seule, assez retenue aussi pour laisser la ville autour d'elle continuer d'exister.\n\nElle gagne à être rapprochée de la Maison des Hiboux. L'une agit par continuité, l'autre par signe plus net. Entre les deux, on perçoit mieux ce que Bruxelles garde encore à hauteur de rue."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Fernand Lefever à Bruxelles. Une lecture de rue d’une façade Art nouveau à Koekelberg, entre continuité urbaine et précision du regard."
+          },
+          "media": {
+            "hero_alt": "Façade Art nouveau de la Maison Fernand Lefever à Bruxelles, avenue du Panthéon à Koekelberg.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Bruxelles"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Fernand Lefever"
+            },
+            {
+              "key": "address",
+              "value": "Avenue du Panthéon 59, Koekelberg"
+            },
+            {
+              "key": "date",
+              "value": "1913"
+            }
+          ],
+          "around": {
+            "note": "À comparer : l’une agit par continuité de rue, l’autre par un signe plus net, sans quitter la même tenue bruxelloise."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -416,84 +476,144 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-lotus-anvers",
       "slug": "maison-lotus-anvers",
-      "format": "article-complet",
-      "title": "Maison Lotus, Anvers",
-      "quote": {
-        "text": {
-          "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
-          "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
-        },
-        "author": {
-          "fr": "William Morris",
-          "en": "William Morris"
-        },
-        "attribution": null,
-        "source": "Victoria and Albert Museum",
-        "source_url": "https://www.vam.ac.uk/collections/william-morris",
-        "source_type": "museum",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 5,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-lotus-anvers.png",
-      "support_images": [],
-      "city": "Anvers",
-      "country": "Belgique",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Motif floral",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "La Maison Lotus a d'emblée quelque chose de très lisible. Le nom, l'architecte, la date, tout cela donne déjà un appui. Réalisée par Jos Bascourt en 1901, elle appartient à cette famille de façades où le motif floral ne relève pas d'un simple ajout. Il oriente la composition, infléchit le regard, et donne au bâtiment une identité assez ferme pour rester en mémoire.",
-      "sections": [
-        {
-          "heading": "Le motif floral sans surcharge",
-          "body": "Avec la Maison Lotus, il faut rester précis. Le plus juste consiste à regarder comment le vocabulaire floral traverse la façade sans l'envahir. Il peut orienter un détail, adoucir une transition, donner une inflexion à l'ensemble. Ce qui compte n'est pas de relever un symbole à chaque ligne. Ce qui compte est de sentir comment un même principe formel tient plusieurs parties du bâtiment.\n\nDans l'Art Nouveau, la référence végétale agit souvent à ce niveau. Elle n'est pas seulement visible. Elle organise. La Maison Lotus semble appartenir à cette famille de façades où le motif donne aussi une manière de construire le regard."
-        },
-        {
-          "heading": "Une entrée juste dans Anvers",
-          "body": "La Maison Lotus donne à Anvers une entrée de bonne mesure. Ni grand monument, ni détail trop étroit. Une façade nommée, datée, assez caractérisée pour tenir un article à elle seule. C'est souvent ainsi qu'une ville commence à compter dans une mémoire personnelle, par une maison qui concentre déjà une manière locale de faire façade.\n\nLe texte doit garder cette échelle. Parler d'Anvers, oui, mais à partir de ce que cette façade rend perceptible, son rythme, sa verticalité, sa manière de prendre place dans la rue."
-        },
-        {
-          "heading": "Ce qu'il faut retenir sur place",
-          "body": "Le principal est de ne pas dissocier le nom de la lecture réelle de la façade. Le lotus ne vaut pas ici comme simple étiquette. Il crée une attente à laquelle le bâtiment répond par sa composition, par sa tenue, par une continuité sensible entre le motif et l'ensemble.\n\nC'est cette correspondance qui donne à la Maison Lotus sa justesse. Une identité ferme, assez calme aussi, pour ouvrir Anvers sans forcer le ton."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison Lotus",
+        "exact_name": "Maison Lotus"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "floral_motif",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "anvers",
+          "country": "belgique"
         }
-      ],
-      "around": {
-        "relation_label": "Même ville",
-        "article_slug": "den-tijd-le-temps-anvers",
-        "note": "À lire aussi : une autre façade anversoise où le nom aide à retenir le lieu sans remplacer la lecture de la composition."
       },
-      "practical": {
-        "Ville": "Anvers",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau",
-        "Architecte": "Jos Bascourt",
-        "Datation": "1901",
-        "Adresse": "Transvaalstraat 52, Berchem (Antwerpen)"
+      "facts": {
+        "location": {
+          "city": "Anvers",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Transvaalstraat 52, Berchem (Antwerpen)"
+        },
+        "dates": {
+          "built": "1901"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Jos Bascourt"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Maison Lotus à Anvers, façade Art Nouveau réalisée par Jos Bascourt en 1901.",
-      "meta_description": "Maison Lotus à Anvers. Une lecture de façade autour du motif floral, avec Jos Bascourt et 1901 comme repères disponibles.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-lotus-anvers.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
+            "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
+          },
+          "author": "William Morris",
+          "attribution": null,
+          "source": "Victoria and Albert Museum",
+          "url": "https://www.vam.ac.uk/collections/william-morris",
+          "type": "museum",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "same_city",
+          "article_id": "den-tijd-le-temps-anvers"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 5,
-      "epigraph": "Parfois un nom suffit à orienter la manière de regarder une façade.",
-      "verified_info": {
-        "exact_name": "Maison Lotus",
-        "architect": "Jos Bascourt",
-        "date": "1901",
-        "style": "Art Nouveau",
-        "city": "Anvers",
-        "country": "Belgique",
-        "address": "Transvaalstraat 52, Berchem (Antwerpen)",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison Lotus, Anvers",
+          "dek": "La Maison Lotus a d'emblée quelque chose de très lisible. Le nom, l'architecte, la date, tout cela donne déjà un appui. Réalisée par Jos Bascourt en 1901, elle appartient à cette famille de façades où le motif floral ne relève pas d'un simple ajout. Il oriente la composition, infléchit le regard, et donne au bâtiment une identité assez ferme pour rester en mémoire.",
+          "epigraph": "Parfois un nom suffit à orienter la manière de regarder une façade.",
+          "sections": [
+            {
+              "heading": "Le motif floral sans surcharge",
+              "body": "Avec la Maison Lotus, il faut rester précis. Le plus juste consiste à regarder comment le vocabulaire floral traverse la façade sans l'envahir. Il peut orienter un détail, adoucir une transition, donner une inflexion à l'ensemble. Ce qui compte n'est pas de relever un symbole à chaque ligne. Ce qui compte est de sentir comment un même principe formel tient plusieurs parties du bâtiment.\n\nDans l'Art Nouveau, la référence végétale agit souvent à ce niveau. Elle n'est pas seulement visible. Elle organise. La Maison Lotus semble appartenir à cette famille de façades où le motif donne aussi une manière de construire le regard."
+            },
+            {
+              "heading": "Une entrée juste dans Anvers",
+              "body": "La Maison Lotus donne à Anvers une entrée de bonne mesure. Ni grand monument, ni détail trop étroit. Une façade nommée, datée, assez caractérisée pour tenir un article à elle seule. C'est souvent ainsi qu'une ville commence à compter dans une mémoire personnelle, par une maison qui concentre déjà une manière locale de faire façade.\n\nLe texte doit garder cette échelle. Parler d'Anvers, oui, mais à partir de ce que cette façade rend perceptible, son rythme, sa verticalité, sa manière de prendre place dans la rue."
+            },
+            {
+              "heading": "Ce qu'il faut retenir sur place",
+              "body": "Le principal est de ne pas dissocier le nom de la lecture réelle de la façade. Le lotus ne vaut pas ici comme simple étiquette. Il crée une attente à laquelle le bâtiment répond par sa composition, par sa tenue, par une continuité sensible entre le motif et l'ensemble.\n\nC'est cette correspondance qui donne à la Maison Lotus sa justesse. Une identité ferme, assez calme aussi, pour ouvrir Anvers sans forcer le ton."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Lotus à Anvers. Une lecture de façade autour du motif floral, avec Jos Bascourt et 1901 comme repères disponibles."
+          },
+          "media": {
+            "hero_alt": "Maison Lotus à Anvers, façade Art Nouveau réalisée par Jos Bascourt en 1901.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Anvers"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jos Bascourt"
+            },
+            {
+              "key": "address",
+              "value": "Transvaalstraat 52, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1901"
+            }
+          ],
+          "around": {
+            "note": "À lire aussi : une autre façade anversoise où le nom aide à retenir le lieu sans remplacer la lecture de la composition."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -906,85 +1026,148 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "den-tijd-le-temps-anvers",
       "slug": "den-tijd-le-temps-anvers",
-      "format": "article-court",
-      "title": "Den Tijd, Anvers",
-      "quote": {
-        "text": {
-          "fr": "Une dignité noble et simple ne suffit-elle pas ?",
-          "en": "Is not a noble and simple dignity sufficient?"
-        },
-        "author": {
-          "fr": "Louis Sullivan",
-          "en": "Louis Sullivan"
-        },
-        "attribution": {
-          "fr": "Ornament in Architecture, 1892",
-          "en": "Ornament in Architecture, 1892"
-        },
-        "source": "Chicago Architecture Center / Architecture.org",
-        "source_url": "https://www.architecture.org/online-resources/buildings-of-chicago/monadnock-building",
-        "source_type": "architecture_institution",
-        "verified": true
+      "status": "draft",
+      "format": "short",
+      "publication": {
+        "order": 11,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/den-tijd-le-temps-anvers.png",
-      "support_images": [
-        "assets/images/articles/le-jour-anvers.png"
-      ],
-      "city": "Anvers",
-      "country": "Belgique",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Écriture urbaine",
-        "Commerce"
-      ],
-      "gaps": [],
-      "chapeau": "Den Tijd montre qu’un sujet court peut tenir sans effort si l’on garde la bonne mesure. Une façade lisible, une baie, une enseigne intégrée à la composition, et Anvers autour. Cela suffit pour une note nette, à condition de ne pas en demander plus au bâtiment qu’il ne donne.",
-      "sections": [
-        {
-          "heading": "Le nom dans la façade",
-          "body": "L'intérêt de Den Tijd tient à la netteté de son dispositif. Le nom ne vient pas se plaquer sur l'image. Il fait déjà partie de la lecture. La façade se construit donc à la rencontre de l'architecture, de l'usage et de l'écriture.\n\nC'est peu, mais c'est assez. Il ne faut pas transformer cette économie en manque. C'est précisément ce qui donne à la note sa justesse."
-        },
-        {
-          "heading": "Une note courte, rien de plus",
-          "body": "Den Tijd n'a pas encore la densité documentaire d'une Maison Lotus. Ce n'est pas un défaut. Une note courte bien tenue vaut mieux qu'un texte étiré. Ici, il faut rester au plus près de la façade, de la baie, de l'enseigne, et laisser le sujet faire le reste.\n\nLe rapprochement avec Den Dag viendra ensuite comme un prolongement naturel, pas comme une compensation."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Den Tijd",
+        "exact_name": "Den Tijd"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "urban_lettering",
+          "commerce"
+        ],
+        "place_keys": {
+          "city": "anvers",
+          "country": "belgique"
         }
-      ],
-      "around": {
-        "relation_label": "Même ville",
-        "article_slug": "maison-lotus-anvers",
-        "note": "À comparer : une autre façade anversoise où le nom reste mémorable, mais laisse davantage la composition porter la lecture."
       },
-      "practical": {
-        "Ville": "Anvers",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau",
-        "Datation": "1903",
-        "Architecte": "A. Cols, A. Defever",
-        "Adresse": "Waterloostraat 59, Berchem (Antwerpen)"
+      "facts": {
+        "location": {
+          "city": "Anvers",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Waterloostraat 59, Berchem (Antwerpen)"
+        },
+        "dates": {
+          "built": "1903"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "A. Cols, A. Defever"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Façade Art Nouveau à Anvers avec la mention Den Tijd, Le Temps, intégrée à la composition.",
-      "meta_description": "Den Tijd à Anvers. Une note courte sur une façade Art Nouveau où le nom, la baie et l'enseigne tiennent ensemble.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/den-tijd-le-temps-anvers.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/le-jour-anvers.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "Une dignité noble et simple ne suffit-elle pas ?",
+            "en": "Is not a noble and simple dignity sufficient?"
+          },
+          "author": "Louis Sullivan",
+          "attribution": {
+            "fr": "Ornament in Architecture, 1892",
+            "en": "Ornament in Architecture, 1892"
+          },
+          "source": "Chicago Architecture Center / Architecture.org",
+          "url": "https://www.architecture.org/online-resources/buildings-of-chicago/monadnock-building",
+          "type": "architecture_institution",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "same_city",
+          "article_id": "maison-lotus-anvers"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 11,
-      "epigraph": "Parfois une baie et quelques lettres suffisent à faire tenir une façade.",
-      "verified_info": {
-        "exact_name": "Den Tijd",
-        "architect": "A. Cols, A. Defever",
-        "date": "1903",
-        "style": "Art Nouveau",
-        "city": "Anvers",
-        "country": "Belgique",
-        "address": "Waterloostraat 59, Berchem (Antwerpen)",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Den Tijd, Anvers",
+          "dek": "Den Tijd montre qu’un sujet court peut tenir sans effort si l’on garde la bonne mesure. Une façade lisible, une baie, une enseigne intégrée à la composition, et Anvers autour. Cela suffit pour une note nette, à condition de ne pas en demander plus au bâtiment qu’il ne donne.",
+          "epigraph": "Parfois une baie et quelques lettres suffisent à faire tenir une façade.",
+          "sections": [
+            {
+              "heading": "Le nom dans la façade",
+              "body": "L'intérêt de Den Tijd tient à la netteté de son dispositif. Le nom ne vient pas se plaquer sur l'image. Il fait déjà partie de la lecture. La façade se construit donc à la rencontre de l'architecture, de l'usage et de l'écriture.\n\nC'est peu, mais c'est assez. Il ne faut pas transformer cette économie en manque. C'est précisément ce qui donne à la note sa justesse."
+            },
+            {
+              "heading": "Une note courte, rien de plus",
+              "body": "Den Tijd n'a pas encore la densité documentaire d'une Maison Lotus. Ce n'est pas un défaut. Une note courte bien tenue vaut mieux qu'un texte étiré. Ici, il faut rester au plus près de la façade, de la baie, de l'enseigne, et laisser le sujet faire le reste.\n\nLe rapprochement avec Den Dag viendra ensuite comme un prolongement naturel, pas comme une compensation."
+            }
+          ],
+          "seo": {
+            "meta_description": "Den Tijd à Anvers. Une note courte sur une façade Art Nouveau où le nom, la baie et l'enseigne tiennent ensemble."
+          },
+          "media": {
+            "hero_alt": "Façade Art Nouveau à Anvers avec la mention Den Tijd, Le Temps, intégrée à la composition.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Anvers"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "A. Cols, A. Defever"
+            },
+            {
+              "key": "address",
+              "value": "Waterloostraat 59, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1903"
+            }
+          ],
+          "around": {
+            "note": "À comparer : une autre façade anversoise où le nom reste mémorable, mais laisse davantage la composition porter la lecture."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
