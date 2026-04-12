@@ -390,89 +390,155 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-des-hiboux-saint-gilles",
       "slug": "maison-des-hiboux-saint-gilles",
-      "format": "article-complet",
-      "title": "Maison des Hiboux, Saint-Gilles",
-      "quote": {
-        "text": {
-          "fr": "Une ligne est une force.",
-          "en": "A line is a force."
-        },
-        "author": {
-          "fr": "Henry van de Velde",
-          "en": "Henry van de Velde"
-        },
-        "attribution": {
-          "fr": "Slogan imprimé pour la première fois en 1902",
-          "en": "Slogan first printed in 1902"
-        },
-        "source": "Nineteenth-Century Art Worldwide",
-        "source_url": "https://www.19thc-artworldwide.org/autumn13/van-nimmen-on-henry-van-de-velde-year-in-germany-and-belgium-part-one",
-        "source_type": "scholarly",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 4,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-des-hiboux-saint-gilles.png",
-      "support_images": [
-        "assets/images/articles/gros-plan-sur-le-sgraffito-de-la-maison-des-hiboux-bruxelles.png"
-      ],
-      "city": "Saint-Gilles",
-      "country": "Belgique",
-      "style": "Art Nouveau géométrique",
-      "tags": [
-        "Art Nouveau",
-        "Façade",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "La Maison des Hiboux est l'un de ces bâtiments que l'on retient vite, puis que l'on regarde plus longtemps qu'on ne l'avait prévu. Les deux oiseaux placés au sommet suffisent à fixer le nom. Mais la façade ne tient pas seulement à ce signe. À Saint-Gilles, avec Édouard Pelseneer comme repère d'auteur, elle impose surtout une manière très sûre de conduire l'œil du bas vers le haut sans perdre la tenue de l'ensemble.",
-      "sections": [
-        {
-          "heading": "Commencer par le signe, ne pas s'y arrêter",
-          "body": "Les hiboux font ce que beaucoup de détails nommés font dans la ville. Ils attirent le regard, donnent une mémoire immédiate, offrent presque un raccourci. Le risque serait de s'en contenter. Or la façade demande autre chose. Une fois le signe repéré, il faut redescendre et reprendre toute l'élévation.\n\nC'est là que le bâtiment devient vraiment intéressant. Les oiseaux ne sont pas un épisode séparé. Ils appartiennent à une composition plus large. Ils la terminent, ils ne la remplacent pas."
-        },
-        {
-          "heading": "Une verticalité tenue",
-          "body": "La Maison des Hiboux garde une fermeté qui compte beaucoup. On parle souvent de l'Art Nouveau comme d'un débordement. Ici, cette idée ne suffit pas. Le décor existe, mais il reste contenu. La façade garde sa ligne, sa montée, son équilibre. Le sommet attire l'œil, mais il ne le confisque pas.\n\nC'est sans doute ce qui rend le bâtiment durable dans la mémoire. On n'en retient pas seulement un motif singulier. On en retient une structure capable de résister à une seconde lecture, puis à une troisième."
-        },
-        {
-          "heading": "Ce qu'il faut regarder à Saint-Gilles",
-          "body": "Le bon ordre de lecture est simple. Voir les hiboux. Revenir ensuite à l'entrée. Puis remonter, plus lentement. Ce trajet évite de transformer la maison en curiosité de façade. Il permet de comprendre comment le sommet répond au reste, et comment l'ensemble tient.\n\nDans Bruxelles, la Maison des Hiboux gagne à être rapprochée de la Maison Fernand Lefever. L'une s'impose par un signe net. L'autre travaille plus discrètement. Entre les deux, on mesure mieux la variété du vocabulaire bruxellois."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison des Hiboux",
+        "exact_name": "n°55. Les Hiboux"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau_geometric",
+        "tag_keys": [
+          "art_nouveau",
+          "facade",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "saint-gilles",
+          "country": "belgique"
         }
-      ],
-      "around": {
-        "relation_label": "Contrepoint",
-        "article_slug": "maison-fernand-lefever-bruxelles",
-        "note": "À lire ensuite : une façade moins immédiatement nommée, mais tout aussi précise dans sa manière de tenir la rue."
       },
-      "practical": {
-        "Ville": "Saint-Gilles",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau géométrique",
-        "Architecte": "Édouard Pelseneer",
-        "Adresse": "Avenue Brugmann 55, Saint-Gilles",
-        "Datation": "1899"
+      "facts": {
+        "location": {
+          "city": "Saint-Gilles",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Avenue Brugmann 55, Saint-Gilles"
+        },
+        "dates": {
+          "built": "1899"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Édouard Pelseneer"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Maison des Hiboux à Saint-Gilles, façade Art Nouveau couronnée par deux oiseaux sculptés.",
-      "meta_description": "Maison des Hiboux à Saint-Gilles. Une lecture de façade entre signe, verticalité et tenue, avec Édouard Pelseneer comme repère d'auteur.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-des-hiboux-saint-gilles.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/gros-plan-sur-le-sgraffito-de-la-maison-des-hiboux-bruxelles.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "Une ligne est une force.",
+            "en": "A line is a force."
+          },
+          "author": {
+            "fr": "Henry van de Velde",
+            "en": "Henry van de Velde"
+          },
+          "attribution": {
+            "fr": "Slogan imprimé pour la première fois en 1902",
+            "en": "Slogan first printed in 1902"
+          },
+          "source": "Nineteenth-Century Art Worldwide",
+          "url": "https://www.19thc-artworldwide.org/autumn13/van-nimmen-on-henry-van-de-velde-year-in-germany-and-belgium-part-one",
+          "type": "scholarly",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "counterpoint",
+          "article_id": "maison-fernand-lefever-bruxelles"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 4,
-      "epigraph": "Un détail peut donner son nom à une façade sans en épuiser la lecture.",
-      "verified_info": {
-        "exact_name": "n°55. Les Hiboux",
-        "architect": "Édouard Pelseneer",
-        "date": "1899",
-        "style": "Art Nouveau géométrique",
-        "city": "Saint-Gilles",
-        "country": "Belgique",
-        "address": "Avenue Brugmann 55, Saint-Gilles",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison des Hiboux, Saint-Gilles",
+          "dek": "La Maison des Hiboux est l'un de ces bâtiments que l'on retient vite, puis que l'on regarde plus longtemps qu'on ne l'avait prévu. Les deux oiseaux placés au sommet suffisent à fixer le nom. Mais la façade ne tient pas seulement à ce signe. À Saint-Gilles, avec Édouard Pelseneer comme repère d'auteur, elle impose surtout une manière très sûre de conduire l'œil du bas vers le haut sans perdre la tenue de l'ensemble.",
+          "epigraph": "Un détail peut donner son nom à une façade sans en épuiser la lecture.",
+          "sections": [
+            {
+              "heading": "Commencer par le signe, ne pas s'y arrêter",
+              "body": "Les hiboux font ce que beaucoup de détails nommés font dans la ville. Ils attirent le regard, donnent une mémoire immédiate, offrent presque un raccourci. Le risque serait de s'en contenter. Or la façade demande autre chose. Une fois le signe repéré, il faut redescendre et reprendre toute l'élévation.\n\nC'est là que le bâtiment devient vraiment intéressant. Les oiseaux ne sont pas un épisode séparé. Ils appartiennent à une composition plus large. Ils la terminent, ils ne la remplacent pas."
+            },
+            {
+              "heading": "Une verticalité tenue",
+              "body": "La Maison des Hiboux garde une fermeté qui compte beaucoup. On parle souvent de l'Art Nouveau comme d'un débordement. Ici, cette idée ne suffit pas. Le décor existe, mais il reste contenu. La façade garde sa ligne, sa montée, son équilibre. Le sommet attire l'œil, mais il ne le confisque pas.\n\nC'est sans doute ce qui rend le bâtiment durable dans la mémoire. On n'en retient pas seulement un motif singulier. On en retient une structure capable de résister à une seconde lecture, puis à une troisième."
+            },
+            {
+              "heading": "Ce qu'il faut regarder à Saint-Gilles",
+              "body": "Le bon ordre de lecture est simple. Voir les hiboux. Revenir ensuite à l'entrée. Puis remonter, plus lentement. Ce trajet évite de transformer la maison en curiosité de façade. Il permet de comprendre comment le sommet répond au reste, et comment l'ensemble tient.\n\nDans Bruxelles, la Maison des Hiboux gagne à être rapprochée de la Maison Fernand Lefever. L'une s'impose par un signe net. L'autre travaille plus discrètement. Entre les deux, on mesure mieux la variété du vocabulaire bruxellois."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison des Hiboux à Saint-Gilles. Une lecture de façade entre signe, verticalité et tenue, avec Édouard Pelseneer comme repère d'auteur."
+          },
+          "media": {
+            "hero_alt": "Maison des Hiboux à Saint-Gilles, façade Art Nouveau couronnée par deux oiseaux sculptés.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Saint-Gilles"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau géométrique"
+            },
+            {
+              "key": "architect",
+              "value": "Édouard Pelseneer"
+            },
+            {
+              "key": "address",
+              "value": "Avenue Brugmann 55, Saint-Gilles"
+            },
+            {
+              "key": "date",
+              "value": "1899"
+            }
+          ],
+          "around": {
+            "note": "À lire ensuite : une façade moins immédiatement nommée, mais tout aussi précise dans sa manière de tenir la rue."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -617,331 +683,591 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-aux-tulipes-bratislava-jeno-schiller",
       "slug": "maison-aux-tulipes-bratislava-jeno-schiller",
-      "format": "article-complet",
-      "title": "Maison aux Tulipes, Bratislava",
-      "quote": {
-        "text": {
-          "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
-          "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
-        },
-        "author": {
-          "fr": "William Morris",
-          "en": "William Morris"
-        },
-        "attribution": null,
-        "source": "Victoria and Albert Museum",
-        "source_url": "https://www.vam.ac.uk/collections/william-morris",
-        "source_type": "museum",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 6,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-aux-tulipes-bratislava-jeno-schiller.png",
-      "support_images": [
-        "assets/images/articles/the-tulip-housse.png"
-      ],
-      "city": "Bratislava",
-      "country": "Slovaquie",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Motif floral",
-        "Façade"
-      ],
-      "gaps": [
-        "Datation précise à confirmer avant publication."
-      ],
-      "chapeau": "La Maison aux Tulipes permet d'élargir la carte sans changer de voix. À Bratislava, au 10 rue Sturova selon les données disponibles, avec Jeno Schiller comme repère d'auteur, le bâtiment tient d'abord par sa façade et par son seuil. Le nom invite facilement au commentaire. Le plus juste est de revenir à la composition, à la manière dont un motif peut orienter tout un bâtiment sans l'alourdir.",
-      "sections": [
-        {
-          "heading": "Le motif sans facilité",
-          "body": "Une maison dite aux Tulipes appelle spontanément tout un vocabulaire que le texte doit éviter de surjouer. Le plus juste consiste à regarder comment le motif infléchit la façade, comment il circule, comment il donne une direction au regard sans absorber tout le bâtiment.\n\nLe sujet n'est donc pas la fleur comme image isolée. C'est la manière dont un principe décoratif arrive à tenir ensemble la surface, le rythme et la présence du lieu."
-        },
-        {
-          "heading": "Ce qu'elle ouvre dans Bratislava",
-          "body": "La Maison aux Tulipes donne à Bratislava une entrée de bonne mesure. Une adresse précise, une façade lisible, un sujet assez ferme pour qu'une ville commence à s'installer autrement que par une vue générale.\n\nLe regard reste le même qu'ailleurs. Il part de la rue, du bâtiment, du détail qui retient, puis il élargit seulement ensuite. C'est à cette condition que Bratislava peut entrer dans le site sans rupture de ton."
-        },
-        {
-          "heading": "Ce qu'il faut lire sur place",
-          "body": "Le regard gagne à alterner entre l'ensemble et le seuil. La façade donne le ton. L'entrée resserre la lecture et montre si cette première impression tient dans le détail. C'est souvent là que l'Art Nouveau devient le plus convaincant.\n\nOn comprend alors que le décor n'est pas une couche supplémentaire. Il accompagne déjà le passage entre la rue, la porte et le reste du bâtiment."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison aux Tulipes",
+        "exact_name": "Maison aux Tulipes, Bratislava"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "floral_motif",
+          "facade"
+        ],
+        "place_keys": {
+          "city": "bratislava",
+          "country": "slovaquie"
         }
-      ],
-      "around": null,
-      "practical": {
-        "Ville": "Bratislava",
-        "Pays": "Slovaquie",
-        "Style": "Art Nouveau",
-        "Architecte": "Jeno Schiller",
-        "Adresse": "10 rue Sturova",
-        "Datation": "À confirmer"
       },
-      "alt_text": "Maison aux Tulipes à Bratislava, façade Art Nouveau située au 10 rue Sturova et attribuée à Jeno Schiller.",
-      "meta_description": "Maison aux Tulipes à Bratislava. Une lecture de façade entre motif, seuil et tenue d'ensemble, avec Jeno Schiller comme repère disponible.",
+      "facts": {
+        "location": {
+          "city": "Bratislava",
+          "country": "Slovaquie",
+          "country_code": "SK",
+          "address": "10 rue Sturova"
+        },
+        "dates": {
+          "built": null
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Jeno Schiller"
+          }
+        ],
+        "notes": null
+      },
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-aux-tulipes-bratislava-jeno-schiller.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/the-tulip-housse.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "N’ayez rien dans vos maisons que vous ne sachiez utile ou que vous ne croyiez beau.",
+            "en": "Have nothing in your houses that you do not know to be useful or believe to be beautiful."
+          },
+          "author": {
+            "fr": "William Morris",
+            "en": "William Morris"
+          },
+          "attribution": null,
+          "source": "Victoria and Albert Museum",
+          "url": "https://www.vam.ac.uk/collections/william-morris",
+          "type": "museum",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": null
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [
+          "Datation précise à confirmer avant publication."
+        ],
+        "flags": []
       },
-      "publication_order_recommended": 6,
-      "epigraph": "Une façade peut garder ses fleurs sans perdre sa tenue.",
-      "verified_info": {
-        "exact_name": "Maison aux Tulipes, Bratislava",
-        "architect": "Jeno Schiller",
-        "date": null,
-        "style": "Art Nouveau",
-        "city": "Bratislava",
-        "country": "Slovaquie",
-        "address": "10 rue Sturova",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison aux Tulipes, Bratislava",
+          "dek": "La Maison aux Tulipes permet d'élargir la carte sans changer de voix. À Bratislava, au 10 rue Sturova selon les données disponibles, avec Jeno Schiller comme repère d'auteur, le bâtiment tient d'abord par sa façade et par son seuil. Le nom invite facilement au commentaire. Le plus juste est de revenir à la composition, à la manière dont un motif peut orienter tout un bâtiment sans l'alourdir.",
+          "epigraph": "Une façade peut garder ses fleurs sans perdre sa tenue.",
+          "sections": [
+            {
+              "heading": "Le motif sans facilité",
+              "body": "Une maison dite aux Tulipes appelle spontanément tout un vocabulaire que le texte doit éviter de surjouer. Le plus juste consiste à regarder comment le motif infléchit la façade, comment il circule, comment il donne une direction au regard sans absorber tout le bâtiment.\n\nLe sujet n'est donc pas la fleur comme image isolée. C'est la manière dont un principe décoratif arrive à tenir ensemble la surface, le rythme et la présence du lieu."
+            },
+            {
+              "heading": "Ce qu'elle ouvre dans Bratislava",
+              "body": "La Maison aux Tulipes donne à Bratislava une entrée de bonne mesure. Une adresse précise, une façade lisible, un sujet assez ferme pour qu'une ville commence à s'installer autrement que par une vue générale.\n\nLe regard reste le même qu'ailleurs. Il part de la rue, du bâtiment, du détail qui retient, puis il élargit seulement ensuite. C'est à cette condition que Bratislava peut entrer dans le site sans rupture de ton."
+            },
+            {
+              "heading": "Ce qu'il faut lire sur place",
+              "body": "Le regard gagne à alterner entre l'ensemble et le seuil. La façade donne le ton. L'entrée resserre la lecture et montre si cette première impression tient dans le détail. C'est souvent là que l'Art Nouveau devient le plus convaincant.\n\nOn comprend alors que le décor n'est pas une couche supplémentaire. Il accompagne déjà le passage entre la rue, la porte et le reste du bâtiment."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison aux Tulipes à Bratislava. Une lecture de façade entre motif, seuil et tenue d'ensemble, avec Jeno Schiller comme repère disponible."
+          },
+          "media": {
+            "hero_alt": "Maison aux Tulipes à Bratislava, façade Art Nouveau située au 10 rue Sturova et attribuée à Jeno Schiller.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Bratislava"
+            },
+            {
+              "key": "country",
+              "value": "Slovaquie"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jeno Schiller"
+            },
+            {
+              "key": "address",
+              "value": "10 rue Sturova"
+            },
+            {
+              "key": "date",
+              "value": "À confirmer"
+            }
+          ],
+          "around": null,
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-strauven-avenue-van-cutsem-2729-tournai-1904",
       "slug": "maison-strauven-avenue-van-cutsem-2729-tournai-1904",
-      "format": "article-complet",
-      "title": "Maison Strauven, avenue Van Cutsem 27–29, Tournai",
-      "quote": {
-        "text": {
-          "fr": "J’ai aimé mon art, mes enfants intellectuels, plus que moi-même.",
-          "en": "I have loved my Art, my Intellectual Children more than Myself."
-        },
-        "author": {
-          "fr": "Victor Horta",
-          "en": "Victor Horta"
-        },
-        "attribution": null,
-        "source": "Foundation Frison Horta",
-        "source_url": "https://www.foundation-frison-horta.be/photos/",
-        "source_type": "foundation",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 7,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/tournai-art-nouveau-door-ironwork.png",
-      "support_images": [
-        "assets/images/articles/bow-window-tournaisien.png"
-      ],
-      "city": "Tournai",
-      "country": "Belgique",
-      "style": "Art Nouveau",
-      "tags": [
-        "Art Nouveau",
-        "Seuil",
-        "Habitat"
-      ],
-      "gaps": [],
-      "chapeau": "Avec la Maison Strauven, tout commence par une précision rare. Une adresse, une date, deux noms, et déjà une façade assez nette pour tenir la lecture. À Tournai, entre l’avenue Van Cutsem et la rue des Volontaires, le bâtiment permet d’écrire au plus près de la rue. Il n’y a pas besoin d’en faire davantage.",
-      "sections": [
-        {
-          "heading": "Une adresse qui ancre la lecture",
-          "body": "Disposer d'une adresse exacte change immédiatement la qualité d'un texte. Le bâtiment cesse d'être une image isolée. Il redevient une présence située, inscrite dans une rue que l'on peut suivre et retenir. C'est une force très simple, mais décisive, de la Maison Strauven.\n\nCette précision oblige aussi à écrire plus juste. On peut rester au plus près de la façade, du seuil, de la manière dont une maison prend place dans la ville, sans compenser par de grandes formules."
-        },
-        {
-          "heading": "Du seuil à l'ensemble",
-          "body": "Ce sujet gagne à être lu à partir de deux distances. D'abord le détail, ensuite l'ensemble. Le seuil retient l'œil parce qu'il concentre une part de l'écriture de la maison. Puis la façade élargit cette première impression et lui donne sa mesure.\n\nCette relation entre proche et lointain compte beaucoup dans l'Art Nouveau. Elle rappelle qu'une façade tient rarement par une seule silhouette. Elle tient par un enchaînement de décisions visibles dans la matière même du bâtiment."
-        },
-        {
-          "heading": "Ce qu'elle laisse en mémoire à Tournai",
-          "body": "La Maison Strauven donne à Tournai une entrée très juste. Non pas une vue générale, mais une adresse à laquelle le regard peut revenir. C'est souvent ainsi qu'une ville s'installe vraiment dans la mémoire, par une porte, une façade, une suite de lignes que l'on reconnaît ensuite ailleurs dans la rue.\n\nIci, la date de 1904 et l'adresse suffisent déjà à donner au texte sa tenue. Le reste tient à la façon dont la maison confirme, à échelle de rue, que Tournai sait aussi garder des façades qui demandent qu'on s'y arrête."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison Strauven",
+        "exact_name": "Maison Strauven, avenue Van Cutsem 27–29, Tournai"
+      },
+      "taxonomy": {
+        "style_key": "art_nouveau",
+        "tag_keys": [
+          "art_nouveau",
+          "threshold",
+          "habitat"
+        ],
+        "place_keys": {
+          "city": "tournai",
+          "country": "belgique"
         }
-      ],
-      "around": null,
-      "practical": {
-        "Ville": "Tournai",
-        "Pays": "Belgique",
-        "Style": "Art Nouveau",
-        "Architecte": "Gustave Strauven, Félix Strauven",
-        "Adresse": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai",
-        "Datation": "1904"
       },
-      "alt_text": "Maison Art Nouveau de Gustave et Félix Strauven à Tournai, sur l’avenue Van Cutsem et la rue des Volontaires.",
-      "meta_description": "Maison Strauven à Tournai. Une lecture de rue d'une adresse Art Nouveau datée de 1904, entre seuil, façade et mémoire de la ville.",
+      "facts": {
+        "location": {
+          "city": "Tournai",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai"
+        },
+        "dates": {
+          "built": "1904"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Gustave Strauven"
+          },
+          {
+            "role": "architect",
+            "name": "Félix Strauven"
+          }
+        ],
+        "notes": null
+      },
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/tournai-art-nouveau-door-ironwork.png",
+          "credit": null
+        },
+        "support": [
+          {
+            "src": "assets/images/articles/bow-window-tournaisien.png",
+            "credit": null
+          }
+        ]
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "J’ai aimé mon art, mes enfants intellectuels, plus que moi-même.",
+            "en": "I have loved my Art, my Intellectual Children more than Myself."
+          },
+          "author": {
+            "fr": "Victor Horta",
+            "en": "Victor Horta"
+          },
+          "attribution": null,
+          "source": "Foundation Frison Horta",
+          "url": "https://www.foundation-frison-horta.be/photos/",
+          "type": "foundation",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": null
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 7,
-      "epigraph": "Certaines adresses donnent tout de suite une prise au regard.",
-      "verified_info": {
-        "exact_name": null,
-        "architect": "Gustave Strauven, Félix Strauven",
-        "date": "1904",
-        "style": "Art Nouveau",
-        "city": "Tournai",
-        "country": "Belgique",
-        "address": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison Strauven, avenue Van Cutsem 27–29, Tournai",
+          "dek": "Avec la Maison Strauven, tout commence par une précision rare. Une adresse, une date, deux noms, et déjà une façade assez nette pour tenir la lecture. À Tournai, entre l’avenue Van Cutsem et la rue des Volontaires, le bâtiment permet d’écrire au plus près de la rue. Il n’y a pas besoin d’en faire davantage.",
+          "epigraph": "Certaines adresses donnent tout de suite une prise au regard.",
+          "sections": [
+            {
+              "heading": "Une adresse qui ancre la lecture",
+              "body": "Disposer d'une adresse exacte change immédiatement la qualité d'un texte. Le bâtiment cesse d'être une image isolée. Il redevient une présence située, inscrite dans une rue que l'on peut suivre et retenir. C'est une force très simple, mais décisive, de la Maison Strauven.\n\nCette précision oblige aussi à écrire plus juste. On peut rester au plus près de la façade, du seuil, de la manière dont une maison prend place dans la ville, sans compenser par de grandes formules."
+            },
+            {
+              "heading": "Du seuil à l'ensemble",
+              "body": "Ce sujet gagne à être lu à partir de deux distances. D'abord le détail, ensuite l'ensemble. Le seuil retient l'œil parce qu'il concentre une part de l'écriture de la maison. Puis la façade élargit cette première impression et lui donne sa mesure.\n\nCette relation entre proche et lointain compte beaucoup dans l'Art Nouveau. Elle rappelle qu'une façade tient rarement par une seule silhouette. Elle tient par un enchaînement de décisions visibles dans la matière même du bâtiment."
+            },
+            {
+              "heading": "Ce qu'elle laisse en mémoire à Tournai",
+              "body": "La Maison Strauven donne à Tournai une entrée très juste. Non pas une vue générale, mais une adresse à laquelle le regard peut revenir. C'est souvent ainsi qu'une ville s'installe vraiment dans la mémoire, par une porte, une façade, une suite de lignes que l'on reconnaît ensuite ailleurs dans la rue.\n\nIci, la date de 1904 et l'adresse suffisent déjà à donner au texte sa tenue. Le reste tient à la façon dont la maison confirme, à échelle de rue, que Tournai sait aussi garder des façades qui demandent qu'on s'y arrête."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Strauven à Tournai. Une lecture de rue d'une adresse Art Nouveau datée de 1904, entre seuil, façade et mémoire de la ville."
+          },
+          "media": {
+            "hero_alt": "Maison Art Nouveau de Gustave et Félix Strauven à Tournai, sur l’avenue Van Cutsem et la rue des Volontaires.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Tournai"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Gustave Strauven, Félix Strauven"
+            },
+            {
+              "key": "address",
+              "value": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai"
+            },
+            {
+              "key": "date",
+              "value": "1904"
+            }
+          ],
+          "around": null,
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
+      "schema_version": 2,
+      "id": "palais-de-la-secession-vienne-18971898",
       "slug": "palais-de-la-secession-vienne-18971898",
-      "format": "article-complet",
-      "title": "Palais de la Sécession, Vienne",
-      "quote": {
-        "text": {
-          "fr": "À chaque époque son art. À l’art sa liberté.",
-          "en": "To every age its art. To art its freedom."
-        },
-        "author": {
-          "fr": "Devise de la Sécession viennoise",
-          "en": "Vienna Secession motto"
-        },
-        "attribution": {
-          "fr": "Inscription de façade",
-          "en": "Facade inscription"
-        },
-        "source": "Secession",
-        "source_url": "https://secession.at/mission_en",
-        "source_type": "institution",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 8,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/palais-de-la-secession-vienne-18971898.png",
-      "support_images": [],
-      "city": "Vienne",
-      "country": "Autriche",
-      "style": "Sécession viennoise",
-      "tags": [
-        "Sécession viennoise",
-        "Façade",
-        "Bâtiment public"
-      ],
-      "gaps": [],
-      "chapeau": "Le Palais de la Sécession fait partie des bâtiments que l’on reconnaît avant même d’en savoir beaucoup. À Vienne, entre 1897 et 1898, avec Joseph Maria Olbrich comme repère d’auteur, il impose une forme de netteté rare. Tout y paraît décidé. Le plus juste est donc de partir de cette évidence visuelle et de regarder comment un bâtiment peut affirmer un langage sans perdre sa lisibilité.",
-      "sections": [
-        {
-          "heading": "Une netteté qui tient l'ensemble",
-          "body": "Le Palais de la Sécession impressionne moins par l'accumulation que par la fermeté. La silhouette, la frontalité, la manière dont décor et volume restent liés, tout concourt à produire une lecture claire. C'est cette clarté qui le rend durable dans le regard.\n\nMême lorsqu'un bâtiment est fortement orné, il peut garder une discipline très stricte. Ici, rien ne paraît flottant. L'édifice tient par une cohérence visible, presque immédiate."
-        },
-        {
-          "heading": "Revenir du nom au bâtiment",
-          "body": "Vienne et la Sécession portent déjà beaucoup d'attentes. Le risque serait de s'en contenter. Le texte doit faire l'inverse et revenir au bâtiment lui-même. Comment il se pose dans l'espace. Comment le décor accompagne le volume. Comment l'ensemble reste lisible même sans appareil historique déployé autour de lui.\n\nC'est cette autonomie qui compte ici. Le Palais de la Sécession n'a pas besoin de beaucoup d'appui pour retenir l'attention. Il tient déjà par la force calme de sa présence."
-        },
-        {
-          "heading": "Ce qu'il ouvre dans Vienne",
-          "body": "Le Palais de la Sécession donne à Vienne une entrée nette, presque frontale. Ensuite seulement, d'autres façades pourront déplacer le regard vers des formes plus habitées ou plus directement prises dans le tissu quotidien.\n\nC'est dans cet écart que la ville devient intéressante. Entre un bâtiment aussi affirmé et des sujets plus proches de la rue, Vienne gagne immédiatement en profondeur."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Palais de la Sécession",
+        "exact_name": "Secession"
+      },
+      "taxonomy": {
+        "style_key": "vienna_secession",
+        "tag_keys": [
+          "vienna_secession",
+          "facade",
+          "public_building"
+        ],
+        "place_keys": {
+          "city": "vienne",
+          "country": "autriche"
         }
-      ],
-      "around": {
-        "relation_label": "Autre échelle",
-        "article_slug": "maison-aux-majoliques-vienne",
-        "note": "À lire ensuite : une façade plus directement prise dans le tissu ordinaire, là où la Sécession s’impose comme un bâtiment autonome."
       },
-      "practical": {
-        "Ville": "Vienne",
-        "Pays": "Autriche",
-        "Style": "Sécession viennoise",
-        "Architecte": "Joseph Maria Olbrich",
-        "Datation": "1897–1898",
-        "Adresse": "Friedrichstraße 12, 1010 Wien"
+      "facts": {
+        "location": {
+          "city": "Vienne",
+          "country": "Autriche",
+          "country_code": "AT",
+          "address": "Friedrichstraße 12, 1010 Wien"
+        },
+        "dates": {
+          "built": "1897–1898"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Joseph Maria Olbrich"
+          }
+        ],
+        "notes": "Premier grand bâtiment d’exposition consacré à l’art moderne en Europe centrale Première pierre le 28 avril 1898 Bâtiment achevé le 29 octobre 1898"
       },
-      "alt_text": "Palais de la Sécession à Vienne, bâtiment de Joseph Maria Olbrich daté de 1897-1898.",
-      "meta_description": "Palais de la Sécession à Vienne. Une lecture de façade et de volume d’un bâtiment daté de 1897-1898, avec Joseph Maria Olbrich comme repère d’auteur.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/palais-de-la-secession-vienne-18971898.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "À chaque époque son art. À l’art sa liberté.",
+            "en": "To every age its art. To art its freedom."
+          },
+          "author": {
+            "fr": "Devise de la Sécession viennoise",
+            "en": "Vienna Secession motto"
+          },
+          "attribution": {
+            "fr": "Inscription de façade",
+            "en": "Facade inscription"
+          },
+          "source": "Secession",
+          "url": "https://secession.at/mission_en",
+          "type": "institution",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "other_scale",
+          "article_id": "maison-aux-majoliques-vienne"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 8,
-      "epigraph": "Parfois un bâtiment s'impose comme une décision prise dans la ville.",
-      "verified_info": {
-        "exact_name": "Secession",
-        "architect": "Joseph Maria Olbrich",
-        "date": "1897–1898",
-        "style": "Sécession viennoise",
-        "city": "Vienne",
-        "country": "Autriche",
-        "address": "Friedrichstraße 12, 1010 Wien",
-        "notes": "Premier grand bâtiment d’exposition consacré à l’art moderne en Europe centrale Première pierre le 28 avril 1898 Bâtiment achevé le 29 octobre 1898"
+      "content": {
+        "fr": {
+          "title": "Palais de la Sécession, Vienne",
+          "dek": "Le Palais de la Sécession fait partie des bâtiments que l’on reconnaît avant même d’en savoir beaucoup. À Vienne, entre 1897 et 1898, avec Joseph Maria Olbrich comme repère d’auteur, il impose une forme de netteté rare. Tout y paraît décidé. Le plus juste est donc de partir de cette évidence visuelle et de regarder comment un bâtiment peut affirmer un langage sans perdre sa lisibilité.",
+          "epigraph": "Parfois un bâtiment s'impose comme une décision prise dans la ville.",
+          "sections": [
+            {
+              "heading": "Une netteté qui tient l'ensemble",
+              "body": "Le Palais de la Sécession impressionne moins par l'accumulation que par la fermeté. La silhouette, la frontalité, la manière dont décor et volume restent liés, tout concourt à produire une lecture claire. C'est cette clarté qui le rend durable dans le regard.\n\nMême lorsqu'un bâtiment est fortement orné, il peut garder une discipline très stricte. Ici, rien ne paraît flottant. L'édifice tient par une cohérence visible, presque immédiate."
+            },
+            {
+              "heading": "Revenir du nom au bâtiment",
+              "body": "Vienne et la Sécession portent déjà beaucoup d'attentes. Le risque serait de s'en contenter. Le texte doit faire l'inverse et revenir au bâtiment lui-même. Comment il se pose dans l'espace. Comment le décor accompagne le volume. Comment l'ensemble reste lisible même sans appareil historique déployé autour de lui.\n\nC'est cette autonomie qui compte ici. Le Palais de la Sécession n'a pas besoin de beaucoup d'appui pour retenir l'attention. Il tient déjà par la force calme de sa présence."
+            },
+            {
+              "heading": "Ce qu'il ouvre dans Vienne",
+              "body": "Le Palais de la Sécession donne à Vienne une entrée nette, presque frontale. Ensuite seulement, d'autres façades pourront déplacer le regard vers des formes plus habitées ou plus directement prises dans le tissu quotidien.\n\nC'est dans cet écart que la ville devient intéressante. Entre un bâtiment aussi affirmé et des sujets plus proches de la rue, Vienne gagne immédiatement en profondeur."
+            }
+          ],
+          "seo": {
+            "meta_description": "Palais de la Sécession à Vienne. Une lecture de façade et de volume d’un bâtiment daté de 1897-1898, avec Joseph Maria Olbrich comme repère d’auteur."
+          },
+          "media": {
+            "hero_alt": "Palais de la Sécession à Vienne, bâtiment de Joseph Maria Olbrich daté de 1897-1898.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Vienne"
+            },
+            {
+              "key": "country",
+              "value": "Autriche"
+            },
+            {
+              "key": "style",
+              "value": "Sécession viennoise"
+            },
+            {
+              "key": "architect",
+              "value": "Joseph Maria Olbrich"
+            },
+            {
+              "key": "date",
+              "value": "1897–1898"
+            },
+            {
+              "key": "address",
+              "value": "Friedrichstraße 12, 1010 Wien"
+            }
+          ],
+          "around": {
+            "note": "À lire ensuite : une façade plus directement prise dans le tissu ordinaire, là où la Sécession s’impose comme un bâtiment autonome."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
+      "schema_version": 2,
+      "id": "maison-aux-majoliques-vienne",
       "slug": "maison-aux-majoliques-vienne",
-      "format": "article-complet",
-      "title": "Maison des Majoliques, Vienne",
-      "quote": {
-        "text": {
-          "fr": "Seul ce qui est pratique peut être beau.",
-          "en": "Only that which is practical can be beautiful."
-        },
-        "author": {
-          "fr": "Otto Wagner",
-          "en": "Otto Wagner"
-        },
-        "attribution": {
-          "fr": "Architecture moderne, 1896",
-          "en": "Modern Architecture, 1896"
-        },
-        "source": "Google Arts & Culture",
-        "source_url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
-        "source_type": "museum_platform",
-        "verified": true
+      "status": "draft",
+      "format": "long",
+      "publication": {
+        "order": 9,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/maison-aux-majoliques-vienne.png",
-      "support_images": [],
-      "city": "Vienne",
-      "country": "Autriche",
-      "style": "Sécession viennoise",
-      "tags": [
-        "Sécession viennoise",
-        "Motif floral",
-        "Façade"
-      ],
-      "gaps": [],
-      "chapeau": "La Maison aux Majoliques déplace le regard autrement que le Palais de la Sécession. Le geste y est moins frontal, plus directement attaché à la façade elle-même. Avec Otto Wagner comme repère d'auteur, et avec ces grands motifs floraux qui couvrent la surface, le bâtiment tient surtout par une chose rare, la capacité d'imprimer sa présence dans la mémoire de rue sans perdre sa discipline.",
-      "sections": [
-        {
-          "heading": "Une surface qui tient l'ensemble",
-          "body": "La Maison aux Majoliques impose d'abord une évidence. Ici, la façade n'est pas un simple plan sur lequel viendrait se poser un décor. Elle devient une surface active, continue, immédiatement lisible. Les grands motifs floraux comptent moins comme anecdote que comme principe d'ensemble.\n\nIls occupent la façade, répartissent l'attention, font tenir ensemble la vue lointaine et le détail plus proche. C'est cette continuité qui rend le bâtiment durable dans le regard."
-        },
-        {
-          "heading": "Le motif, mais sous contrôle",
-          "body": "Le nom d'Otto Wagner donne un ancrage utile, mais il ne remplace pas la lecture. Ce qui compte ici, c'est la façon dont le motif floral reste tenu par les lignes du bâtiment. Une façade décorée n'est forte que si le décor travaille avec sa structure, non contre elle.\n\nLa Maison aux Majoliques semble précisément relever de cet équilibre. De loin, une image ferme. De près, une matière plus complexe. Entre les deux, le bâtiment garde sa cohérence."
-        },
-        {
-          "heading": "Ce qu'elle ouvre dans Vienne",
-          "body": "La Maison aux Majoliques donne à Vienne une autre échelle de lecture. Après un bâtiment aussi affirmé que le Palais de la Sécession, elle ramène le regard vers une façade plus directement habitée, plus proche du tissu quotidien.\n\nEntre les deux, la ville devient immédiatement plus riche. On comprend qu'une même exigence de forme peut passer d'un édifice manifeste à une surface urbaine plus proche de la rue."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Maison des Majoliques",
+        "exact_name": "Majolikahaus"
+      },
+      "taxonomy": {
+        "style_key": "vienna_secession",
+        "tag_keys": [
+          "vienna_secession",
+          "floral_motif",
+          "facade"
+        ],
+        "place_keys": {
+          "city": "vienne",
+          "country": "autriche"
         }
-      ],
-      "around": {
-        "relation_label": "Autre échelle",
-        "article_slug": "palais-de-la-secession-vienne-18971898",
-        "note": "À comparer : même exigence de façade, mais portée ici par un bâtiment autonome plutôt que par une surface prise dans la rue."
       },
-      "practical": {
-        "Ville": "Vienne",
-        "Pays": "Autriche",
-        "Style": "Sécession viennoise",
-        "Architecte": "Otto Wagner",
-        "Datation": "1898–1899",
-        "Adresse": "Linke Wienzeile 40, 1060 Wien"
+      "facts": {
+        "location": {
+          "city": "Vienne",
+          "country": "Autriche",
+          "country_code": "AT",
+          "address": "Linke Wienzeile 40, 1060 Wien"
+        },
+        "dates": {
+          "built": "1898–1899"
+        },
+        "people": [
+          {
+            "role": "architect",
+            "name": "Otto Wagner"
+          }
+        ],
+        "notes": null
       },
-      "alt_text": "Maison aux Majoliques à Vienne, façade de la Sécession viennoise ornée de fleurs roses géantes, attribuée à Otto Wagner.",
-      "meta_description": "Maison aux Majoliques à Vienne. Une lecture de surface et de motif, avec Otto Wagner comme repère d'auteur et une datation laissée prudente.",
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/maison-aux-majoliques-vienne.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "Seul ce qui est pratique peut être beau.",
+            "en": "Only that which is practical can be beautiful."
+          },
+          "author": {
+            "fr": "Otto Wagner",
+            "en": "Otto Wagner"
+          },
+          "attribution": {
+            "fr": "Architecture moderne, 1896",
+            "en": "Modern Architecture, 1896"
+          },
+          "source": "Google Arts & Culture",
+          "url": "https://artsandculture.google.com/entity/otto-wagner/m02g110?hl=en",
+          "type": "museum_platform",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": {
+          "relation_key": "other_scale",
+          "article_id": "palais-de-la-secession-vienne-18971898"
+        }
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [],
+        "flags": []
       },
-      "publication_order_recommended": 9,
-      "epigraph": "Une façade peut rester en mémoire par la seule justesse de sa surface.",
-      "verified_info": {
-        "exact_name": "Majolikahaus",
-        "architect": "Otto Wagner",
-        "date": "1898–1899",
-        "style": "Sécession viennoise",
-        "city": "Vienne",
-        "country": "Autriche",
-        "address": "Linke Wienzeile 40, 1060 Wien",
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Maison des Majoliques, Vienne",
+          "dek": "La Maison aux Majoliques déplace le regard autrement que le Palais de la Sécession. Le geste y est moins frontal, plus directement attaché à la façade elle-même. Avec Otto Wagner comme repère d'auteur, et avec ces grands motifs floraux qui couvrent la surface, le bâtiment tient surtout par une chose rare, la capacité d'imprimer sa présence dans la mémoire de rue sans perdre sa discipline.",
+          "epigraph": "Une façade peut rester en mémoire par la seule justesse de sa surface.",
+          "sections": [
+            {
+              "heading": "Une surface qui tient l'ensemble",
+              "body": "La Maison aux Majoliques impose d'abord une évidence. Ici, la façade n'est pas un simple plan sur lequel viendrait se poser un décor. Elle devient une surface active, continue, immédiatement lisible. Les grands motifs floraux comptent moins comme anecdote que comme principe d'ensemble.\n\nIls occupent la façade, répartissent l'attention, font tenir ensemble la vue lointaine et le détail plus proche. C'est cette continuité qui rend le bâtiment durable dans le regard."
+            },
+            {
+              "heading": "Le motif, mais sous contrôle",
+              "body": "Le nom d'Otto Wagner donne un ancrage utile, mais il ne remplace pas la lecture. Ce qui compte ici, c'est la façon dont le motif floral reste tenu par les lignes du bâtiment. Une façade décorée n'est forte que si le décor travaille avec sa structure, non contre elle.\n\nLa Maison aux Majoliques semble précisément relever de cet équilibre. De loin, une image ferme. De près, une matière plus complexe. Entre les deux, le bâtiment garde sa cohérence."
+            },
+            {
+              "heading": "Ce qu'elle ouvre dans Vienne",
+              "body": "La Maison aux Majoliques donne à Vienne une autre échelle de lecture. Après un bâtiment aussi affirmé que le Palais de la Sécession, elle ramène le regard vers une façade plus directement habitée, plus proche du tissu quotidien.\n\nEntre les deux, la ville devient immédiatement plus riche. On comprend qu'une même exigence de forme peut passer d'un édifice manifeste à une surface urbaine plus proche de la rue."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison aux Majoliques à Vienne. Une lecture de surface et de motif, avec Otto Wagner comme repère d'auteur et une datation laissée prudente."
+          },
+          "media": {
+            "hero_alt": "Maison aux Majoliques à Vienne, façade de la Sécession viennoise ornée de fleurs roses géantes, attribuée à Otto Wagner.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Vienne"
+            },
+            {
+              "key": "country",
+              "value": "Autriche"
+            },
+            {
+              "key": "style",
+              "value": "Sécession viennoise"
+            },
+            {
+              "key": "architect",
+              "value": "Otto Wagner"
+            },
+            {
+              "key": "date",
+              "value": "1898–1899"
+            },
+            {
+              "key": "address",
+              "value": "Linke Wienzeile 40, 1060 Wien"
+            }
+          ],
+          "around": {
+            "note": "À comparer : même exigence de façade, mais portée ici par un bâtiment autonome plutôt que par une surface prise dans la rue."
+          },
+          "resources": []
+        },
+        "en": {}
       }
     },
     {
@@ -1390,82 +1716,139 @@
       }
     },
     {
+      "schema_version": 2,
+      "id": "facade-art-deco-charleroi",
       "slug": "facade-art-deco-charleroi",
-      "format": "article-court",
-      "title": "Façade Art Déco, Charleroi",
-      "quote": {
-        "text": {
-          "fr": "le jeu savant, correct et magnifique, des formes assemblées dans la lumière",
-          "en": "the learned game, correct and magnificent, of forms assembled in the light"
-        },
-        "author": {
-          "fr": "Le Corbusier",
-          "en": "Le Corbusier"
-        },
-        "attribution": {
-          "fr": "Vers une architecture / formulation reprise par la Fondation Le Corbusier",
-          "en": "Vers une architecture / formulation reused by the Fondation Le Corbusier"
-        },
-        "source": "Fondation Le Corbusier",
-        "source_url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
-        "source_type": "foundation",
-        "verified": true
+      "status": "draft",
+      "format": "short",
+      "publication": {
+        "order": 14,
+        "published_on": null,
+        "updated_on": null
       },
-      "hero_image": "assets/images/articles/facade-art-deco-charleroi.png",
-      "support_images": [],
-      "city": "Charleroi",
-      "country": "Belgique",
-      "style": "Art Déco",
-      "tags": [
-        "Art Déco",
-        "Façade"
-      ],
-      "gaps": [
-        "Adresse à confirmer.",
-        "Datation à confirmer.",
-        "Architecte à confirmer."
-      ],
-      "chapeau": "Cette façade Art Déco suffit à faire entrer Charleroi sans détour. L'adresse, la datation et l'architecte restent à confirmer, mais le bâtiment tient déjà par sa netteté. Il donne à la rue une forme plus ferme, plus cadrée, et laisse assez de prise au regard pour justifier une note courte, sans l'alourdir.",
-      "sections": [
-        {
-          "heading": "Une façade de rue, nette et tenue",
-          "body": "Le principal intérêt du sujet tient à sa netteté. La façade se lit d'abord comme ensemble. Les lignes sont plus cadrées, les masses mieux tenues, et le décor, s'il est présent, travaille davantage dans une logique d'ordre que de débordement.\n\nLe détail conservé dans la base vient confirmer cette première impression. Il montre que la tenue générale du bâtiment repose aussi sur une précision locale du dessin et de la matière."
-        },
-        {
-          "heading": "Charleroi à la bonne échelle",
-          "body": "Le sujet ne demande pas qu'on le traite comme un grand bâtiment manifeste. Sa force est ailleurs. Il montre qu'une ville peut entrer dans la mémoire par une simple façade, à condition qu'elle soit assez claire pour soutenir le regard.\n\nÀ Charleroi, cette justesse compte davantage qu'un discours trop large. Le bâtiment fait déjà ce qu'il faut, donner à la rue un accent assez net pour qu'on y revienne."
+      "identity": {
+        "type": "building",
+        "canonical_name": "Façade Art Déco",
+        "exact_name": "Façade Art Déco, Charleroi"
+      },
+      "taxonomy": {
+        "style_key": "art_deco",
+        "tag_keys": [
+          "art_deco",
+          "facade"
+        ],
+        "place_keys": {
+          "city": "charleroi",
+          "country": "belgique"
         }
-      ],
-      "around": null,
-      "practical": {
-        "Ville": "Charleroi",
-        "Pays": "Belgique",
-        "Style": "Art Déco",
-        "Datation": "À confirmer",
-        "Architecte": "À confirmer",
-        "Adresse": "À confirmer"
       },
-      "alt_text": "Façade Art Déco à Charleroi, lue ici comme repère urbain et point d'entrée carolo du site.",
-      "meta_description": "Façade Art Déco à Charleroi. Une note courte sur un bâtiment de rue net, tenu, et assez ferme pour installer la ville.",
+      "facts": {
+        "location": {
+          "city": "Charleroi",
+          "country": "Belgique",
+          "country_code": "BE",
+          "address": null
+        },
+        "dates": {
+          "built": null
+        },
+        "people": [],
+        "notes": null
+      },
+      "media": {
+        "hero": {
+          "src": "assets/images/articles/facade-art-deco-charleroi.png",
+          "credit": null
+        },
+        "support": []
+      },
+      "sources": {
+        "quote": {
+          "text": {
+            "fr": "le jeu savant, correct et magnifique, des formes assemblées dans la lumière",
+            "en": "the learned game, correct and magnificent, of forms assembled in the light"
+          },
+          "author": {
+            "fr": "Le Corbusier",
+            "en": "Le Corbusier"
+          },
+          "attribution": {
+            "fr": "Vers une architecture / formulation reprise par la Fondation Le Corbusier",
+            "en": "Vers une architecture / formulation reused by the Fondation Le Corbusier"
+          },
+          "source": "Fondation Le Corbusier",
+          "url": "https://www.fondationlecorbusier.fr/actualite/linvention-dun-architecte-le-voyage-en-orient-de-le-corbusier/",
+          "type": "foundation",
+          "verified": true
+        }
+      },
+      "relations": {
+        "around": null
+      },
       "editorial": {
         "author": "Antoine Aspeel",
-        "published_on": null,
-        "updated_on": null,
         "image_credit": null,
         "source_note": null,
-        "method_note": null
+        "method_note": null,
+        "gaps": [
+          "Adresse à confirmer.",
+          "Datation à confirmer.",
+          "Architecte à confirmer."
+        ],
+        "flags": []
       },
-      "publication_order_recommended": 14,
-      "epigraph": "Parfois une seule façade suffit à donner son accent à une ville.",
-      "verified_info": {
-        "exact_name": "Façade Art Déco, Charleroi",
-        "architect": null,
-        "date": null,
-        "style": "Art Déco",
-        "city": "Charleroi",
-        "country": "Belgique",
-        "address": null,
-        "notes": null
+      "content": {
+        "fr": {
+          "title": "Façade Art Déco, Charleroi",
+          "dek": "Cette façade Art Déco suffit à faire entrer Charleroi sans détour. L'adresse, la datation et l'architecte restent à confirmer, mais le bâtiment tient déjà par sa netteté. Il donne à la rue une forme plus ferme, plus cadrée, et laisse assez de prise au regard pour justifier une note courte, sans l'alourdir.",
+          "epigraph": "Parfois une seule façade suffit à donner son accent à une ville.",
+          "sections": [
+            {
+              "heading": "Une façade de rue, nette et tenue",
+              "body": "Le principal intérêt du sujet tient à sa netteté. La façade se lit d'abord comme ensemble. Les lignes sont plus cadrées, les masses mieux tenues, et le décor, s'il est présent, travaille davantage dans une logique d'ordre que de débordement.\n\nLe détail conservé dans la base vient confirmer cette première impression. Il montre que la tenue générale du bâtiment repose aussi sur une précision locale du dessin et de la matière."
+            },
+            {
+              "heading": "Charleroi à la bonne échelle",
+              "body": "Le sujet ne demande pas qu'on le traite comme un grand bâtiment manifeste. Sa force est ailleurs. Il montre qu'une ville peut entrer dans la mémoire par une simple façade, à condition qu'elle soit assez claire pour soutenir le regard.\n\nÀ Charleroi, cette justesse compte davantage qu'un discours trop large. Le bâtiment fait déjà ce qu'il faut, donner à la rue un accent assez net pour qu'on y revienne."
+            }
+          ],
+          "seo": {
+            "meta_description": "Façade Art Déco à Charleroi. Une note courte sur un bâtiment de rue net, tenu, et assez ferme pour installer la ville."
+          },
+          "media": {
+            "hero_alt": "Façade Art Déco à Charleroi, lue ici comme repère urbain et point d'entrée carolo du site.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Charleroi"
+            },
+            {
+              "key": "country",
+              "value": "Belgique"
+            },
+            {
+              "key": "style",
+              "value": "Art Déco"
+            },
+            {
+              "key": "date",
+              "value": "À confirmer"
+            },
+            {
+              "key": "architect",
+              "value": "À confirmer"
+            },
+            {
+              "key": "address",
+              "value": "À confirmer"
+            }
+          ],
+          "around": null,
+          "resources": []
+        },
+        "en": {}
       }
     }
   ],
