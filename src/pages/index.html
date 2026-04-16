@@ -29,19 +29,19 @@
     </div>
   </header>
 
-  <nav class="site-nav" aria-label="Navigation principale">
+  <nav class="site-nav" aria-label="Navigation principale" data-i18n-attr="aria-label:home.aria.mainNav">
     <div class="container">
-      <a href="index.html" class="site-nav__brand" aria-label="Retour à l'accueil">
+      <a href="index.html" class="site-nav__brand" aria-label="Retour à l'accueil" data-i18n-attr="aria-label:home.aria.siteHome">
         <span class="site-nav__brand-text">
           <span class="site-nav__wordmark">Art Nouveau et Art Déco</span>
-          <span class="site-nav__tagline">Carnets de villes, façades et seuils</span>
+          <span class="site-nav__tagline" data-i18n="home.tagline">Carnets de villes, façades et seuils</span>
         </span>
       </a>
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="main-menu" aria-label="Ouvrir le menu">Menu</button>
+      <button class="site-nav__toggle" aria-expanded="false" aria-controls="main-menu" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.open">Menu</button>
       <ul class="site-nav__list" id="main-menu" role="list">
-        <li><a href="index.html" class="active" aria-current="page">Accueil</a></li>
-        <li><a href="#galerie">Articles</a></li>
-        <li><a href="about.html">À propos</a></li>
+        <li><a href="index.html" class="active" aria-current="page" data-i18n="home.nav.home">Accueil</a></li>
+        <li><a href="#galerie" data-i18n="home.nav.articles">Articles</a></li>
+        <li><a href="about.html" data-i18n="home.nav.about">À propos</a></li>
         <li><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer" class="site-nav__instagram-link">Instagram</a></li>
       </ul>
     </div>
@@ -51,16 +51,16 @@
     <section class="home-hero" aria-labelledby="hero-title">
       <div class="container home-hero__layout">
         <div class="home-hero__text">
-          <p class="home-hero__eyebrow">Publication d’auteur</p>
-          <h1 class="home-hero__title" id="hero-title">Regarder d’abord. Nommer ensuite.</h1>
-          <p class="home-hero__lede">
+          <p class="home-hero__eyebrow" data-i18n="home.hero.eyebrow">Publication d’auteur</p>
+          <h1 class="home-hero__title" id="hero-title" data-i18n="home.hero.title">Regarder d’abord. Nommer ensuite.</h1>
+          <p class="home-hero__lede" data-i18n="home.hero.lede">
             En grandissant en Belgique, certains détails d’Art Nouveau ou d’Art Déco sont déjà là avant même qu’on sache les nommer. Une ferronnerie, une céramique, un angle de façade, un seuil plus attentif que les autres.
           </p>
-          <p class="home-hero__body">
+          <p class="home-hero__body" data-i18n="home.hero.body">
             Le site part de cette familiarité discrète. Il avance par villes, par bâtiments, par rapprochements. Les images ouvrent la lecture. Le texte vient pour préciser, relier, parfois retenir une mémoire, sans demander plus au lieu qu’il ne donne.
           </p>
           <div class="home-hero__cta">
-            <a href="#galerie" class="btn btn--primary">Lire les articles</a>
+            <a href="#galerie" class="btn btn--primary" data-i18n="home.cta.articles">Lire les articles</a>
             <a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer" class="btn btn--outline-gold">Instagram</a>
           </div>
         </div>
@@ -69,10 +69,11 @@
           <img
             src="../assets/images/site/saint-gilles-brussels.png"
             alt="Façades de Saint-Gilles à Bruxelles"
+            data-i18n-attr="alt:home.hero.alt"
             class="home-hero__image"
             loading="eager"
           >
-          <figcaption class="home-hero__caption">Saint-Gilles, Bruxelles. Une rue peut suffire à remettre le regard au travail.</figcaption>
+          <figcaption class="home-hero__caption" data-i18n="home.hero.caption">Saint-Gilles, Bruxelles. Une rue peut suffire à remettre le regard au travail.</figcaption>
         </figure>
       </div>
     </section>
@@ -80,9 +81,9 @@
     <section class="section home-curated" aria-labelledby="home-curated-title">
       <div class="container">
         <div class="section__header section__header--left home-curated__header">
-          <span class="section__kicker">À lire d’abord</span>
-          <h2 class="section__title section__title--left" id="home-curated-title">Trois entrées pour commencer sans détour</h2>
-          <p class="section__lede">
+          <span class="section__kicker" data-i18n="home.curated.first">À lire d’abord</span>
+          <h2 class="section__title section__title--left" id="home-curated-title" data-i18n="home.curated.title">Trois entrées pour commencer sans détour</h2>
+          <p class="section__lede" data-i18n="home.curated.intro">
             Quelques sujets suffisent pour prendre la mesure du site: une façade fondatrice, un contrepoint, puis un déplacement d’échelle ou de ville.
           </p>
         </div>
@@ -94,9 +95,9 @@
     <section class="section home-paths" aria-labelledby="home-paths-title">
       <div class="container">
         <div class="section__header section__header--left home-paths__header">
-          <span class="section__kicker">Par villes</span>
-          <h2 class="section__title section__title--left" id="home-paths-title">Entrer par une ville, puis élargir le regard</h2>
-          <p class="section__lede">
+          <span class="section__kicker" data-i18n="home.kicker.cities">Par villes</span>
+          <h2 class="section__title section__title--left" id="home-paths-title" data-i18n="home.path.title">Entrer par une ville, puis élargir le regard</h2>
+          <p class="section__lede" data-i18n="home.path.intro">
             Le site avance par foyers urbains plus que par chronologie. Certaines villes ouvrent d’emblée plusieurs lectures.
           </p>
         </div>
@@ -108,9 +109,9 @@
     <section class="section home-rhythm" aria-labelledby="home-rhythm-title">
       <div class="container">
         <div class="section__header section__header--left home-rhythm__header">
-          <span class="section__kicker">Rythmes</span>
-          <h2 class="section__title section__title--left" id="home-rhythm-title">Deux manières de lire</h2>
-          <p class="section__lede">
+          <span class="section__kicker" data-i18n="home.kicker.rhythms">Rythmes</span>
+          <h2 class="section__title section__title--left" id="home-rhythm-title" data-i18n="home.rhythm.title">Deux manières de lire</h2>
+          <p class="section__lede" data-i18n="home.rhythm.intro">
             Certaines pages accompagnent longuement le regard. D’autres tiennent en une note plus brève. Cette alternance fait partie de la revue.
           </p>
         </div>
@@ -122,24 +123,24 @@
     <section class="section home-journal" id="galerie" aria-labelledby="journal-title">
       <div class="container">
         <div class="section__header section__header--left home-journal__header">
-          <span class="section__kicker">Articles</span>
-          <h2 class="section__title section__title--left" id="journal-title">Tous les articles</h2>
-          <p class="section__lede" id="gallery-intro">
+          <span class="section__kicker" data-i18n="home.kicker.articles">Articles</span>
+          <h2 class="section__title section__title--left" id="journal-title" data-i18n="home.gallery.title">Tous les articles</h2>
+          <p class="section__lede" id="gallery-intro" data-i18n="home.gallery.intro">
             L’ensemble du corpus reste consultable ici, avec ses repères de villes, de styles et de détails.
           </p>
-          <p class="home-journal__note">
+          <p class="home-journal__note" data-i18n-html="home.gallery.note">
             L’intention du site se lit <a href="about.html">à propos</a>. Les photographies, détails et repérages se prolongent sur <a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a>.
           </p>
         </div>
 
         <div id="gallery-state" class="gallery-state" hidden></div>
-        <div id="gallery-tags" class="tag-list home-journal__tags" aria-label="Tags des articles"></div>
+        <div id="gallery-tags" class="tag-list home-journal__tags" aria-label="Tags des articles" data-i18n-attr="aria-label:home.aria.galleryTags"></div>
 
         <div id="gallery-grid" class="gallery__grid gallery__grid--editorial">
           <!-- Cartes dérivées de articles.json -->
         </div>
 
-        <div id="gallery-pagination" class="gallery__pagination" aria-label="Pagination de la galerie"></div>
+        <div id="gallery-pagination" class="gallery__pagination" aria-label="Pagination de la galerie" data-i18n-attr="aria-label:home.aria.gallery"></div>
       </div>
     </section>
 
@@ -150,26 +151,26 @@
       <div class="site-footer__grid site-footer__grid--home">
         <div class="site-footer__brand">
           <span class="site-title">Art Nouveau et Art Déco</span>
-          <p>
+          <p data-i18n="home.footer.body">
             Une publication d’auteur consacrée aux villes européennes, à leurs seuils, à leurs façades, et à ce qui persiste encore dans le détail.
           </p>
         </div>
 
         <div>
-          <p class="site-footer__heading">Parcours</p>
+          <p class="site-footer__heading" data-i18n="home.footer.nav">Parcours</p>
           <ul class="site-footer__list">
-            <li><a href="#galerie">Derniers articles</a></li>
-            <li><a href="about.html">À propos</a></li>
-            <li><a href="mentions.html">Mentions et contact</a></li>
+            <li><a href="#galerie" data-i18n="home.footer.latest">Derniers articles</a></li>
+            <li><a href="about.html" data-i18n="home.nav.about">À propos</a></li>
+            <li><a href="mentions.html" data-i18n="home.footer.legal">Mentions et contact</a></li>
             <li><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a></li>
           </ul>
         </div>
       </div>
 
       <div class="site-footer__bottom">
-        <span>© 2026 Art Nouveau et Art Déco en Europe.</span>
-        <nav aria-label="Liens de bas de page">
-          <a href="mentions.html" class="text-link">Mentions et contact</a>
+        <span data-i18n="home.footer.copyright">© 2026 Art Nouveau et Art Déco en Europe.</span>
+        <nav aria-label="Liens de bas de page" data-i18n-attr="aria-label:home.aria.footer">
+          <a href="mentions.html" class="text-link" data-i18n="home.footer.legal">Mentions et contact</a>
           <a
             href="https://www.instagram.com/artnouveauetdeco"
             target="_blank"

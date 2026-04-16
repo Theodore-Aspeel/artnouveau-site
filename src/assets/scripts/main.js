@@ -13,6 +13,39 @@ if (i18n && typeof i18n.previewLocale === 'function') {
   }
 }
 
+function applyStaticI18n() {
+  if (!i18n || typeof i18n.t !== 'function') return;
+
+  document.querySelectorAll('[data-i18n]').forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach((element) => {
+    element.innerHTML = t(element.dataset.i18nHtml);
+  });
+
+  document.querySelectorAll('[data-i18n-attr]').forEach((element) => {
+    element.dataset.i18nAttr.split(';').forEach((entry) => {
+      const [attribute, key] = entry.split(':').map((part) => part && part.trim());
+      if (attribute && key) {
+        element.setAttribute(attribute, t(key));
+      }
+    });
+  });
+}
+
+function applyPreviewLocaleLinks() {
+  if (!i18n || typeof i18n.previewLocale !== 'function' || typeof i18n.withPreviewLocale !== 'function') return;
+  if (!i18n.previewLocale()) return;
+
+  document.querySelectorAll('a[href]').forEach((link) => {
+    link.setAttribute('href', i18n.withPreviewLocale(link.getAttribute('href')));
+  });
+}
+
+applyStaticI18n();
+applyPreviewLocaleLinks();
+
 if (toggle && menu) {
   toggle.addEventListener('click', () => {
     const isOpen = menu.classList.toggle('is-open');
