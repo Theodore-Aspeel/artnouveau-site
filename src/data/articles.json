@@ -154,7 +154,65 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison Coilliot, Lille",
+          "dek": "Maison Coilliot belongs to those buildings one first understands from the street. Even before knowing more, one sees that the facade does not simply occupy its alignment. It shifts it. Hector Guimard's name gives a firm point of reference. The rest depends on a more direct sensation: a surface that seems to work from within and give the street another measure.",
+          "epigraph": "Some facades immediately change the bearing of a street.",
+          "sections": [
+            {
+              "heading": "A presence that needs no prior explanation",
+              "body": "The strength of the place lies in its immediate legibility. Even when the documentation remains partial, one senses that this is not a facade conceived as a simple front. The lines, the reliefs, the entrance, the way solids and openings answer one another already compose a reading. The eye does not need to be guided for long. It understands that ornament was not added afterwards. It belongs to the building's perceptible structure.\n\nThis is often where Art Nouveau asserts itself most precisely. Not as a catalogue of motifs, but as a way of setting the facade in motion without dissolving it. Nothing is agitated. Nothing is dry either. Everything seems held by a rhythm that asks the passer-by to slow down."
+            },
+            {
+              "heading": "Guimard as anchor, the street as proof",
+              "body": "The association with Hector Guimard matters, of course. It is enough to place the building within a wider history. But in front of Maison Coilliot, the most useful approach is still to begin with what the street gives. This is not only an architect's name being read here. It is a way of holding together impulse, material, and the continuity of the elevation.\n\nThe eye moves without losing itself. It returns to the threshold, moves back toward the upper parts, stops at a local tension, then takes in the whole again. That circulation is decisive. It recalls that a good Art Nouveau facade cannot be reduced either to its signature or to its decoration. It establishes a discipline of looking."
+            },
+            {
+              "heading": "What to read on site",
+              "body": "The first point of attention remains the entrance. In this kind of architecture, the threshold often concentrates something of the building's general logic. Then one has to return to the whole and see how the facade distinguishes itself from its neighbours without fully breaking with them. That gap is where the reading becomes most precise.\n\nIn Lille, Maison Coilliot finds a natural extension in L'Huitriere and in the Lumiere du Nord lodge. The three subjects do not belong to the same moment or the same vocabulary, but they show a similar demand: a facade that does not leave the street entirely unchanged."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Coilliot in Lille. A street-level reading of the facade associated with Hector Guimard, between threshold, rhythm, and urban presence."
+          },
+          "media": {
+            "hero_alt": "Art Nouveau facade of Maison Coilliot in Lille, a building associated with Hector Guimard.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Lille"
+            },
+            {
+              "key": "country",
+              "value": "France"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Hector Guimard"
+            },
+            {
+              "key": "address",
+              "value": "14 rue de Fleurus, Lille"
+            },
+            {
+              "key": "date",
+              "value": "1898 ; 1900"
+            },
+            {
+              "key": "access",
+              "value": "Seen from the street"
+            }
+          ],
+          "around": {
+            "note": "Compare two very different ways of holding a facade: one more singular, the other more commercial, but just as clear."
+          }
+        }
       }
     },
     {
@@ -314,7 +372,65 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "L'Huitriere, Lille",
+          "dek": "L'Huitriere shows very clearly what Art Deco changes in the street. The facade keeps a clean frontality, more framed, more held. At pavement level, commerce does not appear as a simple use. It becomes another way of giving form to the city.",
+          "epigraph": "Commerce too can leave a facade in memory.",
+          "sections": [
+            {
+              "heading": "Read the facade first, then the address",
+              "body": "In front of L'Huitriere, the right order of reading almost means forgetting for a moment the place one knows by name. The first thing to see is what the facade does in the street. It frames its entrance, orders its visible parts, imposes a clear frontality. Commerce does not appear as a simple use. It becomes a full urban presence.\n\nThat bearing is valuable because it avoids anecdote. The building does not live only from its sign or its reputation. It holds through a composition that allows it to last in the eye."
+            },
+            {
+              "heading": "A firmer writing",
+              "body": "The passage from Art Nouveau to Art Deco can be read here with clarity. The lines seem more held, the relationships more framed, the ornamental effects more contained. One senses less of a continuous thrust and more of a taste for cut, measure, and stability. That does not make the facade colder. It simply changes its register.\n\nThis shift is what makes L'Huitriere important in a reading of Lille. A few streets away from subjects that are more supple or more sinuous, it recalls that a city can keep several ways of making a facade without losing its coherence."
+            },
+            {
+              "heading": "What to hold on site",
+              "body": "The most useful approach is to begin with the whole, then return to the materials, the motifs, and the relation between the sign, the openings, and the entrance. This progression avoids reducing the building to one attractive detail. It makes clear what the facade is really trying to do: hold its place in the street with enough authority to remain in memory.\n\nIn Lille, L'Huitriere naturally speaks with Maison Coilliot and the Lumiere du Nord lodge. The comparison does not erase the differences. It makes them easier to read."
+            }
+          ],
+          "seo": {
+            "meta_description": "L'Huitriere in Lille. A street-level reading of an Art Deco facade, between commerce, frontality, and urban bearing."
+          },
+          "media": {
+            "hero_alt": "Art Deco facade of L'Huitriere in Lille, at 3-7 rue des Chats-Bossus.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Lille"
+            },
+            {
+              "key": "country",
+              "value": "France"
+            },
+            {
+              "key": "style",
+              "value": "Art Deco"
+            },
+            {
+              "key": "architect",
+              "value": "Trannoy"
+            },
+            {
+              "key": "address",
+              "value": "3-7 rue des Chats-Bossus, Lille"
+            },
+            {
+              "key": "date",
+              "value": "1928 ; 1940"
+            },
+            {
+              "key": "access",
+              "value": "Old Lille"
+            }
+          ],
+          "around": {
+            "note": "Compare it with Coilliot: there, the facade asserts its singularity more strongly; here, it remains tied to commerce while keeping a very firm clarity."
+          }
+        }
       }
     },
     {
