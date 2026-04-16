@@ -111,6 +111,54 @@ class CliTests(unittest.TestCase):
         self.assertIn("image_summary", payload)
         self.assertIn("readiness", payload)
 
+    def test_social_queue_command_runs(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-queue"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Social publication queue", output.getvalue())
+        self.assertIn("Articles checked: 1", output.getvalue())
+        self.assertIn("demo", output.getvalue())
+
+    def test_social_queue_json_command_runs(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-queue", "--json"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["summary"]["total"], 1)
+        self.assertEqual(payload["items"][0]["slug"], "demo")
+        self.assertIn("queue_status", payload["items"][0])
+
 
 if __name__ == "__main__":
     unittest.main()

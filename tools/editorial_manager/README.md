@@ -26,6 +26,8 @@ python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
 python -m tools.editorial_manager social-brief <slug>
 python -m tools.editorial_manager social-brief <slug> --json
+python -m tools.editorial_manager social-queue
+python -m tools.editorial_manager social-queue --json
 ```
 
 ## Commands
@@ -41,6 +43,8 @@ python -m tools.editorial_manager social-brief <slug> --json
 - `locale-report <slug>`: shows the same locale status for one article.
 - `social-brief <slug>`: prepares a simple read-only publication brief for one article, with FR/EN titles and dek, locale status, quote, practical items, image presence, and a readiness summary.
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
+- `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
+- `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 
@@ -49,6 +53,12 @@ python -m tools.editorial_manager social-brief <slug> --json
 - `fr-only`: no real English text is present under `content.en`.
 - `en-partial`: some English text exists, but one or more main fields are missing.
 - `en-ready`: English title, dek, meta description, hero alt text, and section heading/body coverage are present.
+
+`social-queue` uses a deliberately small status rule:
+
+- `blocked`: the publication checklist has one or more errors, or the article has no hero image.
+- `needs-review`: there are no blocking errors, but the publication checklist has warnings or the locale status is not `en-ready`.
+- `candidate`: the publication checklist has no errors or warnings, the locale status is `en-ready`, and a hero image is present.
 
 ## Deliberate Limits
 

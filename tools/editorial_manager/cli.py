@@ -15,9 +15,12 @@ from .reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_queue,
+    render_social_queue_json,
     render_summary,
 )
 from .social_brief import build_social_brief
+from .social_queue import build_social_queue
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,6 +60,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output the social brief as a simple structured JSON payload.",
+    )
+
+    social_queue_parser = subparsers.add_parser(
+        "social-queue",
+        help="Show a read-only batch queue of social publication candidates.",
+    )
+    social_queue_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the social queue as a simple structured JSON payload.",
     )
 
     return parser
@@ -126,6 +139,14 @@ def main(argv: list[str] | None = None) -> int:
             print(render_social_brief_json(brief))
         else:
             print(render_social_brief(brief))
+        return 0
+
+    if args.command == "social-queue":
+        items = build_social_queue(articles)
+        if args.json:
+            print(render_social_queue_json(items))
+        else:
+            print(render_social_queue(items))
         return 0
 
     parser.error(f"unknown command: {args.command}")

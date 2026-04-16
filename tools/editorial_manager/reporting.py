@@ -21,6 +21,7 @@ from .article_access import (
 from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
 from .social_brief import SocialBrief, social_brief_to_dict
+from .social_queue import SocialQueueItem, social_queue_to_dict
 
 
 Article = dict[str, Any]
@@ -228,6 +229,45 @@ def render_social_brief(brief: SocialBrief) -> str:
 
 def render_social_brief_json(brief: SocialBrief) -> str:
     return json.dumps(social_brief_to_dict(brief), ensure_ascii=False, indent=2)
+
+
+def render_social_queue(items: list[SocialQueueItem]) -> str:
+    counts = Counter(item.queue_status for item in items)
+    rows = [
+        [
+            item.queue_status,
+            item.slug,
+            item.title_fr or "-",
+            item.title_en or "-",
+            item.locale_status,
+            item.readiness,
+            "yes" if item.has_hero else "no",
+        ]
+        for item in items
+    ]
+
+    lines = [
+        "Social publication queue",
+        f"Articles checked: {len(items)}",
+        f"candidate: {counts.get('candidate', 0)}",
+        f"needs-review: {counts.get('needs-review', 0)}",
+        f"blocked: {counts.get('blocked', 0)}",
+    ]
+
+    if rows:
+        lines.append("")
+        lines.append(render_table(
+            ["Queue", "Slug", "Title FR", "Title EN", "Locale", "Readiness", "Hero"],
+            rows,
+        ))
+    else:
+        lines.append("No articles found.")
+
+    return "\n".join(lines)
+
+
+def render_social_queue_json(items: list[SocialQueueItem]) -> str:
+    return json.dumps(social_queue_to_dict(items), ensure_ascii=False, indent=2)
 
 
 def render_issue_lines(issues: list[CheckIssue]) -> list[str]:

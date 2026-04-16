@@ -9,6 +9,8 @@ from tools.editorial_manager.reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_queue,
+    render_social_queue_json,
     render_summary,
 )
 from tools.editorial_manager.social_brief import (
@@ -17,6 +19,7 @@ from tools.editorial_manager.social_brief import (
     ReadinessBrief,
     SocialBrief,
 )
+from tools.editorial_manager.social_queue import SocialQueueItem
 
 
 class ReportingTests(unittest.TestCase):
@@ -130,6 +133,33 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["practical_items"], [{"key": "city", "value": "Lille"}])
         self.assertEqual(payload["image_summary"]["has_hero"], True)
         self.assertEqual(payload["readiness"]["ok_count"], 8)
+
+    def test_social_queue_renders_terminal_readable_table(self):
+        output = render_social_queue([
+            SocialQueueItem("demo", "Titre FR", "Title EN", "en-ready", "ready", True, "candidate"),
+            SocialQueueItem("draft", "Brouillon", "", "fr-only", "needs review", True, "needs-review"),
+        ])
+
+        self.assertIn("Social publication queue", output)
+        self.assertIn("Articles checked: 2", output)
+        self.assertIn("candidate: 1", output)
+        self.assertIn("needs-review: 1", output)
+        self.assertIn("Queue", output)
+        self.assertIn("Title FR", output)
+        self.assertIn("demo", output)
+        self.assertIn("yes", output)
+
+    def test_social_queue_json_renders_structured_payload(self):
+        output = render_social_queue_json([
+            SocialQueueItem("demo", "Titre FR", "Title EN", "en-ready", "ready", True, "candidate"),
+        ])
+
+        payload = json.loads(output)
+
+        self.assertEqual(payload["summary"]["total"], 1)
+        self.assertEqual(payload["summary"]["candidate"], 1)
+        self.assertEqual(payload["items"][0]["slug"], "demo")
+        self.assertEqual(payload["items"][0]["queue_status"], "candidate")
 
 
 if __name__ == "__main__":
