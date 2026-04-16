@@ -159,6 +159,73 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["items"][0]["slug"], "demo")
         self.assertIn("queue_status", payload["items"][0])
 
+    def test_social_queue_json_command_accepts_filters(self):
+        articles = [
+            {
+                "slug": "candidate",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 1},
+                "media": {"hero": {"src": "assets/images/candidate.png"}},
+                "content": {
+                    "fr": {
+                        "title": "Candidat",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {
+                        "title": "Candidate",
+                        "dek": "Dek EN.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta EN."},
+                        "media": {"hero_alt": "Alt EN."},
+                    },
+                },
+            },
+            {
+                "slug": "blocked",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 2},
+                "media": {"hero": {"src": ""}},
+                "content": {
+                    "fr": {
+                        "title": "Bloque",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {},
+                },
+            },
+        ]
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=articles):
+            with redirect_stdout(output):
+                exit_code = main([
+                    "social-queue",
+                    "--status",
+                    "candidate",
+                    "--locale-status",
+                    "en-ready",
+                    "--has-hero",
+                    "yes",
+                    "--limit",
+                    "1",
+                    "--json",
+                ])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["summary"]["total"], 1)
+        self.assertEqual(payload["items"][0]["slug"], "candidate")
+        self.assertEqual(payload["items"][0]["queue_status"], "candidate")
+
 
 if __name__ == "__main__":
     unittest.main()

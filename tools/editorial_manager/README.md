@@ -28,6 +28,7 @@ python -m tools.editorial_manager social-brief <slug>
 python -m tools.editorial_manager social-brief <slug> --json
 python -m tools.editorial_manager social-queue
 python -m tools.editorial_manager social-queue --json
+python -m tools.editorial_manager social-queue --status candidate --locale-status en-ready --has-hero yes --limit 5
 ```
 
 ## Commands
@@ -45,6 +46,7 @@ python -m tools.editorial_manager social-queue --json
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
+- `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 
@@ -59,6 +61,8 @@ python -m tools.editorial_manager social-queue --json
 - `blocked`: the publication checklist has one or more errors, or the article has no hero image.
 - `needs-review`: there are no blocking errors, but the publication checklist has warnings or the locale status is not `en-ready`.
 - `candidate`: the publication checklist has no errors or warnings, the locale status is `en-ready`, and a hero image is present.
+
+When multiple `social-queue` filters are used together, they are combined as AND filters. `--limit` is applied after filtering and keeps the existing publication order.
 
 ## Deliberate Limits
 

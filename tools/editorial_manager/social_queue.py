@@ -24,10 +24,42 @@ class SocialQueueItem:
     queue_status: str
 
 
-def build_social_queue(articles: list[Article]) -> list[SocialQueueItem]:
+@dataclass(frozen=True)
+class SocialQueueFilters:
+    status: str | None = None
+    locale_status: str | None = None
+    has_hero: bool | None = None
+    limit: int | None = None
+
+
+def build_social_queue(
+    articles: list[Article],
+    filters: SocialQueueFilters | None = None,
+) -> list[SocialQueueItem]:
     """Build a compact batch view of social publication candidates."""
     sorted_articles = sorted(articles, key=lambda item: article_publication_order(item) or 999_999)
-    return [_queue_item_from_brief(build_social_brief(article)) for article in sorted_articles]
+    items = [_queue_item_from_brief(build_social_brief(article)) for article in sorted_articles]
+    return filter_social_queue(items, filters)
+
+
+def filter_social_queue(
+    items: list[SocialQueueItem],
+    filters: SocialQueueFilters | None,
+) -> list[SocialQueueItem]:
+    """Apply simple AND filters while preserving the existing queue order."""
+    if filters is None:
+        return items
+
+    filtered = [
+        item
+        for item in items
+        if _matches_social_queue_filters(item, filters)
+    ]
+
+    if filters.limit is not None:
+        return filtered[:filters.limit]
+
+    return filtered
 
 
 def social_queue_to_dict(items: list[SocialQueueItem]) -> dict[str, Any]:
@@ -74,3 +106,16 @@ def _queue_status(brief: SocialBrief) -> str:
         return "needs-review"
 
     return "candidate"
+
+
+def _matches_social_queue_filters(item: SocialQueueItem, filters: SocialQueueFilters) -> bool:
+    if filters.status is not None and item.queue_status != filters.status:
+        return False
+
+    if filters.locale_status is not None and item.locale_status != filters.locale_status:
+        return False
+
+    if filters.has_hero is not None and item.has_hero != filters.has_hero:
+        return False
+
+    return True

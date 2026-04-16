@@ -20,7 +20,14 @@ from .reporting import (
     render_summary,
 )
 from .social_brief import build_social_brief
-from .social_queue import build_social_queue
+from .social_queue import SocialQueueFilters, build_social_queue
+
+
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be a positive integer")
+    return parsed
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +77,26 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output the social queue as a simple structured JSON payload.",
+    )
+    social_queue_parser.add_argument(
+        "--status",
+        choices=("candidate", "needs-review", "blocked"),
+        help="Keep only queue items with this status.",
+    )
+    social_queue_parser.add_argument(
+        "--locale-status",
+        choices=("en-ready", "en-partial", "fr-only"),
+        help="Keep only queue items with this locale status.",
+    )
+    social_queue_parser.add_argument(
+        "--has-hero",
+        choices=("yes", "no"),
+        help="Keep only queue items that have, or do not have, a hero image.",
+    )
+    social_queue_parser.add_argument(
+        "--limit",
+        type=positive_int,
+        help="Keep only the first N matching queue items.",
     )
 
     return parser
@@ -142,7 +169,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "social-queue":
-        items = build_social_queue(articles)
+        filters = SocialQueueFilters(
+            status=args.status,
+            locale_status=args.locale_status,
+            has_hero=None if args.has_hero is None else args.has_hero == "yes",
+            limit=args.limit,
+        )
+        items = build_social_queue(articles, filters)
         if args.json:
             print(render_social_queue_json(items))
         else:
