@@ -1177,7 +1177,60 @@
           "around": null,
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison aux Tulipes, Bratislava",
+          "dek": "Maison aux Tulipes widens the map without changing the site's voice. In Bratislava, at 10 rue Sturova according to the available data, with Jeno Schiller as the architectural reference, the building first holds through its facade and its threshold. The name easily invites commentary. The fairer approach is to return to the composition, to the way a motif can guide a whole building without weighing it down.",
+          "epigraph": "A facade can keep its flowers without losing its composure.",
+          "sections": [
+            {
+              "heading": "The motif without ease",
+              "body": "A house called Maison aux Tulipes naturally calls up a whole vocabulary that the text should avoid overplaying. The more accurate approach is to look at how the motif bends the facade, how it circulates, how it gives direction to the eye without absorbing the whole building.\n\nThe subject, then, is not the flower as an isolated image. It is the way a decorative principle manages to hold together surface, rhythm, and the presence of the place."
+            },
+            {
+              "heading": "What it opens in Bratislava",
+              "body": "Maison aux Tulipes gives Bratislava an entry at the right scale. A precise address, a legible facade, a subject firm enough for a city to begin appearing through something other than a general view.\n\nThe gaze remains the same as elsewhere. It starts from the street, the building, the detail that holds attention, and only then widens. On that condition, Bratislava can enter the site without a break in tone."
+            },
+            {
+              "heading": "What to read on site",
+              "body": "The eye gains from moving between the whole and the threshold. The facade sets the tone. The entrance tightens the reading and shows whether that first impression holds in the detail. This is often where Art Nouveau becomes most convincing.\n\nOne then understands that ornament is not an added layer. It already accompanies the passage between the street, the door, and the rest of the building."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison aux Tulipes in Bratislava. A facade reading between motif, threshold, and overall composure, with Jeno Schiller as the available reference."
+          },
+          "media": {
+            "hero_alt": "Maison aux Tulipes in Bratislava, an Art Nouveau facade at 10 rue Sturova and attributed to Jeno Schiller.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Bratislava"
+            },
+            {
+              "key": "country",
+              "value": "Slovakia"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jeno Schiller"
+            },
+            {
+              "key": "address",
+              "value": "10 rue Sturova"
+            },
+            {
+              "key": "date",
+              "value": "To be confirmed"
+            }
+          ],
+          "around": null,
+          "resources": []
+        }
       }
     },
     {
@@ -1325,7 +1378,60 @@
           "around": null,
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison Strauven, Avenue Van Cutsem 27-29, Tournai",
+          "dek": "With Maison Strauven, everything begins with rare precision. An address, a date, two names, and already a facade clear enough to hold the reading. In Tournai, between Avenue Van Cutsem and Rue des Volontaires, the building allows the text to stay close to the street. There is no need to make it say more.",
+          "epigraph": "Some addresses immediately give the eye a hold.",
+          "sections": [
+            {
+              "heading": "An address that anchors the reading",
+              "body": "Having an exact address immediately changes the quality of a text. The building stops being an isolated image. It becomes again a situated presence, set into a street one can follow and remember. This is a very simple but decisive strength of Maison Strauven.\n\nThat precision also requires a more accurate way of writing. One can stay close to the facade, the threshold, the way a house takes its place in the city, without compensating through large formulas."
+            },
+            {
+              "heading": "From threshold to whole",
+              "body": "This subject gains from being read at two distances. First the detail, then the whole. The threshold holds the eye because it concentrates part of the house's writing. Then the facade widens that first impression and gives it its measure.\n\nThis relation between near and far matters greatly in Art Nouveau. It recalls that a facade rarely holds through one silhouette alone. It holds through a chain of decisions visible in the building's own material presence."
+            },
+            {
+              "heading": "What it leaves in memory in Tournai",
+              "body": "Maison Strauven gives Tournai a very fair point of entry. Not a general view, but an address to which the eye can return. This is often how a city truly settles in memory: through a door, a facade, a sequence of lines later recognized elsewhere in the street.\n\nHere, the date 1904 and the address already give the text its composure. The rest lies in the way the house confirms, at street scale, that Tournai too keeps facades that ask one to stop."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Strauven in Tournai. A street-level reading of a 1904 Art Nouveau address, between threshold, facade, and urban memory."
+          },
+          "media": {
+            "hero_alt": "Art Nouveau house by Gustave and Félix Strauven in Tournai, on Avenue Van Cutsem and Rue des Volontaires.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Tournai"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Gustave Strauven, Félix Strauven"
+            },
+            {
+              "key": "address",
+              "value": "Avenue Van Cutsem 27, 28-28b, 29 + rue des Volontaires 1, Tournai"
+            },
+            {
+              "key": "date",
+              "value": "1904"
+            }
+          ],
+          "around": null,
+          "resources": []
+        }
       }
     },
     {
@@ -2458,7 +2564,56 @@
           "around": null,
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "An Ernest Delune House for a Master Glassmaker",
+          "dek": "This house by Ernest Delune asks for a simple, clear reading. In Ixelles, in 1902, it first holds through the relation between workshop, dwelling, and facade. The subject does not need to be widened further to justify a short note.",
+          "epigraph": "Sometimes the client is enough to shift the way a facade is read.",
+          "sections": [
+            {
+              "heading": "Workshop and dwelling",
+              "body": "Knowing that this was once both a workshop and a dwelling immediately changes the reading. One becomes more attentive to the place of the bays, to the relation between use and facade, to the way the threshold already organizes a more mixed presence in the street.\n\nErnest Delune's name gives the subject its firmness. It allows the text to stay close to the building, without asking it for a broader story than the confirmed data allows."
+            },
+            {
+              "heading": "Stay at the right scale",
+              "body": "This subject does not call for a long article. A short, held note is better here than a text that would overinterpret the building. The essential point is already there: a relation between facade, use, and gaze, precise enough to justify its place.\n\nThe text can therefore remain at this scale. It accompanies the reading without forcing the building to say more than it gives."
+            }
+          ],
+          "seo": {
+            "meta_description": "A house by Ernest Delune in Ixelles. A short note on a former workshop and dwelling, between use, facade, and street-level reading."
+          },
+          "media": {
+            "hero_alt": "Art Nouveau house by Ernest Delune in Ixelles, formerly the workshop and dwelling of Clas Grüner Sterner.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Ixelles"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Ernest Delune"
+            },
+            {
+              "key": "date",
+              "value": "1902"
+            },
+            {
+              "key": "address",
+              "value": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles"
+            }
+          ],
+          "around": null,
+          "resources": []
+        }
       }
     },
     {
@@ -2594,7 +2749,56 @@
           "around": null,
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Art Deco Facade, Charleroi",
+          "dek": "This Art Deco facade is enough to bring Charleroi into the corpus directly. The address, date, and architect still need confirmation, but the building already holds through its clarity. It gives the street a firmer, more framed form, and offers the eye enough hold to justify a short note without weighing it down.",
+          "epigraph": "Sometimes a single facade is enough to give a city its accent.",
+          "sections": [
+            {
+              "heading": "A clear, held street facade",
+              "body": "The main interest of the subject lies in its clarity. The facade first reads as a whole. The lines are more framed, the masses more firmly held, and ornament, if present, works more through order than through overflow.\n\nThe detail kept in the corpus confirms that first impression. It shows that the building's overall composure also depends on a local precision of drawing and material."
+            },
+            {
+              "heading": "Charleroi at the right scale",
+              "body": "The subject does not need to be treated as a major manifesto building. Its strength lies elsewhere. It shows that a city can enter memory through a simple facade, provided it is clear enough to sustain the gaze.\n\nIn Charleroi, that rightness matters more than an overly broad discourse. The building already does what is needed: it gives the street an accent clear enough for the eye to return."
+            }
+          ],
+          "seo": {
+            "meta_description": "Art Deco facade in Charleroi. A short note on a clear, held street building, firm enough to give the city a place in the corpus."
+          },
+          "media": {
+            "hero_alt": "Art Deco facade in Charleroi, read here as an urban marker and a point of entry into the city.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Charleroi"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Deco"
+            },
+            {
+              "key": "date",
+              "value": "To be confirmed"
+            },
+            {
+              "key": "architect",
+              "value": "To be confirmed"
+            },
+            {
+              "key": "address",
+              "value": "To be confirmed"
+            }
+          ],
+          "around": null,
+          "resources": []
+        }
       }
     }
   ],
