@@ -85,6 +85,145 @@ When multiple `social-queue` filters are used together, they are combined as AND
 
 `social-package --next` reuses `social-next` selection, then builds the usual package for the selected article. The JSON structure is the same as `social-package <slug>`.
 
+## `social-package` JSON Contract
+
+`social-package` is the stable read-only payload intended for future social/editorial automation. It combines existing helper outputs; it does not add private workflow state and does not modify `src/data/articles.json`.
+
+Top-level structure:
+
+- `slug`: stable article slug.
+- `requested_locale`: locale requested by the caller, currently `fr` or `en`.
+- `source_locale`: locale actually used for visible caption/media text. If English is requested but no English title or dek exists, this is `fr`.
+- `locale_status`: brief locale readiness summary, with `status` and `missing_fields`.
+- `queue_status`: social queue decision, one of `candidate`, `needs-review`, or `blocked`.
+- `brief`: the full `social-brief` payload for the article.
+- `caption`: the full `social-caption` payload for the selected source locale.
+- `media`: hero and support images prepared for social use.
+- `links`: relative article links for the published FR page and EN preview.
+- `image_summary`: compact image presence summary copied from `brief`.
+- `readiness`: publication checklist summary copied from `brief`.
+- `reasons`: human-readable queue reasons explaining `queue_status`.
+
+Optional or empty values are explicit rather than omitted:
+
+- `brief.title_en`, `brief.dek_en`, quote fields, media `alt`, and media `caption` may be empty strings.
+- `brief.quote` may be `null` when the article has no usable quote.
+- `brief.locale_status.missing_fields`, `brief.practical_items`, `media.support`, `caption.hashtags`, `readiness.notes`, and `reasons` may be empty arrays.
+- `media.hero.src` may be empty when no hero image exists; in that case `image_summary.has_hero` is `false` and `queue_status` is `blocked`.
+
+Status fields have different roles:
+
+- `readiness.status` comes from the publication checklist: `ready`, `needs review`, or `blocked`.
+- `queue_status` is the social queue decision: `candidate` requires a ready checklist, `en-ready` locale status, and a hero image; `needs-review` means no blocker but warnings or incomplete English; `blocked` means checklist errors or a missing hero.
+- `reasons` explains the queue decision. For candidates it records the positive checks; for review/blocking states it lists the relevant warnings, errors, missing English content, or missing hero image.
+
+`media`, `links`, `brief`, and `caption` are deliberately separate:
+
+- `media` contains image paths plus localized/fallback alt and caption text for the selected `source_locale`.
+- `links` contains relative site paths only; it does not publish externally.
+- `brief` is the editorial context block: FR/EN title and dek, locale status, quote, practical items, image summary, and checklist readiness.
+- `caption` is a deterministic draft for social copy: title, hook, short caption, CTA, and hashtags.
+
+Small example:
+
+```json
+{
+  "slug": "demo",
+  "requested_locale": "en",
+  "source_locale": "en",
+  "locale_status": {
+    "status": "en-ready",
+    "missing_fields": []
+  },
+  "queue_status": "candidate",
+  "brief": {
+    "slug": "demo",
+    "locale_status": {
+      "status": "en-ready",
+      "missing_fields": []
+    },
+    "title_fr": "Maison Demo",
+    "title_en": "Demo House",
+    "dek_fr": "Dek FR.",
+    "dek_en": "Dek EN.",
+    "quote": null,
+    "practical_items": [
+      {
+        "key": "city",
+        "value": "Lille"
+      },
+      {
+        "key": "style",
+        "value": "Art Nouveau"
+      }
+    ],
+    "image_summary": {
+      "has_hero": true,
+      "hero_src": "assets/images/demo.png",
+      "support_count": 1
+    },
+    "readiness": {
+      "status": "ready",
+      "ok_count": 8,
+      "error_count": 0,
+      "warning_count": 0,
+      "notes": []
+    }
+  },
+  "caption": {
+    "slug": "demo",
+    "requested_locale": "en",
+    "source_locale": "en",
+    "locale_status": "en-ready",
+    "title": "Demo House",
+    "hook": "Look closer: Demo House",
+    "caption": "Dek EN.",
+    "cta": "Read the article on the site.",
+    "hashtags": [
+      "#ArtNouveau",
+      "#Lille",
+      "#Architecture",
+      "#Patrimoine"
+    ]
+  },
+  "media": {
+    "hero": {
+      "src": "assets/images/demo.png",
+      "alt": "Alt EN.",
+      "caption": "Caption EN."
+    },
+    "support": [
+      {
+        "src": "assets/images/support.png",
+        "alt": "Support alt EN.",
+        "caption": "Support caption EN."
+      }
+    ]
+  },
+  "links": {
+    "article_fr_path": "article.html?slug=demo",
+    "article_en_preview_path": "article.html?slug=demo&previewLocale=en"
+  },
+  "image_summary": {
+    "has_hero": true,
+    "hero_src": "assets/images/demo.png",
+    "support_count": 1
+  },
+  "readiness": {
+    "status": "ready",
+    "ok_count": 8,
+    "error_count": 0,
+    "warning_count": 0,
+    "notes": []
+  },
+  "reasons": [
+    "Publication checklist is ready.",
+    "English content is ready.",
+    "Hero image is present."
+  ]
+}
+```
+
 `social-caption` uses deliberately simple deterministic rules:
 
 - `--locale` defaults to `fr`.
