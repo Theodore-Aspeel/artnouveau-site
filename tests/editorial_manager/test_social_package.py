@@ -1,0 +1,81 @@
+import unittest
+
+from tools.editorial_manager.social_package import build_social_package, social_package_to_dict
+
+
+def ready_article() -> dict:
+    return {
+        "slug": "demo",
+        "status": "ready",
+        "format": "long",
+        "publication": {"order": 1},
+        "media": {
+            "hero": {"src": "assets/images/demo.png"},
+            "support": [{"src": "assets/images/support.png"}],
+        },
+        "facts": {"location": {"city": "Lille", "country": "France"}},
+        "taxonomy": {"style_key": "art-nouveau"},
+        "content": {
+            "fr": {
+                "title": "Maison Demo",
+                "dek": "Dek FR.",
+                "sections": [{"heading": "A", "body": "B"}],
+                "seo": {"meta_description": "Meta FR."},
+                "media": {"hero_alt": "Alt FR."},
+                "practical_items": [
+                    {"key": "city", "value": "Lille"},
+                    {"key": "style", "value": "Art Nouveau"},
+                ],
+            },
+            "en": {
+                "title": "Demo House",
+                "dek": "Dek EN.",
+                "sections": [{"heading": "A", "body": "B"}],
+                "seo": {"meta_description": "Meta EN."},
+                "media": {"hero_alt": "Alt EN."},
+            },
+        },
+    }
+
+
+class SocialPackageTests(unittest.TestCase):
+    def test_social_package_combines_existing_social_payloads(self):
+        package = build_social_package(ready_article(), "en")
+        payload = social_package_to_dict(package)
+
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["requested_locale"], "en")
+        self.assertEqual(payload["source_locale"], "en")
+        self.assertEqual(payload["locale_status"]["status"], "en-ready")
+        self.assertEqual(payload["queue_status"], "candidate")
+        self.assertEqual(payload["brief"]["slug"], "demo")
+        self.assertEqual(payload["brief"]["title_fr"], "Maison Demo")
+        self.assertEqual(payload["caption"]["title"], "Demo House")
+        self.assertEqual(payload["image_summary"], {
+            "has_hero": True,
+            "hero_src": "assets/images/demo.png",
+            "support_count": 1,
+        })
+        self.assertEqual(payload["readiness"]["status"], "ready")
+        self.assertEqual(payload["reasons"], [
+            "Publication checklist is ready.",
+            "English content is ready.",
+            "Hero image is present.",
+        ])
+
+    def test_social_package_reports_french_source_when_english_is_missing(self):
+        article = ready_article()
+        article["content"]["en"] = {}
+
+        payload = social_package_to_dict(build_social_package(article, "en"))
+
+        self.assertEqual(payload["requested_locale"], "en")
+        self.assertEqual(payload["source_locale"], "fr")
+        self.assertEqual(payload["locale_status"]["status"], "fr-only")
+        self.assertEqual(payload["queue_status"], "needs-review")
+        self.assertEqual(payload["caption"]["title"], "Maison Demo")
+        self.assertIn("English content is missing.", payload["reasons"])
+
+
+if __name__ == "__main__":
+    unittest.main()

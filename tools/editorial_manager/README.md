@@ -28,6 +28,8 @@ python -m tools.editorial_manager social-brief <slug>
 python -m tools.editorial_manager social-brief <slug> --json
 python -m tools.editorial_manager social-caption <slug>
 python -m tools.editorial_manager social-caption <slug> --locale en --json
+python -m tools.editorial_manager social-package <slug>
+python -m tools.editorial_manager social-package <slug> --locale en
 python -m tools.editorial_manager social-queue
 python -m tools.editorial_manager social-queue --json
 python -m tools.editorial_manager social-queue --status candidate --locale-status en-ready --has-hero yes --limit 5
@@ -51,6 +53,7 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
 - `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
 - `social-caption <slug> --locale fr|en --json`: prints the same caption proposal as a small structured JSON payload. When English is requested but unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
+- `social-package <slug> --locale fr|en`: prints one JSON payload for later social automation, combining the existing brief, caption, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 - `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.

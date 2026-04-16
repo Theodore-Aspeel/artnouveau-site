@@ -19,12 +19,14 @@ from .reporting import (
     render_social_caption_json,
     render_social_next,
     render_social_next_json,
+    render_social_package_json,
     render_social_queue,
     render_social_queue_json,
     render_summary,
 )
 from .social_brief import build_social_brief
 from .social_caption import build_social_caption
+from .social_package import build_social_package
 from .social_queue import SocialQueueFilters, build_social_next, build_social_queue
 
 
@@ -89,6 +91,23 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output the social caption as a simple structured JSON payload.",
+    )
+
+    social_package_parser = subparsers.add_parser(
+        "social-package",
+        help="Prepare one read-only JSON social automation package for one article.",
+    )
+    social_package_parser.add_argument("slug", help="Article slug to prepare.")
+    social_package_parser.add_argument(
+        "--locale",
+        choices=("fr", "en"),
+        default="fr",
+        help="Caption locale to prepare. Defaults to fr.",
+    )
+    social_package_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Accepted for consistency. social-package always outputs JSON.",
     )
 
     social_queue_parser = subparsers.add_parser(
@@ -225,6 +244,14 @@ def main(argv: list[str] | None = None) -> int:
             print(render_social_caption_json(caption))
         else:
             print(render_social_caption(caption))
+        return 0
+
+    if args.command == "social-package":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        package = build_social_package(article, args.locale)
+        print(render_social_package_json(package))
         return 0
 
     if args.command == "social-queue":

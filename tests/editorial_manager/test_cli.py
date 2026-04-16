@@ -166,6 +166,38 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["title"], "Demo EN")
         self.assertEqual(payload["cta"], "Read the article on the site.")
 
+    def test_social_package_command_outputs_json_payload(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "city": "Lille",
+            "style": "Art Nouveau",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-package", "demo", "--locale", "en"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["requested_locale"], "en")
+        self.assertEqual(payload["source_locale"], "en")
+        self.assertIn("brief", payload)
+        self.assertIn("caption", payload)
+        self.assertIn("image_summary", payload)
+        self.assertIn("readiness", payload)
+        self.assertIn("reasons", payload)
+
     def test_social_queue_command_runs(self):
         article = {
             "slug": "demo",

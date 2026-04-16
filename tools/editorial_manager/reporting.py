@@ -22,6 +22,7 @@ from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
 from .social_brief import SocialBrief, social_brief_to_dict
 from .social_caption import SocialCaption, social_caption_to_dict
+from .social_package import SocialPackage, social_package_to_dict
 from .social_queue import SocialQueueItem, social_next_to_dict, social_queue_to_dict
 
 
@@ -253,6 +254,10 @@ def render_social_caption(caption: SocialCaption) -> str:
 
 def render_social_caption_json(caption: SocialCaption) -> str:
     return json.dumps(social_caption_to_dict(caption), ensure_ascii=False, indent=2)
+
+
+def render_social_package_json(package: SocialPackage) -> str:
+    return json.dumps(social_package_to_dict(package), ensure_ascii=False, indent=2)
 
 
 def render_social_queue(items: list[SocialQueueItem]) -> str:
