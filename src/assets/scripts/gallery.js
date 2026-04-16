@@ -18,8 +18,6 @@
   if (!grid) return;
 
   const PAGE_SIZE = 12;
-  const defaultTitle = titleEl ? titleEl.textContent : '';
-  const defaultIntro = introEl ? introEl.textContent : '';
   const searchParams = new URLSearchParams(window.location.search);
   const articleDataUrl = new URL('data/articles.json', window.location.href);
   const requestedTag = taxonomy && typeof taxonomy.slugifyTag === 'function'
@@ -503,7 +501,7 @@
 
   function renderState() {
     if (titleEl) {
-      titleEl.textContent = activeTag ? t('gallery.filteredTitle', { tag: activeTag.label }) : defaultTitle;
+      titleEl.textContent = activeTag ? t('gallery.filteredTitle', { tag: activeTag.label }) : t('home.gallery.title');
     }
 
     if (introEl) {
@@ -512,7 +510,7 @@
           count: galleryItems.length,
           articleLabel: articleCountLabel(galleryItems.length),
         })
-        : defaultIntro;
+        : t('home.gallery.intro');
     }
 
     if (!stateEl) return;
