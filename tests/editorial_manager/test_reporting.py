@@ -9,6 +9,8 @@ from tools.editorial_manager.reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_caption,
+    render_social_caption_json,
     render_social_next,
     render_social_next_json,
     render_social_queue,
@@ -21,6 +23,7 @@ from tools.editorial_manager.social_brief import (
     ReadinessBrief,
     SocialBrief,
 )
+from tools.editorial_manager.social_caption import SocialCaption
 from tools.editorial_manager.social_queue import SocialQueueItem
 
 
@@ -135,6 +138,51 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["practical_items"], [{"key": "city", "value": "Lille"}])
         self.assertEqual(payload["image_summary"]["has_hero"], True)
         self.assertEqual(payload["readiness"]["ok_count"], 8)
+
+    def test_social_caption_renders_terminal_readable_proposal(self):
+        output = render_social_caption(SocialCaption(
+            slug="demo",
+            requested_locale="en",
+            source_locale="fr",
+            locale_status="fr-only",
+            title="Titre FR",
+            hook="À découvrir: Titre FR",
+            caption="Dek FR.",
+            cta="Lire l'article sur le site.",
+            hashtags=("#ArtNouveau", "#Lille"),
+        ))
+
+        self.assertIn("Social caption proposal", output)
+        self.assertIn("Slug: demo", output)
+        self.assertIn("Requested locale: en", output)
+        self.assertIn("Source locale: fr", output)
+        self.assertIn("Locale status: fr-only", output)
+        self.assertIn("Hook: À découvrir: Titre FR", output)
+        self.assertIn("Caption:", output)
+        self.assertIn("CTA: Lire l'article sur le site.", output)
+        self.assertIn("#ArtNouveau #Lille", output)
+
+    def test_social_caption_json_renders_structured_payload(self):
+        output = render_social_caption_json(SocialCaption(
+            slug="demo",
+            requested_locale="fr",
+            source_locale="fr",
+            locale_status="en-ready",
+            title="Titre FR",
+            hook="À découvrir: Titre FR",
+            caption="Dek FR.",
+            cta="Lire l'article sur le site.",
+            hashtags=("#ArtNouveau", "#Lille"),
+        ))
+
+        payload = json.loads(output)
+
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["requested_locale"], "fr")
+        self.assertEqual(payload["source_locale"], "fr")
+        self.assertEqual(payload["locale_status"], "en-ready")
+        self.assertEqual(payload["caption"], "Dek FR.")
+        self.assertEqual(payload["hashtags"], ["#ArtNouveau", "#Lille"])
 
     def test_social_queue_renders_terminal_readable_table(self):
         output = render_social_queue([

@@ -15,6 +15,8 @@ from .reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_caption,
+    render_social_caption_json,
     render_social_next,
     render_social_next_json,
     render_social_queue,
@@ -22,6 +24,7 @@ from .reporting import (
     render_summary,
 )
 from .social_brief import build_social_brief
+from .social_caption import build_social_caption
 from .social_queue import SocialQueueFilters, build_social_next, build_social_queue
 
 
@@ -69,6 +72,23 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output the social brief as a simple structured JSON payload.",
+    )
+
+    social_caption_parser = subparsers.add_parser(
+        "social-caption",
+        help="Prepare a read-only social caption proposal for one article.",
+    )
+    social_caption_parser.add_argument("slug", help="Article slug to prepare.")
+    social_caption_parser.add_argument(
+        "--locale",
+        choices=("fr", "en"),
+        default="fr",
+        help="Caption locale to prepare. Defaults to fr.",
+    )
+    social_caption_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the social caption as a simple structured JSON payload.",
     )
 
     social_queue_parser = subparsers.add_parser(
@@ -194,6 +214,17 @@ def main(argv: list[str] | None = None) -> int:
             print(render_social_brief_json(brief))
         else:
             print(render_social_brief(brief))
+        return 0
+
+    if args.command == "social-caption":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        caption = build_social_caption(article, args.locale)
+        if args.json:
+            print(render_social_caption_json(caption))
+        else:
+            print(render_social_caption(caption))
         return 0
 
     if args.command == "social-queue":

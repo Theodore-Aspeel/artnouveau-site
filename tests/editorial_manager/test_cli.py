@@ -111,6 +111,61 @@ class CliTests(unittest.TestCase):
         self.assertIn("image_summary", payload)
         self.assertIn("readiness", payload)
 
+    def test_social_caption_command_runs(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "city": "Lille",
+            "style": "Art Nouveau",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-caption", "demo"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Social caption proposal", output.getvalue())
+        self.assertIn("Slug: demo", output.getvalue())
+        self.assertIn("Hook: À découvrir: Demo", output.getvalue())
+        self.assertIn("#ArtNouveau #Lille", output.getvalue())
+
+    def test_social_caption_json_command_accepts_locale(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "city": "Lille",
+            "style": "Art Nouveau",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-caption", "demo", "--locale", "en", "--json"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["requested_locale"], "en")
+        self.assertEqual(payload["source_locale"], "en")
+        self.assertEqual(payload["title"], "Demo EN")
+        self.assertEqual(payload["cta"], "Read the article on the site.")
+
     def test_social_queue_command_runs(self):
         article = {
             "slug": "demo",

@@ -26,6 +26,8 @@ python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
 python -m tools.editorial_manager social-brief <slug>
 python -m tools.editorial_manager social-brief <slug> --json
+python -m tools.editorial_manager social-caption <slug>
+python -m tools.editorial_manager social-caption <slug> --locale en --json
 python -m tools.editorial_manager social-queue
 python -m tools.editorial_manager social-queue --json
 python -m tools.editorial_manager social-queue --status candidate --locale-status en-ready --has-hero yes --limit 5
@@ -47,6 +49,8 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 - `locale-report <slug>`: shows the same locale status for one article.
 - `social-brief <slug>`: prepares a simple read-only publication brief for one article, with FR/EN titles and dek, locale status, quote, practical items, image presence, and a readiness summary.
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
+- `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
+- `social-caption <slug> --locale fr|en --json`: prints the same caption proposal as a small structured JSON payload. When English is requested but unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 - `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.
@@ -71,6 +75,15 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 When multiple `social-queue` filters are used together, they are combined as AND filters. `--limit` is applied after filtering and keeps the existing publication order.
 
 `social-next` reuses the same queue status and filter rules as `social-queue`, then returns only the first matching item. By default, it selects the first `candidate` article in publication order.
+
+`social-caption` uses deliberately simple deterministic rules:
+
+- `--locale` defaults to `fr`.
+- the hook is a short fixed prefix plus the selected title.
+- the caption uses the selected dek when available, otherwise the title, and is capped to a short text.
+- the CTA is a fixed locale-aware sentence.
+- hashtags are derived from practical items or taxonomy values, then completed with broad editorial tags.
+- if `--locale en` has no English title or dek, the output keeps `requested_locale: en` but uses `source_locale: fr` so the fallback is visible.
 
 ## Deliberate Limits
 
