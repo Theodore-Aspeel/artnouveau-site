@@ -574,7 +574,62 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison Fernand Lefever, Brussels",
+          "dek": "Maison Fernand Lefever recalls something simple. In Brussels, Art Nouveau does not appear only in streets already made famous. It can also hold in a facade caught within a tight, active, almost hurried urban fabric. On Avenue du Panthéon, in Koekelberg, this house shows how a well-held elevation can change the reading of a street.",
+          "epigraph": "In a dense street, a facade can still make the eye rise.",
+          "sections": [
+            {
+              "heading": "A facade held within the city's continuity",
+              "body": "The first quality of this house is its anchoring. It does not stand apart like an isolated object. It takes its place in a street already loaded with uses, movement, and rhythm. That is precisely why it matters. Art Nouveau appears here less as an exception than as a way of intensifying the ordinary.\n\nThe facade does not try to overpower what surrounds it. It introduces something else: more tension in the drawing, more attention in the upward movement of the eye, a presence that does not break the street but makes it more legible."
+            },
+            {
+              "heading": "Rising from the threshold",
+              "body": "To look at it properly, one should begin low. The threshold, the bays, the relation between the first lines and the rest of the elevation already set the tone. Only then can the eye move upward. That progression matters. It makes it possible to feel how the facade is organized through successive accents, without being reduced to a single strong motif.\n\nEven with documentation still incomplete, this reading holds. It does not require inventing more. It is enough to follow what the building actually gives: its measure, its rise, its way of remaining dense without becoming heavy."
+            },
+            {
+              "heading": "What it opens in Brussels",
+              "body": "Maison Fernand Lefever offers a fair scale of entry into Brussels. Neither monument nor lost detail. A facade precise enough to stand on its own, and restrained enough to let the city around it continue to exist.\n\nIt gains from being read beside Maison des Hiboux. One works through continuity, the other through a clearer sign. Between the two, one better senses what Brussels still keeps at street level."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Fernand Lefever in Brussels. A street-level reading of an Art Nouveau facade in Koekelberg, between urban continuity and precision of the eye."
+          },
+          "media": {
+            "hero_alt": "Art Nouveau facade of Maison Fernand Lefever in Brussels, on Avenue du Panthéon in Koekelberg.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Brussels"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Fernand Lefever"
+            },
+            {
+              "key": "address",
+              "value": "Avenue du Panthéon 59, Koekelberg"
+            },
+            {
+              "key": "date",
+              "value": "1913"
+            }
+          ],
+          "around": {
+            "note": "Compare it with Maison des Hiboux: one works through street continuity, the other through a clearer sign, without leaving the same Brussels restraint."
+          },
+          "resources": []
+        }
       }
     },
     {
@@ -726,7 +781,62 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison des Hiboux, Saint-Gilles",
+          "dek": "Maison des Hiboux is one of those buildings one remembers quickly, then looks at longer than expected. The two birds at the top are enough to fix the name. But the facade does not hold only through that sign. In Saint-Gilles, with Édouard Pelseneer as the named architectural reference, it mainly asserts a very sure way of leading the eye from bottom to top without losing the whole facade's composure.",
+          "epigraph": "A detail can give a facade its name without exhausting the reading.",
+          "sections": [
+            {
+              "heading": "Begin with the sign, but do not stop there",
+              "body": "The owls do what many named details do in the city. They catch the eye, give immediate memory, almost offer a shortcut. The risk would be to stop there. But the facade asks for something else. Once the sign has been noticed, one has to come back down and read the whole elevation again.\n\nThat is where the building becomes truly interesting. The birds are not a separate episode. They belong to a wider composition. They complete it; they do not replace it."
+            },
+            {
+              "heading": "A held verticality",
+              "body": "Maison des Hiboux keeps a firmness that matters greatly. Art Nouveau is often spoken of as overflow. Here, that idea is not enough. Ornament is present, but it remains contained. The facade keeps its line, its rise, its balance. The top draws the eye, but it does not seize it entirely.\n\nThat is probably what makes the building last in memory. One does not retain only a singular motif. One retains a structure able to withstand a second reading, then a third."
+            },
+            {
+              "heading": "What to look at in Saint-Gilles",
+              "body": "The right order of reading is simple. See the owls. Return to the entrance. Then rise again, more slowly. This path avoids turning the house into a facade curiosity. It makes it possible to understand how the top answers the rest, and how the whole holds together.\n\nIn Brussels, Maison des Hiboux gains from being read beside Maison Fernand Lefever. One asserts itself through a clear sign. The other works more discreetly. Between the two, the variety of the Brussels vocabulary becomes easier to measure."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison des Hiboux in Saint-Gilles. A facade reading between sign, verticality, and composure, with Édouard Pelseneer as architectural reference."
+          },
+          "media": {
+            "hero_alt": "Maison des Hiboux in Saint-Gilles, an Art Nouveau facade crowned by two sculpted birds.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Saint-Gilles"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Geometric Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Édouard Pelseneer"
+            },
+            {
+              "key": "address",
+              "value": "Avenue Brugmann 55, Saint-Gilles"
+            },
+            {
+              "key": "date",
+              "value": "1899"
+            }
+          ],
+          "around": {
+            "note": "Read next: a facade less immediately named, but just as precise in the way it holds the street."
+          },
+          "resources": []
+        }
       }
     },
     {
@@ -1761,7 +1871,62 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Casa Campanini, Milan (1904)",
+          "dek": "Casa Campanini gives Milan a precise point of entry. Dated 1904-1905 and tied to Milanese Liberty, it first holds through the facade and the threshold. The building does not need a frame of commentary to assert itself. It is enough to read it at street level, in the relation between the whole, the entrance, and the denser points where the eye comes to rest.",
+          "epigraph": "A well-held entrance can give the measure of an entire building.",
+          "sections": [
+            {
+              "heading": "Milanese Liberty at threshold level",
+              "body": "The interest of Casa Campanini lies in its scale of reading. One should not begin with Milan in general, but with the building itself. The facade, the threshold, the way the entrance gathers part of the place's intensity already give a great deal.\n\nMilanese Liberty, as it can be sensed here, treats the facade as a carefully ordered whole. Decoration is present, but above all it distributes tensions and gives the passage a particular density."
+            },
+            {
+              "heading": "A facade that anchors Milan differently",
+              "body": "With Casa Campanini, Milan can be read through an inhabited facade, not through a public building or a view held too far away. That changes the quality of looking. The city becomes more tangible, closer, more directly bound to the street.\n\nThe building plays that role with real precision. It gives Milan a strong address, clear enough for the eye to move later toward other forms without losing its point of departure."
+            },
+            {
+              "heading": "What to read on site",
+              "body": "The useful approach is to begin with the general composition, then return to the threshold and to the points where the building tightens. The whole must remain legible. Only then does one understand that Liberty is not a simple taste for motif, but a way of organizing the facade.\n\nCasa Campanini is then best set beside the Aquarium. One establishes a more inhabited register. The other opens Milan toward the public building."
+            }
+          ],
+          "seo": {
+            "meta_description": "Casa Campanini in Milan. A street-level reading of facade and threshold in Milanese Liberty, with 1904 as the available point of reference."
+          },
+          "media": {
+            "hero_alt": "Casa Campanini in Milan, a Liberty facade dated 1904 in the project corpus.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milan"
+            },
+            {
+              "key": "country",
+              "value": "Italy"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Alfredo Campanini"
+            },
+            {
+              "key": "address",
+              "value": "Via Vincenzo Bellini 11, corner Via Livorno, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1904-1905"
+            }
+          ],
+          "around": {
+            "note": "Read also: in the same city, the move from an inhabited facade to a public building clearly shifts the scale of looking."
+          },
+          "resources": []
+        }
       }
     },
     {
@@ -2103,7 +2268,62 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Milan Aquarium (1906)",
+          "dek": "The Milan Aquarium usefully shifts the eye. With it, Liberty is no longer read only at the scale of the house or the private facade. It also appears in a public building, addressed to the city as a whole. Dated 1906 in the available data, the subject first holds through this extension of the gaze, from domestic ornament toward a broader civic presence.",
+          "epigraph": "The city does not keep its clearest forms only in housing.",
+          "sections": [
+            {
+              "heading": "When Liberty leaves the house",
+              "body": "The first interest of the Aquarium lies there. It recalls that an architectural language does not stop at housing or at the private facade. Here, decoration and composition move toward a public building. That immediately changes the scale of reading.\n\nThe eye is no longer looking only for a domestic threshold or a singular entrance. It meets a building that takes its place in the city differently, with a more collective address, a wider function, and another way of holding space."
+            },
+            {
+              "heading": "Read the function without leaving the facade",
+              "body": "In a subject like this, function matters because it changes the way the building is approached. One does not read an aquarium as one reads a house. Expectations shift. The relation to public legibility, civic presence, and collective use becomes more perceptible.\n\nEven with partial documentation, this point is enough to give the text its direction. It names the register, then allows the eye to return to the facade itself, to its bearing, to what it already makes visible."
+            },
+            {
+              "heading": "What it opens in Milan",
+              "body": "The Aquarium gains from being read with Casa Campanini. One anchors Milan in a highly individualized residential facade. The other opens the city toward a public building. The comparison does not smooth away the differences. It makes them more legible.\n\nBetween the two, Milan stops appearing as a single image. The city opens through several thresholds, several uses, several ways of holding a form."
+            }
+          ],
+          "seo": {
+            "meta_description": "Milan Aquarium, 1906. A reading of a public building where Milanese Liberty moves from the private facade toward the whole city."
+          },
+          "media": {
+            "hero_alt": "Milan Aquarium, a Liberty monument dated 1906 in the project corpus.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milan"
+            },
+            {
+              "key": "country",
+              "value": "Italy"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Sebastiano Locati"
+            },
+            {
+              "key": "address",
+              "value": "Viale Gadio 2, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1906"
+            }
+          ],
+          "around": {
+            "note": "Read next: the return to an inhabited facade makes the distance between domestic register and civic presence easier to feel."
+          },
+          "resources": []
+        }
       }
     },
     {
