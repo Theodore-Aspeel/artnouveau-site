@@ -1192,7 +1192,61 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Secession Building, Vienna",
+          "dek": "The Secession Building belongs to the kind of architecture one recognizes before knowing very much about it. In Vienna, between 1897 and 1898, with Joseph Maria Olbrich as a clear point of authorship, it imposes a rare kind of clarity. Everything seems decided. The right way to approach it is therefore to begin with that visual evidence and to see how a building can assert a language without losing its legibility.",
+          "epigraph": "Sometimes a building enters the city like a decision already made.",
+          "sections": [
+            {
+              "heading": "A Clarity That Holds The Whole",
+              "body": "The Secession Building impresses less through accumulation than through firmness. Its silhouette, its frontality, the way ornament and volume remain connected, all work toward a clear reading. That clarity is what makes it stay in the eye.\n\nEven when a building is strongly ornamented, it can keep a very strict discipline. Here, nothing seems loose. The building holds together through a visible coherence, almost immediate."
+            },
+            {
+              "heading": "Returning From The Name To The Building",
+              "body": "Vienna and the Secession already carry many expectations. The risk would be to stop there. The text has to do the opposite and return to the building itself. How it stands in space. How the ornament accompanies the volume. How the whole remains legible even without a full historical apparatus around it.\n\nThat autonomy matters here. The Secession Building does not need much support to hold attention. It already stands through the calm force of its presence."
+            },
+            {
+              "heading": "What It Opens In Vienna",
+              "body": "The Secession Building gives Vienna a clear, almost frontal entry point. Only after that can other facades shift the eye toward more inhabited forms, or toward surfaces more directly caught in the everyday fabric of the street.\n\nThat distance is what makes the city interesting. Between such an assertive building and subjects closer to the street, Vienna immediately gains depth."
+            }
+          ],
+          "seo": {
+            "meta_description": "The Secession Building in Vienna. A street-level reading of facade and volume in a building dated 1897-1898, with Joseph Maria Olbrich as a point of authorship."
+          },
+          "media": {
+            "hero_alt": "Secession Building in Vienna, designed by Joseph Maria Olbrich and dated 1897-1898.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Vienna"
+            },
+            {
+              "key": "country",
+              "value": "Austria"
+            },
+            {
+              "key": "style",
+              "value": "Vienna Secession"
+            },
+            {
+              "key": "architect",
+              "value": "Joseph Maria Olbrich"
+            },
+            {
+              "key": "date",
+              "value": "1897-1898"
+            },
+            {
+              "key": "address",
+              "value": "Friedrichstrasse 12, 1010 Wien"
+            }
+          ],
+          "around": {
+            "note": "Read next: a facade more directly held in the ordinary fabric of the street, while the Secession stands as an autonomous building."
+          }
+        }
       }
     },
     {
@@ -1339,7 +1393,61 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Majolikahaus, Vienna",
+          "dek": "The Majolikahaus shifts the eye differently from the Secession Building. The gesture is less frontal, more directly attached to the facade itself. With Otto Wagner as a point of authorship, and with the large floral motifs covering the surface, the building holds above all through something rare: the ability to leave a presence in the memory of the street without losing its discipline.",
+          "epigraph": "A facade can stay in memory through the simple rightness of its surface.",
+          "sections": [
+            {
+              "heading": "A Surface That Holds The Whole",
+              "body": "The Majolikahaus first offers an evident fact. Here, the facade is not a simple plane on which decoration has been placed. It becomes an active, continuous, immediately legible surface. The large floral motifs matter less as anecdote than as a principle for the whole.\n\nThey occupy the facade, distribute attention, and hold together the distant view and the closer detail. That continuity is what makes the building last in the eye."
+            },
+            {
+              "heading": "The Motif, But Under Control",
+              "body": "Otto Wagner's name gives a useful anchor, but it does not replace looking. What matters here is the way the floral motif remains held by the lines of the building. A decorated facade is strong only when the decoration works with its structure, not against it.\n\nThe Majolikahaus seems to belong precisely to that balance. From a distance, a firm image. Up close, a more complex surface. Between the two, the building keeps its coherence."
+            },
+            {
+              "heading": "What It Opens In Vienna",
+              "body": "The Majolikahaus gives Vienna another scale of reading. After a building as assertive as the Secession Building, it brings the eye back to a facade more directly inhabited, closer to the daily fabric of the street.\n\nBetween the two, the city immediately becomes richer. One understands that the same demand for form can move from a manifesto-like building to an urban surface closer to the street."
+            }
+          ],
+          "seo": {
+            "meta_description": "Majolikahaus in Vienna. A street-level reading of surface and floral motif, with Otto Wagner as a point of authorship and a cautious date of 1898-1899."
+          },
+          "media": {
+            "hero_alt": "Majolikahaus in Vienna, a Vienna Secession facade with large pink floral motifs, associated with Otto Wagner.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Vienna"
+            },
+            {
+              "key": "country",
+              "value": "Austria"
+            },
+            {
+              "key": "style",
+              "value": "Vienna Secession"
+            },
+            {
+              "key": "architect",
+              "value": "Otto Wagner"
+            },
+            {
+              "key": "date",
+              "value": "1898-1899"
+            },
+            {
+              "key": "address",
+              "value": "Linke Wienzeile 40, 1060 Wien"
+            }
+          ],
+          "around": {
+            "note": "Compare it with the same demand for facade, carried there by an autonomous building rather than by a surface caught in the street."
+          }
+        }
       }
     },
     {
