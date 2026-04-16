@@ -88,6 +88,10 @@ class SocialPackageTests(unittest.TestCase):
                 },
             ],
         })
+        self.assertEqual(payload["links"], {
+            "article_fr_path": "article.html?slug=demo",
+            "article_en_preview_path": "article.html?slug=demo&previewLocale=en",
+        })
         self.assertEqual(payload["readiness"]["status"], "ready")
         self.assertEqual(payload["reasons"], [
             "Publication checklist is ready.",
@@ -146,6 +150,19 @@ class SocialPackageTests(unittest.TestCase):
                 "caption": "Second stable caption.",
             },
         ])
+
+    def test_social_package_links_encode_slug_and_keep_relative_paths(self):
+        article = ready_article()
+        article["slug"] = "demo/lille ete"
+
+        payload = social_package_to_dict(build_social_package(article, "fr"))
+
+        self.assertEqual(payload["links"], {
+            "article_fr_path": "article.html?slug=demo%2Flille%20ete",
+            "article_en_preview_path": (
+                "article.html?slug=demo%2Flille%20ete&previewLocale=en"
+            ),
+        })
 
 
 if __name__ == "__main__":

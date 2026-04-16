@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
+from urllib.parse import quote
 
 from .article_access import (
     article_hero_alt,
@@ -34,6 +35,12 @@ class SocialPackageMedia:
 
 
 @dataclass(frozen=True)
+class SocialPackageLinks:
+    article_fr_path: str
+    article_en_preview_path: str
+
+
+@dataclass(frozen=True)
 class SocialPackage:
     slug: str
     requested_locale: str
@@ -41,6 +48,7 @@ class SocialPackage:
     brief: SocialBrief
     caption: SocialCaption
     media: SocialPackageMedia
+    links: SocialPackageLinks
     queue_item: SocialQueueItem
 
 
@@ -57,6 +65,7 @@ def build_social_package(article: Article, locale: str = "fr") -> SocialPackage:
         brief=brief,
         caption=caption,
         media=_media_package(article, caption.source_locale),
+        links=_links_package(brief.slug),
         queue_item=queue_item,
     )
 
@@ -75,9 +84,17 @@ def social_package_to_dict(package: SocialPackage) -> dict[str, Any]:
         "brief": brief_payload,
         "caption": caption_payload,
         "media": _media_to_dict(package.media),
+        "links": _links_to_dict(package.links),
         "image_summary": brief_payload["image_summary"],
         "readiness": brief_payload["readiness"],
         "reasons": list(package.queue_item.reasons),
+    }
+
+
+def _links_to_dict(links: SocialPackageLinks) -> dict[str, str]:
+    return {
+        "article_fr_path": links.article_fr_path,
+        "article_en_preview_path": links.article_en_preview_path,
     }
 
 
@@ -112,6 +129,16 @@ def _media_package(article: Article, locale: str) -> SocialPackageMedia:
             ),
         ),
         support=tuple(_support_images(support, localized_media)),
+    )
+
+
+def _links_package(slug: str) -> SocialPackageLinks:
+    encoded_slug = quote(slug, safe="")
+    article_fr_path = f"article.html?slug={encoded_slug}"
+
+    return SocialPackageLinks(
+        article_fr_path=article_fr_path,
+        article_en_preview_path=f"{article_fr_path}&previewLocale=en",
     )
 
 
