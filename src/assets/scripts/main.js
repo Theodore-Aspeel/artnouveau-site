@@ -43,8 +43,28 @@ function applyPreviewLocaleLinks() {
   });
 }
 
+function initPreviewLocaleToggle() {
+  if (!i18n || typeof i18n.previewLocale !== 'function' || typeof i18n.previewLocaleHref !== 'function') return;
+
+  const currentLocale = i18n.previewLocale() || i18n.defaultLocale || 'fr';
+  document.querySelectorAll('[data-preview-locale-link]').forEach((link) => {
+    const targetLocale = link.dataset.previewLocaleLink;
+    const isActive = targetLocale === currentLocale;
+
+    link.setAttribute('href', i18n.previewLocaleHref(targetLocale));
+    link.classList.toggle('is-active', isActive);
+
+    if (isActive) {
+      link.setAttribute('aria-current', 'true');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
+}
+
 applyStaticI18n();
 applyPreviewLocaleLinks();
+initPreviewLocaleToggle();
 
 if (toggle && menu) {
   toggle.addEventListener('click', () => {

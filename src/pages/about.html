@@ -37,13 +37,20 @@
           <span class="site-nav__tagline" data-i18n="home.tagline">Carnets de villes, façades et seuils</span>
         </span>
       </a>
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="main-menu" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.open">Menu</button>
       <ul class="site-nav__list" id="main-menu" role="list">
         <li><a href="index.html" data-i18n="home.nav.home">Accueil</a></li>
         <li><a href="index.html#galerie" data-i18n="home.nav.articles">Articles</a></li>
         <li><a href="about.html" class="active" aria-current="page" data-i18n="home.nav.about">À propos</a></li>
         <li><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer" class="site-nav__instagram-link">Instagram</a></li>
       </ul>
+      <div class="site-nav__actions">
+        <div class="site-nav__language" aria-label="Langue de preview" data-i18n-attr="aria-label:nav.language">
+          <a href="about.html" class="site-nav__lang-link" data-preview-locale-link="fr" lang="fr">FR</a>
+          <span aria-hidden="true">/</span>
+          <a href="about.html?previewLocale=en" class="site-nav__lang-link" data-preview-locale-link="en" lang="en">EN</a>
+        </div>
+        <button class="site-nav__toggle" aria-expanded="false" aria-controls="main-menu" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.open">Menu</button>
+      </div>
     </div>
   </nav>
 
@@ -149,7 +156,7 @@
 
           <div class="about-editorial__visual">
             <img
-              src="../assets/images/site/antoine-aspeel.png"
+              src="../assets/images/site/author/author-portrait-2026.jpg"
               alt="Portrait de l'auteur du projet Art Nouveau et Art Déco"
               data-i18n-attr="alt:about.image.alt"
               class="about-editorial__img"

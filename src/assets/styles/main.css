@@ -210,6 +210,35 @@ hr {
   color: var(--an-ink);
 }
 
+.site-nav__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-nav__language {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--an-muted);
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.site-nav__lang-link {
+  border-bottom: 1px solid transparent;
+  color: var(--an-muted);
+}
+
+.site-nav__lang-link:hover,
+.site-nav__lang-link.is-active {
+  border-color: var(--an-accent-soft);
+  color: var(--an-ink);
+}
+
 .site-nav__instagram-link {
   padding: 0.52rem 0.82rem !important;
   border: 1px solid var(--an-line-strong);
@@ -2097,6 +2126,7 @@ main {
   .site-nav__list {
     display: none;
     width: 100%;
+    order: 3;
     flex-direction: column;
     align-items: stretch;
     gap: 0.2rem;

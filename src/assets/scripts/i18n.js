@@ -125,6 +125,7 @@
       'home.rhythm.title': 'Deux mani\u00e8res de lire',
       'home.tagline': 'Carnets de villes, fa\u00e7ades et seuils',
       'nav.close': 'Fermer',
+      'nav.language': 'Langue de preview',
       'nav.menu': 'Menu',
       'nav.open': 'Ouvrir le menu',
       'mentions.contact.body': 'Pour une pr\u00e9cision factuelle, une correction utile ou un signalement li\u00e9 \u00e0 une image, le canal de contact \u00e9ditorial est <a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">@artnouveauetdeco</a>.',
@@ -270,6 +271,7 @@
       'home.rhythm.title': 'Two ways of reading',
       'home.tagline': 'City notes, facades, and thresholds',
       'nav.close': 'Close',
+      'nav.language': 'Preview language',
       'nav.menu': 'Menu',
       'nav.open': 'Open menu',
       'mentions.contact.body': 'For a factual clarification, a useful correction, or a note about an image, the editorial contact channel is <a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">@artnouveauetdeco</a>.',
@@ -343,6 +345,20 @@
     return path + (serialized ? '?' + serialized : '') + hash;
   }
 
+  function previewLocaleHref(locale) {
+    const requested = supportedLocale(locale);
+    const url = new URL(window.location.href);
+
+    if (requested && requested !== DEFAULT_LOCALE) {
+      url.searchParams.set(PREVIEW_LOCALE_PARAM, requested);
+    } else {
+      url.searchParams.delete(PREVIEW_LOCALE_PARAM);
+    }
+
+    const page = url.pathname.split('/').pop() || 'index.html';
+    return page + url.search + url.hash;
+  }
+
   function interpolate(message, params) {
     if (!params || typeof params !== 'object') return message;
 
@@ -373,6 +389,7 @@
     defaultLocale: DEFAULT_LOCALE,
     normalizeLocale,
     previewLocale,
+    previewLocaleHref,
     resolveLocale,
     t,
     articleCountLabel,
