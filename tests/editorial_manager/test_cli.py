@@ -198,6 +198,135 @@ class CliTests(unittest.TestCase):
         self.assertIn("readiness", payload)
         self.assertIn("reasons", payload)
 
+    def test_social_package_next_outputs_first_matching_package(self):
+        articles = [
+            {
+                "slug": "blocked",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 1},
+                "media": {"hero": {"src": ""}},
+                "content": {
+                    "fr": {
+                        "title": "Bloque",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {},
+                },
+            },
+            {
+                "slug": "candidate",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 2},
+                "media": {"hero": {"src": "assets/images/candidate.png"}},
+                "content": {
+                    "fr": {
+                        "title": "Candidat",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {
+                        "title": "Candidate",
+                        "dek": "Dek EN.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta EN."},
+                        "media": {"hero_alt": "Alt EN."},
+                    },
+                },
+            },
+        ]
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=articles):
+            with redirect_stdout(output):
+                exit_code = main(["social-package", "--next", "--locale", "en"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["slug"], "candidate")
+        self.assertEqual(payload["requested_locale"], "en")
+        self.assertEqual(payload["source_locale"], "en")
+        self.assertEqual(payload["queue_status"], "candidate")
+        self.assertIn("brief", payload)
+        self.assertIn("caption", payload)
+        self.assertIn("image_summary", payload)
+        self.assertIn("readiness", payload)
+        self.assertIn("reasons", payload)
+
+    def test_social_package_next_accepts_queue_filters(self):
+        articles = [
+            {
+                "slug": "candidate",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 1},
+                "media": {"hero": {"src": "assets/images/candidate.png"}},
+                "content": {
+                    "fr": {
+                        "title": "Candidat",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {
+                        "title": "Candidate",
+                        "dek": "Dek EN.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta EN."},
+                        "media": {"hero_alt": "Alt EN."},
+                    },
+                },
+            },
+            {
+                "slug": "review",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 2},
+                "media": {"hero": {"src": "assets/images/review.png"}},
+                "content": {
+                    "fr": {
+                        "title": "A revoir",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {},
+                },
+            },
+        ]
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=articles):
+            with redirect_stdout(output):
+                exit_code = main([
+                    "social-package",
+                    "--next",
+                    "--status",
+                    "needs-review",
+                    "--locale-status",
+                    "fr-only",
+                    "--has-hero",
+                    "yes",
+                ])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["slug"], "review")
+        self.assertEqual(payload["source_locale"], "fr")
+        self.assertEqual(payload["queue_status"], "needs-review")
+        self.assertEqual(payload["locale_status"]["status"], "fr-only")
+        self.assertIn("English content is missing.", payload["reasons"])
+
     def test_social_queue_command_runs(self):
         article = {
             "slug": "demo",

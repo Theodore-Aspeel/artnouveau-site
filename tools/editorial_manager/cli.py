@@ -95,9 +95,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     social_package_parser = subparsers.add_parser(
         "social-package",
-        help="Prepare one read-only JSON social automation package for one article.",
+        help="Prepare one read-only JSON social automation package.",
     )
-    social_package_parser.add_argument("slug", help="Article slug to prepare.")
+    social_package_parser.add_argument("slug", nargs="?", help="Article slug to prepare.")
+    social_package_parser.add_argument(
+        "--next",
+        action="store_true",
+        help="Package the first matching social publication candidate.",
+    )
     social_package_parser.add_argument(
         "--locale",
         choices=("fr", "en"),
@@ -108,6 +113,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Accepted for consistency. social-package always outputs JSON.",
+    )
+    social_package_parser.add_argument(
+        "--status",
+        choices=("candidate", "needs-review", "blocked"),
+        default="candidate",
+        help="With --next, keep only queue items with this status. Defaults to candidate.",
+    )
+    social_package_parser.add_argument(
+        "--locale-status",
+        choices=("en-ready", "en-partial", "fr-only"),
+        help="With --next, keep only queue items with this locale status.",
+    )
+    social_package_parser.add_argument(
+        "--has-hero",
+        choices=("yes", "no"),
+        help="With --next, keep only queue items that have, or do not have, a hero image.",
     )
 
     social_queue_parser = subparsers.add_parser(
@@ -247,9 +268,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "social-package":
-        article = find_article_by_slug(articles, args.slug)
+        selected_slug = args.slug
+        if args.slug:
+            article = find_article_by_slug(articles, args.slug)
+        elif args.next:
+            filters = SocialQueueFilters(
+                status=args.status,
+                locale_status=args.locale_status,
+                has_hero=None if args.has_hero is None else args.has_hero == "yes",
+            )
+            item = build_social_next(articles, filters)
+            if item is None:
+                parser.error("no matching social package candidate")
+            selected_slug = item.slug
+            article = find_article_by_slug(articles, item.slug)
+        else:
+            parser.error("social-package requires a slug or --next")
+
         if article is None:
-            parser.error(f"unknown article slug: {args.slug}")
+            parser.error(f"unknown article slug: {selected_slug}")
         package = build_social_package(article, args.locale)
         print(render_social_package_json(package))
         return 0

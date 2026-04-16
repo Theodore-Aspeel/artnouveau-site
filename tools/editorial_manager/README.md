@@ -30,6 +30,8 @@ python -m tools.editorial_manager social-caption <slug>
 python -m tools.editorial_manager social-caption <slug> --locale en --json
 python -m tools.editorial_manager social-package <slug>
 python -m tools.editorial_manager social-package <slug> --locale en
+python -m tools.editorial_manager social-package --next
+python -m tools.editorial_manager social-package --next --status needs-review --locale-status fr-only --has-hero yes
 python -m tools.editorial_manager social-queue
 python -m tools.editorial_manager social-queue --json
 python -m tools.editorial_manager social-queue --status candidate --locale-status en-ready --has-hero yes --limit 5
@@ -54,6 +56,8 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 - `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
 - `social-caption <slug> --locale fr|en --json`: prints the same caption proposal as a small structured JSON payload. When English is requested but unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
 - `social-package <slug> --locale fr|en`: prints one JSON payload for later social automation, combining the existing brief, caption, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
+- `social-package --next --locale fr|en`: selects the first matching article through the same queue logic as `social-next`, then prints the same package payload as the slug mode.
+- `social-package --next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. These filters apply only to automatic selection. `--status` defaults to `candidate`.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 - `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.
@@ -78,6 +82,8 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 When multiple `social-queue` filters are used together, they are combined as AND filters. `--limit` is applied after filtering and keeps the existing publication order.
 
 `social-next` reuses the same queue status and filter rules as `social-queue`, then returns only the first matching item. By default, it selects the first `candidate` article in publication order.
+
+`social-package --next` reuses `social-next` selection, then builds the usual package for the selected article. The JSON structure is the same as `social-package <slug>`.
 
 `social-caption` uses deliberately simple deterministic rules:
 
