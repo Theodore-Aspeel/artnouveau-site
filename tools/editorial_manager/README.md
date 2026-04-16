@@ -55,7 +55,7 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
 - `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
 - `social-caption <slug> --locale fr|en --json`: prints the same caption proposal as a small structured JSON payload. When English is requested but unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
-- `social-package <slug> --locale fr|en`: prints one JSON payload for later social automation, combining the existing brief, caption, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
+- `social-package <slug> --locale fr|en`: prints one JSON payload for later social automation, combining the existing brief, caption, media block, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
 - `social-package --next --locale fr|en`: selects the first matching article through the same queue logic as `social-next`, then prints the same package payload as the slug mode.
 - `social-package --next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. These filters apply only to automatic selection. `--status` defaults to `candidate`.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.

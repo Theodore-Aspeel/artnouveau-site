@@ -10,8 +10,16 @@ def ready_article() -> dict:
         "format": "long",
         "publication": {"order": 1},
         "media": {
-            "hero": {"src": "assets/images/demo.png"},
-            "support": [{"src": "assets/images/support.png"}],
+            "hero": {
+                "src": "assets/images/demo.png",
+                "caption": "Stable hero caption.",
+            },
+            "support": [
+                {
+                    "src": "assets/images/support.png",
+                    "caption": "Stable support caption.",
+                },
+            ],
         },
         "facts": {"location": {"city": "Lille", "country": "France"}},
         "taxonomy": {"style_key": "art-nouveau"},
@@ -21,7 +29,12 @@ def ready_article() -> dict:
                 "dek": "Dek FR.",
                 "sections": [{"heading": "A", "body": "B"}],
                 "seo": {"meta_description": "Meta FR."},
-                "media": {"hero_alt": "Alt FR."},
+                "media": {
+                    "hero_alt": "Alt FR.",
+                    "hero_caption": "Caption FR.",
+                    "support_alt": ["Support alt FR."],
+                    "support_captions": ["Support caption FR."],
+                },
                 "practical_items": [
                     {"key": "city", "value": "Lille"},
                     {"key": "style", "value": "Art Nouveau"},
@@ -32,7 +45,12 @@ def ready_article() -> dict:
                 "dek": "Dek EN.",
                 "sections": [{"heading": "A", "body": "B"}],
                 "seo": {"meta_description": "Meta EN."},
-                "media": {"hero_alt": "Alt EN."},
+                "media": {
+                    "hero_alt": "Alt EN.",
+                    "hero_caption": "Caption EN.",
+                    "support_alt": ["Support alt EN."],
+                    "support_captions": ["Support caption EN."],
+                },
             },
         },
     }
@@ -56,6 +74,20 @@ class SocialPackageTests(unittest.TestCase):
             "hero_src": "assets/images/demo.png",
             "support_count": 1,
         })
+        self.assertEqual(payload["media"], {
+            "hero": {
+                "src": "assets/images/demo.png",
+                "alt": "Alt EN.",
+                "caption": "Caption EN.",
+            },
+            "support": [
+                {
+                    "src": "assets/images/support.png",
+                    "alt": "Support alt EN.",
+                    "caption": "Support caption EN.",
+                },
+            ],
+        })
         self.assertEqual(payload["readiness"]["status"], "ready")
         self.assertEqual(payload["reasons"], [
             "Publication checklist is ready.",
@@ -74,7 +106,46 @@ class SocialPackageTests(unittest.TestCase):
         self.assertEqual(payload["locale_status"]["status"], "fr-only")
         self.assertEqual(payload["queue_status"], "needs-review")
         self.assertEqual(payload["caption"]["title"], "Maison Demo")
+        self.assertEqual(payload["media"]["hero"]["alt"], "Alt FR.")
+        self.assertEqual(payload["media"]["hero"]["caption"], "Caption FR.")
         self.assertIn("English content is missing.", payload["reasons"])
+
+    def test_social_package_media_uses_stable_fallbacks_and_keeps_support_order(self):
+        article = ready_article()
+        article["content"]["fr"]["media"] = {
+            "hero_alt": "Alt FR.",
+            "support_alt": ["First alt."],
+            "support_captions": ["First caption."],
+        }
+        article["media"]["support"] = [
+            {"src": "assets/images/first.png"},
+            {"src": ""},
+            {
+                "src": "assets/images/second.png",
+                "alt": "Second stable alt.",
+                "caption": "Second stable caption.",
+            },
+        ]
+
+        payload = social_package_to_dict(build_social_package(article, "fr"))
+
+        self.assertEqual(payload["media"]["hero"], {
+            "src": "assets/images/demo.png",
+            "alt": "Alt FR.",
+            "caption": "Stable hero caption.",
+        })
+        self.assertEqual(payload["media"]["support"], [
+            {
+                "src": "assets/images/first.png",
+                "alt": "First alt.",
+                "caption": "First caption.",
+            },
+            {
+                "src": "assets/images/second.png",
+                "alt": "Second stable alt.",
+                "caption": "Second stable caption.",
+            },
+        ])
 
 
 if __name__ == "__main__":
