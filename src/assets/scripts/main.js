@@ -6,6 +6,13 @@ function t(key, params) {
   return i18n && typeof i18n.t === 'function' ? i18n.t(key, params) : key;
 }
 
+if (i18n && typeof i18n.previewLocale === 'function') {
+  const previewLocale = i18n.previewLocale();
+  if (previewLocale) {
+    document.documentElement.setAttribute('lang', previewLocale);
+  }
+}
+
 if (toggle && menu) {
   toggle.addEventListener('click', () => {
     const isOpen = menu.classList.toggle('is-open');

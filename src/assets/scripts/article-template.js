@@ -36,11 +36,11 @@
   }
 
   function articleTagHref(tag) {
-    if (taxonomy && typeof taxonomy.buildTagHref === 'function') {
-      return taxonomy.buildTagHref(tag, homeHref);
-    }
+    const href = taxonomy && typeof taxonomy.buildTagHref === 'function'
+      ? taxonomy.buildTagHref(tag, homeHref)
+      : galleryHref;
 
-    return galleryHref;
+    return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
   }
 
   function currentLocale() {
@@ -54,6 +54,10 @@
 
   function t(key, params) {
     return i18n && typeof i18n.t === 'function' ? i18n.t(key, params, currentLocale()) : key;
+  }
+
+  function previewHref(href) {
+    return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
   }
 
   function localizedValue(value) {
@@ -197,7 +201,7 @@
     const h1 = make('h1', '', t('article.notFound.title'));
     const p = make('p', '', t('article.notFound.description'));
     const a = make('a', '', t('article.notFound.home'));
-    a.href = homeHref;
+    a.href = previewHref(homeHref);
     p.appendChild(a);
     wrap.appendChild(h1);
     wrap.appendChild(p);
@@ -284,8 +288,8 @@
   breadcrumb.setAttribute('aria-label', t('article.breadcrumb.aria'));
   breadcrumb.innerHTML = `
     <ol>
-      <li><a href="${homeHref}">${t('article.breadcrumb.home')}</a></li>
-      <li><a href="${galleryHref}">${t('article.breadcrumb.articles')}</a></li>
+      <li><a href="${previewHref(homeHref)}">${t('article.breadcrumb.home')}</a></li>
+      <li><a href="${previewHref(galleryHref)}">${t('article.breadcrumb.articles')}</a></li>
       <li aria-current="page"></li>
     </ol>
   `;
@@ -539,7 +543,7 @@
 
     function buildSequenceCard(item, direction) {
       const link = make('a', 'article-sequence__card');
-      link.href = articleHrefBase + encodeURIComponent(item.slug);
+      link.href = previewHref(articleHrefBase + encodeURIComponent(item.slug));
 
       const eyebrow = make('span', 'article-sequence__eyebrow', direction);
       const sequenceTitle = access.getArticleTitle(item, locale);
@@ -651,7 +655,7 @@
       if (aroundTarget) {
         const aroundTitle = access.getArticleTitle(aroundTarget, locale);
         const aroundLink = make('a', 'article-tpl__around-link', aroundTitle);
-        aroundLink.href = articleHrefBase + encodeURIComponent(aroundTarget.slug);
+        aroundLink.href = previewHref(articleHrefBase + encodeURIComponent(aroundTarget.slug));
         block.appendChild(aroundLink);
       } else if (aroundItem.articleTitle) {
         block.appendChild(make('p', 'article-tpl__around-link article-tpl__around-link--static', aroundItem.articleTitle));

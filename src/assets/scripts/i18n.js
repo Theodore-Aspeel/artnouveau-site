@@ -2,6 +2,7 @@
   'use strict';
 
   const DEFAULT_LOCALE = 'fr';
+  const PREVIEW_LOCALE_PARAM = 'previewLocale';
   const SUPPORTED_LOCALES = new Set(['fr', 'en']);
 
   const MESSAGES = {
@@ -131,9 +132,41 @@
     return SUPPORTED_LOCALES.has(normalized) ? normalized : DEFAULT_LOCALE;
   }
 
+  function supportedLocale(locale) {
+    const normalized = typeof locale === 'string'
+      ? locale.trim().toLowerCase().split('-')[0]
+      : '';
+
+    return SUPPORTED_LOCALES.has(normalized) ? normalized : '';
+  }
+
+  function previewLocale() {
+    const params = new URLSearchParams(window.location.search);
+    return supportedLocale(params.get(PREVIEW_LOCALE_PARAM));
+  }
+
   function resolveLocale(source) {
-    const lang = source || document.documentElement.getAttribute('lang');
+    const lang = source || previewLocale() || document.documentElement.getAttribute('lang');
     return normalizeLocale(lang || DEFAULT_LOCALE);
+  }
+
+  function withPreviewLocale(href) {
+    const locale = previewLocale();
+    if (!locale || typeof href !== 'string' || !href.trim()) return href;
+    if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(href) || /^(?:mailto|tel):/i.test(href)) return href;
+
+    const hashIndex = href.indexOf('#');
+    const beforeHash = hashIndex >= 0 ? href.slice(0, hashIndex) : href;
+    const hash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+    const queryIndex = beforeHash.indexOf('?');
+    const path = queryIndex >= 0 ? beforeHash.slice(0, queryIndex) : beforeHash;
+    const query = queryIndex >= 0 ? beforeHash.slice(queryIndex + 1) : '';
+    const params = new URLSearchParams(query);
+
+    params.set(PREVIEW_LOCALE_PARAM, locale);
+
+    const serialized = params.toString();
+    return path + (serialized ? '?' + serialized : '') + hash;
   }
 
   function interpolate(message, params) {
@@ -165,8 +198,10 @@
   global.SiteI18n = {
     defaultLocale: DEFAULT_LOCALE,
     normalizeLocale,
+    previewLocale,
     resolveLocale,
     t,
     articleCountLabel,
+    withPreviewLocale,
   };
 })(window);

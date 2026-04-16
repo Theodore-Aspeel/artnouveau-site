@@ -49,10 +49,15 @@
       : 'article' + (Number(count) > 1 ? 's' : '');
   }
 
-  function buildArticleHref(slug) {
+  function canonicalArticleHref(slug) {
     const normalizedSlug = normalizeText(slug);
     if (!normalizedSlug) return 'article.html';
     return 'article.html?slug=' + encodeURIComponent(normalizedSlug);
+  }
+
+  function buildArticleHref(slug) {
+    const href = canonicalArticleHref(slug);
+    return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
   }
 
   function normalizeText(value) {
@@ -163,9 +168,10 @@
     const link = document.createElement('a');
     const label = tag && typeof tag === 'object' ? tag.label : tag;
     link.className = className + (isActive ? ' tag-chip--active' : '');
-    link.href = taxonomy && typeof taxonomy.buildTagHref === 'function'
+    const href = taxonomy && typeof taxonomy.buildTagHref === 'function'
       ? taxonomy.buildTagHref(tag, 'index.html')
       : 'index.html#galerie';
+    link.href = i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
     link.textContent = label;
     return link;
   }
@@ -483,7 +489,9 @@
 
     const allLink = document.createElement('a');
     allLink.className = 'tag-chip tag-chip--ghost' + (activeTag ? '' : ' tag-chip--active');
-    allLink.href = 'index.html#galerie';
+    allLink.href = i18n && typeof i18n.withPreviewLocale === 'function'
+      ? i18n.withPreviewLocale('index.html#galerie')
+      : 'index.html#galerie';
     allLink.textContent = t('gallery.all');
     tagsEl.appendChild(allLink);
 
