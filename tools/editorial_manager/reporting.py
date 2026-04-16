@@ -24,6 +24,7 @@ from .social_brief import SocialBrief, social_brief_to_dict
 from .social_caption import SocialCaption, social_caption_to_dict
 from .social_package import SocialPackage, social_package_to_dict
 from .social_queue import SocialQueueItem, social_next_to_dict, social_queue_to_dict
+from .social_workflow import SocialWorkflow
 
 
 Article = dict[str, Any]
@@ -324,6 +325,59 @@ def render_social_next(item: SocialQueueItem | None) -> str:
 
 def render_social_next_json(item: SocialQueueItem | None) -> str:
     return json.dumps(social_next_to_dict(item), ensure_ascii=False, indent=2)
+
+
+def render_social_workflow(workflow: SocialWorkflow | None) -> str:
+    lines = ["Local social workflow"]
+
+    if workflow is None:
+        lines.append("No matching article found.")
+        return "\n".join(lines)
+
+    package = workflow.package
+    payload = social_package_to_dict(package)
+    caption = payload["caption"]
+    media = payload["media"]
+    hero = media["hero"]
+    links = payload["links"]
+
+    lines.extend([
+        f"Queue status: {workflow.selected.queue_status}",
+        f"Slug: {package.slug}",
+        f"Requested locale: {package.requested_locale}",
+        f"Source locale: {package.source_locale}",
+        f"Locale status: {payload['locale_status']['status']}",
+        f"Readiness: {payload['readiness']['status']}",
+        "",
+        "Caption draft:",
+        f"  Hook: {caption['hook'] or '-'}",
+        f"  Caption: {caption['caption'] or '-'}",
+        f"  CTA: {caption['cta'] or '-'}",
+        f"  Hashtags: {' '.join(caption['hashtags']) if caption['hashtags'] else '-'}",
+        "",
+        "Media:",
+        f"  Hero src: {hero['src'] or '-'}",
+        f"  Hero alt: {hero['alt'] or '-'}",
+        f"  Support images: {len(media['support'])}",
+        "",
+        "Links:",
+        f"  Article FR: {links['article_fr_path']}",
+        f"  EN preview: {links['article_en_preview_path']}",
+        "",
+        "Next local commands:",
+        (
+            "  python -m tools.editorial_manager "
+            f"social-package {package.slug} --locale {package.requested_locale}"
+        ),
+        f"  python -m tools.editorial_manager social-brief {package.slug}",
+    ])
+
+    if payload["reasons"]:
+        lines.append("")
+        lines.append("Reasons:")
+        lines.extend(f"  - {reason}" for reason in payload["reasons"])
+
+    return "\n".join(lines)
 
 
 def render_issue_lines(issues: list[CheckIssue]) -> list[str]:

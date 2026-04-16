@@ -558,6 +558,50 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["next"]["slug"], "review")
         self.assertEqual(payload["next"]["queue_status"], "needs-review")
 
+    def test_social_workflow_command_outputs_local_handoff(self):
+        article = {
+            "slug": "candidate",
+            "status": "ready",
+            "format": "long",
+            "publication": {"order": 1},
+            "media": {"hero": {"src": "assets/images/candidate.png"}},
+            "facts": {"location": {"city": "Lille"}},
+            "taxonomy": {"style_key": "art-nouveau"},
+            "content": {
+                "fr": {
+                    "title": "Candidat",
+                    "dek": "Dek FR.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Meta FR."},
+                    "media": {"hero_alt": "Alt FR."},
+                },
+                "en": {
+                    "title": "Candidate",
+                    "dek": "Dek EN.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Meta EN."},
+                    "media": {"hero_alt": "Alt EN."},
+                },
+            },
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-workflow", "--locale", "en"])
+
+        rendered = output.getvalue()
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Local social workflow", rendered)
+        self.assertIn("Slug: candidate", rendered)
+        self.assertIn("Caption draft:", rendered)
+        self.assertIn("Hero src: assets/images/candidate.png", rendered)
+        self.assertIn(
+            "python -m tools.editorial_manager social-package candidate --locale en",
+            rendered,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

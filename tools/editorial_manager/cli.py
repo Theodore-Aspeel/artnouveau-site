@@ -22,12 +22,14 @@ from .reporting import (
     render_social_package_json,
     render_social_queue,
     render_social_queue_json,
+    render_social_workflow,
     render_summary,
 )
 from .social_brief import build_social_brief
 from .social_caption import build_social_caption
 from .social_package import build_social_package
 from .social_queue import SocialQueueFilters, build_social_next, build_social_queue
+from .social_workflow import build_social_workflow
 
 
 def positive_int(value: str) -> int:
@@ -187,6 +189,33 @@ def build_parser() -> argparse.ArgumentParser:
         help="Keep only queue items that have, or do not have, a hero image.",
     )
 
+    social_workflow_parser = subparsers.add_parser(
+        "social-workflow",
+        help="Prepare the next local social workflow handoff.",
+    )
+    social_workflow_parser.add_argument(
+        "--locale",
+        choices=("fr", "en"),
+        default="fr",
+        help="Caption locale to prepare. Defaults to fr.",
+    )
+    social_workflow_parser.add_argument(
+        "--status",
+        choices=("candidate", "needs-review", "blocked"),
+        default="candidate",
+        help="Keep only queue items with this status. Defaults to candidate.",
+    )
+    social_workflow_parser.add_argument(
+        "--locale-status",
+        choices=("en-ready", "en-partial", "fr-only"),
+        help="Keep only queue items with this locale status.",
+    )
+    social_workflow_parser.add_argument(
+        "--has-hero",
+        choices=("yes", "no"),
+        help="Keep only queue items that have, or do not have, a hero image.",
+    )
+
     return parser
 
 
@@ -316,6 +345,16 @@ def main(argv: list[str] | None = None) -> int:
             print(render_social_next_json(item))
         else:
             print(render_social_next(item))
+        return 0
+
+    if args.command == "social-workflow":
+        filters = SocialQueueFilters(
+            status=args.status,
+            locale_status=args.locale_status,
+            has_hero=None if args.has_hero is None else args.has_hero == "yes",
+        )
+        workflow = build_social_workflow(articles, args.locale, filters)
+        print(render_social_workflow(workflow))
         return 0
 
     parser.error(f"unknown command: {args.command}")

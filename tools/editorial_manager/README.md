@@ -38,6 +38,8 @@ python -m tools.editorial_manager social-queue --status candidate --locale-statu
 python -m tools.editorial_manager social-next
 python -m tools.editorial_manager social-next --json
 python -m tools.editorial_manager social-next --status needs-review --locale-status fr-only
+python -m tools.editorial_manager social-workflow
+python -m tools.editorial_manager social-workflow --locale en --status needs-review --locale-status fr-only
 ```
 
 ## Commands
@@ -64,6 +66,8 @@ python -m tools.editorial_manager social-next --status needs-review --locale-sta
 - `social-next`: shows the first matching social publication candidate in publication order. It defaults to `--status candidate`.
 - `social-next --json`: prints the same next item as a small structured JSON payload for future automation workflows.
 - `social-next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`.
+- `social-workflow`: prepares a small local handoff for the first matching social publication candidate. It reuses `social-next` selection and `social-package` payload building, then prints the selected article, caption draft, media paths, article links, reasons, and follow-up local commands.
+- `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. It also accepts `--locale fr|en` for the caption/package locale.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 
@@ -84,6 +88,8 @@ When multiple `social-queue` filters are used together, they are combined as AND
 `social-next` reuses the same queue status and filter rules as `social-queue`, then returns only the first matching item. By default, it selects the first `candidate` article in publication order.
 
 `social-package --next` reuses `social-next` selection, then builds the usual package for the selected article. The JSON structure is the same as `social-package <slug>`.
+
+`social-workflow` is intentionally a human-facing local entry point. It does not create files, update article data, call APIs, or publish anything. Use `social-package <slug> --locale <locale>` when the full JSON payload is needed.
 
 ## `social-package` JSON Contract
 
