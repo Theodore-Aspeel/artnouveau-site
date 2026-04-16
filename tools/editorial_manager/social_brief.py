@@ -67,6 +67,38 @@ class SocialBrief:
     readiness: ReadinessBrief
 
 
+def social_brief_to_dict(brief: SocialBrief) -> dict[str, Any]:
+    """Convert a social brief to a stable automation-friendly payload."""
+    return {
+        "slug": brief.slug,
+        "locale_status": {
+            "status": brief.locale_status.status,
+            "missing_fields": list(brief.locale_status.missing_fields),
+        },
+        "title_fr": brief.title_fr,
+        "title_en": brief.title_en,
+        "dek_fr": brief.dek_fr,
+        "dek_en": brief.dek_en,
+        "quote": _quote_to_dict(brief.quote),
+        "practical_items": [
+            {"key": item.key, "value": item.value}
+            for item in brief.practical_items
+        ],
+        "image_summary": {
+            "has_hero": brief.images.has_hero,
+            "hero_src": brief.images.hero_src,
+            "support_count": brief.images.support_count,
+        },
+        "readiness": {
+            "status": brief.readiness.status,
+            "ok_count": brief.readiness.ok_count,
+            "error_count": brief.readiness.error_count,
+            "warning_count": brief.readiness.warning_count,
+            "notes": list(brief.readiness.notes),
+        },
+    }
+
+
 def build_social_brief(article: Article) -> SocialBrief:
     """Build a compact human-readable publication brief for one article."""
     locale_status = analyze_article_locale(article)
@@ -82,6 +114,19 @@ def build_social_brief(article: Article) -> SocialBrief:
         images=_image_presence(article),
         readiness=_readiness_brief(publication_check_article(article)),
     )
+
+
+def _quote_to_dict(quote: QuoteBrief | None) -> dict[str, str] | None:
+    if quote is None:
+        return None
+
+    return {
+        "text_fr": quote.text_fr,
+        "text_en": quote.text_en,
+        "author": quote.author,
+        "attribution_fr": quote.attribution_fr,
+        "attribution_en": quote.attribution_en,
+    }
 
 
 def _localized_text(article: Article, locale: str, field: str) -> str:

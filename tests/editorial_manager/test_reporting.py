@@ -1,3 +1,4 @@
+import json
 import unittest
 
 from tools.editorial_manager.checks import CheckIssue, PublicationCheckItem
@@ -7,6 +8,7 @@ from tools.editorial_manager.reporting import (
     render_locale_report,
     render_publication_check_report,
     render_social_brief,
+    render_social_brief_json,
     render_summary,
 )
 from tools.editorial_manager.social_brief import (
@@ -106,6 +108,28 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("city: Lille", output)
         self.assertIn("hero: yes", output)
         self.assertIn("status: ready", output)
+
+    def test_social_brief_json_renders_structured_payload(self):
+        output = render_social_brief_json(SocialBrief(
+            slug="demo",
+            title_fr="Titre FR",
+            title_en="Title EN",
+            locale_status=LocaleReportItem("demo", "en-ready", ()),
+            dek_fr="Dek FR.",
+            dek_en="Dek EN.",
+            quote=None,
+            practical_items=(PracticalItem("city", "Lille"),),
+            images=ImagePresence(True, "assets/images/demo.png", 0),
+            readiness=ReadinessBrief("ready", 8, 0, 0, ()),
+        ))
+
+        payload = json.loads(output)
+
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["locale_status"], {"status": "en-ready", "missing_fields": []})
+        self.assertEqual(payload["practical_items"], [{"key": "city", "value": "Lille"}])
+        self.assertEqual(payload["image_summary"]["has_hero"], True)
+        self.assertEqual(payload["readiness"]["ok_count"], 8)
 
 
 if __name__ == "__main__":

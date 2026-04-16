@@ -1,4 +1,5 @@
 import io
+import json
 import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
@@ -82,6 +83,33 @@ class CliTests(unittest.TestCase):
         self.assertIn("Social publication brief", output.getvalue())
         self.assertIn("Slug: demo", output.getvalue())
         self.assertIn("Title EN: Demo EN", output.getvalue())
+
+    def test_social_brief_json_command_runs(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-brief", "demo", "--json"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["slug"], "demo")
+        self.assertEqual(payload["title_en"], "Demo EN")
+        self.assertIn("locale_status", payload)
+        self.assertIn("image_summary", payload)
+        self.assertIn("readiness", payload)
 
 
 if __name__ == "__main__":

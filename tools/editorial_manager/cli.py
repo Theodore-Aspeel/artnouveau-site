@@ -14,6 +14,7 @@ from .reporting import (
     render_locale_report,
     render_publication_check_report,
     render_social_brief,
+    render_social_brief_json,
     render_summary,
 )
 from .social_brief import build_social_brief
@@ -52,6 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Prepare a read-only social publication brief for one article.",
     )
     social_brief_parser.add_argument("slug", help="Article slug to prepare.")
+    social_brief_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the social brief as a simple structured JSON payload.",
+    )
 
     return parser
 
@@ -115,7 +121,11 @@ def main(argv: list[str] | None = None) -> int:
         article = find_article_by_slug(articles, args.slug)
         if article is None:
             parser.error(f"unknown article slug: {args.slug}")
-        print(render_social_brief(build_social_brief(article)))
+        brief = build_social_brief(article)
+        if args.json:
+            print(render_social_brief_json(brief))
+        else:
+            print(render_social_brief(brief))
         return 0
 
     parser.error(f"unknown command: {args.command}")

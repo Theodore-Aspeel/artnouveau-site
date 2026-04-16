@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+import json
 from typing import Any
 
 from .article_access import (
@@ -19,7 +20,7 @@ from .article_access import (
 )
 from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
-from .social_brief import SocialBrief
+from .social_brief import SocialBrief, social_brief_to_dict
 
 
 Article = dict[str, Any]
@@ -223,6 +224,10 @@ def render_social_brief(brief: SocialBrief) -> str:
             lines.append(f"    - {note}")
 
     return "\n".join(lines)
+
+
+def render_social_brief_json(brief: SocialBrief) -> str:
+    return json.dumps(social_brief_to_dict(brief), ensure_ascii=False, indent=2)
 
 
 def render_issue_lines(issues: list[CheckIssue]) -> list[str]:
