@@ -47,6 +47,11 @@ class SocialQueueTests(unittest.TestCase):
         self.assertEqual(item.readiness, "ready")
         self.assertTrue(item.has_hero)
         self.assertEqual(item.queue_status, "candidate")
+        self.assertEqual(item.reasons, (
+            "Publication checklist is ready.",
+            "English content is ready.",
+            "Hero image is present.",
+        ))
 
     def test_build_social_queue_marks_needs_review_for_missing_english(self):
         article = ready_article("demo")
@@ -57,6 +62,9 @@ class SocialQueueTests(unittest.TestCase):
         self.assertEqual(item.locale_status, "fr-only")
         self.assertEqual(item.readiness, "needs review")
         self.assertEqual(item.queue_status, "needs-review")
+        self.assertIn("English content is missing.", item.reasons)
+        self.assertIn("Publication checklist has 1 warning(s).", item.reasons)
+        self.assertIn("WARNING [content-en] English content is missing or empty.", item.reasons)
 
     def test_build_social_queue_marks_blocked_for_publication_errors(self):
         article = ready_article("demo")
@@ -67,6 +75,19 @@ class SocialQueueTests(unittest.TestCase):
         self.assertFalse(item.has_hero)
         self.assertEqual(item.readiness, "blocked")
         self.assertEqual(item.queue_status, "blocked")
+        self.assertIn("Publication checklist has 1 error(s).", item.reasons)
+        self.assertIn("ERROR [hero-image] hero image is missing.", item.reasons)
+        self.assertIn("Hero image is missing.", item.reasons)
+
+    def test_build_social_queue_explains_partial_english_review(self):
+        article = ready_article("demo")
+        article["content"]["en"]["dek"] = ""
+
+        item = build_social_queue([article])[0]
+
+        self.assertEqual(item.locale_status, "en-partial")
+        self.assertEqual(item.queue_status, "needs-review")
+        self.assertIn("English content is incomplete: dek.", item.reasons)
 
     def test_build_social_queue_keeps_publication_order(self):
         items = build_social_queue([
@@ -148,6 +169,11 @@ class SocialQueueTests(unittest.TestCase):
         self.assertEqual(payload["items"][0]["slug"], "demo")
         self.assertEqual(payload["items"][0]["queue_status"], "candidate")
         self.assertEqual(payload["items"][0]["has_hero"], True)
+        self.assertEqual(payload["items"][0]["reasons"], [
+            "Publication checklist is ready.",
+            "English content is ready.",
+            "Hero image is present.",
+        ])
 
     def test_social_next_to_dict_keeps_simple_next_payload(self):
         item = build_social_next([ready_article("demo")])
@@ -156,6 +182,7 @@ class SocialQueueTests(unittest.TestCase):
         self.assertEqual(payload["next"]["slug"], "demo")
         self.assertEqual(payload["next"]["queue_status"], "candidate")
         self.assertEqual(payload["next"]["has_hero"], True)
+        self.assertIn("reasons", payload["next"])
 
     def test_social_next_to_dict_handles_no_match(self):
         payload = social_next_to_dict(None)

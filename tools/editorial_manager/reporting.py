@@ -242,6 +242,7 @@ def render_social_queue(items: list[SocialQueueItem]) -> str:
             item.locale_status,
             item.readiness,
             "yes" if item.has_hero else "no",
+            "; ".join(item.reasons) if item.reasons else "-",
         ]
         for item in items
     ]
@@ -257,7 +258,7 @@ def render_social_queue(items: list[SocialQueueItem]) -> str:
     if rows:
         lines.append("")
         lines.append(render_table(
-            ["Queue", "Slug", "Title FR", "Title EN", "Locale", "Readiness", "Hero"],
+            ["Queue", "Slug", "Title FR", "Title EN", "Locale", "Readiness", "Hero", "Reasons"],
             rows,
         ))
     else:
@@ -285,6 +286,8 @@ def render_social_next(item: SocialQueueItem | None) -> str:
         f"Locale status: {item.locale_status}",
         f"Readiness: {item.readiness}",
         f"Hero image: {'yes' if item.has_hero else 'no'}",
+        "Reasons:",
+        *[f"  - {reason}" for reason in item.reasons],
         f"Brief command: python -m tools.editorial_manager social-brief {item.slug}",
     ])
     return "\n".join(lines)

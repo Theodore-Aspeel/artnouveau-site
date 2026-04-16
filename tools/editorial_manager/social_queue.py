@@ -22,6 +22,7 @@ class SocialQueueItem:
     readiness: str
     has_hero: bool
     queue_status: str
+    reasons: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -106,10 +107,12 @@ def _social_queue_item_to_dict(item: SocialQueueItem) -> dict[str, Any]:
         "readiness": item.readiness,
         "has_hero": item.has_hero,
         "queue_status": item.queue_status,
+        "reasons": list(item.reasons),
     }
 
 
 def _queue_item_from_brief(brief: SocialBrief) -> SocialQueueItem:
+    queue_status = _queue_status(brief)
     return SocialQueueItem(
         slug=brief.slug,
         title_fr=brief.title_fr,
@@ -117,7 +120,8 @@ def _queue_item_from_brief(brief: SocialBrief) -> SocialQueueItem:
         locale_status=brief.locale_status.status,
         readiness=brief.readiness.status,
         has_hero=brief.images.has_hero,
-        queue_status=_queue_status(brief),
+        queue_status=queue_status,
+        reasons=_queue_reasons(brief, queue_status),
     )
 
 
@@ -129,6 +133,51 @@ def _queue_status(brief: SocialBrief) -> str:
         return "needs-review"
 
     return "candidate"
+
+
+def _queue_reasons(brief: SocialBrief, queue_status: str) -> tuple[str, ...]:
+    if queue_status == "candidate":
+        return (
+            "Publication checklist is ready.",
+            "English content is ready.",
+            "Hero image is present.",
+        )
+
+    if queue_status == "blocked":
+        reasons = []
+        if brief.readiness.error_count > 0:
+            reasons.append(f"Publication checklist has {brief.readiness.error_count} error(s).")
+            reasons.extend(_readiness_notes(brief, "ERROR"))
+        if not brief.images.has_hero:
+            reasons.append("Hero image is missing.")
+        return tuple(_dedupe(reasons))
+
+    reasons = []
+    if brief.readiness.warning_count > 0:
+        reasons.append(f"Publication checklist has {brief.readiness.warning_count} warning(s).")
+        reasons.extend(_readiness_notes(brief, "WARNING"))
+    if brief.locale_status.status == "fr-only":
+        reasons.append("English content is missing.")
+    elif brief.locale_status.status == "en-partial":
+        missing = ", ".join(brief.locale_status.missing_fields)
+        reasons.append(f"English content is incomplete: {missing}.")
+    return tuple(_dedupe(reasons))
+
+
+def _readiness_notes(brief: SocialBrief, status: str) -> list[str]:
+    prefix = f"{status} "
+    return [note for note in brief.readiness.notes if note.startswith(prefix)]
+
+
+def _dedupe(values: list[str]) -> list[str]:
+    seen = set()
+    result = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
 
 
 def _matches_social_queue_filters(item: SocialQueueItem, filters: SocialQueueFilters) -> bool:

@@ -148,6 +148,7 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("needs-review: 1", output)
         self.assertIn("Queue", output)
         self.assertIn("Title FR", output)
+        self.assertIn("Reasons", output)
         self.assertIn("demo", output)
         self.assertIn("yes", output)
 
@@ -162,6 +163,7 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["summary"]["candidate"], 1)
         self.assertEqual(payload["items"][0]["slug"], "demo")
         self.assertEqual(payload["items"][0]["queue_status"], "candidate")
+        self.assertEqual(payload["items"][0]["reasons"], [])
 
     def test_social_next_renders_terminal_readable_summary(self):
         output = render_social_next(
@@ -172,6 +174,7 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Queue status: candidate", output)
         self.assertIn("Slug: demo", output)
         self.assertIn("Title FR: Titre FR", output)
+        self.assertIn("Reasons:", output)
         self.assertIn("Brief command: python -m tools.editorial_manager social-brief demo", output)
 
     def test_social_next_renders_empty_state(self):
@@ -189,6 +192,7 @@ class ReportingTests(unittest.TestCase):
 
         self.assertEqual(payload["next"]["slug"], "demo")
         self.assertEqual(payload["next"]["queue_status"], "candidate")
+        self.assertEqual(payload["next"]["reasons"], [])
 
 
 if __name__ == "__main__":
