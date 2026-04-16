@@ -2,8 +2,10 @@ import unittest
 
 from tools.editorial_manager.social_queue import (
     SocialQueueFilters,
+    build_social_next,
     build_social_queue,
     filter_social_queue,
+    social_next_to_dict,
     social_queue_to_dict,
 )
 
@@ -93,6 +95,32 @@ class SocialQueueTests(unittest.TestCase):
 
         self.assertEqual([item.slug for item in items], ["fr-only"])
 
+    def test_build_social_next_returns_first_candidate_by_publication_order(self):
+        first = ready_article("first", order=1)
+        second = ready_article("second", order=2)
+        blocked = ready_article("blocked", order=0)
+        blocked["media"]["hero"]["src"] = ""
+
+        item = build_social_next([second, blocked, first])
+
+        self.assertIsNotNone(item)
+        self.assertEqual(item.slug, "first")
+        self.assertEqual(item.queue_status, "candidate")
+
+    def test_build_social_next_accepts_queue_filters(self):
+        candidate = ready_article("candidate", order=1)
+        fr_only = ready_article("fr-only", order=2)
+        fr_only["content"]["en"] = {}
+
+        item = build_social_next(
+            [candidate, fr_only],
+            SocialQueueFilters(status="needs-review", locale_status="fr-only"),
+        )
+
+        self.assertIsNotNone(item)
+        self.assertEqual(item.slug, "fr-only")
+        self.assertEqual(item.queue_status, "needs-review")
+
     def test_filter_social_queue_combines_filters_as_and(self):
         items = build_social_queue([
             ready_article("candidate", order=1),
@@ -120,6 +148,19 @@ class SocialQueueTests(unittest.TestCase):
         self.assertEqual(payload["items"][0]["slug"], "demo")
         self.assertEqual(payload["items"][0]["queue_status"], "candidate")
         self.assertEqual(payload["items"][0]["has_hero"], True)
+
+    def test_social_next_to_dict_keeps_simple_next_payload(self):
+        item = build_social_next([ready_article("demo")])
+        payload = social_next_to_dict(item)
+
+        self.assertEqual(payload["next"]["slug"], "demo")
+        self.assertEqual(payload["next"]["queue_status"], "candidate")
+        self.assertEqual(payload["next"]["has_hero"], True)
+
+    def test_social_next_to_dict_handles_no_match(self):
+        payload = social_next_to_dict(None)
+
+        self.assertEqual(payload, {"next": None})
 
 
 if __name__ == "__main__":

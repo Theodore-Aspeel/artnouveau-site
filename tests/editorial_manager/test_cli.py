@@ -226,6 +226,122 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["items"][0]["slug"], "candidate")
         self.assertEqual(payload["items"][0]["queue_status"], "candidate")
 
+    def test_social_next_command_runs(self):
+        articles = [
+            {
+                "slug": "blocked",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 1},
+                "media": {"hero": {"src": ""}},
+                "content": {
+                    "fr": {
+                        "title": "Bloque",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {},
+                },
+            },
+            {
+                "slug": "candidate",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 2},
+                "media": {"hero": {"src": "assets/images/candidate.png"}},
+                "content": {
+                    "fr": {
+                        "title": "Candidat",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {
+                        "title": "Candidate",
+                        "dek": "Dek EN.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta EN."},
+                        "media": {"hero_alt": "Alt EN."},
+                    },
+                },
+            },
+        ]
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=articles):
+            with redirect_stdout(output):
+                exit_code = main(["social-next"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Social next article", output.getvalue())
+        self.assertIn("Slug: candidate", output.getvalue())
+        self.assertIn("Queue status: candidate", output.getvalue())
+
+    def test_social_next_json_command_accepts_filters(self):
+        articles = [
+            {
+                "slug": "candidate",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 1},
+                "media": {"hero": {"src": "assets/images/candidate.png"}},
+                "content": {
+                    "fr": {
+                        "title": "Candidat",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {
+                        "title": "Candidate",
+                        "dek": "Dek EN.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta EN."},
+                        "media": {"hero_alt": "Alt EN."},
+                    },
+                },
+            },
+            {
+                "slug": "review",
+                "status": "ready",
+                "format": "long",
+                "publication": {"order": 2},
+                "media": {"hero": {"src": "assets/images/review.png"}},
+                "content": {
+                    "fr": {
+                        "title": "A revoir",
+                        "dek": "Dek FR.",
+                        "sections": [{"heading": "A", "body": "B"}],
+                        "seo": {"meta_description": "Meta FR."},
+                        "media": {"hero_alt": "Alt FR."},
+                    },
+                    "en": {},
+                },
+            },
+        ]
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=articles):
+            with redirect_stdout(output):
+                exit_code = main([
+                    "social-next",
+                    "--status",
+                    "needs-review",
+                    "--locale-status",
+                    "fr-only",
+                    "--json",
+                ])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["next"]["slug"], "review")
+        self.assertEqual(payload["next"]["queue_status"], "needs-review")
+
 
 if __name__ == "__main__":
     unittest.main()

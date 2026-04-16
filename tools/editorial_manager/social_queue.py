@@ -42,6 +42,22 @@ def build_social_queue(
     return filter_social_queue(items, filters)
 
 
+def build_social_next(
+    articles: list[Article],
+    filters: SocialQueueFilters | None = None,
+) -> SocialQueueItem | None:
+    """Return the first matching social queue item in publication order."""
+    active_filters = filters or SocialQueueFilters(status="candidate")
+    queue_filters = SocialQueueFilters(
+        status=active_filters.status,
+        locale_status=active_filters.locale_status,
+        has_hero=active_filters.has_hero,
+        limit=1,
+    )
+    items = build_social_queue(articles, queue_filters)
+    return items[0] if items else None
+
+
 def filter_social_queue(
     items: list[SocialQueueItem],
     filters: SocialQueueFilters | None,
@@ -71,18 +87,25 @@ def social_queue_to_dict(items: list[SocialQueueItem]) -> dict[str, Any]:
             "needs_review": counts.get("needs-review", 0),
             "blocked": counts.get("blocked", 0),
         },
-        "items": [
-            {
-                "slug": item.slug,
-                "title_fr": item.title_fr,
-                "title_en": item.title_en,
-                "locale_status": item.locale_status,
-                "readiness": item.readiness,
-                "has_hero": item.has_hero,
-                "queue_status": item.queue_status,
-            }
-            for item in items
-        ],
+        "items": [_social_queue_item_to_dict(item) for item in items],
+    }
+
+
+def social_next_to_dict(item: SocialQueueItem | None) -> dict[str, Any]:
+    return {
+        "next": None if item is None else _social_queue_item_to_dict(item),
+    }
+
+
+def _social_queue_item_to_dict(item: SocialQueueItem) -> dict[str, Any]:
+    return {
+        "slug": item.slug,
+        "title_fr": item.title_fr,
+        "title_en": item.title_en,
+        "locale_status": item.locale_status,
+        "readiness": item.readiness,
+        "has_hero": item.has_hero,
+        "queue_status": item.queue_status,
     }
 
 

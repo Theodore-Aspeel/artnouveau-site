@@ -21,7 +21,7 @@ from .article_access import (
 from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
 from .social_brief import SocialBrief, social_brief_to_dict
-from .social_queue import SocialQueueItem, social_queue_to_dict
+from .social_queue import SocialQueueItem, social_next_to_dict, social_queue_to_dict
 
 
 Article = dict[str, Any]
@@ -268,6 +268,30 @@ def render_social_queue(items: list[SocialQueueItem]) -> str:
 
 def render_social_queue_json(items: list[SocialQueueItem]) -> str:
     return json.dumps(social_queue_to_dict(items), ensure_ascii=False, indent=2)
+
+
+def render_social_next(item: SocialQueueItem | None) -> str:
+    lines = ["Social next article"]
+
+    if item is None:
+        lines.append("No matching article found.")
+        return "\n".join(lines)
+
+    lines.extend([
+        f"Queue status: {item.queue_status}",
+        f"Slug: {item.slug}",
+        f"Title FR: {item.title_fr or '-'}",
+        f"Title EN: {item.title_en or '-'}",
+        f"Locale status: {item.locale_status}",
+        f"Readiness: {item.readiness}",
+        f"Hero image: {'yes' if item.has_hero else 'no'}",
+        f"Brief command: python -m tools.editorial_manager social-brief {item.slug}",
+    ])
+    return "\n".join(lines)
+
+
+def render_social_next_json(item: SocialQueueItem | None) -> str:
+    return json.dumps(social_next_to_dict(item), ensure_ascii=False, indent=2)
 
 
 def render_issue_lines(issues: list[CheckIssue]) -> list[str]:

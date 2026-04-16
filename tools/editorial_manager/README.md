@@ -29,6 +29,9 @@ python -m tools.editorial_manager social-brief <slug> --json
 python -m tools.editorial_manager social-queue
 python -m tools.editorial_manager social-queue --json
 python -m tools.editorial_manager social-queue --status candidate --locale-status en-ready --has-hero yes --limit 5
+python -m tools.editorial_manager social-next
+python -m tools.editorial_manager social-next --json
+python -m tools.editorial_manager social-next --status needs-review --locale-status fr-only
 ```
 
 ## Commands
@@ -47,6 +50,9 @@ python -m tools.editorial_manager social-queue --status candidate --locale-statu
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 - `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.
+- `social-next`: shows the first matching social publication candidate in publication order. It defaults to `--status candidate`.
+- `social-next --json`: prints the same next item as a small structured JSON payload for future automation workflows.
+- `social-next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 
@@ -63,6 +69,8 @@ python -m tools.editorial_manager social-queue --status candidate --locale-statu
 - `candidate`: the publication checklist has no errors or warnings, the locale status is `en-ready`, and a hero image is present.
 
 When multiple `social-queue` filters are used together, they are combined as AND filters. `--limit` is applied after filtering and keeps the existing publication order.
+
+`social-next` reuses the same queue status and filter rules as `social-queue`, then returns only the first matching item. By default, it selects the first `candidate` article in publication order.
 
 ## Deliberate Limits
 

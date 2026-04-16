@@ -15,12 +15,14 @@ from .reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_next,
+    render_social_next_json,
     render_social_queue,
     render_social_queue_json,
     render_summary,
 )
 from .social_brief import build_social_brief
-from .social_queue import SocialQueueFilters, build_social_queue
+from .social_queue import SocialQueueFilters, build_social_next, build_social_queue
 
 
 def positive_int(value: str) -> int:
@@ -97,6 +99,32 @@ def build_parser() -> argparse.ArgumentParser:
         "--limit",
         type=positive_int,
         help="Keep only the first N matching queue items.",
+    )
+
+    social_next_parser = subparsers.add_parser(
+        "social-next",
+        help="Show the next read-only social publication candidate.",
+    )
+    social_next_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the next social candidate as a simple structured JSON payload.",
+    )
+    social_next_parser.add_argument(
+        "--status",
+        choices=("candidate", "needs-review", "blocked"),
+        default="candidate",
+        help="Keep only queue items with this status. Defaults to candidate.",
+    )
+    social_next_parser.add_argument(
+        "--locale-status",
+        choices=("en-ready", "en-partial", "fr-only"),
+        help="Keep only queue items with this locale status.",
+    )
+    social_next_parser.add_argument(
+        "--has-hero",
+        choices=("yes", "no"),
+        help="Keep only queue items that have, or do not have, a hero image.",
     )
 
     return parser
@@ -180,6 +208,19 @@ def main(argv: list[str] | None = None) -> int:
             print(render_social_queue_json(items))
         else:
             print(render_social_queue(items))
+        return 0
+
+    if args.command == "social-next":
+        filters = SocialQueueFilters(
+            status=args.status,
+            locale_status=args.locale_status,
+            has_hero=None if args.has_hero is None else args.has_hero == "yes",
+        )
+        item = build_social_next(articles, filters)
+        if args.json:
+            print(render_social_next_json(item))
+        else:
+            print(render_social_next(item))
         return 0
 
     parser.error(f"unknown command: {args.command}")

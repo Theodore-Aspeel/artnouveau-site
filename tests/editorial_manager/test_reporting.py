@@ -9,6 +9,8 @@ from tools.editorial_manager.reporting import (
     render_publication_check_report,
     render_social_brief,
     render_social_brief_json,
+    render_social_next,
+    render_social_next_json,
     render_social_queue,
     render_social_queue_json,
     render_summary,
@@ -160,6 +162,33 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(payload["summary"]["candidate"], 1)
         self.assertEqual(payload["items"][0]["slug"], "demo")
         self.assertEqual(payload["items"][0]["queue_status"], "candidate")
+
+    def test_social_next_renders_terminal_readable_summary(self):
+        output = render_social_next(
+            SocialQueueItem("demo", "Titre FR", "Title EN", "en-ready", "ready", True, "candidate")
+        )
+
+        self.assertIn("Social next article", output)
+        self.assertIn("Queue status: candidate", output)
+        self.assertIn("Slug: demo", output)
+        self.assertIn("Title FR: Titre FR", output)
+        self.assertIn("Brief command: python -m tools.editorial_manager social-brief demo", output)
+
+    def test_social_next_renders_empty_state(self):
+        output = render_social_next(None)
+
+        self.assertIn("Social next article", output)
+        self.assertIn("No matching article found.", output)
+
+    def test_social_next_json_renders_simple_payload(self):
+        output = render_social_next_json(
+            SocialQueueItem("demo", "Titre FR", "Title EN", "en-ready", "ready", True, "candidate")
+        )
+
+        payload = json.loads(output)
+
+        self.assertEqual(payload["next"]["slug"], "demo")
+        self.assertEqual(payload["next"]["queue_status"], "candidate")
 
 
 if __name__ == "__main__":
