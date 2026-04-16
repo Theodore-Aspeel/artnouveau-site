@@ -5,11 +5,13 @@ from __future__ import annotations
 import argparse
 
 from .checks import check_article, check_articles, publication_check_article, publication_check_articles
+from .locale_report import analyze_article_locale, analyze_articles_locale
 from .repository import find_article_by_slug, load_articles
 from .reporting import (
     render_article_detail,
     render_article_list,
     render_check_report,
+    render_locale_report,
     render_publication_check_report,
     render_summary,
 )
@@ -36,6 +38,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Run a read-only publication preparation checklist.",
     )
     publication_check_parser.add_argument("slug", nargs="?", help="Optional article slug to check.")
+
+    locale_report_parser = subparsers.add_parser(
+        "locale-report",
+        help="Show the read-only FR/EN content status.",
+    )
+    locale_report_parser.add_argument("slug", nargs="?", help="Optional article slug to inspect.")
 
     return parser
 
@@ -83,6 +91,17 @@ def main(argv: list[str] | None = None) -> int:
             items = publication_check_articles(articles)
             print(render_publication_check_report(items, len(articles)))
         return 1 if any(item.status == "ERROR" for item in items) else 0
+
+    if args.command == "locale-report":
+        if args.slug:
+            article = find_article_by_slug(articles, args.slug)
+            if article is None:
+                parser.error(f"unknown article slug: {args.slug}")
+            items = [analyze_article_locale(article)]
+        else:
+            items = analyze_articles_locale(articles)
+        print(render_locale_report(items))
+        return 0
 
     parser.error(f"unknown command: {args.command}")
     return 2

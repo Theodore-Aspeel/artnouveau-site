@@ -1,7 +1,13 @@
 import unittest
 
 from tools.editorial_manager.checks import CheckIssue, PublicationCheckItem
-from tools.editorial_manager.reporting import render_check_report, render_publication_check_report, render_summary
+from tools.editorial_manager.locale_report import LocaleReportItem
+from tools.editorial_manager.reporting import (
+    render_check_report,
+    render_locale_report,
+    render_publication_check_report,
+    render_summary,
+)
 
 
 class ReportingTests(unittest.TestCase):
@@ -54,6 +60,21 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("OK [title-fr]", output)
         self.assertIn("WARNING [content-en]", output)
         self.assertIn("ERROR [hero-image]", output)
+
+    def test_locale_report_renders_status_counts_and_missing_fields(self):
+        output = render_locale_report([
+            LocaleReportItem("one", "fr-only", ("title", "sections")),
+            LocaleReportItem("two", "en-partial", ("media.hero_alt",)),
+            LocaleReportItem("three", "en-ready", ()),
+        ])
+
+        self.assertIn("Locale report", output)
+        self.assertIn("Articles checked: 3", output)
+        self.assertIn("fr-only: 1", output)
+        self.assertIn("en-partial: 1", output)
+        self.assertIn("en-ready: 1", output)
+        self.assertIn("media.hero_alt", output)
+        self.assertIn("three", output)
 
 
 if __name__ == "__main__":

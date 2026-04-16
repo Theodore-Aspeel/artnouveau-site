@@ -7,6 +7,37 @@ from tools.editorial_manager.cli import main
 
 
 class CliTests(unittest.TestCase):
+    def test_locale_report_slug_command_runs(self):
+        article = {
+            "slug": "demo",
+            "schema_version": 2,
+            "content": {
+                "fr": {
+                    "title": "Demo",
+                    "dek": "Demo dek.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Demo meta."},
+                    "media": {"hero_alt": "Demo alt."},
+                },
+                "en": {
+                    "title": "Demo",
+                    "dek": "Demo dek.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Demo meta."},
+                    "media": {"hero_alt": "Demo alt."},
+                },
+            },
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["locale-report", "demo"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Locale report", output.getvalue())
+        self.assertIn("en-ready", output.getvalue())
+
     def test_publication_check_slug_command_runs(self):
         article = {
             "slug": "demo",

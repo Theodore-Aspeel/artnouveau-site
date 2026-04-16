@@ -22,6 +22,8 @@ python -m tools.editorial_manager check
 python -m tools.editorial_manager check <slug>
 python -m tools.editorial_manager publication-check
 python -m tools.editorial_manager publication-check <slug>
+python -m tools.editorial_manager locale-report
+python -m tools.editorial_manager locale-report <slug>
 ```
 
 ## Commands
@@ -33,8 +35,16 @@ python -m tools.editorial_manager publication-check <slug>
 - `check <slug>`: runs the same checks for one article.
 - `publication-check`: runs a publication preparation checklist across all articles.
 - `publication-check <slug>`: runs the publication checklist for one article.
+- `locale-report`: shows the read-only FR/EN editorial status for all articles.
+- `locale-report <slug>`: shows the same locale status for one article.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
+
+`locale-report` uses a deliberately simple status rule:
+
+- `fr-only`: no real English text is present under `content.en`.
+- `en-partial`: some English text exists, but one or more main fields are missing.
+- `en-ready`: English title, dek, meta description, hero alt text, and section heading/body coverage are present.
 
 ## Deliberate Limits
 

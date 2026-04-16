@@ -18,6 +18,7 @@ from .article_access import (
     has_english_content,
 )
 from .checks import CheckIssue, PublicationCheckItem
+from .locale_report import LocaleReportItem
 
 
 Article = dict[str, Any]
@@ -138,6 +139,34 @@ def render_publication_check_report(items: list[PublicationCheckItem], checked_c
             lines.append("")
             lines.append(f"Article: {item.slug}")
         lines.append(f"  - {item.status} [{item.code}] {item.message}")
+
+    return "\n".join(lines)
+
+
+def render_locale_report(items: list[LocaleReportItem]) -> str:
+    counts = Counter(item.status for item in items)
+    rows = [
+        [
+            item.status,
+            item.slug,
+            ", ".join(item.missing_fields) if item.missing_fields else "-",
+        ]
+        for item in items
+    ]
+
+    lines = [
+        "Locale report",
+        f"Articles checked: {len(items)}",
+        f"fr-only: {counts.get('fr-only', 0)}",
+        f"en-partial: {counts.get('en-partial', 0)}",
+        f"en-ready: {counts.get('en-ready', 0)}",
+    ]
+
+    if rows:
+        lines.append("")
+        lines.append(render_table(["Status", "Slug", "Missing EN fields"], rows))
+    else:
+        lines.append("No articles found.")
 
     return "\n".join(lines)
 
