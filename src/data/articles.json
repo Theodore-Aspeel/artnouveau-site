@@ -751,7 +751,61 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Maison Lotus, Antwerp",
+          "dek": "Maison Lotus is immediately legible. The name, the architect, the date: each already gives the eye a point of entry. Designed by Jos Bascourt in 1901, it belongs to that family of facades where the floral motif is not a simple addition. It guides the composition, bends the gaze, and gives the building an identity firm enough to stay in memory.",
+          "epigraph": "Sometimes a name is enough to shape the way one looks at a facade.",
+          "sections": [
+            {
+              "heading": "The floral motif without excess",
+              "body": "With Maison Lotus, the reading has to stay precise. The most useful approach is to see how the floral vocabulary crosses the facade without overwhelming it. It may guide a detail, soften a transition, give the whole a slight inflection. What matters is not to find a symbol on every line. What matters is to feel how one formal principle holds several parts of the building together.\n\nIn Art Nouveau, the vegetal reference often works at that level. It is not only visible. It organizes. Maison Lotus seems to belong to that family of facades where the motif also gives the eye a way to build its reading."
+            },
+            {
+              "heading": "A measured entry into Antwerp",
+              "body": "Maison Lotus gives Antwerp a well-measured point of entry. It is neither a major monument nor a detail too narrow to carry attention. It is a named, dated facade, distinct enough to hold an article on its own. This is often how a city begins to matter in personal memory: through a house that already gathers a local way of making a facade.\n\nThe text has to keep that scale. To speak of Antwerp, yes, but from what this facade makes perceptible: its rhythm, its verticality, its way of taking its place in the street."
+            },
+            {
+              "heading": "What to hold on site",
+              "body": "The main point is not to separate the name from the actual reading of the facade. The lotus is not just a label here. It creates an expectation to which the building responds through its composition, its bearing, and a perceptible continuity between motif and whole.\n\nThat correspondence gives Maison Lotus its rightness. A firm identity, calm enough as well, to open Antwerp without forcing the tone."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Lotus in Antwerp. A street-level reading of a floral Art Nouveau facade, with Jos Bascourt and 1901 as stable points of reference."
+          },
+          "media": {
+            "hero_alt": "Maison Lotus in Antwerp, an Art Nouveau facade designed by Jos Bascourt in 1901.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Antwerp"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jos Bascourt"
+            },
+            {
+              "key": "address",
+              "value": "Transvaalstraat 52, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1901"
+            }
+          ],
+          "around": {
+            "note": "Read also: another Antwerp facade where the name helps the place remain memorable without replacing the reading of the composition."
+          }
+        }
       }
     },
     {
@@ -1736,7 +1790,57 @@
           },
           "resources": []
         },
-        "en": {}
+        "en": {
+          "title": "Den Tijd, Antwerp",
+          "dek": "Den Tijd shows that a short subject can hold without strain when the measure is right. A legible facade, a bay, lettering integrated into the composition, and Antwerp around it. That is enough for a clear note, provided the building is not asked to give more than it does.",
+          "epigraph": "Sometimes a bay and a few letters are enough to hold a facade together.",
+          "sections": [
+            {
+              "heading": "The name in the facade",
+              "body": "The interest of Den Tijd lies in the clarity of its device. The name does not simply sit on the image. It already belongs to the reading. The facade is therefore built at the meeting point of architecture, use, and lettering.\n\nIt is little, but it is enough. That economy should not be turned into a lack. It is precisely what gives the note its right measure."
+            },
+            {
+              "heading": "A short note, nothing more",
+              "body": "Den Tijd does not yet have the documentary density of Maison Lotus. That is not a flaw. A short note kept in hand is better than a stretched text. Here, the reading has to stay close to the facade, the bay, the lettering, and let the subject do the rest.\n\nThe relation with Den Dag can come next as a natural extension, not as compensation."
+            }
+          ],
+          "seo": {
+            "meta_description": "Den Tijd in Antwerp. A short street-level note on an Art Nouveau facade where name, bay, and lettering hold together."
+          },
+          "media": {
+            "hero_alt": "Art Nouveau facade in Antwerp with the words Den Tijd, Le Temps, integrated into the composition.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Antwerp"
+            },
+            {
+              "key": "country",
+              "value": "Belgium"
+            },
+            {
+              "key": "style",
+              "value": "Art Nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "A. Cols, A. Defever"
+            },
+            {
+              "key": "address",
+              "value": "Waterloostraat 59, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1903"
+            }
+          ],
+          "around": {
+            "note": "Compare it with another Antwerp facade where the name remains memorable, while the composition carries more of the reading."
+          }
+        }
       }
     },
     {
