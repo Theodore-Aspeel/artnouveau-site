@@ -19,6 +19,7 @@ from .article_access import (
 )
 from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
+from .social_brief import SocialBrief
 
 
 Article = dict[str, Any]
@@ -167,6 +168,59 @@ def render_locale_report(items: list[LocaleReportItem]) -> str:
         lines.append(render_table(["Status", "Slug", "Missing EN fields"], rows))
     else:
         lines.append("No articles found.")
+
+    return "\n".join(lines)
+
+
+def render_social_brief(brief: SocialBrief) -> str:
+    lines = [
+        "Social publication brief",
+        f"Slug: {brief.slug}",
+        f"Locale status: {brief.locale_status.status}",
+        f"Title FR: {brief.title_fr or '-'}",
+        f"Title EN: {brief.title_en or '-'}",
+        "",
+        "Dek:",
+        f"  FR: {brief.dek_fr or '-'}",
+        f"  EN: {brief.dek_en or '-'}",
+    ]
+
+    if brief.quote is not None:
+        lines.extend([
+            "",
+            "Quote:",
+            f"  FR: {brief.quote.text_fr or '-'}",
+            f"  EN: {brief.quote.text_en or '-'}",
+            f"  Author: {brief.quote.author or '-'}",
+            f"  Attribution FR: {brief.quote.attribution_fr or '-'}",
+            f"  Attribution EN: {brief.quote.attribution_en or '-'}",
+        ])
+
+    lines.append("")
+    lines.append("Practical items:")
+    if brief.practical_items:
+        for item in brief.practical_items:
+            lines.append(f"  - {item.key}: {item.value}")
+    else:
+        lines.append("  - none")
+
+    lines.extend([
+        "",
+        "Images:",
+        f"  - hero: {'yes' if brief.images.has_hero else 'no'}",
+        f"  - hero src: {brief.images.hero_src or '-'}",
+        f"  - support images: {brief.images.support_count}",
+        "",
+        "Readiness:",
+        f"  - status: {brief.readiness.status}",
+        f"  - publication checklist: {brief.readiness.ok_count} OK, "
+        f"{brief.readiness.error_count} errors, {brief.readiness.warning_count} warnings",
+    ])
+
+    if brief.readiness.notes:
+        lines.append("  - notes:")
+        for note in brief.readiness.notes:
+            lines.append(f"    - {note}")
 
     return "\n".join(lines)
 

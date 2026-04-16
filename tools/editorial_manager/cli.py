@@ -13,8 +13,10 @@ from .reporting import (
     render_check_report,
     render_locale_report,
     render_publication_check_report,
+    render_social_brief,
     render_summary,
 )
+from .social_brief import build_social_brief
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -44,6 +46,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Show the read-only FR/EN content status.",
     )
     locale_report_parser.add_argument("slug", nargs="?", help="Optional article slug to inspect.")
+
+    social_brief_parser = subparsers.add_parser(
+        "social-brief",
+        help="Prepare a read-only social publication brief for one article.",
+    )
+    social_brief_parser.add_argument("slug", help="Article slug to prepare.")
 
     return parser
 
@@ -101,6 +109,13 @@ def main(argv: list[str] | None = None) -> int:
         else:
             items = analyze_articles_locale(articles)
         print(render_locale_report(items))
+        return 0
+
+    if args.command == "social-brief":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        print(render_social_brief(build_social_brief(article)))
         return 0
 
     parser.error(f"unknown command: {args.command}")

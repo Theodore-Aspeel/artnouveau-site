@@ -24,6 +24,7 @@ python -m tools.editorial_manager publication-check
 python -m tools.editorial_manager publication-check <slug>
 python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
+python -m tools.editorial_manager social-brief <slug>
 ```
 
 ## Commands
@@ -37,6 +38,7 @@ python -m tools.editorial_manager locale-report <slug>
 - `publication-check <slug>`: runs the publication checklist for one article.
 - `locale-report`: shows the read-only FR/EN editorial status for all articles.
 - `locale-report <slug>`: shows the same locale status for one article.
+- `social-brief <slug>`: prepares a simple read-only publication brief for one article, with FR/EN titles and dek, locale status, quote, practical items, image presence, and a readiness summary.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 

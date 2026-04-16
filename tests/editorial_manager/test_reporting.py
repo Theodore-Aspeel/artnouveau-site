@@ -6,7 +6,14 @@ from tools.editorial_manager.reporting import (
     render_check_report,
     render_locale_report,
     render_publication_check_report,
+    render_social_brief,
     render_summary,
+)
+from tools.editorial_manager.social_brief import (
+    ImagePresence,
+    PracticalItem,
+    ReadinessBrief,
+    SocialBrief,
 )
 
 
@@ -75,6 +82,30 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("en-ready: 1", output)
         self.assertIn("media.hero_alt", output)
         self.assertIn("three", output)
+
+    def test_social_brief_renders_terminal_readable_sections(self):
+        output = render_social_brief(SocialBrief(
+            slug="demo",
+            title_fr="Titre FR",
+            title_en="Title EN",
+            locale_status=LocaleReportItem("demo", "en-ready", ()),
+            dek_fr="Dek FR.",
+            dek_en="Dek EN.",
+            quote=None,
+            practical_items=(PracticalItem("city", "Lille"),),
+            images=ImagePresence(True, "assets/images/demo.png", 0),
+            readiness=ReadinessBrief("ready", 8, 0, 0, ()),
+        ))
+
+        self.assertIn("Social publication brief", output)
+        self.assertIn("Slug: demo", output)
+        self.assertIn("Locale status: en-ready", output)
+        self.assertIn("Title FR: Titre FR", output)
+        self.assertIn("Title EN: Title EN", output)
+        self.assertIn("Practical items:", output)
+        self.assertIn("city: Lille", output)
+        self.assertIn("hero: yes", output)
+        self.assertIn("status: ready", output)
 
 
 if __name__ == "__main__":
