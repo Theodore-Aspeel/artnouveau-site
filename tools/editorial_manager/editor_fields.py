@@ -45,6 +45,7 @@ EDITABLE_FIELDS: tuple[EditableField, ...] = (
 
 EDITABLE_FIELD_BY_PATH = {field.path: field for field in EDITABLE_FIELDS}
 SECTION_FIELD_RE = re.compile(r"^content\.(fr|en)\.sections\.(0|[1-9]\d*)\.(heading|body)$")
+SUPPORT_IMAGE_FIELD_RE = re.compile(r"^media\.support\.(0|[1-9]\d*)\.src$")
 SECTION_LOCALES = (("fr", "FR"), ("en", "EN"))
 SECTION_PROPERTIES = (("heading", "titre", "text"), ("body", "texte", "textarea"))
 
@@ -54,13 +55,25 @@ def editable_field_payload() -> list[dict[str, Any]]:
 
 
 def editable_fields_for_article(article: Article) -> list[EditableField]:
-    return [*EDITABLE_FIELDS, *section_editable_fields(article)]
+    return [*EDITABLE_FIELDS, *support_image_editable_fields(article), *section_editable_fields(article)]
 
 
 def editable_field_for_path(article: Article, path: str) -> EditableField | None:
     field = EDITABLE_FIELD_BY_PATH.get(path)
     if field is not None:
         return field
+
+    support_match = SUPPORT_IMAGE_FIELD_RE.match(path)
+    if support_match:
+        index = int(support_match.group(1))
+        support_images = get_path(article, "media.support")
+        if (
+            isinstance(support_images, list)
+            and index < len(support_images)
+            and isinstance(support_images[index], dict)
+        ):
+            return support_image_editable_field(index, path)
+        return None
 
     match = SECTION_FIELD_RE.match(path)
     if not match:
@@ -104,6 +117,29 @@ def section_editable_fields(article: Article) -> list[EditableField]:
                     )
                 )
     return fields
+
+
+def support_image_editable_fields(article: Article) -> list[EditableField]:
+    support_images = get_path(article, "media.support")
+    if not isinstance(support_images, list):
+        return []
+
+    fields: list[EditableField] = []
+    for index, image in enumerate(support_images):
+        if not isinstance(image, dict):
+            continue
+        fields.append(support_image_editable_field(index, f"media.support.{index}.src"))
+    return fields
+
+
+def support_image_editable_field(index: int, path: str) -> EditableField:
+    return EditableField(
+        path,
+        f"Image support {index + 1}",
+        "image-select",
+        required=True,
+        group="Images support",
+    )
 
 
 def editable_field_to_payload(field: EditableField) -> dict[str, Any]:

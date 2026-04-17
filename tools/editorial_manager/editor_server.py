@@ -179,6 +179,11 @@ EDITOR_HTML = r"""<!doctype html>
     .hero-preview { display: grid; gap: 8px; max-width: 420px; margin: 14px 0; }
     .hero-preview img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; border: 1px solid #d9dee3; background: #ffffff; }
     .hero-preview .empty { padding: 12px; border: 1px solid #d9dee3; border-radius: 6px; background: #ffffff; }
+    .support-summary { display: grid; gap: 10px; max-width: 720px; margin: 14px 0; }
+    .support-summary__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+    .support-preview { display: grid; gap: 6px; }
+    .support-preview img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; border: 1px solid #d9dee3; background: #ffffff; }
+    .support-preview .empty { padding: 10px; border: 1px solid #d9dee3; border-radius: 6px; background: #ffffff; }
     fieldset { border: 1px solid #d9dee3; border-radius: 6px; padding: 14px; background: #ffffff; }
     legend { padding: 0 6px; font-weight: 700; }
     .field-group { display: grid; gap: 14px; }
@@ -248,6 +253,7 @@ EDITOR_HTML = r"""<!doctype html>
         <h2>${escapeHtml(article.title || article.slug)}</h2>
         <div class="meta">Slug: ${escapeHtml(article.slug)} · Image principale: ${escapeHtml(article.hero_src || "-")}</div>
         ${renderHeroPreview(article.hero_src || "")}
+        ${renderSupportSummary(article.support_images || [])}
         <div class="actions">
           <button id="validateButton">Valider</button>
           <button id="saveButton" class="primary">Enregistrer</button>
@@ -265,6 +271,14 @@ EDITOR_HTML = r"""<!doctype html>
           if (preview) preview.outerHTML = renderHeroPreview(heroSelect.value);
         });
       }
+      document.querySelectorAll('select[data-control="image-select"]').forEach((select) => {
+        if (select.dataset.field === "media.hero.src") return;
+        select.addEventListener("change", () => {
+          currentValues[select.dataset.field] = select.value;
+          const preview = document.getElementById(fieldPreviewId(select.dataset.field));
+          if (preview) preview.outerHTML = renderSupportFieldPreview(select.dataset.field, select.value);
+        });
+      });
     }
 
     function renderHeroPreview(src) {
@@ -274,6 +288,32 @@ EDITOR_HTML = r"""<!doctype html>
       return `
         <div class="hero-preview" id="heroPreview">
           <strong>Image principale actuelle</strong>
+          <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
+          <div class="meta">${escapeHtml(src)}</div>
+        </div>
+      `;
+    }
+
+    function renderSupportSummary(images) {
+      if (!images.length) {
+        return `<div class="support-summary"><strong>Images support actuelles</strong><p class="empty">Aucune image support existante. Cet editeur ne permet pas d'en ajouter.</p></div>`;
+      }
+      const cards = images.map((image) => renderSupportCard(image.index, image.src || "")).join("");
+      return `
+        <div class="support-summary">
+          <strong>Images support actuelles</strong>
+          <div class="support-summary__grid">${cards}</div>
+        </div>
+      `;
+    }
+
+    function renderSupportCard(index, src) {
+      if (!src) {
+        return `<div class="support-preview"><strong>Slot ${Number(index) + 1}</strong><p class="empty">Aucune image.</p></div>`;
+      }
+      return `
+        <div class="support-preview">
+          <strong>Slot ${Number(index) + 1}</strong>
           <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
           <div class="meta">${escapeHtml(src)}</div>
         </div>
@@ -305,12 +345,30 @@ EDITOR_HTML = r"""<!doctype html>
       }
       if (field.control === "image-select") {
         const options = `<option value="">Choisir une image...</option>` + currentImageOptions.map((image) => `<option value="${escapeAttr(image.src)}"${image.src === value ? " selected" : ""}>${escapeHtml(image.label || image.src)}</option>`).join("");
-        return `<label>${escapeHtml(field.label)}<select data-field="${escapeAttr(field.path)}"${required}>${options}</select></label>`;
+        const preview = field.path.startsWith("media.support.") ? renderSupportFieldPreview(field.path, value) : "";
+        return `<label>${escapeHtml(field.label)}<select data-control="image-select" data-field="${escapeAttr(field.path)}"${required}>${options}</select>${preview}</label>`;
       }
       if (field.control === "textarea") {
         return `<label>${escapeHtml(field.label)}<textarea data-field="${escapeAttr(field.path)}"${required}>${escapeHtml(value)}</textarea></label>`;
       }
       return `<label>${escapeHtml(field.label)}<input data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}></label>`;
+    }
+
+    function renderSupportFieldPreview(fieldPath, src) {
+      const id = fieldPreviewId(fieldPath);
+      if (!src) {
+        return `<div class="support-preview" id="${escapeAttr(id)}"><p class="empty">Aucune image selectionnee pour ce slot.</p></div>`;
+      }
+      return `
+        <div class="support-preview" id="${escapeAttr(id)}">
+          <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
+          <div class="meta">${escapeHtml(src)}</div>
+        </div>
+      `;
+    }
+
+    function fieldPreviewId(fieldPath) {
+      return `preview-${String(fieldPath).replace(/[^a-z0-9]+/gi, "-")}`;
     }
 
     function collectChanges() {

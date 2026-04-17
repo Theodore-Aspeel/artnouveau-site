@@ -241,7 +241,7 @@ Small example:
 
 ## Deliberate Limits
 
-Editorial Manager V1 keeps the CLI inspection commands read-only, and the local browser editor deliberately small. The editor can update only whitelisted article fields, including `media.hero.src` by selecting an existing image under `src/assets/images`. It does not upload image files, edit image binaries, manage support images, migrate articles, generate translations, build the website, or replace the Node validation/build pipeline.
+Editorial Manager V1 keeps the CLI inspection commands read-only, and the local browser editor deliberately small. The editor can update only whitelisted article fields, including `media.hero.src` and existing `media.support[*].src` slots by selecting an existing image under `src/assets/images`. It does not upload image files, edit image binaries, add, remove, or reorder support images, migrate articles, generate translations, build the website, or replace the Node validation/build pipeline.
 
 It is a repo-local editorial helper, not a publishing workflow manager.
 

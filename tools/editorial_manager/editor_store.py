@@ -61,6 +61,7 @@ def build_editor_article_payload(article: Article, project_root: Path = PROJECT_
         "status": str(article.get("status") or ""),
         "order": article_publication_order(article),
         "hero_src": article_hero_image(article),
+        "support_images": current_support_images(article),
         "image_options": list_editor_image_options(project_root),
         "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
         "checks": validate_article_for_editor(article, project_root=project_root),
@@ -140,8 +141,8 @@ def apply_changes(
         if field.choices and value not in field.choices:
             errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
             continue
-        if field_path == "media.hero.src" and not is_valid_editor_image_src(value, project_root):
-            errors.append(error("invalid-image", "L'image principale doit être une image existante sous assets/images."))
+        if field.control == "image-select" and not is_valid_editor_image_src(value, project_root):
+            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images."))
             continue
 
         set_path(article, field_path, value)
@@ -158,8 +159,8 @@ def validate_article_for_editor(article: Article, project_root: Path = PROJECT_R
             errors.append(error("required-field", f"{field.label} is required."))
         if field.choices and value and value not in field.choices:
             errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
-        if field.path == "media.hero.src" and value and not is_valid_editor_image_src(value, project_root):
-            errors.append(error("invalid-image", "L'image principale doit être une image existante sous assets/images."))
+        if field.control == "image-select" and value and not is_valid_editor_image_src(value, project_root):
+            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images."))
 
     publication_errors = [item for item in publication_check_article(article) if item.status == "ERROR"]
     for item in publication_errors:
@@ -170,6 +171,19 @@ def validate_article_for_editor(article: Article, project_root: Path = PROJECT_R
 
 def normalize_edit_value(value: Any) -> str:
     return value.strip() if isinstance(value, str) else ""
+
+
+def current_support_images(article: Article) -> list[dict[str, Any]]:
+    support = get_path(article, "media.support")
+    if not isinstance(support, list):
+        return []
+
+    images: list[dict[str, Any]] = []
+    for index, item in enumerate(support):
+        if not isinstance(item, dict):
+            continue
+        images.append({"index": index, "src": normalize_edit_value(item.get("src"))})
+    return images
 
 
 def write_payload_atomic(path: Path, payload: Payload) -> None:

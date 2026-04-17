@@ -11,9 +11,12 @@ from tools.editorial_manager.editor_store import (
 
 
 VALID_HERO_SRC = "assets/images/articles/maison-coilliot-lille-hector-guimard.png"
+VALID_SUPPORT_SRC = "assets/images/articles/lhuitriere-lille-art-deco.png"
 
 
-def sample_article(hero_src=VALID_HERO_SRC):
+def sample_article(hero_src=VALID_HERO_SRC, support=None):
+    if support is None:
+        support = []
     return {
         "schema_version": 2,
         "id": "demo",
@@ -21,7 +24,7 @@ def sample_article(hero_src=VALID_HERO_SRC):
         "status": "draft",
         "format": "long",
         "publication": {"order": 1},
-        "media": {"hero": {"src": hero_src}, "support": []},
+        "media": {"hero": {"src": hero_src}, "support": support},
         "content": {
             "fr": {
                 "title": "Demo FR",
@@ -47,13 +50,15 @@ def sample_article(hero_src=VALID_HERO_SRC):
 
 class EditorStoreTests(unittest.TestCase):
     def test_editor_payload_contains_only_editable_fields(self):
-        payload = build_editor_article_payload(sample_article())
+        payload = build_editor_article_payload(sample_article(support=[{"src": VALID_SUPPORT_SRC}]))
         field_paths = [field["path"] for field in payload["fields"]]
 
         self.assertTrue(payload["image_options"])
         self.assertIn(VALID_HERO_SRC, [image["src"] for image in payload["image_options"]])
+        self.assertEqual(payload["support_images"], [{"index": 0, "src": VALID_SUPPORT_SRC}])
         self.assertIn("status", field_paths)
         self.assertIn("media.hero.src", field_paths)
+        self.assertIn("media.support.0.src", field_paths)
         self.assertIn("content.fr.title", field_paths)
         self.assertIn("content.en.media.hero_alt", field_paths)
         self.assertIn("content.fr.sections.0.heading", field_paths)
@@ -65,13 +70,17 @@ class EditorStoreTests(unittest.TestCase):
         self.assertNotIn("content.fr.sections", field_paths)
 
     def test_section_fields_are_grouped_for_non_technical_editor(self):
-        payload = build_editor_article_payload(sample_article())
+        payload = build_editor_article_payload(sample_article(support=[{"src": VALID_SUPPORT_SRC}]))
         fields = {field["path"]: field for field in payload["fields"]}
 
         self.assertEqual(fields["media.hero.src"]["label"], "Image principale")
         self.assertEqual(fields["media.hero.src"]["group"], "Image principale")
         self.assertEqual(fields["media.hero.src"]["control"], "image-select")
         self.assertTrue(fields["media.hero.src"]["required"])
+        self.assertEqual(fields["media.support.0.src"]["label"], "Image support 1")
+        self.assertEqual(fields["media.support.0.src"]["group"], "Images support")
+        self.assertEqual(fields["media.support.0.src"]["control"], "image-select")
+        self.assertTrue(fields["media.support.0.src"]["required"])
         self.assertEqual(fields["content.fr.sections.0.heading"]["label"], "Section 1 - titre (FR)")
         self.assertEqual(fields["content.fr.sections.0.heading"]["group"], "Sections FR")
         self.assertEqual(fields["content.fr.sections.0.heading"]["control"], "text")
@@ -94,6 +103,11 @@ class EditorStoreTests(unittest.TestCase):
 
         self.assertEqual(errors[0]["code"], "field-not-editable")
 
+    def test_validate_changes_rejects_new_support_image_slot(self):
+        errors = validate_changes(sample_article(), [{"field": "media.support.0.src", "value": VALID_SUPPORT_SRC}])
+
+        self.assertEqual(errors[0]["code"], "field-not-editable")
+
     def test_validate_changes_reports_required_safe_field(self):
         errors = validate_changes(sample_article(), [{"field": "content.fr.title", "value": ""}])
 
@@ -106,6 +120,13 @@ class EditorStoreTests(unittest.TestCase):
 
     def test_validate_changes_rejects_invalid_hero_image_path(self):
         errors = validate_changes(sample_article(), [{"field": "media.hero.src", "value": "assets/images/missing.png"}])
+
+        self.assertEqual(errors[0]["code"], "invalid-image")
+
+    def test_validate_changes_rejects_invalid_support_image_path(self):
+        article = sample_article(support=[{"src": VALID_SUPPORT_SRC}])
+
+        errors = validate_changes(article, [{"field": "media.support.0.src", "value": "assets/images/missing.png"}])
 
         self.assertEqual(errors[0]["code"], "invalid-image")
 
@@ -166,6 +187,36 @@ class EditorStoreTests(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(payload["articles"][0]["media"]["hero"]["src"], "assets/images/articles/replacement.png")
 
+    def test_save_article_changes_writes_existing_support_image_slot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(
+                path,
+                [
+                    sample_article(
+                        "assets/images/articles/current.png",
+                        support=[
+                            {"src": "assets/images/articles/current.png"},
+                            {"src": "assets/images/articles/second.png"},
+                        ],
+                    )
+                ],
+            )
+
+            result = save_article_changes(
+                "demo",
+                [{"field": "media.support.0.src", "value": "assets/images/articles/replacement.png"}],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        support = payload["articles"][0]["media"]["support"]
+        self.assertTrue(result["ok"])
+        self.assertEqual(len(support), 2)
+        self.assertEqual(support[0]["src"], "assets/images/articles/replacement.png")
+        self.assertEqual(support[1]["src"], "assets/images/articles/second.png")
+
     def test_save_article_changes_rejects_non_existing_hero_image_path(self):
         with tempfile.TemporaryDirectory() as directory:
             path = temp_articles_path(directory)
@@ -212,6 +263,7 @@ def temp_articles_path(directory: str) -> Path:
     image_dir.mkdir(parents=True, exist_ok=True)
     (image_dir / "current.png").write_bytes(b"fake image")
     (image_dir / "replacement.png").write_bytes(b"fake image")
+    (image_dir / "second.png").write_bytes(b"fake image")
     return root / "src" / "data" / "articles.json"
 
 
