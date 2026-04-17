@@ -8,6 +8,13 @@ from tools.editorial_manager.cli import main
 
 
 class CliTests(unittest.TestCase):
+    def test_editor_command_starts_local_server(self):
+        with patch("tools.editorial_manager.cli.run_editor_server") as run_editor_server:
+            exit_code = main(["editor", "--host", "127.0.0.1", "--port", "9000", "--no-browser"])
+
+        self.assertEqual(exit_code, 0)
+        run_editor_server.assert_called_once_with("127.0.0.1", 9000, open_browser=False)
+
     def test_locale_report_slug_command_runs(self):
         article = {
             "slug": "demo",

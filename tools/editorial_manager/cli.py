@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 
 from .checks import check_article, check_articles, publication_check_article, publication_check_articles
+from .editor_server import run_editor_server
 from .locale_report import analyze_article_locale, analyze_articles_locale
 from .repository import find_article_by_slug, load_articles
 from .reporting import (
@@ -45,6 +46,27 @@ def build_parser() -> argparse.ArgumentParser:
         description="Read-only editorial explorer for the article dataset.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    editor_parser = subparsers.add_parser(
+        "editor",
+        help="Start the local browser editor for safe article edits.",
+    )
+    editor_parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Local host to bind. Defaults to 127.0.0.1.",
+    )
+    editor_parser.add_argument(
+        "--port",
+        type=positive_int,
+        default=8765,
+        help="Local port to bind. Defaults to 8765.",
+    )
+    editor_parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Do not open the browser automatically.",
+    )
 
     subparsers.add_parser("summary", help="Show a global article summary.")
     subparsers.add_parser("list", help="List articles in publication order.")
@@ -222,6 +244,11 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+
+    if args.command == "editor":
+        run_editor_server(args.host, args.port, open_browser=not args.no_browser)
+        return 0
+
     articles = load_articles()
 
     if args.command == "summary":
