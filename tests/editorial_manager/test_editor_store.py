@@ -10,7 +10,10 @@ from tools.editorial_manager.editor_store import (
 )
 
 
-def sample_article():
+VALID_HERO_SRC = "assets/images/articles/maison-coilliot-lille-hector-guimard.png"
+
+
+def sample_article(hero_src=VALID_HERO_SRC):
     return {
         "schema_version": 2,
         "id": "demo",
@@ -18,7 +21,7 @@ def sample_article():
         "status": "draft",
         "format": "long",
         "publication": {"order": 1},
-        "media": {"hero": {"src": "assets/images/demo.png"}, "support": []},
+        "media": {"hero": {"src": hero_src}, "support": []},
         "content": {
             "fr": {
                 "title": "Demo FR",
@@ -47,7 +50,10 @@ class EditorStoreTests(unittest.TestCase):
         payload = build_editor_article_payload(sample_article())
         field_paths = [field["path"] for field in payload["fields"]]
 
+        self.assertTrue(payload["image_options"])
+        self.assertIn(VALID_HERO_SRC, [image["src"] for image in payload["image_options"]])
         self.assertIn("status", field_paths)
+        self.assertIn("media.hero.src", field_paths)
         self.assertIn("content.fr.title", field_paths)
         self.assertIn("content.en.media.hero_alt", field_paths)
         self.assertIn("content.fr.sections.0.heading", field_paths)
@@ -62,6 +68,10 @@ class EditorStoreTests(unittest.TestCase):
         payload = build_editor_article_payload(sample_article())
         fields = {field["path"]: field for field in payload["fields"]}
 
+        self.assertEqual(fields["media.hero.src"]["label"], "Image principale")
+        self.assertEqual(fields["media.hero.src"]["group"], "Image principale")
+        self.assertEqual(fields["media.hero.src"]["control"], "image-select")
+        self.assertTrue(fields["media.hero.src"]["required"])
         self.assertEqual(fields["content.fr.sections.0.heading"]["label"], "Section 1 - titre (FR)")
         self.assertEqual(fields["content.fr.sections.0.heading"]["group"], "Sections FR")
         self.assertEqual(fields["content.fr.sections.0.heading"]["control"], "text")
@@ -94,10 +104,15 @@ class EditorStoreTests(unittest.TestCase):
 
         self.assertIn("required-field", [item["code"] for item in errors])
 
+    def test_validate_changes_rejects_invalid_hero_image_path(self):
+        errors = validate_changes(sample_article(), [{"field": "media.hero.src", "value": "assets/images/missing.png"}])
+
+        self.assertEqual(errors[0]["code"], "invalid-image")
+
     def test_save_article_changes_writes_allowed_field(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "articles.json"
-            write_payload(path, [sample_article()])
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
 
             result = save_article_changes(
                 "demo",
@@ -113,8 +128,8 @@ class EditorStoreTests(unittest.TestCase):
 
     def test_save_article_changes_writes_existing_section_fields(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "articles.json"
-            write_payload(path, [sample_article()])
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
 
             result = save_article_changes(
                 "demo",
@@ -135,10 +150,43 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(sections_fr[0]["heading"], "Updated heading FR")
         self.assertEqual(sections_en[0]["body"], "Updated body EN.")
 
+    def test_save_article_changes_writes_existing_hero_image_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+
+            result = save_article_changes(
+                "demo",
+                [{"field": "media.hero.src", "value": "assets/images/articles/replacement.png"}],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertTrue(result["ok"])
+        self.assertEqual(payload["articles"][0]["media"]["hero"]["src"], "assets/images/articles/replacement.png")
+
+    def test_save_article_changes_rejects_non_existing_hero_image_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+
+            result = save_article_changes(
+                "demo",
+                [{"field": "media.hero.src", "value": "assets/images/articles/missing.png"}],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["errors"][0]["code"], "invalid-image")
+        self.assertEqual(payload["articles"][0]["media"]["hero"]["src"], "assets/images/articles/current.png")
+
     def test_save_article_changes_rolls_back_when_validation_fails(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "articles.json"
-            write_payload(path, [sample_article()])
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
 
             result = save_article_changes(
                 "demo",
@@ -154,7 +202,17 @@ class EditorStoreTests(unittest.TestCase):
 
 
 def write_payload(path: Path, articles):
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"articles": articles}, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def temp_articles_path(directory: str) -> Path:
+    root = Path(directory)
+    image_dir = root / "src" / "assets" / "images" / "articles"
+    image_dir.mkdir(parents=True, exist_ok=True)
+    (image_dir / "current.png").write_bytes(b"fake image")
+    (image_dir / "replacement.png").write_bytes(b"fake image")
+    return root / "src" / "data" / "articles.json"
 
 
 if __name__ == "__main__":

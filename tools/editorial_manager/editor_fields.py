@@ -28,6 +28,7 @@ class EditableField:
 
 EDITABLE_FIELDS: tuple[EditableField, ...] = (
     EditableField("status", "Statut de publication", "select", required=True, choices=STATUS_VALUES),
+    EditableField("media.hero.src", "Image principale", "image-select", required=True, group="Image principale"),
     EditableField("content.fr.title", "Titre français", "text", required=True),
     EditableField("content.en.title", "Titre anglais", "text"),
     EditableField("content.fr.dek", "Chapeau français", "textarea", required=True),

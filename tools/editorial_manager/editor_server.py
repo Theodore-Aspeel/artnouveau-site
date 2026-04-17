@@ -5,11 +5,13 @@ from __future__ import annotations
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import mimetypes
 from typing import Any
 from urllib.parse import unquote, urlparse
 import webbrowser
 
 from .editor_fields import editable_field_payload
+from .editor_images import editor_image_path
 from .editor_store import (
     build_editor_article_payload,
     find_payload_article,
@@ -40,6 +42,14 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
 
         if route == "/":
             self.send_text(EDITOR_HTML, "text/html; charset=utf-8")
+            return
+
+        if route.startswith("/assets/images/"):
+            image_path = editor_image_path(unquote(route.lstrip("/")))
+            if image_path is None:
+                self.send_json({"error": "Image not found."}, HTTPStatus.NOT_FOUND)
+                return
+            self.send_file(image_path)
             return
 
         if route == "/api/fields":
@@ -122,6 +132,15 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(encoded)
 
+    def send_file(self, path) -> None:
+        payload = path.read_bytes()
+        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
 
 def route_slug(route: str, prefix: str) -> str:
     if not route.startswith(prefix):
@@ -157,6 +176,9 @@ EDITOR_HTML = r"""<!doctype html>
     label { display: grid; gap: 6px; font-weight: 700; }
     input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 9px; background: #ffffff; }
     textarea { min-height: 96px; resize: vertical; }
+    .hero-preview { display: grid; gap: 8px; max-width: 420px; margin: 14px 0; }
+    .hero-preview img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; border: 1px solid #d9dee3; background: #ffffff; }
+    .hero-preview .empty { padding: 12px; border: 1px solid #d9dee3; border-radius: 6px; background: #ffffff; }
     fieldset { border: 1px solid #d9dee3; border-radius: 6px; padding: 14px; background: #ffffff; }
     legend { padding: 0 6px; font-weight: 700; }
     .field-group { display: grid; gap: 14px; }
@@ -182,6 +204,7 @@ EDITOR_HTML = r"""<!doctype html>
     let articles = [];
     let currentSlug = "";
     let currentValues = {};
+    let currentImageOptions = [];
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -213,6 +236,7 @@ EDITOR_HTML = r"""<!doctype html>
       currentSlug = slug;
       currentValues = {};
       article.fields.forEach((item) => currentValues[item.path] = item.value || "");
+      currentImageOptions = article.image_options || [];
       renderArticleList();
       renderEditor(article);
     }
@@ -223,6 +247,7 @@ EDITOR_HTML = r"""<!doctype html>
       editor.innerHTML = `
         <h2>${escapeHtml(article.title || article.slug)}</h2>
         <div class="meta">Slug: ${escapeHtml(article.slug)} · Image principale: ${escapeHtml(article.hero_src || "-")}</div>
+        ${renderHeroPreview(article.hero_src || "")}
         <div class="actions">
           <button id="validateButton">Valider</button>
           <button id="saveButton" class="primary">Enregistrer</button>
@@ -232,6 +257,27 @@ EDITOR_HTML = r"""<!doctype html>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+      const heroSelect = document.querySelector('[data-field="media.hero.src"]');
+      if (heroSelect) {
+        heroSelect.addEventListener("change", () => {
+          currentValues["media.hero.src"] = heroSelect.value;
+          const preview = document.getElementById("heroPreview");
+          if (preview) preview.outerHTML = renderHeroPreview(heroSelect.value);
+        });
+      }
+    }
+
+    function renderHeroPreview(src) {
+      if (!src) {
+        return `<div class="hero-preview" id="heroPreview"><strong>Image principale actuelle</strong><p class="empty">Aucune image principale.</p></div>`;
+      }
+      return `
+        <div class="hero-preview" id="heroPreview">
+          <strong>Image principale actuelle</strong>
+          <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
+          <div class="meta">${escapeHtml(src)}</div>
+        </div>
+      `;
     }
 
     function renderFieldGroups(articleFields) {
@@ -255,6 +301,10 @@ EDITOR_HTML = r"""<!doctype html>
       const required = field.required ? " required" : "";
       if (field.control === "select") {
         const options = field.choices.map((choice) => `<option value="${escapeAttr(choice)}"${choice === value ? " selected" : ""}>${escapeHtml(choice)}</option>`).join("");
+        return `<label>${escapeHtml(field.label)}<select data-field="${escapeAttr(field.path)}"${required}>${options}</select></label>`;
+      }
+      if (field.control === "image-select") {
+        const options = `<option value="">Choisir une image...</option>` + currentImageOptions.map((image) => `<option value="${escapeAttr(image.src)}"${image.src === value ? " selected" : ""}>${escapeHtml(image.label || image.src)}</option>`).join("");
         return `<label>${escapeHtml(field.label)}<select data-field="${escapeAttr(field.path)}"${required}>${options}</select></label>`;
       }
       if (field.control === "textarea") {
@@ -312,6 +362,10 @@ EDITOR_HTML = r"""<!doctype html>
 
     function escapeAttr(value) {
       return escapeHtml(value);
+    }
+
+    function encodeImagePath(src) {
+      return String(src).split("/").map((part) => encodeURIComponent(part)).join("/");
     }
 
     init().catch((error) => {

@@ -12,6 +12,7 @@ from typing import Any, Callable
 from .article_access import article_hero_image, article_publication_order, article_slug, article_title
 from .checks import publication_check_article
 from .editor_fields import editable_field_for_path, editable_field_value_payload, editable_fields_for_article, get_path, set_path
+from .editor_images import is_valid_editor_image_src, list_editor_image_options, project_root_from_articles_path
 from .repository import ARTICLES_JSON, PROJECT_ROOT
 
 
@@ -52,7 +53,7 @@ def find_payload_article(payload: Payload, slug: str) -> Article | None:
     return None
 
 
-def build_editor_article_payload(article: Article) -> dict[str, Any]:
+def build_editor_article_payload(article: Article, project_root: Path = PROJECT_ROOT) -> dict[str, Any]:
     return {
         "slug": article_slug(article),
         "title": article_title(article, "fr"),
@@ -60,17 +61,22 @@ def build_editor_article_payload(article: Article) -> dict[str, Any]:
         "status": str(article.get("status") or ""),
         "order": article_publication_order(article),
         "hero_src": article_hero_image(article),
+        "image_options": list_editor_image_options(project_root),
         "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
-        "checks": validate_article_for_editor(article),
+        "checks": validate_article_for_editor(article, project_root=project_root),
     }
 
 
-def validate_changes(article: Article, changes: list[dict[str, Any]]) -> list[dict[str, str]]:
+def validate_changes(
+    article: Article,
+    changes: list[dict[str, Any]],
+    project_root: Path = PROJECT_ROOT,
+) -> list[dict[str, str]]:
     draft = deepcopy(article)
-    errors = apply_changes(draft, changes)
+    errors = apply_changes(draft, changes, project_root=project_root)
     if errors:
         return errors
-    return validate_article_for_editor(draft)
+    return validate_article_for_editor(draft, project_root=project_root)
 
 
 def save_article_changes(
@@ -81,13 +87,14 @@ def save_article_changes(
 ) -> dict[str, Any]:
     payload = load_article_payload(path)
     original_payload = deepcopy(payload)
+    project_root = project_root_from_articles_path(path)
     article = find_payload_article(payload, slug)
     if article is None:
         return {"ok": False, "errors": [error("unknown-slug", f"Unknown article slug: {slug}.")]}
 
-    errors = apply_changes(article, changes)
+    errors = apply_changes(article, changes, project_root=project_root)
     if not errors:
-        errors = validate_article_for_editor(article)
+        errors = validate_article_for_editor(article, project_root=project_root)
     if errors:
         return {"ok": False, "errors": errors}
 
@@ -104,12 +111,16 @@ def save_article_changes(
 
     return {
         "ok": True,
-        "article": build_editor_article_payload(article),
+        "article": build_editor_article_payload(article, project_root=project_root),
         "message": "Article saved and validation passed.",
     }
 
 
-def apply_changes(article: Article, changes: list[dict[str, Any]]) -> list[dict[str, str]]:
+def apply_changes(
+    article: Article,
+    changes: list[dict[str, Any]],
+    project_root: Path = PROJECT_ROOT,
+) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
     if not isinstance(changes, list):
         return [error("invalid-payload", "Changes must be a list.")]
@@ -129,13 +140,16 @@ def apply_changes(article: Article, changes: list[dict[str, Any]]) -> list[dict[
         if field.choices and value not in field.choices:
             errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
             continue
+        if field_path == "media.hero.src" and not is_valid_editor_image_src(value, project_root):
+            errors.append(error("invalid-image", "L'image principale doit être une image existante sous assets/images."))
+            continue
 
         set_path(article, field_path, value)
 
     return errors
 
 
-def validate_article_for_editor(article: Article) -> list[dict[str, str]]:
+def validate_article_for_editor(article: Article, project_root: Path = PROJECT_ROOT) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
 
     for field in editable_fields_for_article(article):
@@ -144,6 +158,8 @@ def validate_article_for_editor(article: Article) -> list[dict[str, str]]:
             errors.append(error("required-field", f"{field.label} is required."))
         if field.choices and value and value not in field.choices:
             errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
+        if field.path == "media.hero.src" and value and not is_valid_editor_image_src(value, project_root):
+            errors.append(error("invalid-image", "L'image principale doit être une image existante sous assets/images."))
 
     publication_errors = [item for item in publication_check_article(article) if item.status == "ERROR"]
     for item in publication_errors:
