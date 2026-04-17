@@ -174,6 +174,7 @@ EDITOR_HTML = r"""<!doctype html>
     .meta { color: #617080; font-size: 13px; margin-top: 4px; }
     .form-grid { display: grid; gap: 14px; max-width: 960px; }
     label { display: grid; gap: 6px; font-weight: 700; }
+    .readonly-key { color: #617080; font-size: 13px; font-weight: 400; }
     input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 9px; background: #ffffff; }
     textarea { min-height: 96px; resize: vertical; }
     .hero-preview { display: grid; gap: 8px; max-width: 420px; margin: 14px 0; }
@@ -349,9 +350,14 @@ EDITOR_HTML = r"""<!doctype html>
         return `<label>${escapeHtml(field.label)}<select data-control="image-select" data-field="${escapeAttr(field.path)}"${required}>${options}</select>${preview}</label>`;
       }
       if (field.control === "textarea") {
-        return `<label>${escapeHtml(field.label)}<textarea data-field="${escapeAttr(field.path)}"${required}>${escapeHtml(value)}</textarea></label>`;
+        return `<label>${fieldLabel(field)}<textarea data-field="${escapeAttr(field.path)}"${required}>${escapeHtml(value)}</textarea></label>`;
       }
-      return `<label>${escapeHtml(field.label)}<input data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}></label>`;
+      return `<label>${fieldLabel(field)}<input data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}></label>`;
+    }
+
+    function fieldLabel(field) {
+      const key = field.readonly_key ? `<span class="readonly-key">Cle: ${escapeHtml(field.readonly_key)}</span>` : "";
+      return `${escapeHtml(field.label)}${key}`;
     }
 
     function renderSupportFieldPreview(fieldPath, src) {

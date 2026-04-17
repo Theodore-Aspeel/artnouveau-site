@@ -24,6 +24,7 @@ class EditableField:
     required: bool = False
     choices: tuple[str, ...] = ()
     group: str = "Champs principaux"
+    readonly_key: str = ""
 
 
 EDITABLE_FIELDS: tuple[EditableField, ...] = (
@@ -45,9 +46,19 @@ EDITABLE_FIELDS: tuple[EditableField, ...] = (
 
 EDITABLE_FIELD_BY_PATH = {field.path: field for field in EDITABLE_FIELDS}
 SECTION_FIELD_RE = re.compile(r"^content\.(fr|en)\.sections\.(0|[1-9]\d*)\.(heading|body)$")
+PRACTICAL_ITEM_FIELD_RE = re.compile(r"^content\.(fr|en)\.practical_items\.(0|[1-9]\d*)\.value$")
 SUPPORT_IMAGE_FIELD_RE = re.compile(r"^media\.support\.(0|[1-9]\d*)\.src$")
 SECTION_LOCALES = (("fr", "FR"), ("en", "EN"))
 SECTION_PROPERTIES = (("heading", "titre", "text"), ("body", "texte", "textarea"))
+PRACTICAL_ITEM_LABELS = {
+    "city": "Ville",
+    "country": "Pays",
+    "style": "Style",
+    "architect": "Architecte",
+    "address": "Adresse",
+    "date": "Date",
+    "access": "Acces",
+}
 
 
 def editable_field_payload() -> list[dict[str, Any]]:
@@ -55,7 +66,12 @@ def editable_field_payload() -> list[dict[str, Any]]:
 
 
 def editable_fields_for_article(article: Article) -> list[EditableField]:
-    return [*EDITABLE_FIELDS, *support_image_editable_fields(article), *section_editable_fields(article)]
+    return [
+        *EDITABLE_FIELDS,
+        *support_image_editable_fields(article),
+        *section_editable_fields(article),
+        *practical_item_editable_fields(article),
+    ]
 
 
 def editable_field_for_path(article: Article, path: str) -> EditableField | None:
@@ -73,6 +89,19 @@ def editable_field_for_path(article: Article, path: str) -> EditableField | None
             and isinstance(support_images[index], dict)
         ):
             return support_image_editable_field(index, path)
+        return None
+
+    practical_match = PRACTICAL_ITEM_FIELD_RE.match(path)
+    if practical_match:
+        locale, index_text = practical_match.groups()
+        practical_items = get_path(article, f"content.{locale}.practical_items")
+        index = int(index_text)
+        if (
+            isinstance(practical_items, list)
+            and index < len(practical_items)
+            and isinstance(practical_items[index], dict)
+        ):
+            return practical_item_editable_field(locale, index, practical_items[index], path)
         return None
 
     match = SECTION_FIELD_RE.match(path)
@@ -119,6 +148,40 @@ def section_editable_fields(article: Article) -> list[EditableField]:
     return fields
 
 
+def practical_item_editable_fields(article: Article) -> list[EditableField]:
+    fields: list[EditableField] = []
+    for locale, _locale_label in SECTION_LOCALES:
+        practical_items = get_path(article, f"content.{locale}.practical_items")
+        if not isinstance(practical_items, list):
+            continue
+        for index, item in enumerate(practical_items):
+            if not isinstance(item, dict):
+                continue
+            fields.append(
+                practical_item_editable_field(
+                    locale,
+                    index,
+                    item,
+                    f"content.{locale}.practical_items.{index}.value",
+                )
+            )
+    return fields
+
+
+def practical_item_editable_field(locale: str, index: int, item: dict[str, Any], path: str) -> EditableField:
+    locale_label = "FR" if locale == "fr" else "EN"
+    key = normalize_path_value(item.get("key"))
+    label = PRACTICAL_ITEM_LABELS.get(key, key.replace("_", " ").capitalize() if key else f"Ligne {index + 1}")
+    return EditableField(
+        path,
+        f"{label} ({locale_label})",
+        "text",
+        required=locale == "fr",
+        group=f"Informations pratiques {locale_label}",
+        readonly_key=key,
+    )
+
+
 def support_image_editable_fields(article: Article) -> list[EditableField]:
     support_images = get_path(article, "media.support")
     if not isinstance(support_images, list):
@@ -150,6 +213,7 @@ def editable_field_to_payload(field: EditableField) -> dict[str, Any]:
         "required": field.required,
         "choices": list(field.choices),
         "group": field.group,
+        "readonly_key": field.readonly_key,
     }
 
 
