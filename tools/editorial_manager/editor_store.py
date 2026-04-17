@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 from typing import Any, Callable
+from urllib.parse import quote
 
 from .article_access import article_hero_image, article_publication_order, article_slug, article_title
 from .checks import publication_check_article
@@ -54,17 +55,28 @@ def find_payload_article(payload: Payload, slug: str) -> Article | None:
 
 
 def build_editor_article_payload(article: Article, project_root: Path = PROJECT_ROOT) -> dict[str, Any]:
+    slug = article_slug(article)
     return {
-        "slug": article_slug(article),
+        "slug": slug,
         "title": article_title(article, "fr"),
         "title_en": article_title(article, "en"),
         "status": str(article.get("status") or ""),
         "order": article_publication_order(article),
         "hero_src": article_hero_image(article),
         "support_images": current_support_images(article),
+        "preview_urls": build_preview_urls(slug),
         "image_options": list_editor_image_options(project_root),
         "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
         "checks": validate_article_for_editor(article, project_root=project_root),
+    }
+
+
+def build_preview_urls(slug: str) -> dict[str, str]:
+    encoded_slug = quote(slug, safe="")
+    article_url = f"article.html?slug={encoded_slug}"
+    return {
+        "fr": article_url,
+        "en": f"{article_url}&previewLocale=en",
     }
 
 

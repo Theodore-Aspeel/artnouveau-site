@@ -6,6 +6,7 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import mimetypes
+from pathlib import Path
 from typing import Any
 from urllib.parse import unquote, urlparse
 import webbrowser
@@ -20,7 +21,11 @@ from .editor_store import (
     save_article_changes,
     validate_changes,
 )
-from .repository import ARTICLES_JSON
+from .repository import ARTICLES_JSON, PROJECT_ROOT
+
+
+DIST_ROOT = PROJECT_ROOT / "dist"
+SRC_ROOT = PROJECT_ROOT / "src"
 
 
 def run_editor_server(host: str = "127.0.0.1", port: int = 8765, open_browser: bool = True) -> None:
@@ -44,12 +49,29 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self.send_text(EDITOR_HTML, "text/html; charset=utf-8")
             return
 
+        if route == "/data/articles.json":
+            self.send_file(ARTICLES_JSON)
+            return
+
         if route.startswith("/assets/images/"):
             image_path = editor_image_path(unquote(route.lstrip("/")))
-            if image_path is None:
-                self.send_json({"error": "Image not found."}, HTTPStatus.NOT_FOUND)
+            if image_path is not None:
+                self.send_file(image_path)
                 return
-            self.send_file(image_path)
+
+        if route.startswith("/assets/"):
+            asset_path = resolve_static_path(SRC_ROOT, route)
+            if asset_path is None:
+                asset_path = resolve_static_path(DIST_ROOT, route)
+            if asset_path is None:
+                self.send_json({"error": "Asset not found."}, HTTPStatus.NOT_FOUND)
+                return
+            self.send_file(asset_path)
+            return
+
+        site_path = resolve_static_path(DIST_ROOT, route)
+        if site_path is not None:
+            self.send_file(site_path)
             return
 
         if route == "/api/fields":
@@ -142,6 +164,20 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
 
+def resolve_static_path(root: Path, route: str) -> Path | None:
+    if not root.exists():
+        return None
+    relative_route = unquote(route).lstrip("/") or "index.html"
+    candidate = (root / relative_route).resolve()
+    try:
+        candidate.relative_to(root.resolve())
+    except ValueError:
+        return None
+    if candidate.is_dir():
+        candidate = candidate / "index.html"
+    return candidate if candidate.is_file() else None
+
+
 def route_slug(route: str, prefix: str) -> str:
     if not route.startswith(prefix):
         return ""
@@ -166,7 +202,8 @@ EDITOR_HTML = r"""<!doctype html>
     h1 { margin: 0; font-size: 22px; }
     h2 { margin: 0 0 12px; font-size: 20px; }
     button, select, input, textarea { font: inherit; }
-    button { border: 1px solid #9aa6b2; border-radius: 6px; background: #ffffff; padding: 8px 10px; cursor: pointer; }
+    button, .button-link { border: 1px solid #9aa6b2; border-radius: 6px; background: #ffffff; padding: 8px 10px; cursor: pointer; }
+    .button-link { color: inherit; display: inline-block; text-decoration: none; }
     button.primary { background: #155e75; color: #ffffff; border-color: #155e75; }
     button:disabled { cursor: not-allowed; opacity: 0.55; }
     .article-button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid #e4e8eb; border-radius: 0; padding: 12px 14px; }
@@ -189,6 +226,7 @@ EDITOR_HTML = r"""<!doctype html>
     legend { padding: 0 6px; font-weight: 700; }
     .field-group { display: grid; gap: 14px; }
     .actions { display: flex; gap: 10px; margin: 16px 0; }
+    .preview-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
     .message { margin: 12px 0; padding: 10px; border-radius: 6px; background: #eef6ee; }
     .message.error { background: #fbeaea; }
     .empty { color: #617080; }
@@ -253,6 +291,7 @@ EDITOR_HTML = r"""<!doctype html>
       editor.innerHTML = `
         <h2>${escapeHtml(article.title || article.slug)}</h2>
         <div class="meta">Slug: ${escapeHtml(article.slug)} · Image principale: ${escapeHtml(article.hero_src || "-")}</div>
+        ${renderPreviewActions(article.preview_urls || {})}
         ${renderHeroPreview(article.hero_src || "")}
         ${renderSupportSummary(article.support_images || [])}
         <div class="actions">
@@ -280,6 +319,22 @@ EDITOR_HTML = r"""<!doctype html>
           if (preview) preview.outerHTML = renderSupportFieldPreview(select.dataset.field, select.value);
         });
       });
+    }
+
+    function renderPreviewActions(urls) {
+      const frUrl = urls.fr || previewUrl("fr");
+      const enUrl = urls.en || previewUrl("en");
+      return `
+        <div class="preview-actions" aria-label="Preview de l'article">
+          <a class="button-link" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Preview FR</a>
+          <a class="button-link" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Preview EN</a>
+        </div>
+      `;
+    }
+
+    function previewUrl(locale) {
+      const base = `article.html?slug=${encodeURIComponent(currentSlug)}`;
+      return locale === "en" ? `${base}&previewLocale=en` : base;
     }
 
     function renderHeroPreview(src) {

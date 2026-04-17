@@ -5,6 +5,7 @@ import unittest
 
 from tools.editorial_manager.editor_store import (
     build_editor_article_payload,
+    build_preview_urls,
     save_article_changes,
     validate_changes,
 )
@@ -62,6 +63,8 @@ class EditorStoreTests(unittest.TestCase):
         field_paths = [field["path"] for field in payload["fields"]]
 
         self.assertTrue(payload["image_options"])
+        self.assertEqual(payload["preview_urls"]["fr"], "article.html?slug=demo")
+        self.assertEqual(payload["preview_urls"]["en"], "article.html?slug=demo&previewLocale=en")
         self.assertIn(VALID_HERO_SRC, [image["src"] for image in payload["image_options"]])
         self.assertEqual(payload["support_images"], [{"index": 0, "src": VALID_SUPPORT_SRC}])
         self.assertIn("status", field_paths)
@@ -112,6 +115,12 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(fields["content.en.practical_items.1.value"]["label"], "Adresse (EN)")
         self.assertEqual(fields["content.en.practical_items.1.value"]["readonly_key"], "address")
         self.assertFalse(fields["content.en.practical_items.1.value"]["required"])
+
+    def test_preview_urls_keep_encoded_slug_and_locale_parameter(self):
+        urls = build_preview_urls("demo/lille ete")
+
+        self.assertEqual(urls["fr"], "article.html?slug=demo%2Flille%20ete")
+        self.assertEqual(urls["en"], "article.html?slug=demo%2Flille%20ete&previewLocale=en")
 
     def test_validate_changes_rejects_non_whitelisted_field(self):
         errors = validate_changes(sample_article(), [{"field": "slug", "value": "new-slug"}])
