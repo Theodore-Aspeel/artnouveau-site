@@ -50,17 +50,47 @@ class EditorStoreTests(unittest.TestCase):
         self.assertIn("status", field_paths)
         self.assertIn("content.fr.title", field_paths)
         self.assertIn("content.en.media.hero_alt", field_paths)
+        self.assertIn("content.fr.sections.0.heading", field_paths)
+        self.assertIn("content.fr.sections.0.body", field_paths)
+        self.assertIn("content.en.sections.0.heading", field_paths)
+        self.assertIn("content.en.sections.0.body", field_paths)
         self.assertNotIn("slug", field_paths)
         self.assertNotIn("taxonomy.style_key", field_paths)
         self.assertNotIn("content.fr.sections", field_paths)
+
+    def test_section_fields_are_grouped_for_non_technical_editor(self):
+        payload = build_editor_article_payload(sample_article())
+        fields = {field["path"]: field for field in payload["fields"]}
+
+        self.assertEqual(fields["content.fr.sections.0.heading"]["label"], "Section 1 - titre (FR)")
+        self.assertEqual(fields["content.fr.sections.0.heading"]["group"], "Sections FR")
+        self.assertEqual(fields["content.fr.sections.0.heading"]["control"], "text")
+        self.assertEqual(fields["content.fr.sections.0.body"]["control"], "textarea")
+        self.assertTrue(fields["content.fr.sections.0.body"]["required"])
+        self.assertFalse(fields["content.en.sections.0.body"]["required"])
 
     def test_validate_changes_rejects_non_whitelisted_field(self):
         errors = validate_changes(sample_article(), [{"field": "slug", "value": "new-slug"}])
 
         self.assertEqual(errors[0]["code"], "field-not-editable")
 
+    def test_validate_changes_rejects_non_existing_section_index(self):
+        errors = validate_changes(sample_article(), [{"field": "content.fr.sections.1.body", "value": "New section"}])
+
+        self.assertEqual(errors[0]["code"], "field-not-editable")
+
+    def test_validate_changes_rejects_section_shape_change(self):
+        errors = validate_changes(sample_article(), [{"field": "content.fr.sections", "value": []}])
+
+        self.assertEqual(errors[0]["code"], "field-not-editable")
+
     def test_validate_changes_reports_required_safe_field(self):
         errors = validate_changes(sample_article(), [{"field": "content.fr.title", "value": ""}])
+
+        self.assertIn("required-field", [item["code"] for item in errors])
+
+    def test_validate_changes_reports_required_french_section_body(self):
+        errors = validate_changes(sample_article(), [{"field": "content.fr.sections.0.body", "value": ""}])
 
         self.assertIn("required-field", [item["code"] for item in errors])
 
@@ -80,6 +110,30 @@ class EditorStoreTests(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Updated FR")
         self.assertEqual(payload["articles"][0]["slug"], "demo")
+
+    def test_save_article_changes_writes_existing_section_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "articles.json"
+            write_payload(path, [sample_article()])
+
+            result = save_article_changes(
+                "demo",
+                [
+                    {"field": "content.fr.sections.0.heading", "value": "Updated heading FR"},
+                    {"field": "content.en.sections.0.body", "value": "Updated body EN."},
+                ],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        sections_fr = payload["articles"][0]["content"]["fr"]["sections"]
+        sections_en = payload["articles"][0]["content"]["en"]["sections"]
+        self.assertTrue(result["ok"])
+        self.assertEqual(len(sections_fr), 1)
+        self.assertEqual(len(sections_en), 1)
+        self.assertEqual(sections_fr[0]["heading"], "Updated heading FR")
+        self.assertEqual(sections_en[0]["body"], "Updated body EN.")
 
     def test_save_article_changes_rolls_back_when_validation_fails(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -105,4 +159,3 @@ def write_payload(path: Path, articles):
 
 if __name__ == "__main__":
     unittest.main()
-

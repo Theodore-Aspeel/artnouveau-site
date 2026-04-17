@@ -157,6 +157,9 @@ EDITOR_HTML = r"""<!doctype html>
     label { display: grid; gap: 6px; font-weight: 700; }
     input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 9px; background: #ffffff; }
     textarea { min-height: 96px; resize: vertical; }
+    fieldset { border: 1px solid #d9dee3; border-radius: 6px; padding: 14px; background: #ffffff; }
+    legend { padding: 0 6px; font-weight: 700; }
+    .field-group { display: grid; gap: 14px; }
     .actions { display: flex; gap: 10px; margin: 16px 0; }
     .message { margin: 12px 0; padding: 10px; border-radius: 6px; background: #eef6ee; }
     .message.error { background: #fbeaea; }
@@ -216,7 +219,7 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderEditor(article) {
       const editor = document.getElementById("editor");
-      const controls = fields.map((field) => renderField(field, currentValues[field.path] || "")).join("");
+      const controls = renderFieldGroups(article.fields || []);
       editor.innerHTML = `
         <h2>${escapeHtml(article.title || article.slug)}</h2>
         <div class="meta">Slug: ${escapeHtml(article.slug)} · Image principale: ${escapeHtml(article.hero_src || "-")}</div>
@@ -229,6 +232,23 @@ EDITOR_HTML = r"""<!doctype html>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+    }
+
+    function renderFieldGroups(articleFields) {
+      const groups = [];
+      articleFields.forEach((field) => {
+        let group = groups.find((item) => item.name === (field.group || "Champs principaux"));
+        if (!group) {
+          group = { name: field.group || "Champs principaux", fields: [] };
+          groups.push(group);
+        }
+        group.fields.push(field);
+      });
+
+      return groups.map((group) => {
+        const controls = group.fields.map((field) => renderField(field, currentValues[field.path] || "")).join("");
+        return `<fieldset><legend>${escapeHtml(group.name)}</legend><div class="field-group">${controls}</div></fieldset>`;
+      }).join("");
     }
 
     function renderField(field, value) {

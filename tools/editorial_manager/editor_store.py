@@ -11,7 +11,7 @@ from typing import Any, Callable
 
 from .article_access import article_hero_image, article_publication_order, article_slug, article_title
 from .checks import publication_check_article
-from .editor_fields import EDITABLE_FIELD_BY_PATH, EDITABLE_FIELDS, get_path, set_path
+from .editor_fields import editable_field_for_path, editable_field_value_payload, editable_fields_for_article, get_path, set_path
 from .repository import ARTICLES_JSON, PROJECT_ROOT
 
 
@@ -60,13 +60,7 @@ def build_editor_article_payload(article: Article) -> dict[str, Any]:
         "status": str(article.get("status") or ""),
         "order": article_publication_order(article),
         "hero_src": article_hero_image(article),
-        "fields": [
-            {
-                "path": field.path,
-                "value": normalize_edit_value(get_path(article, field.path)),
-            }
-            for field in EDITABLE_FIELDS
-        ],
+        "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
         "checks": validate_article_for_editor(article),
     }
 
@@ -126,11 +120,11 @@ def apply_changes(article: Article, changes: list[dict[str, Any]]) -> list[dict[
             continue
 
         field_path = str(change.get("field") or "")
-        if field_path not in EDITABLE_FIELD_BY_PATH:
+        field = editable_field_for_path(article, field_path)
+        if field is None:
             errors.append(error("field-not-editable", f"{field_path or '<empty>'} is not editable."))
             continue
 
-        field = EDITABLE_FIELD_BY_PATH[field_path]
         value = normalize_edit_value(change.get("value"))
         if field.choices and value not in field.choices:
             errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
@@ -144,7 +138,7 @@ def apply_changes(article: Article, changes: list[dict[str, Any]]) -> list[dict[
 def validate_article_for_editor(article: Article) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
 
-    for field in EDITABLE_FIELDS:
+    for field in editable_fields_for_article(article):
         value = normalize_edit_value(get_path(article, field.path))
         if field.required and not value:
             errors.append(error("required-field", f"{field.label} is required."))
@@ -189,4 +183,3 @@ def run_project_validation() -> tuple[bool, list[str]]:
 
 def error(code: str, message: str) -> dict[str, str]:
     return {"code": code, "message": message}
-
