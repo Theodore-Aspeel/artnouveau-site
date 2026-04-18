@@ -2227,6 +2227,60 @@
           "around": {
             "note": "Compare it with another Antwerp facade where the name remains memorable, while the composition carries more of the reading."
           }
+        },
+        "nl": {
+          "title": "Den Tijd, Antwerpen",
+          "dek": "Den Tijd laat zien dat een kort onderwerp kan standhouden wanneer de maat juist blijft. Een leesbare gevel, een travee, letters die in de compositie zijn opgenomen, en Antwerpen eromheen. Dat is genoeg voor een heldere notitie, zolang het gebouw niet meer hoeft te dragen dan het geeft.",
+          "epigraph": "Soms volstaan een travee en enkele letters om een gevel bijeen te houden.",
+          "sections": [
+            {
+              "heading": "De naam in de gevel",
+              "body": "De kracht van Den Tijd ligt in de helderheid van het gebaar. De naam is niet zomaar op het beeld geplakt. Hij hoort al bij de lezing van de gevel. Architectuur, gebruik en typografie raken elkaar hier in een klein maar precies geheel.\n\nDat is weinig, maar het is genoeg. Die soberheid hoeft niet als een tekort te worden gelezen. Juist daardoor krijgt deze korte notitie haar juiste maat."
+            },
+            {
+              "heading": "Een korte notitie, niet meer",
+              "body": "Den Tijd heeft nog niet de documentaire dichtheid van Maison Lotus. Dat is geen zwakte. Een korte, goed afgewogen notitie is beter dan een uitgerekte tekst. Hier moet de blik dicht bij de gevel blijven, bij de travee, de belettering en wat het onderwerp zelf kan dragen.\n\nDe vergelijking met Den Dag kan later vanzelf volgen, als een natuurlijke voortzetting, niet als compensatie."
+            }
+          ],
+          "seo": {
+            "meta_description": "Den Tijd in Antwerpen. Een korte gevelnotitie over art nouveau waarin naam, travee en belettering samen blijven."
+          },
+          "media": {
+            "hero_alt": "Art-nouveaugevel in Antwerpen met de woorden Den Tijd, Le Temps, opgenomen in de compositie.",
+            "support_alt": [
+              "Ondersteunend gevelbeeld in Antwerpen met de vermelding Le Jour."
+            ]
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Antwerpen"
+            },
+            {
+              "key": "country",
+              "value": "België"
+            },
+            {
+              "key": "style",
+              "value": "Art nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "A. Cols, A. Defever"
+            },
+            {
+              "key": "address",
+              "value": "Waterloostraat 59, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1903"
+            }
+          ],
+          "around": {
+            "note": "Vergelijk met een andere Antwerpse gevel waar de naam goed blijft hangen, terwijl de compositie meer van de lezing draagt."
+          },
+          "resources": []
         }
       }
     },
