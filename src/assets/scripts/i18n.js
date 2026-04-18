@@ -365,6 +365,8 @@
       'home.cta.articles': 'Lees de artikelen',
       'home.curated.first': 'Begin hier',
       'home.curated.next': 'Daarna verder',
+      'home.footer.body': 'Een auteurspublicatie over Europese steden, hun drempels, hun gevels en wat in het detail blijft bestaan.',
+      'home.footer.copyright': '\u00a9 2026 Art Nouveau en Art Deco in Europa.',
       'home.footer.latest': 'Nieuwste artikelen',
       'home.footer.legal': 'Vermelding en contact',
       'home.footer.nav': 'Routes',

@@ -42,9 +42,21 @@ assert.equal(i18n.resolveLocale(), 'nl');
 
 assert.equal(i18n.t('article.facts'), 'Kerngegevens');
 assert.equal(i18n.t('gallery.all'), 'Alle');
+assert.equal(i18n.t('home.footer.body'), 'Een auteurspublicatie over Europese steden, hun drempels, hun gevels en wat in het detail blijft bestaan.');
+assert.equal(i18n.t('home.footer.copyright'), '\u00a9 2026 Art Nouveau en Art Deco in Europa.');
 assert.equal(i18n.articleCountLabel(1, 'nl'), 'artikel');
 assert.equal(i18n.articleCountLabel(2, 'nl'), 'artikelen');
 assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Partir du d\u00e9tail, puis revenir \u00e0 la ville');
+
+const articleTemplateHtml = fs.readFileSync('src/pages/article-redirect.html', 'utf8');
+assert.match(articleTemplateHtml, /class="site-nav"[^>]+data-i18n-attr="aria-label:home\.aria\.mainNav"/);
+assert.match(articleTemplateHtml, /class="site-nav__tagline" data-i18n="home\.tagline"/);
+assert.match(articleTemplateHtml, /data-i18n="home\.nav\.home"/);
+assert.match(articleTemplateHtml, /data-i18n="home\.nav\.articles"/);
+assert.match(articleTemplateHtml, /data-i18n="home\.nav\.about"/);
+assert.match(articleTemplateHtml, /class="site-nav__language"[^>]+data-i18n-attr="aria-label:nav\.language"/);
+assert.match(articleTemplateHtml, /class="site-nav__toggle"[^>]+data-i18n-attr="aria-label:nav\.open"/);
+assert.doesNotMatch(articleTemplateHtml, /data-preview-locale-link="nl"/);
 
 const v2Article = {
   taxonomy: {
