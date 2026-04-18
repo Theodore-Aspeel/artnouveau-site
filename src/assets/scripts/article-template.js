@@ -649,6 +649,18 @@
     });
     block.appendChild(dl);
 
+    if (typeof access.getArticleMapLink === 'function') {
+      const mapLink = access.getArticleMapLink(article, locale);
+      if (mapLink) {
+        const link = make('a', 'article-map-link', t('article.map.open'));
+        link.href = mapLink.href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.setAttribute('aria-label', t('article.map.openFor', { address: mapLink.address }));
+        block.appendChild(link);
+      }
+    }
+
     sidebar.appendChild(block);
   }
 

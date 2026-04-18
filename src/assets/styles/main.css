@@ -1509,6 +1509,25 @@ main {
   text-wrap: pretty;
 }
 
+.article-map-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.95rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--an-line);
+  border-bottom: 1px solid var(--an-accent-soft);
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--an-accent);
+}
+
+.article-map-link:hover {
+  color: var(--an-ink);
+}
+
 .article-tpl__facts {
   background: linear-gradient(180deg, rgba(255, 252, 247, 0.82), rgba(242, 234, 219, 0.7));
 }

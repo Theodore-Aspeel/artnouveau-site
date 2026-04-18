@@ -290,6 +290,53 @@
       .filter((item) => item.value);
   }
 
+  function normalizeAddressForChecks(value) {
+    return normalizeText(value)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function usableMapAddress(value) {
+    const address = normalizeText(value);
+    if (!address || address.length < 8) return '';
+
+    const normalized = normalizeAddressForChecks(address);
+    if (!/[a-z]/i.test(normalized) || !/\d/.test(normalized)) return '';
+    if (/^(?:a confirmer|adresse a confirmer|non renseigne(?:e)?|unknown|n\/a|sans adresse|-)$/.test(normalized)) return '';
+
+    return address;
+  }
+
+  function appendDistinctLocationPart(parts, value) {
+    const text = normalizeText(value);
+    if (!text) return;
+
+    const normalizedText = normalizeAddressForChecks(text);
+    const alreadyPresent = parts.some((part) => normalizeAddressForChecks(part).includes(normalizedText));
+    if (!alreadyPresent) {
+      parts.push(text);
+    }
+  }
+
+  function getArticleMapLink(article, locale = 'fr') {
+    const addressItem = getArticlePracticalItems(article, locale).find((item) => item.key === 'address');
+    const address = usableMapAddress(addressItem && addressItem.value);
+    if (!address) return null;
+
+    const articleTaxonomy = getArticleTaxonomy(article, locale);
+    const queryParts = [address];
+    appendDistinctLocationPart(queryParts, articleTaxonomy.city);
+    appendDistinctLocationPart(queryParts, articleTaxonomy.country);
+
+    return {
+      address,
+      href: `https://www.google.com/maps/search/${encodeURIComponent(queryParts.join(', '))}`,
+    };
+  }
+
   function getArticleAround(article, locale = 'fr') {
     const content = getArticleContent(article, locale);
     const relation = isPlainObject(article && article.relations) && isPlainObject(article.relations.around)
@@ -341,6 +388,7 @@
     getArticleEpigraph,
     getArticleFormat,
     getArticleGaps,
+    getArticleMapLink,
     getArticleHeroAlt,
     getArticleMedia,
     getArticleMetaDescription,
