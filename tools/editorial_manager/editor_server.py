@@ -8,11 +8,11 @@ import json
 import mimetypes
 from pathlib import Path
 from typing import Any
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 import webbrowser
 
 from .editor_fields import editable_field_payload
-from .editor_images import editor_image_path
+from .editor_images import editor_image_path, import_editor_image, list_editor_image_options
 from .editor_store import (
     build_editor_article_payload,
     find_payload_article,
@@ -99,6 +99,17 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         route = parsed.path
 
+        if route == "/api/images/import":
+            filename = import_filename(parsed.query)
+            payload = self.read_bytes()
+            try:
+                image = import_editor_image(filename, payload)
+            except ValueError as exc:
+                self.send_json({"ok": False, "error": str(exc)}, HTTPStatus.BAD_REQUEST)
+                return
+            self.send_json({"ok": True, "image": image, "image_options": list_editor_image_options()})
+            return
+
         if route.endswith("/validate"):
             slug = route_slug(route[: -len("/validate")], "/api/articles/")
             if not slug:
@@ -137,6 +148,12 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
         raw = self.rfile.read(length).decode("utf-8")
         parsed = json.loads(raw)
         return parsed if isinstance(parsed, dict) else {}
+
+    def read_bytes(self) -> bytes:
+        length = int(self.headers.get("Content-Length", "0") or "0")
+        if length <= 0:
+            return b""
+        return self.rfile.read(length)
 
     def send_json(self, payload: Any, status: HTTPStatus = HTTPStatus.OK) -> None:
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -185,6 +202,11 @@ def route_slug(route: str, prefix: str) -> str:
     if not slug or "/" in slug:
         return ""
     return unquote(slug)
+
+
+def import_filename(query: str) -> str:
+    values = parse_qs(query, keep_blank_values=True).get("filename", [])
+    return values[0] if values else ""
 
 
 EDITOR_HTML = r"""<!doctype html>
@@ -259,6 +281,9 @@ EDITOR_HTML = r"""<!doctype html>
     .field-row--wide textarea { min-height: 116px; }
     .hero-preview { display: grid; gap: 8px; max-width: 460px; }
     .hero-preview img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; }
+    .image-import { display: grid; gap: 10px; padding: 14px; }
+    .image-import__actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .image-import input[type="file"] { max-width: 420px; }
     .image-empty, .support-preview .empty { padding: 12px; border: 1px dashed #b8c2cc; border-radius: 6px; background: #ffffff; color: var(--muted); }
     .support-summary { display: grid; gap: 10px; }
     .support-summary__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
@@ -383,6 +408,8 @@ EDITOR_HTML = r"""<!doctype html>
         control.addEventListener("input", () => handleFieldEdit(control));
         control.addEventListener("change", () => handleFieldEdit(control));
       });
+      const imageImportButton = document.getElementById("imageImportButton");
+      if (imageImportButton) imageImportButton.addEventListener("click", importImage);
       const heroSelect = document.querySelector('[data-field="media.hero.src"]');
       if (heroSelect) {
         heroSelect.addEventListener("change", () => {
@@ -507,9 +534,31 @@ EDITOR_HTML = r"""<!doctype html>
             </section>
           `;
         }).join("");
+        const importMarkup = tab.key === "images" ? renderImageImportPanel() : "";
+        if (tab.key === "images") {
+          return `<div class="tab-panel${currentTab === tab.key ? " active" : ""}" data-tab-panel="${escapeAttr(tab.key)}">${importMarkup}${groupMarkup}</div>`;
+        }
         if (!groupMarkup) return "";
         return `<div class="tab-panel${currentTab === tab.key ? " active" : ""}" data-tab-panel="${escapeAttr(tab.key)}">${groupMarkup}</div>`;
       }).join("");
+    }
+
+    function renderImageImportPanel() {
+      return `
+        <section class="field-panel" aria-labelledby="group-image-import">
+          <div class="field-panel__header">
+            <h3 id="group-image-import">Importer une image</h3>
+            <p class="field-panel__description">Ajouter une image locale au projet, puis la choisir dans les listes image principale ou support.</p>
+          </div>
+          <div class="image-import">
+            <input id="imageImportFile" type="file" accept=".avif,.gif,.jpg,.jpeg,.png,.webp,image/avif,image/gif,image/jpeg,image/png,image/webp">
+            <div class="image-import__actions">
+              <button id="imageImportButton" class="secondary" type="button">Importer l'image</button>
+              <span class="meta">Une seule image a la fois. Extensions acceptees: avif, gif, jpg, jpeg, png, webp.</span>
+            </div>
+          </div>
+        </section>
+      `;
     }
 
     function editorTabs() {
@@ -704,6 +753,36 @@ EDITOR_HTML = r"""<!doctype html>
       currentValues[control.dataset.field] = control.value;
       clearFieldError(control.dataset.field);
       updateSaveState();
+    }
+
+    async function importImage() {
+      const input = document.getElementById("imageImportFile");
+      const file = input && input.files ? input.files[0] : null;
+      if (!file) {
+        setMessage("Choisissez d'abord une image locale a importer.", true);
+        return;
+      }
+      setMessage("Import de l'image en cours...");
+      try {
+        const result = await api(`/api/images/import?filename=${encodeURIComponent(file.name)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/octet-stream" },
+          body: file
+        });
+        currentImageOptions = result.image_options || currentImageOptions;
+        refreshImageSelectOptions();
+        if (input) input.value = "";
+        setMessage(`Image importee: ${escapeHtml(result.image.src)}. Elle est maintenant disponible dans les listes d'images.`);
+      } catch (error) {
+        setMessage(escapeHtml(error.error || "L'import de l'image a echoue."), true);
+      }
+    }
+
+    function refreshImageSelectOptions() {
+      document.querySelectorAll('select[data-control="image-select"]').forEach((select) => {
+        const value = currentValues[select.dataset.field] || select.value || "";
+        select.innerHTML = `<option value="">Choisir une image...</option>` + currentImageOptions.map((image) => `<option value="${escapeAttr(image.src)}"${image.src === value ? " selected" : ""}>${escapeHtml(image.label || image.src)}</option>`).join("");
+      });
     }
 
     function hasUnsavedChanges() {

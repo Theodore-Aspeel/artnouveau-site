@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
+import unicodedata
 
 from .repository import PROJECT_ROOT
 
 
 IMAGE_EXTENSIONS = {".avif", ".gif", ".jpg", ".jpeg", ".png", ".webp"}
 IMAGE_SRC_PREFIX = "assets/images/"
+IMAGE_IMPORT_DIR = Path("src") / "assets" / "images" / "articles" / "imported"
+IMAGE_IMPORT_MAX_BYTES = 20 * 1024 * 1024
 
 
 def list_editor_image_options(project_root: Path = PROJECT_ROOT) -> list[dict[str, str]]:
@@ -54,6 +58,64 @@ def editor_image_path(src: str, project_root: Path = PROJECT_ROOT) -> Path | Non
     if not is_valid_editor_image_src(src, project_root):
         return None
     return (project_root / "src" / src.strip().replace("\\", "/")).resolve()
+
+
+def import_editor_image(filename: str, payload: bytes, project_root: Path = PROJECT_ROOT) -> dict[str, str]:
+    """Copy one uploaded local image into the controlled editor image catalog."""
+    if not isinstance(payload, bytes) or not payload:
+        raise ValueError("Le fichier image est vide.")
+    if len(payload) > IMAGE_IMPORT_MAX_BYTES:
+        raise ValueError("Le fichier image depasse la limite de 20 Mo.")
+
+    safe_name = normalized_image_filename(filename)
+    target_dir = safe_import_dir(project_root)
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_path = available_import_path(target_dir, safe_name)
+
+    with target_path.open("xb") as handle:
+        handle.write(payload)
+
+    src = image_src_from_path(target_path, project_root)
+    return {"src": src, "label": src.removeprefix(IMAGE_SRC_PREFIX)}
+
+
+def normalized_image_filename(filename: str) -> str:
+    """Return a safe lowercase image filename with an allowed extension."""
+    raw_name = Path(str(filename or "")).name
+    suffix = Path(raw_name).suffix.lower()
+    if suffix not in IMAGE_EXTENSIONS:
+        allowed = ", ".join(sorted(IMAGE_EXTENSIONS))
+        raise ValueError(f"Extension non autorisee. Extensions acceptees: {allowed}.")
+
+    stem = raw_name[: -len(Path(raw_name).suffix)] if Path(raw_name).suffix else raw_name
+    ascii_stem = unicodedata.normalize("NFKD", stem).encode("ascii", "ignore").decode("ascii")
+    normalized = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_stem).strip("-").lower()
+    if not normalized:
+        normalized = "image"
+    return f"{normalized}{suffix}"
+
+
+def safe_import_dir(project_root: Path) -> Path:
+    """Resolve the import folder and keep it below src/assets/images/articles."""
+    target_dir = (project_root / IMAGE_IMPORT_DIR).resolve()
+    articles_root = (project_root / "src" / "assets" / "images" / "articles").resolve()
+    try:
+        target_dir.relative_to(articles_root)
+    except ValueError as exc:
+        raise ValueError("Dossier d'import image invalide.") from exc
+    return target_dir
+
+
+def available_import_path(target_dir: Path, filename: str) -> Path:
+    """Return a non-existing path, adding -2, -3... on clear collisions."""
+    stem = Path(filename).stem
+    suffix = Path(filename).suffix
+    candidate = target_dir / filename
+    index = 2
+    while candidate.exists():
+        candidate = target_dir / f"{stem}-{index}{suffix}"
+        index += 1
+    return candidate
 
 
 def project_root_from_articles_path(path: Path) -> Path:

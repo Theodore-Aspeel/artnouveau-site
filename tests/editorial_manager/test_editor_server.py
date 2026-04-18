@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from tools.editorial_manager.editor_server import EDITOR_HTML, resolve_static_path, route_slug
+from tools.editorial_manager.editor_server import EDITOR_HTML, import_filename, resolve_static_path, route_slug
 
 
 class EditorServerTests(unittest.TestCase):
@@ -29,6 +29,11 @@ class EditorServerTests(unittest.TestCase):
 
         self.assertEqual(slug, "demo lille")
 
+    def test_import_filename_reads_encoded_query_value(self):
+        filename = import_filename("filename=Fa%C3%A7ade%20Demo.PNG")
+
+        self.assertEqual(filename, "Façade Demo.PNG")
+
     def test_editor_html_contains_non_technical_ux_markers(self):
         self.assertIn('class="editor-pane"', EDITOR_HTML)
         self.assertIn("Texte principal FR", EDITOR_HTML)
@@ -53,6 +58,10 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("confirmDiscardUnsavedChanges", EDITOR_HTML)
         self.assertIn("beforeunload", EDITOR_HTML)
         self.assertIn("Changer d'article les fera perdre", EDITOR_HTML)
+        self.assertIn("Importer une image", EDITOR_HTML)
+        self.assertIn('type="file"', EDITOR_HTML)
+        self.assertIn("/api/images/import", EDITOR_HTML)
+        self.assertIn("refreshImageSelectOptions", EDITOR_HTML)
 
     def test_editor_html_prepares_local_draft_preview(self):
         self.assertIn('data-preview-locale="fr"', EDITOR_HTML)
