@@ -2,42 +2,42 @@
   'use strict';
 
   const STYLE_LABELS = {
-    art_nouveau: { fr: 'Art Nouveau', en: 'Art Nouveau' },
-    art_nouveau_geometric: { fr: 'Art Nouveau géométrique', en: 'Geometric Art Nouveau' },
-    art_deco: { fr: 'Art Déco', en: 'Art Deco' },
-    liberty_art_nouveau: { fr: 'Liberty / Art Nouveau', en: 'Liberty / Art Nouveau' },
-    vienna_secession: { fr: 'Sécession viennoise', en: 'Vienna Secession' },
+    art_nouveau: { fr: 'Art Nouveau', en: 'Art Nouveau', nl: 'Art nouveau' },
+    art_nouveau_geometric: { fr: 'Art Nouveau géométrique', en: 'Geometric Art Nouveau', nl: 'Geometrische art nouveau' },
+    art_deco: { fr: 'Art Déco', en: 'Art Deco', nl: 'Art deco' },
+    liberty_art_nouveau: { fr: 'Liberty / Art Nouveau', en: 'Liberty / Art Nouveau', nl: 'Liberty / art nouveau' },
+    vienna_secession: { fr: 'Sécession viennoise', en: 'Vienna Secession', nl: 'Weense Secessie' },
   };
 
   const TAG_LABELS = {
-    art_nouveau: { fr: 'Art Nouveau', en: 'Art Nouveau' },
-    art_deco: { fr: 'Art Déco', en: 'Art Deco' },
-    public_building: { fr: 'Bâtiment public', en: 'Public building' },
-    commerce: { fr: 'Commerce', en: 'Commerce' },
-    facade: { fr: 'Façade', en: 'Facade' },
-    habitat: { fr: 'Habitat', en: 'Housing' },
-    liberty: { fr: 'Liberty', en: 'Liberty' },
-    floral_motif: { fr: 'Motif floral', en: 'Floral motif' },
-    threshold: { fr: 'Seuil', en: 'Threshold' },
-    vienna_secession: { fr: 'Sécession viennoise', en: 'Vienna Secession' },
-    urban_lettering: { fr: 'Écriture urbaine', en: 'Urban lettering' },
+    art_nouveau: { fr: 'Art Nouveau', en: 'Art Nouveau', nl: 'Art nouveau' },
+    art_deco: { fr: 'Art Déco', en: 'Art Deco', nl: 'Art deco' },
+    public_building: { fr: 'Bâtiment public', en: 'Public building', nl: 'Openbaar gebouw' },
+    commerce: { fr: 'Commerce', en: 'Commerce', nl: 'Handel' },
+    facade: { fr: 'Façade', en: 'Facade', nl: 'Gevel' },
+    habitat: { fr: 'Habitat', en: 'Housing', nl: 'Wonen' },
+    liberty: { fr: 'Liberty', en: 'Liberty', nl: 'Liberty' },
+    floral_motif: { fr: 'Motif floral', en: 'Floral motif', nl: 'Bloemmotief' },
+    threshold: { fr: 'Seuil', en: 'Threshold', nl: 'Drempel' },
+    vienna_secession: { fr: 'Sécession viennoise', en: 'Vienna Secession', nl: 'Weense Secessie' },
+    urban_lettering: { fr: 'Écriture urbaine', en: 'Urban lettering', nl: 'Stedelijke belettering' },
   };
 
   const RELATION_LABELS = {
-    same_city: { fr: 'Même ville', en: 'Same city' },
-    counterpoint: { fr: 'Contrepoint', en: 'Counterpoint' },
-    other_scale: { fr: 'Autre échelle', en: 'Another scale' },
+    same_city: { fr: 'Même ville', en: 'Same city', nl: 'Zelfde stad' },
+    counterpoint: { fr: 'Contrepoint', en: 'Counterpoint', nl: 'Contrapunt' },
+    other_scale: { fr: 'Autre échelle', en: 'Another scale', nl: 'Andere schaal' },
   };
 
   const PRACTICAL_LABELS = {
-    exact_name: { fr: 'Nom exact', en: 'Exact name' },
-    city: { fr: 'Ville', en: 'City' },
-    country: { fr: 'Pays', en: 'Country' },
-    style: { fr: 'Style', en: 'Style' },
-    architect: { fr: 'Architecte', en: 'Architect' },
-    address: { fr: 'Adresse', en: 'Address' },
-    date: { fr: 'Datation', en: 'Date' },
-    access: { fr: 'Accès', en: 'Access' },
+    exact_name: { fr: 'Nom exact', en: 'Exact name', nl: 'Exacte naam' },
+    city: { fr: 'Ville', en: 'City', nl: 'Stad' },
+    country: { fr: 'Pays', en: 'Country', nl: 'Land' },
+    style: { fr: 'Style', en: 'Style', nl: 'Stijl' },
+    architect: { fr: 'Architecte', en: 'Architect', nl: 'Architect' },
+    address: { fr: 'Adresse', en: 'Address', nl: 'Adres' },
+    date: { fr: 'Datation', en: 'Date', nl: 'Datering' },
+    access: { fr: 'Accès', en: 'Access', nl: 'Toegang' },
   };
 
   const PRACTICAL_KEY_BY_V1_LABEL = {
@@ -282,7 +282,7 @@
           const key = PRACTICAL_KEY_BY_V1_LABEL[label] || label;
           return {
             key,
-            label,
+            label: localizedLabel(PRACTICAL_LABELS, key, locale, label),
             value: normalizeText(value),
           };
         })
