@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from tools.editorial_manager.editor_server import resolve_static_path, route_slug
+from tools.editorial_manager.editor_server import EDITOR_HTML, resolve_static_path, route_slug
 
 
 class EditorServerTests(unittest.TestCase):
@@ -28,6 +28,15 @@ class EditorServerTests(unittest.TestCase):
         slug = route_slug("/api/articles/demo%20lille", "/api/articles/")
 
         self.assertEqual(slug, "demo lille")
+
+    def test_editor_html_contains_non_technical_ux_markers(self):
+        self.assertIn('class="editor-pane"', EDITOR_HTML)
+        self.assertIn("Texte principal FR", EDITOR_HTML)
+        self.assertIn("Texte principal EN", EDITOR_HTML)
+        self.assertIn("Obligatoire", EDITOR_HTML)
+        self.assertIn("Optionnel", EDITOR_HTML)
+        self.assertIn("field-error", EDITOR_HTML)
+        self.assertIn("à corriger avant d'enregistrer", EDITOR_HTML)
 
 
 if __name__ == "__main__":

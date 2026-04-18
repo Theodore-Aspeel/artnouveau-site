@@ -188,49 +188,63 @@ def route_slug(route: str, prefix: str) -> str:
 
 
 EDITOR_HTML = r"""<!doctype html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Éditeur éditorial</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; color: #1f2933; background: #f6f7f8; }
-    header { padding: 16px 24px; background: #ffffff; border-bottom: 1px solid #d9dee3; }
-    main { display: grid; grid-template-columns: 320px 1fr; min-height: calc(100vh - 66px); }
-    aside { border-right: 1px solid #d9dee3; background: #ffffff; overflow: auto; }
-    section { padding: 20px; overflow: auto; }
+    :root { --border: #d7dde2; --muted: #64717f; --text: #1f2933; --panel: #ffffff; --soft: #f4f7f8; --accent: #155e75; --error: #b42318; --error-bg: #fff0ee; --success: #1f6f43; --success-bg: #edf7ef; }
+    body { margin: 0; font-family: Arial, sans-serif; color: var(--text); background: #f6f7f8; }
+    header { padding: 18px 24px; background: var(--panel); border-bottom: 1px solid var(--border); }
+    main { display: grid; grid-template-columns: 320px 1fr; min-height: calc(100vh - 71px); }
+    aside { border-right: 1px solid var(--border); background: var(--panel); overflow: auto; }
+    .editor-pane { padding: 22px; overflow: auto; }
     h1 { margin: 0; font-size: 22px; }
-    h2 { margin: 0 0 12px; font-size: 20px; }
+    h2 { margin: 0; font-size: 24px; }
+    h3 { margin: 0; font-size: 18px; }
+    p { margin: 0; }
     button, select, input, textarea { font: inherit; }
-    button, .button-link { border: 1px solid #9aa6b2; border-radius: 6px; background: #ffffff; padding: 8px 10px; cursor: pointer; }
+    button, .button-link { border: 1px solid #9aa6b2; border-radius: 6px; background: #ffffff; padding: 9px 12px; cursor: pointer; }
     .button-link { color: inherit; display: inline-block; text-decoration: none; }
-    button.primary { background: #155e75; color: #ffffff; border-color: #155e75; }
+    button.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); }
     button:disabled { cursor: not-allowed; opacity: 0.55; }
-    .article-button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid #e4e8eb; border-radius: 0; padding: 12px 14px; }
+    .article-button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid #e4e8eb; border-radius: 0; padding: 13px 14px; }
     .article-button.active { background: #e7f2f5; }
-    .meta { color: #617080; font-size: 13px; margin-top: 4px; }
-    .form-grid { display: grid; gap: 14px; max-width: 960px; }
-    label { display: grid; gap: 6px; font-weight: 700; }
-    .readonly-key { color: #617080; font-size: 13px; font-weight: 400; }
-    input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 9px; background: #ffffff; }
-    textarea { min-height: 96px; resize: vertical; }
-    .hero-preview { display: grid; gap: 8px; max-width: 420px; margin: 14px 0; }
-    .hero-preview img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 6px; border: 1px solid #d9dee3; background: #ffffff; }
-    .hero-preview .empty { padding: 12px; border: 1px solid #d9dee3; border-radius: 6px; background: #ffffff; }
-    .support-summary { display: grid; gap: 10px; max-width: 720px; margin: 14px 0; }
+    .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .editor-shell { display: grid; gap: 18px; max-width: 1080px; }
+    .editor-header { display: grid; gap: 12px; padding: 18px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
+    .editor-title-row { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+    .status-pills, .preview-actions, .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .pill { display: inline-flex; align-items: center; min-height: 26px; padding: 2px 9px; border: 1px solid var(--border); border-radius: 999px; background: var(--soft); color: #33414f; font-size: 13px; }
+    .pill.required { border-color: #e2b9b3; background: #fff5f3; color: #8a2f25; }
+    .pill.optional { color: var(--muted); }
+    .form-grid { display: grid; gap: 16px; }
+    .field-panel { border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden; }
+    .field-panel__header { display: grid; gap: 5px; padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--soft); }
+    .field-panel__description { color: var(--muted); font-size: 14px; }
+    .field-group { display: grid; gap: 14px; padding: 16px; }
+    .field-row { display: grid; gap: 7px; }
+    .field-label-line { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-weight: 700; }
+    .field-help { color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .field-error { display: none; color: var(--error); font-size: 13px; font-weight: 700; }
+    .field-row.has-error .field-error { display: block; }
+    .field-row.has-error input, .field-row.has-error textarea, .field-row.has-error select { border-color: var(--error); box-shadow: 0 0 0 2px rgba(180, 35, 24, 0.08); }
+    input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 10px; background: #ffffff; max-width: 100%; }
+    textarea { min-height: 112px; resize: vertical; line-height: 1.45; }
+    .hero-preview { display: grid; gap: 8px; max-width: 460px; }
+    .hero-preview img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; }
+    .image-empty, .support-preview .empty { padding: 12px; border: 1px dashed #b8c2cc; border-radius: 6px; background: #ffffff; color: var(--muted); }
+    .support-summary { display: grid; gap: 10px; }
     .support-summary__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-    .support-preview { display: grid; gap: 6px; }
-    .support-preview img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; border: 1px solid #d9dee3; background: #ffffff; }
-    .support-preview .empty { padding: 10px; border: 1px solid #d9dee3; border-radius: 6px; background: #ffffff; }
-    fieldset { border: 1px solid #d9dee3; border-radius: 6px; padding: 14px; background: #ffffff; }
-    legend { padding: 0 6px; font-weight: 700; }
-    .field-group { display: grid; gap: 14px; }
-    .actions { display: flex; gap: 10px; margin: 16px 0; }
-    .preview-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
-    .message { margin: 12px 0; padding: 10px; border-radius: 6px; background: #eef6ee; }
-    .message.error { background: #fbeaea; }
-    .empty { color: #617080; }
-    @media (max-width: 760px) { main { grid-template-columns: 1fr; } aside { max-height: 40vh; border-right: 0; border-bottom: 1px solid #d9dee3; } }
+    .support-preview { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: #ffffff; }
+    .support-preview img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; }
+    .actions { position: sticky; bottom: 0; padding: 12px 0; background: linear-gradient(to top, #f6f7f8 75%, rgba(246, 247, 248, 0)); }
+    .message { padding: 12px 14px; border-radius: 6px; border: 1px solid #b9ddc2; background: var(--success-bg); color: var(--success); }
+    .message.error { border-color: #e6b7b0; background: var(--error-bg); color: var(--error); }
+    .message ul { margin: 8px 0 0; padding-left: 20px; }
+    .empty { color: var(--muted); }
+    @media (max-width: 760px) { main { grid-template-columns: 1fr; } aside { max-height: 36vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } }
   </style>
 </head>
 <body>
@@ -239,7 +253,7 @@ EDITOR_HTML = r"""<!doctype html>
   </header>
   <main>
     <aside id="articleList"></aside>
-    <section>
+    <section class="editor-pane">
       <div id="editor"><p class="empty">Choisissez un article à modifier.</p></div>
     </section>
   </main>
@@ -249,6 +263,7 @@ EDITOR_HTML = r"""<!doctype html>
     let currentSlug = "";
     let currentValues = {};
     let currentImageOptions = [];
+    let currentArticleFields = [];
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -269,7 +284,7 @@ EDITOR_HTML = r"""<!doctype html>
       articles.forEach((article) => {
         const button = document.createElement("button");
         button.className = "article-button" + (article.slug === currentSlug ? " active" : "");
-        button.innerHTML = `<strong>${escapeHtml(article.title || article.slug)}</strong><div class="meta">${escapeHtml(article.status || "-")} · ${article.has_hero ? "image principale" : "pas d'image principale"}</div>`;
+        button.innerHTML = `<strong>${escapeHtml(article.title || article.slug)}</strong><div class="meta">${escapeHtml(statusLabel(article.status))} · ${article.has_hero ? "image principale" : "image à choisir"}</div>`;
         button.addEventListener("click", () => openArticle(article.slug));
         list.appendChild(button);
       });
@@ -281,6 +296,7 @@ EDITOR_HTML = r"""<!doctype html>
       currentValues = {};
       article.fields.forEach((item) => currentValues[item.path] = item.value || "");
       currentImageOptions = article.image_options || [];
+      currentArticleFields = article.fields || [];
       renderArticleList();
       renderEditor(article);
     }
@@ -289,20 +305,34 @@ EDITOR_HTML = r"""<!doctype html>
       const editor = document.getElementById("editor");
       const controls = renderFieldGroups(article.fields || []);
       editor.innerHTML = `
-        <h2>${escapeHtml(article.title || article.slug)}</h2>
-        <div class="meta">Slug: ${escapeHtml(article.slug)} · Image principale: ${escapeHtml(article.hero_src || "-")}</div>
-        ${renderPreviewActions(article.preview_urls || {})}
-        ${renderHeroPreview(article.hero_src || "")}
-        ${renderSupportSummary(article.support_images || [])}
-        <div class="actions">
-          <button id="validateButton">Valider</button>
-          <button id="saveButton" class="primary">Enregistrer</button>
+        <div class="editor-shell">
+          <div class="editor-header">
+            <div class="editor-title-row">
+              <div>
+                <h2>${escapeHtml(article.title || article.slug)}</h2>
+                <div class="meta">Article: ${escapeHtml(article.slug)}</div>
+              </div>
+              <div class="status-pills">
+                <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
+                <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
+              </div>
+            </div>
+            ${renderPreviewActions(article.preview_urls || {})}
+          </div>
+          <div id="message"></div>
+          <form class="form-grid" id="articleForm">${controls}</form>
+          <div class="actions">
+            <button id="validateButton" type="button">Vérifier les champs</button>
+            <button id="saveButton" class="primary" type="button">Enregistrer</button>
+          </div>
         </div>
-        <div id="message"></div>
-        <form class="form-grid" id="articleForm">${controls}</form>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+      document.querySelectorAll("[data-field]").forEach((control) => {
+        control.addEventListener("input", () => clearFieldError(control.dataset.field));
+        control.addEventListener("change", () => clearFieldError(control.dataset.field));
+      });
       const heroSelect = document.querySelector('[data-field="media.hero.src"]');
       if (heroSelect) {
         heroSelect.addEventListener("change", () => {
@@ -326,8 +356,8 @@ EDITOR_HTML = r"""<!doctype html>
       const enUrl = urls.en || previewUrl("en");
       return `
         <div class="preview-actions" aria-label="Preview de l'article">
-          <a class="button-link" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Preview FR</a>
-          <a class="button-link" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Preview EN</a>
+          <a class="button-link" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Voir l'article FR</a>
+          <a class="button-link" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Voir l'aperçu EN</a>
         </div>
       `;
     }
@@ -339,11 +369,11 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderHeroPreview(src) {
       if (!src) {
-        return `<div class="hero-preview" id="heroPreview"><strong>Image principale actuelle</strong><p class="empty">Aucune image principale.</p></div>`;
+        return `<div class="hero-preview" id="heroPreview"><strong>Aperçu de l'image principale</strong><p class="image-empty">Aucune image principale sélectionnée.</p></div>`;
       }
       return `
         <div class="hero-preview" id="heroPreview">
-          <strong>Image principale actuelle</strong>
+          <strong>Aperçu de l'image principale</strong>
           <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
           <div class="meta">${escapeHtml(src)}</div>
         </div>
@@ -352,12 +382,12 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderSupportSummary(images) {
       if (!images.length) {
-        return `<div class="support-summary"><strong>Images support actuelles</strong><p class="empty">Aucune image support existante. Cet editeur ne permet pas d'en ajouter.</p></div>`;
+        return `<div class="support-summary"><strong>Images support</strong><p class="empty">Aucune image support existante. Cet éditeur ne permet pas d'en ajouter.</p></div>`;
       }
       const cards = images.map((image) => renderSupportCard(image.index, image.src || "")).join("");
       return `
         <div class="support-summary">
-          <strong>Images support actuelles</strong>
+          <strong>Images support</strong>
           <div class="support-summary__grid">${cards}</div>
         </div>
       `;
@@ -365,11 +395,11 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderSupportCard(index, src) {
       if (!src) {
-        return `<div class="support-preview"><strong>Slot ${Number(index) + 1}</strong><p class="empty">Aucune image.</p></div>`;
+        return `<div class="support-preview"><strong>Image ${Number(index) + 1}</strong><p class="empty">Aucune image.</p></div>`;
       }
       return `
         <div class="support-preview">
-          <strong>Slot ${Number(index) + 1}</strong>
+          <strong>Image ${Number(index) + 1}</strong>
           <img src="/${escapeAttr(encodeImagePath(src))}" alt="">
           <div class="meta">${escapeHtml(src)}</div>
         </div>
@@ -377,48 +407,153 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     function renderFieldGroups(articleFields) {
-      const groups = [];
+      const groups = editorGroups();
       articleFields.forEach((field) => {
-        let group = groups.find((item) => item.name === (field.group || "Champs principaux"));
-        if (!group) {
-          group = { name: field.group || "Champs principaux", fields: [] };
-          groups.push(group);
-        }
-        group.fields.push(field);
+        groupForField(groups, field).fields.push(field);
       });
 
-      return groups.map((group) => {
+      return groups.filter((group) => group.fields.length).map((group) => {
         const controls = group.fields.map((field) => renderField(field, currentValues[field.path] || "")).join("");
-        return `<fieldset><legend>${escapeHtml(group.name)}</legend><div class="field-group">${controls}</div></fieldset>`;
+        return `
+          <section class="field-panel" aria-labelledby="${escapeAttr(group.id)}">
+            <div class="field-panel__header">
+              <h3 id="${escapeAttr(group.id)}">${escapeHtml(group.name)}</h3>
+              <p class="field-panel__description">${escapeHtml(group.description)}</p>
+            </div>
+            <div class="field-group">${controls}</div>
+          </section>
+        `;
       }).join("");
+    }
+
+    function editorGroups() {
+      return [
+        { id: "group-status", key: "status", name: "Publication", description: "Etat de travail de l'article.", fields: [] },
+        { id: "group-hero", key: "hero", name: "Image principale", description: "Image affichée en tête d'article et texte associé.", fields: [] },
+        { id: "group-fr-main", key: "fr-main", name: "Texte principal FR", description: "Titre, chapeau, épigraphe, SEO et note liée en français.", fields: [] },
+        { id: "group-en-main", key: "en-main", name: "Texte principal EN", description: "Champs anglais, à compléter progressivement quand le contenu existe.", fields: [] },
+        { id: "group-fr-practical", key: "fr-practical", name: "Informations pratiques FR", description: "Valeurs visibles dans le bloc pratique français.", fields: [] },
+        { id: "group-en-practical", key: "en-practical", name: "Informations pratiques EN", description: "Valeurs visibles dans le bloc pratique anglais.", fields: [] },
+        { id: "group-fr-sections", key: "fr-sections", name: "Sections FR", description: "Titres et paragraphes du corps de l'article français.", fields: [] },
+        { id: "group-en-sections", key: "en-sections", name: "Sections EN", description: "Titres et paragraphes du corps anglais si disponibles.", fields: [] },
+        { id: "group-support", key: "support", name: "Images support", description: "Images secondaires déjà présentes dans l'article.", fields: [] },
+        { id: "group-other", key: "other", name: "Autres champs", description: "Champs éditables complémentaires.", fields: [] },
+      ];
+    }
+
+    function groupForField(groups, field) {
+      const path = field.path || "";
+      let key = "other";
+      if (path === "status") key = "status";
+      else if (path === "media.hero.src" || path === "content.fr.media.hero_alt" || path === "content.en.media.hero_alt") key = "hero";
+      else if (path.startsWith("media.support.")) key = "support";
+      else if (path.startsWith("content.fr.practical_items.")) key = "fr-practical";
+      else if (path.startsWith("content.en.practical_items.")) key = "en-practical";
+      else if (path.startsWith("content.fr.sections.")) key = "fr-sections";
+      else if (path.startsWith("content.en.sections.")) key = "en-sections";
+      else if (path.startsWith("content.fr.")) key = "fr-main";
+      else if (path.startsWith("content.en.")) key = "en-main";
+      return groups.find((group) => group.key === key) || groups[groups.length - 1];
     }
 
     function renderField(field, value) {
       const required = field.required ? " required" : "";
+      const fieldId = fieldDomId(field.path);
+      const help = fieldHelp(field);
+      const helpMarkup = help ? `<p class="field-help" id="${escapeAttr(fieldId)}-help">${escapeHtml(help)}</p>` : "";
+      const describedBy = help ? ` aria-describedby="${escapeAttr(fieldId)}-help ${escapeAttr(fieldId)}-error"` : ` aria-describedby="${escapeAttr(fieldId)}-error"`;
+      const badge = `<span class="pill ${field.required ? "required" : "optional"}">${field.required ? "Obligatoire" : "Optionnel"}</span>`;
+      const label = `<div class="field-label-line"><label for="${escapeAttr(fieldId)}">${fieldLabel(field)}</label>${badge}</div>`;
+      const error = `<p class="field-error" id="${escapeAttr(fieldId)}-error"></p>`;
       if (field.control === "select") {
         const options = field.choices.map((choice) => `<option value="${escapeAttr(choice)}"${choice === value ? " selected" : ""}>${escapeHtml(choice)}</option>`).join("");
-        return `<label>${escapeHtml(field.label)}<select data-field="${escapeAttr(field.path)}"${required}>${options}</select></label>`;
+        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}</div>`;
       }
       if (field.control === "image-select") {
         const options = `<option value="">Choisir une image...</option>` + currentImageOptions.map((image) => `<option value="${escapeAttr(image.src)}"${image.src === value ? " selected" : ""}>${escapeHtml(image.label || image.src)}</option>`).join("");
         const preview = field.path.startsWith("media.support.") ? renderSupportFieldPreview(field.path, value) : "";
-        return `<label>${escapeHtml(field.label)}<select data-control="image-select" data-field="${escapeAttr(field.path)}"${required}>${options}</select>${preview}</label>`;
+        const heroPreview = field.path === "media.hero.src" ? renderHeroPreview(value) : "";
+        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-control="image-select" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}${heroPreview}${preview}</div>`;
       }
       if (field.control === "textarea") {
-        return `<label>${fieldLabel(field)}<textarea data-field="${escapeAttr(field.path)}"${required}>${escapeHtml(value)}</textarea></label>`;
+        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<textarea id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${escapeHtml(value)}</textarea>${error}</div>`;
       }
-      return `<label>${fieldLabel(field)}<input data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}></label>`;
+      return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<input id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}${describedBy}>${error}</div>`;
     }
 
     function fieldLabel(field) {
-      const key = field.readonly_key ? `<span class="readonly-key">Cle: ${escapeHtml(field.readonly_key)}</span>` : "";
-      return `${escapeHtml(field.label)}${key}`;
+      return escapeHtml(displayLabel(field));
+    }
+
+    function displayLabel(field) {
+      const path = field.path || "";
+      const labels = {
+        "status": "Statut",
+        "media.hero.src": "Image principale",
+        "content.fr.title": "Titre FR",
+        "content.en.title": "Titre EN",
+        "content.fr.dek": "Chapeau FR",
+        "content.en.dek": "Chapeau EN",
+        "content.fr.epigraph": "Épigraphe FR",
+        "content.en.epigraph": "Épigraphe EN",
+        "content.fr.seo.meta_description": "Description courte FR",
+        "content.en.seo.meta_description": "Description courte EN",
+        "content.fr.media.hero_alt": "Description de l'image FR",
+        "content.en.media.hero_alt": "Description de l'image EN",
+        "content.fr.around.note": "Note d'article lié FR",
+        "content.en.around.note": "Note d'article lié EN",
+      };
+      if (labels[path]) return labels[path];
+
+      const section = path.match(/^content\.(fr|en)\.sections\.(\d+)\.(heading|body)$/);
+      if (section) {
+        const locale = section[1].toUpperCase();
+        const number = Number(section[2]) + 1;
+        return section[3] === "heading" ? `Section ${number} - titre ${locale}` : `Section ${number} - texte ${locale}`;
+      }
+
+      const practical = path.match(/^content\.(fr|en)\.practical_items\.(\d+)\.value$/);
+      if (practical) {
+        const locale = practical[1].toUpperCase();
+        const labelsByKey = { city: "Ville", country: "Pays", style: "Style", architect: "Architecte", address: "Adresse", date: "Date", access: "Accès" };
+        return `${labelsByKey[field.readonly_key] || field.label} ${locale}`;
+      }
+
+      const support = path.match(/^media\.support\.(\d+)\.src$/);
+      if (support) return `Image support ${Number(support[1]) + 1}`;
+      return field.label || path;
+    }
+
+    function fieldHelp(field) {
+      const path = field.path || "";
+      if (path === "status") return "Choisir l'état de travail avant publication.";
+      if (path === "media.hero.src") return "Choisir une image déjà présente dans le projet.";
+      if (path.includes(".title")) return "Titre visible en haut de l'article.";
+      if (path.includes(".dek")) return "Court résumé affiché sous le titre.";
+      if (path.includes(".epigraph")) return "Phrase d'accroche affichée avant le texte.";
+      if (path.includes("seo.meta_description")) return "Résumé court utilisé par les moteurs de recherche et les partages.";
+      if (path.includes("media.hero_alt")) return "Décrire brièvement l'image pour l'accessibilité.";
+      if (path.includes(".around.note")) return "Courte note visible vers l'article lié.";
+      if (path.includes(".sections.") && path.endsWith(".heading")) return "Intertitre de section.";
+      if (path.includes(".sections.") && path.endsWith(".body")) return "Texte principal de cette section.";
+      if (path.includes(".practical_items.")) return "Modifier seulement la valeur visible, pas le type d'information.";
+      if (path.startsWith("media.support.")) return "Remplacer uniquement l'image de cet emplacement existant.";
+      return "";
+    }
+
+    function fieldDomId(path) {
+      return `field-${String(path).replace(/[^a-z0-9]+/gi, "-")}`;
+    }
+
+    function statusLabel(status) {
+      const labels = { draft: "brouillon", ready: "prêt", published: "publié" };
+      return labels[status] || status || "-";
     }
 
     function renderSupportFieldPreview(fieldPath, src) {
       const id = fieldPreviewId(fieldPath);
       if (!src) {
-        return `<div class="support-preview" id="${escapeAttr(id)}"><p class="empty">Aucune image selectionnee pour ce slot.</p></div>`;
+        return `<div class="support-preview" id="${escapeAttr(id)}"><p class="empty">Aucune image sélectionnée pour cet emplacement.</p></div>`;
       }
       return `
         <div class="support-preview" id="${escapeAttr(id)}">
@@ -440,17 +575,19 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     async function validateArticle() {
-      setMessage("Validation en cours...");
+      clearAllFieldErrors();
+      setMessage("Vérification en cours...");
       const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/validate`, postPayload({ changes: collectChanges() }));
-      renderResult(result, "Validation réussie.");
+      renderResult(result, "Tout est vérifié. Aucun blocage détecté.");
     }
 
     async function saveArticle() {
+      clearAllFieldErrors();
       setMessage("Enregistrement en cours...");
       try {
         const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/save`, postPayload({ changes: collectChanges() }));
         await openArticle(currentSlug);
-        renderResult(result, result.message || "Enregistrement réussi.");
+        renderResult(result, "Article enregistré. La validation du projet est passée.");
       } catch (error) {
         renderResult(error, "L'enregistrement a échoué.");
       }
@@ -462,17 +599,60 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderResult(result, successMessage) {
       if (result.ok) {
+        clearAllFieldErrors();
         setMessage(successMessage);
         return;
       }
       const errors = result.errors || [{ message: result.error || "Erreur inconnue." }];
-      setMessage(errors.map((item) => `${item.code || "error"}: ${item.message}`).join("<br>"), true);
+      applyErrors(errors);
     }
 
     function setMessage(message, isError) {
       const box = document.getElementById("message");
       box.className = message ? "message" + (isError ? " error" : "") : "";
       box.innerHTML = message || "";
+    }
+
+    function applyErrors(errors) {
+      clearAllFieldErrors();
+      const items = errors.map((item) => ({ ...item, message: friendlyError(item) }));
+      items.forEach((item) => {
+        if (!item.field) return;
+        const row = fieldRow(item.field);
+        const errorBox = document.getElementById(`${fieldDomId(item.field)}-error`);
+        if (row && errorBox) {
+          row.classList.add("has-error");
+          errorBox.textContent = item.message;
+        }
+      });
+      const list = items.map((item) => `<li>${escapeHtml(item.message)}</li>`).join("");
+      setMessage(`<strong>${items.length} point${items.length > 1 ? "s" : ""} à corriger avant d'enregistrer.</strong><ul>${list}</ul>`, true);
+    }
+
+    function clearAllFieldErrors() {
+      document.querySelectorAll(".field-row.has-error").forEach((row) => row.classList.remove("has-error"));
+      document.querySelectorAll(".field-error").forEach((box) => box.textContent = "");
+    }
+
+    function clearFieldError(fieldPath) {
+      const row = fieldRow(fieldPath);
+      const errorBox = document.getElementById(`${fieldDomId(fieldPath)}-error`);
+      if (row) row.classList.remove("has-error");
+      if (errorBox) errorBox.textContent = "";
+    }
+
+    function fieldRow(fieldPath) {
+      return Array.from(document.querySelectorAll("[data-field-row]")).find((row) => row.dataset.fieldRow === fieldPath);
+    }
+
+    function friendlyError(error) {
+      const field = currentArticleFields.find((item) => item.path === error.field);
+      const label = field ? displayLabel(field) : "";
+      if (error.code === "required-field") return `${label || "Ce champ"} est obligatoire.`;
+      if (error.code === "invalid-image") return `${label || "Cette image"} doit utiliser une image existante du projet.`;
+      if (error.code === "invalid-choice") return `${label || "Ce choix"} contient une valeur non autorisée.`;
+      if (error.code === "project-validation") return "La validation complète du projet a échoué. Rien n'a été enregistré.";
+      return error.message || "Erreur inconnue.";
     }
 
     function escapeHtml(value) {

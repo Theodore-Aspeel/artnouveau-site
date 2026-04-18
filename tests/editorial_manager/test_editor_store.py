@@ -161,6 +161,10 @@ class EditorStoreTests(unittest.TestCase):
         errors = validate_changes(sample_article(), [{"field": "content.fr.title", "value": ""}])
 
         self.assertIn("required-field", [item["code"] for item in errors])
+        self.assertIn(
+            {"code": "required-field", "message": "Titre français is required.", "field": "content.fr.title"},
+            errors,
+        )
 
     def test_validate_changes_reports_required_french_section_body(self):
         errors = validate_changes(sample_article(), [{"field": "content.fr.sections.0.body", "value": ""}])

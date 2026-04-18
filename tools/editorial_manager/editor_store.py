@@ -146,15 +146,17 @@ def apply_changes(
         field_path = str(change.get("field") or "")
         field = editable_field_for_path(article, field_path)
         if field is None:
-            errors.append(error("field-not-editable", f"{field_path or '<empty>'} is not editable."))
+            errors.append(error("field-not-editable", f"{field_path or '<empty>'} is not editable.", field_path))
             continue
 
         value = normalize_edit_value(change.get("value"))
         if field.choices and value not in field.choices:
-            errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
+            errors.append(
+                error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}.", field_path)
+            )
             continue
         if field.control == "image-select" and not is_valid_editor_image_src(value, project_root):
-            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images."))
+            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images.", field_path))
             continue
 
         set_path(article, field_path, value)
@@ -168,11 +170,11 @@ def validate_article_for_editor(article: Article, project_root: Path = PROJECT_R
     for field in editable_fields_for_article(article):
         value = normalize_edit_value(get_path(article, field.path))
         if field.required and not value:
-            errors.append(error("required-field", f"{field.label} is required."))
+            errors.append(error("required-field", f"{field.label} is required.", field.path))
         if field.choices and value and value not in field.choices:
-            errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}."))
+            errors.append(error("invalid-choice", f"{field.label} must be one of {', '.join(field.choices)}.", field.path))
         if field.control == "image-select" and value and not is_valid_editor_image_src(value, project_root):
-            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images."))
+            errors.append(error("invalid-image", f"{field.label} doit etre une image existante sous assets/images.", field.path))
 
     publication_errors = [item for item in publication_check_article(article) if item.status == "ERROR"]
     for item in publication_errors:
@@ -223,5 +225,8 @@ def run_project_validation() -> tuple[bool, list[str]]:
     return False, [message for message in messages if message]
 
 
-def error(code: str, message: str) -> dict[str, str]:
-    return {"code": code, "message": message}
+def error(code: str, message: str, field: str = "") -> dict[str, str]:
+    payload = {"code": code, "message": message}
+    if field:
+        payload["field"] = field
+    return payload
