@@ -11,6 +11,7 @@ from tools.editorial_manager.editor_store import (
     save_article_changes,
     validate_changes,
 )
+from tools.editorial_manager.editor_backups import create_articles_backup, list_article_backups, restore_articles_backup
 
 
 VALID_HERO_SRC = "assets/images/articles/maison-coilliot-lille-hector-guimard.png"
@@ -67,6 +68,10 @@ class EditorStoreTests(unittest.TestCase):
         self.assertTrue(payload["image_options"])
         self.assertEqual(payload["preview_urls"]["fr"], "article.html?slug=demo")
         self.assertEqual(payload["preview_urls"]["en"], "article.html?slug=demo&previewLocale=en")
+        self.assertEqual(payload["preview_urls"]["nl"], "article.html?slug=demo&previewLocale=nl")
+        self.assertEqual(payload["locale_contract"]["default"], "fr")
+        self.assertIn("nl", payload["locale_contract"]["preview"])
+        self.assertNotIn("nl", payload["locale_contract"]["editable"])
         self.assertIn(VALID_HERO_SRC, [image["src"] for image in payload["image_options"]])
         self.assertEqual(payload["support_images"], [{"index": 0, "src": VALID_SUPPORT_SRC}])
         self.assertIn("status", field_paths)
@@ -123,6 +128,7 @@ class EditorStoreTests(unittest.TestCase):
 
         self.assertEqual(urls["fr"], "article.html?slug=demo%2Flille%20ete")
         self.assertEqual(urls["en"], "article.html?slug=demo%2Flille%20ete&previewLocale=en")
+        self.assertEqual(urls["nl"], "article.html?slug=demo%2Flille%20ete&previewLocale=nl")
 
     def test_validate_changes_rejects_non_whitelisted_field(self):
         errors = validate_changes(sample_article(), [{"field": "slug", "value": "new-slug"}])
@@ -164,7 +170,7 @@ class EditorStoreTests(unittest.TestCase):
 
         self.assertIn("required-field", [item["code"] for item in errors])
         self.assertIn(
-            {"code": "required-field", "message": "Titre français is required.", "field": "content.fr.title"},
+            {"code": "required-field", "message": "Titre FR is required.", "field": "content.fr.title"},
             errors,
         )
 
@@ -199,8 +205,52 @@ class EditorStoreTests(unittest.TestCase):
             payload = json.loads(path.read_text(encoding="utf-8"))
 
         self.assertTrue(result["ok"])
+        self.assertIn("backup", result)
         self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Updated FR")
         self.assertEqual(payload["articles"][0]["slug"], "demo")
+
+    def test_save_article_changes_creates_backup_before_writing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+
+            result = save_article_changes(
+                "demo",
+                [{"field": "content.fr.title", "value": "Updated FR"}],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            backup_path = Path(directory) / result["backup"]["path"]
+            backup_payload = json.loads(backup_path.read_text(encoding="utf-8"))
+
+        self.assertTrue(result["ok"])
+        self.assertEqual(backup_payload["articles"][0]["content"]["fr"]["title"], "Demo FR")
+
+    def test_restore_articles_backup_restores_selected_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            root = Path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+            backup = create_articles_backup(path, project_root=root)
+            write_payload(path, [sample_article("assets/images/articles/current.png") | {"slug": "changed"}])
+
+            restored = restore_articles_backup(backup["id"], path=path, project_root=root)
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertEqual(restored["id"], backup["id"])
+        self.assertEqual(payload["articles"][0]["slug"], "demo")
+
+    def test_article_backups_keep_only_recent_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            root = Path(directory)
+            for index in range(7):
+                write_payload(path, [sample_article("assets/images/articles/current.png") | {"slug": f"demo-{index}"}])
+                create_articles_backup(path, project_root=root)
+
+            backups = list_article_backups(project_root=root)
+
+        self.assertEqual(len(backups), 5)
 
     def test_validate_then_save_flow_updates_json(self):
         changes = [{"field": "content.fr.title", "value": "Updated FR"}]

@@ -1,9 +1,14 @@
 (function attachSiteI18n(global) {
   'use strict';
 
-  const DEFAULT_LOCALE = 'fr';
+  const localeConfig = global.SiteLocales || {};
+  const DEFAULT_LOCALE = localeConfig.defaultLocale || 'fr';
   const PREVIEW_LOCALE_PARAM = 'previewLocale';
-  const SUPPORTED_LOCALES = new Set(['fr', 'en']);
+  const PREVIEW_LOCALES = new Set(
+    typeof localeConfig.previewLocaleCodes === 'function'
+      ? localeConfig.previewLocaleCodes()
+      : ['fr', 'en']
+  );
 
   const MESSAGES = {
     fr: {
@@ -307,19 +312,24 @@
   };
 
   function normalizeLocale(locale) {
-    const normalized = typeof locale === 'string'
-      ? locale.trim().toLowerCase().split('-')[0]
-      : '';
+    if (typeof localeConfig.normalizeLocale === 'function') {
+      return localeConfig.normalizeLocale(locale, {
+        supported: Array.from(PREVIEW_LOCALES),
+        defaultLocale: DEFAULT_LOCALE,
+      });
+    }
 
-    return SUPPORTED_LOCALES.has(normalized) ? normalized : DEFAULT_LOCALE;
+    const normalized = typeof locale === 'string' ? locale.trim().toLowerCase().split('-')[0] : '';
+    return PREVIEW_LOCALES.has(normalized) ? normalized : DEFAULT_LOCALE;
   }
 
   function supportedLocale(locale) {
-    const normalized = typeof locale === 'string'
-      ? locale.trim().toLowerCase().split('-')[0]
-      : '';
+    if (typeof localeConfig.supportedLocale === 'function') {
+      return localeConfig.supportedLocale(locale, { supported: Array.from(PREVIEW_LOCALES) });
+    }
 
-    return SUPPORTED_LOCALES.has(normalized) ? normalized : '';
+    const normalized = typeof locale === 'string' ? locale.trim().toLowerCase().split('-')[0] : '';
+    return PREVIEW_LOCALES.has(normalized) ? normalized : '';
   }
 
   function previewLocale() {
@@ -393,6 +403,7 @@
 
   global.SiteI18n = {
     defaultLocale: DEFAULT_LOCALE,
+    previewLocaleCodes: Array.from(PREVIEW_LOCALES),
     normalizeLocale,
     previewLocale,
     previewLocaleHref,

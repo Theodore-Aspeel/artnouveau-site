@@ -10,6 +10,8 @@ from dataclasses import dataclass
 import re
 from typing import Any
 
+from .locales import editable_locale_specs, is_required_locale, locale_label
+
 
 Article = dict[str, Any]
 
@@ -27,28 +29,43 @@ class EditableField:
     readonly_key: str = ""
 
 
+LOCALIZED_MAIN_FIELDS = (
+    ("title", "Titre", "text", True),
+    ("dek", "Chapeau", "textarea", True),
+    ("epigraph", "Epigraphe", "textarea", True),
+    ("seo.meta_description", "Description SEO", "textarea", True),
+    ("media.hero_alt", "Texte alternatif de l'image principale", "textarea", True),
+    ("around.note", "Note de l'article lie", "textarea", False),
+)
+
+
+def localized_main_fields() -> tuple[EditableField, ...]:
+    fields: list[EditableField] = []
+    for locale in editable_locale_specs():
+        for path_suffix, label, control, required_in_source in LOCALIZED_MAIN_FIELDS:
+            fields.append(
+                EditableField(
+                    f"content.{locale.code}.{path_suffix}",
+                    f"{label} {locale.label}",
+                    control,
+                    required=required_in_source and locale.required,
+                )
+            )
+    return tuple(fields)
+
+
 EDITABLE_FIELDS: tuple[EditableField, ...] = (
     EditableField("status", "Statut de publication", "select", required=True, choices=STATUS_VALUES),
     EditableField("media.hero.src", "Image principale", "image-select", required=True, group="Image principale"),
-    EditableField("content.fr.title", "Titre français", "text", required=True),
-    EditableField("content.en.title", "Titre anglais", "text"),
-    EditableField("content.fr.dek", "Chapeau français", "textarea", required=True),
-    EditableField("content.en.dek", "Chapeau anglais", "textarea"),
-    EditableField("content.fr.epigraph", "Épigraphe française", "textarea", required=True),
-    EditableField("content.en.epigraph", "Épigraphe anglaise", "textarea"),
-    EditableField("content.fr.seo.meta_description", "Description SEO française", "textarea", required=True),
-    EditableField("content.en.seo.meta_description", "Description SEO anglaise", "textarea"),
-    EditableField("content.fr.media.hero_alt", "Texte alternatif français de l'image principale", "textarea", required=True),
-    EditableField("content.en.media.hero_alt", "Texte alternatif anglais de l'image principale", "textarea"),
-    EditableField("content.fr.around.note", "Note française de l'article lié", "textarea"),
-    EditableField("content.en.around.note", "Note anglaise de l'article lié", "textarea"),
+    *localized_main_fields(),
 )
 
 EDITABLE_FIELD_BY_PATH = {field.path: field for field in EDITABLE_FIELDS}
-SECTION_FIELD_RE = re.compile(r"^content\.(fr|en)\.sections\.(0|[1-9]\d*)\.(heading|body)$")
-PRACTICAL_ITEM_FIELD_RE = re.compile(r"^content\.(fr|en)\.practical_items\.(0|[1-9]\d*)\.value$")
+EDITABLE_LOCALE_PATTERN = "|".join(re.escape(locale.code) for locale in editable_locale_specs())
+SECTION_FIELD_RE = re.compile(rf"^content\.({EDITABLE_LOCALE_PATTERN})\.sections\.(0|[1-9]\d*)\.(heading|body)$")
+PRACTICAL_ITEM_FIELD_RE = re.compile(rf"^content\.({EDITABLE_LOCALE_PATTERN})\.practical_items\.(0|[1-9]\d*)\.value$")
 SUPPORT_IMAGE_FIELD_RE = re.compile(r"^media\.support\.(0|[1-9]\d*)\.src$")
-SECTION_LOCALES = (("fr", "FR"), ("en", "EN"))
+SECTION_LOCALES = tuple((locale.code, locale.label) for locale in editable_locale_specs())
 SECTION_PROPERTIES = (("heading", "titre", "text"), ("body", "texte", "textarea"))
 PRACTICAL_ITEM_LABELS = {
     "city": "Ville",
@@ -114,21 +131,21 @@ def editable_field_for_path(article: Article, path: str) -> EditableField | None
     if not isinstance(sections, list) or index >= len(sections) or not isinstance(sections[index], dict):
         return None
 
-    locale_label = "FR" if locale == "fr" else "EN"
+    current_locale_label = locale_label(locale)
     property_label = "titre" if property_name == "heading" else "texte"
     control = "text" if property_name == "heading" else "textarea"
     return EditableField(
         path,
-        f"Section {index + 1} - {property_label} ({locale_label})",
+        f"Section {index + 1} - {property_label} ({current_locale_label})",
         control,
-        required=locale == "fr",
-        group=f"Sections {locale_label}",
+        required=is_required_locale(locale),
+        group=f"Sections {current_locale_label}",
     )
 
 
 def section_editable_fields(article: Article) -> list[EditableField]:
     fields: list[EditableField] = []
-    for locale, locale_label in SECTION_LOCALES:
+    for locale, current_locale_label in SECTION_LOCALES:
         sections = get_path(article, f"content.{locale}.sections")
         if not isinstance(sections, list):
             continue
@@ -139,10 +156,10 @@ def section_editable_fields(article: Article) -> list[EditableField]:
                 fields.append(
                     EditableField(
                         f"content.{locale}.sections.{index}.{property_name}",
-                        f"Section {index + 1} - {property_label} ({locale_label})",
+                        f"Section {index + 1} - {property_label} ({current_locale_label})",
                         control,
-                        required=locale == "fr",
-                        group=f"Sections {locale_label}",
+                        required=is_required_locale(locale),
+                        group=f"Sections {current_locale_label}",
                     )
                 )
     return fields
@@ -150,7 +167,7 @@ def section_editable_fields(article: Article) -> list[EditableField]:
 
 def practical_item_editable_fields(article: Article) -> list[EditableField]:
     fields: list[EditableField] = []
-    for locale, _locale_label in SECTION_LOCALES:
+    for locale, _current_locale_label in SECTION_LOCALES:
         practical_items = get_path(article, f"content.{locale}.practical_items")
         if not isinstance(practical_items, list):
             continue
@@ -169,15 +186,15 @@ def practical_item_editable_fields(article: Article) -> list[EditableField]:
 
 
 def practical_item_editable_field(locale: str, index: int, item: dict[str, Any], path: str) -> EditableField:
-    locale_label = "FR" if locale == "fr" else "EN"
+    current_locale_label = locale_label(locale)
     key = normalize_path_value(item.get("key"))
     label = PRACTICAL_ITEM_LABELS.get(key, key.replace("_", " ").capitalize() if key else f"Ligne {index + 1}")
     return EditableField(
         path,
-        f"{label} ({locale_label})",
+        f"{label} ({current_locale_label})",
         "text",
-        required=locale == "fr",
-        group=f"Informations pratiques {locale_label}",
+        required=is_required_locale(locale),
+        group=f"Informations pratiques {current_locale_label}",
         readonly_key=key,
     )
 

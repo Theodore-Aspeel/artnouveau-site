@@ -49,6 +49,11 @@
     Datation: 'date',
     Accès: 'access',
   };
+  const localeConfig = global.SiteLocales || {};
+  const DEFAULT_LOCALE = localeConfig.defaultLocale || 'fr';
+  const FALLBACK_LOCALES = Array.isArray(localeConfig.fallbackLocales)
+    ? localeConfig.fallbackLocales
+    : ['fr', 'en'];
 
   function isPlainObject(value) {
     return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -59,7 +64,10 @@
   }
 
   function normalizeLocale(locale) {
-    return normalizeText(locale || 'fr').toLowerCase().split('-')[0] || 'fr';
+    if (typeof localeConfig.normalizeLocale === 'function') {
+      return localeConfig.normalizeLocale(locale);
+    }
+    return normalizeText(locale || DEFAULT_LOCALE).toLowerCase().split('-')[0] || DEFAULT_LOCALE;
   }
 
   function localizedValue(value, locale, fallbackValue) {
@@ -70,11 +78,10 @@
     const direct = normalizeText(value[lang]);
     if (direct) return direct;
 
-    const french = normalizeText(value.fr);
-    if (french) return french;
-
-    const english = normalizeText(value.en);
-    if (english) return english;
+    for (const fallbackLocale of FALLBACK_LOCALES) {
+      const fallbackText = normalizeText(value[fallbackLocale]);
+      if (fallbackText) return fallbackText;
+    }
 
     for (const candidate of Object.values(value)) {
       const text = normalizeText(candidate);
@@ -95,40 +102,41 @@
 
     const lang = normalizeLocale(locale);
     if (isPlainObject(content[lang])) return content[lang];
-    if (isPlainObject(content.fr)) return content.fr;
-    if (isPlainObject(content.en)) return content.en;
+    for (const fallbackLocale of FALLBACK_LOCALES) {
+      if (isPlainObject(content[fallbackLocale])) return content[fallbackLocale];
+    }
     return {};
   }
 
-  function getArticleContent(article, locale = 'fr') {
+  function getArticleContent(article, locale = DEFAULT_LOCALE) {
     const selected = getLocaleContent(article, locale);
-    const french = getLocaleContent(article, 'fr');
+    const required = getLocaleContent(article, DEFAULT_LOCALE);
 
-    return Object.assign({}, french, selected);
+    return Object.assign({}, required, selected);
   }
 
-  function getArticleTitle(article, locale = 'fr') {
+  function getArticleTitle(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     return normalizeText(content.title) || normalizeText(article && article.title);
   }
 
-  function getArticleDek(article, locale = 'fr') {
+  function getArticleDek(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     return normalizeText(content.dek || content.chapeau) || normalizeText(article && article.chapeau);
   }
 
-  function getArticleEpigraph(article, locale = 'fr') {
+  function getArticleEpigraph(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     return normalizeText(content.epigraph) || normalizeText(article && article.epigraph);
   }
 
-  function getArticleMetaDescription(article, locale = 'fr') {
+  function getArticleMetaDescription(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const seo = isPlainObject(content.seo) ? content.seo : {};
     return normalizeText(seo.meta_description || content.meta_description) || normalizeText(article && article.meta_description);
   }
 
-  function getArticleSections(article, locale = 'fr') {
+  function getArticleSections(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const sections = Array.isArray(content.sections) && content.sections.length
       ? content.sections
@@ -162,7 +170,7 @@
     };
   }
 
-  function getArticleMedia(article, locale = 'fr') {
+  function getArticleMedia(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const contentMedia = isPlainObject(content.media) ? content.media : {};
     const sourceMedia = isPlainObject(article && article.media) ? article.media : {};
@@ -190,12 +198,12 @@
     return { hero, support };
   }
 
-  function getArticleHeroAlt(article, locale = 'fr') {
+  function getArticleHeroAlt(article, locale = DEFAULT_LOCALE) {
     const media = getArticleMedia(article, locale);
     return normalizeText(media.hero && media.hero.alt) || getArticleTitle(article, locale);
   }
 
-  function getArticleTaxonomy(article, locale = 'fr') {
+  function getArticleTaxonomy(article, locale = DEFAULT_LOCALE) {
     const taxonomy = isPlainObject(article && article.taxonomy) ? article.taxonomy : {};
     const facts = isPlainObject(article && article.facts) ? article.facts : {};
     const location = isPlainObject(facts.location) ? facts.location : {};
@@ -233,7 +241,7 @@
     return format;
   }
 
-  function getArticlePracticalItems(article, locale = 'fr') {
+  function getArticlePracticalItems(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const facts = isPlainObject(article && article.facts) ? article.facts : {};
     const location = isPlainObject(facts.location) ? facts.location : {};
@@ -321,7 +329,7 @@
     }
   }
 
-  function getArticleMapLink(article, locale = 'fr') {
+  function getArticleMapLink(article, locale = DEFAULT_LOCALE) {
     const addressItem = getArticlePracticalItems(article, locale).find((item) => item.key === 'address');
     const address = usableMapAddress(addressItem && addressItem.value);
     if (!address) return null;
@@ -339,7 +347,7 @@
     };
   }
 
-  function getArticleAround(article, locale = 'fr') {
+  function getArticleAround(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const relation = isPlainObject(article && article.relations) && isPlainObject(article.relations.around)
       ? article.relations.around
@@ -362,7 +370,7 @@
     };
   }
 
-  function getArticleResources(article, locale = 'fr') {
+  function getArticleResources(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     const resources = Array.isArray(content.resources) ? content.resources : article && article.resources;
 

@@ -52,6 +52,27 @@ class LocaleReportTests(unittest.TestCase):
         self.assertEqual(item.status, "en-ready")
         self.assertEqual(item.missing_fields, ())
 
+    def test_article_with_target_locale_fields_is_ready(self):
+        article = article_with_english({"title": "Demo"})
+        article["content"]["nl"] = {
+            "title": "Demo NL",
+            "dek": "Dek NL.",
+            "sections": [{"heading": "A", "body": "B"}],
+            "seo": {"meta_description": "Meta NL."},
+            "media": {"hero_alt": "Alt NL."},
+        }
+
+        item = analyze_article_locale(article, "nl")
+
+        self.assertEqual(item.status, "nl-ready")
+        self.assertEqual(item.missing_fields, ())
+
+    def test_missing_prepared_target_locale_stays_fr_only(self):
+        item = analyze_article_locale(article_with_english({"title": "Demo"}), "nl")
+
+        self.assertEqual(item.status, "fr-only")
+        self.assertIn("title", item.missing_fields)
+
     def test_articles_locale_preserves_one_item_per_article(self):
         items = analyze_articles_locale([
             article_with_english({"title": "Demo"}),

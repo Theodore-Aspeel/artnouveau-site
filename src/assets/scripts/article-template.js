@@ -62,6 +62,10 @@
   }
 
   function localizedValue(value) {
+    if (access && typeof access.localizedValue === 'function') {
+      return access.localizedValue(value, currentLocale());
+    }
+
     if (typeof value === 'string') return value.trim();
     if (!value || typeof value !== 'object') return '';
 

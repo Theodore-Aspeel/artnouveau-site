@@ -7,6 +7,7 @@ import argparse
 from .checks import check_article, check_articles, publication_check_article, publication_check_articles
 from .editor_server import run_editor_server
 from .locale_report import analyze_article_locale, analyze_articles_locale
+from .locales import locale_status_choices, preview_locale_codes
 from .repository import find_article_by_slug, load_articles
 from .reporting import (
     render_article_detail,
@@ -85,9 +86,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     locale_report_parser = subparsers.add_parser(
         "locale-report",
-        help="Show the read-only FR/EN content status.",
+        help="Show the read-only source/target locale content status.",
     )
     locale_report_parser.add_argument("slug", nargs="?", help="Optional article slug to inspect.")
+    locale_report_parser.add_argument(
+        "--locale",
+        choices=preview_locale_codes(),
+        default="en",
+        help="Target locale to inspect. Defaults to en.",
+    )
 
     social_brief_parser = subparsers.add_parser(
         "social-brief",
@@ -107,7 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
     social_caption_parser.add_argument("slug", help="Article slug to prepare.")
     social_caption_parser.add_argument(
         "--locale",
-        choices=("fr", "en"),
+        choices=preview_locale_codes(),
         default="fr",
         help="Caption locale to prepare. Defaults to fr.",
     )
@@ -129,7 +136,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_package_parser.add_argument(
         "--locale",
-        choices=("fr", "en"),
+        choices=preview_locale_codes(),
         default="fr",
         help="Caption locale to prepare. Defaults to fr.",
     )
@@ -146,7 +153,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_package_parser.add_argument(
         "--locale-status",
-        choices=("en-ready", "en-partial", "fr-only"),
+        choices=locale_status_choices(),
         help="With --next, keep only queue items with this locale status.",
     )
     social_package_parser.add_argument(
@@ -171,7 +178,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_queue_parser.add_argument(
         "--locale-status",
-        choices=("en-ready", "en-partial", "fr-only"),
+        choices=locale_status_choices(),
         help="Keep only queue items with this locale status.",
     )
     social_queue_parser.add_argument(
@@ -202,7 +209,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_next_parser.add_argument(
         "--locale-status",
-        choices=("en-ready", "en-partial", "fr-only"),
+        choices=locale_status_choices(),
         help="Keep only queue items with this locale status.",
     )
     social_next_parser.add_argument(
@@ -217,7 +224,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_workflow_parser.add_argument(
         "--locale",
-        choices=("fr", "en"),
+        choices=preview_locale_codes(),
         default="fr",
         help="Caption locale to prepare. Defaults to fr.",
     )
@@ -229,7 +236,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     social_workflow_parser.add_argument(
         "--locale-status",
-        choices=("en-ready", "en-partial", "fr-only"),
+        choices=locale_status_choices(),
         help="Keep only queue items with this locale status.",
     )
     social_workflow_parser.add_argument(
@@ -295,9 +302,9 @@ def main(argv: list[str] | None = None) -> int:
             article = find_article_by_slug(articles, args.slug)
             if article is None:
                 parser.error(f"unknown article slug: {args.slug}")
-            items = [analyze_article_locale(article)]
+            items = [analyze_article_locale(article, args.locale)]
         else:
-            items = analyze_articles_locale(articles)
+            items = analyze_articles_locale(articles, args.locale)
         print(render_locale_report(items))
         return 0
 

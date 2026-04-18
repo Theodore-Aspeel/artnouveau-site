@@ -88,10 +88,9 @@ class SocialPackageTests(unittest.TestCase):
                 },
             ],
         })
-        self.assertEqual(payload["links"], {
-            "article_fr_path": "article.html?slug=demo",
-            "article_en_preview_path": "article.html?slug=demo&previewLocale=en",
-        })
+        self.assertEqual(payload["links"]["article_fr_path"], "article.html?slug=demo")
+        self.assertEqual(payload["links"]["article_en_preview_path"], "article.html?slug=demo&previewLocale=en")
+        self.assertEqual(payload["links"]["preview_paths"]["nl"], "article.html?slug=demo&previewLocale=nl")
         self.assertEqual(payload["readiness"]["status"], "ready")
         self.assertEqual(payload["reasons"], [
             "Publication checklist is ready.",
@@ -157,12 +156,15 @@ class SocialPackageTests(unittest.TestCase):
 
         payload = social_package_to_dict(build_social_package(article, "fr"))
 
-        self.assertEqual(payload["links"], {
-            "article_fr_path": "article.html?slug=demo%2Flille%20ete",
-            "article_en_preview_path": (
-                "article.html?slug=demo%2Flille%20ete&previewLocale=en"
-            ),
-        })
+        self.assertEqual(payload["links"]["article_fr_path"], "article.html?slug=demo%2Flille%20ete")
+        self.assertEqual(
+            payload["links"]["article_en_preview_path"],
+            "article.html?slug=demo%2Flille%20ete&previewLocale=en",
+        )
+        self.assertEqual(
+            payload["links"]["preview_paths"]["nl"],
+            "article.html?slug=demo%2Flille%20ete&previewLocale=nl",
+        )
 
 
 if __name__ == "__main__":

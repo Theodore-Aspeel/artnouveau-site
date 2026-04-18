@@ -8,6 +8,7 @@ import re
 import unicodedata
 
 from .article_access import article_taxonomy
+from .locales import DEFAULT_LOCALE, normalize_locale
 from .social_brief import SocialBrief, build_social_brief
 
 
@@ -29,14 +30,15 @@ class SocialCaption:
 
 def build_social_caption(article: Article, locale: str = "fr") -> SocialCaption:
     """Build a deterministic, human-editable caption proposal for one article."""
+    requested_locale = normalize_locale(locale)
     brief = build_social_brief(article)
-    source_locale = _caption_source_locale(brief, locale)
+    source_locale = _caption_source_locale(brief, requested_locale)
     title = _localized_value(brief, source_locale, "title")
     dek = _localized_value(brief, source_locale, "dek")
 
     return SocialCaption(
         slug=brief.slug,
-        requested_locale=locale,
+        requested_locale=requested_locale,
         source_locale=source_locale,
         locale_status=brief.locale_status.status,
         title=title,
@@ -65,7 +67,7 @@ def social_caption_to_dict(caption: SocialCaption) -> dict[str, Any]:
 def _caption_source_locale(brief: SocialBrief, requested_locale: str) -> str:
     if requested_locale == "en" and (brief.title_en or brief.dek_en):
         return "en"
-    return "fr"
+    return DEFAULT_LOCALE
 
 
 def _localized_value(brief: SocialBrief, locale: str, field: str) -> str:

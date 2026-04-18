@@ -46,6 +46,30 @@ class CliTests(unittest.TestCase):
         self.assertIn("Locale report", output.getvalue())
         self.assertIn("en-ready", output.getvalue())
 
+    def test_locale_report_accepts_prepared_nl_target(self):
+        article = {
+            "slug": "demo",
+            "schema_version": 2,
+            "content": {
+                "fr": {
+                    "title": "Demo",
+                    "dek": "Demo dek.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Demo meta."},
+                    "media": {"hero_alt": "Demo alt."},
+                },
+                "en": {},
+            },
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["locale-report", "demo", "--locale", "nl"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("fr-only", output.getvalue())
+
     def test_publication_check_slug_command_runs(self):
         article = {
             "slug": "demo",
@@ -172,6 +196,32 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["source_locale"], "en")
         self.assertEqual(payload["title"], "Demo EN")
         self.assertEqual(payload["cta"], "Read the article on the site.")
+
+    def test_social_caption_json_accepts_internal_nl_preview_locale(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "title": "Demo",
+            "chapeau": "Demo dek.",
+            "city": "Lille",
+            "style": "Art Nouveau",
+            "meta_description": "Demo meta.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Demo alt.",
+            "publication_order_recommended": 1,
+            "content": {"en": {"title": "Demo EN", "dek": "Demo dek EN."}},
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main(["social-caption", "demo", "--locale", "nl", "--json"])
+
+        payload = json.loads(output.getvalue())
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["requested_locale"], "nl")
+        self.assertEqual(payload["source_locale"], "fr")
 
     def test_social_package_command_outputs_json_payload(self):
         article = {

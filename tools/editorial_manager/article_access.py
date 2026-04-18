@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from .locales import DEFAULT_LOCALE, FALLBACK_LOCALES, normalize_locale
+
 
 Article = dict[str, Any]
 
@@ -28,28 +30,29 @@ def article_model(article: Article) -> str:
     return "v1"
 
 
-def locale_content(article: Article, locale: str = "fr") -> dict[str, Any]:
+def locale_content(article: Article, locale: str = DEFAULT_LOCALE) -> dict[str, Any]:
     content = article.get("content")
     if not is_mapping(content):
         return {}
 
-    selected = content.get(locale)
+    selected = content.get(normalize_locale(locale))
     if is_mapping(selected):
         return selected
 
-    french = content.get("fr")
-    if is_mapping(french):
-        return french
+    for fallback_locale in FALLBACK_LOCALES:
+        fallback = content.get(fallback_locale)
+        if is_mapping(fallback):
+            return fallback
 
     return {}
 
 
-def article_title(article: Article, locale: str = "fr") -> str:
+def article_title(article: Article, locale: str = DEFAULT_LOCALE) -> str:
     content = locale_content(article, locale)
     return normalize_text(content.get("title")) or normalize_text(article.get("title"))
 
 
-def article_dek(article: Article, locale: str = "fr") -> str:
+def article_dek(article: Article, locale: str = DEFAULT_LOCALE) -> str:
     content = locale_content(article, locale)
     return normalize_text(content.get("dek")) or normalize_text(article.get("chapeau"))
 
@@ -61,14 +64,14 @@ def article_hero_image(article: Article) -> str:
     return hero_src or normalize_text(article.get("hero_image"))
 
 
-def article_hero_alt(article: Article, locale: str = "fr") -> str:
+def article_hero_alt(article: Article, locale: str = DEFAULT_LOCALE) -> str:
     content = locale_content(article, locale)
     media = content.get("media") if content else None
     hero_alt = normalize_text(media.get("hero_alt")) if is_mapping(media) else ""
     return hero_alt or normalize_text(article.get("alt_text")) or normalize_text(article.get("hero_alt"))
 
 
-def article_meta_description(article: Article, locale: str = "fr") -> str:
+def article_meta_description(article: Article, locale: str = DEFAULT_LOCALE) -> str:
     content = locale_content(article, locale)
     seo = content.get("seo") if content else None
     meta_description = normalize_text(seo.get("meta_description")) if is_mapping(seo) else ""
@@ -108,16 +111,30 @@ def article_taxonomy(article: Article) -> dict[str, str]:
     }
 
 
-def article_sections_count(article: Article, locale: str = "fr") -> int:
+def article_sections_count(article: Article, locale: str = DEFAULT_LOCALE) -> int:
     content = locale_content(article, locale)
     sections = content.get("sections") if content else article.get("sections")
     return len(sections) if isinstance(sections, list) else 0
 
 
-def has_english_content(article: Article) -> bool:
+def has_locale_content(article: Article, locale: str) -> bool:
     content = article.get("content")
-    english = content.get("en") if is_mapping(content) else None
-    return is_mapping(english) and any(bool(normalize_text(value)) for value in english.values())
+    selected = content.get(normalize_locale(locale)) if is_mapping(content) else None
+    return is_mapping(selected) and any(_has_real_text(value) for value in selected.values())
+
+
+def has_english_content(article: Article) -> bool:
+    return has_locale_content(article, "en")
+
+
+def _has_real_text(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(normalize_text(value))
+    if is_mapping(value):
+        return any(_has_real_text(item) for item in value.values())
+    if isinstance(value, list):
+        return any(_has_real_text(item) for item in value)
+    return False
 
 
 def article_slug(article: Article) -> str:

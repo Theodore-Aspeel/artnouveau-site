@@ -13,8 +13,10 @@ from urllib.parse import quote
 
 from .article_access import article_hero_image, article_publication_order, article_slug, article_title
 from .checks import publication_check_article
+from .editor_backups import create_articles_backup
 from .editor_fields import editable_field_for_path, editable_field_value_payload, editable_fields_for_article, get_path, set_path
 from .editor_images import is_valid_editor_image_src, list_editor_image_options, project_root_from_articles_path
+from .locales import DEFAULT_LOCALE, SUPPORTED_LOCALES, editable_locale_specs, preview_locale_codes
 from .repository import ARTICLES_JSON, PROJECT_ROOT
 
 
@@ -66,6 +68,7 @@ def build_editor_article_payload(article: Article, project_root: Path = PROJECT_
         "hero_src": article_hero_image(article),
         "support_images": current_support_images(article),
         "preview_urls": build_preview_urls(slug),
+        "locale_contract": editor_locale_contract(),
         "image_options": list_editor_image_options(project_root),
         "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
         "checks": validate_article_for_editor(article, project_root=project_root),
@@ -75,9 +78,28 @@ def build_editor_article_payload(article: Article, project_root: Path = PROJECT_
 def build_preview_urls(slug: str) -> dict[str, str]:
     encoded_slug = quote(slug, safe="")
     article_url = f"article.html?slug={encoded_slug}"
+    urls = {}
+    for locale in preview_locale_codes():
+        urls[locale] = article_url if locale == DEFAULT_LOCALE else f"{article_url}&previewLocale={locale}"
+    return urls
+
+
+def editor_locale_contract() -> dict[str, Any]:
     return {
-        "fr": article_url,
-        "en": f"{article_url}&previewLocale=en",
+        "default": DEFAULT_LOCALE,
+        "supported": [
+            {
+                "code": locale.code,
+                "label": locale.label,
+                "required": locale.required,
+                "public": locale.public,
+                "preview": locale.preview,
+                "editable": locale.editable,
+            }
+            for locale in SUPPORTED_LOCALES
+        ],
+        "editable": [locale.code for locale in editable_locale_specs()],
+        "preview": list(preview_locale_codes()),
     }
 
 
@@ -112,6 +134,19 @@ def save_article_changes(
     if errors:
         return {"ok": False, "errors": errors}
 
+    try:
+        backup = create_articles_backup(path, project_root=project_root)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "errors": [
+                error(
+                    "backup-failed",
+                    f"La sauvegarde locale de securite n'a pas pu etre creee. Rien n'a ete enregistre: {exc}",
+                )
+            ],
+        }
+
     write_payload_atomic(path, payload)
     validate = validator or run_project_validation
     try:
@@ -131,6 +166,7 @@ def save_article_changes(
     return {
         "ok": True,
         "article": build_editor_article_payload(article, project_root=project_root),
+        "backup": backup,
         "message": "Article saved and validation passed.",
     }
 

@@ -12,12 +12,14 @@ from urllib.parse import parse_qs, unquote, urlparse
 import webbrowser
 
 from .editor_fields import editable_field_payload
+from .editor_backups import create_articles_backup, list_article_backups, restore_articles_backup
 from .editor_images import editor_image_path, import_editor_image, list_editor_image_options
 from .editor_store import (
     build_editor_article_payload,
     find_payload_article,
     list_editor_articles,
     load_article_payload,
+    run_project_validation,
     save_article_changes,
     validate_changes,
 )
@@ -83,6 +85,10 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self.send_json({"articles": list_editor_articles(payload)})
             return
 
+        if route == "/api/backups":
+            self.send_json({"backups": list_article_backups()})
+            return
+
         slug = route_slug(route, "/api/articles/")
         if slug:
             payload = load_article_payload(ARTICLES_JSON)
@@ -108,6 +114,41 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": False, "error": str(exc)}, HTTPStatus.BAD_REQUEST)
                 return
             self.send_json({"ok": True, "image": image, "image_options": list_editor_image_options()})
+            return
+
+        if route == "/api/backups/restore":
+            request = self.read_json()
+            try:
+                current_backup = create_articles_backup(ARTICLES_JSON, keep=6)
+                restored = restore_articles_backup(request.get("backup_id"), ARTICLES_JSON)
+                ok, validation_errors = run_project_validation()
+            except (FileNotFoundError, ValueError, OSError) as exc:
+                self.send_json({"ok": False, "errors": [{"code": "restore-failed", "message": str(exc)}]}, HTTPStatus.BAD_REQUEST)
+                return
+            if not ok:
+                restore_articles_backup(current_backup["id"], ARTICLES_JSON)
+                self.send_json(
+                    {
+                        "ok": False,
+                        "errors": [
+                            {
+                                "code": "restore-validation",
+                                "message": "La restauration a echoue pendant la verification. L'etat precedent a ete remis en place.",
+                            }
+                        ]
+                        + [{"code": "restore-validation", "message": message} for message in validation_errors],
+                    },
+                    HTTPStatus.BAD_REQUEST,
+                )
+                return
+            self.send_json(
+                {
+                    "ok": True,
+                    "restored": restored,
+                    "backups": list_article_backups(),
+                    "message": "Sauvegarde restauree. La verification du projet est passee.",
+                }
+            )
             return
 
         if route.endswith("/validate"):
@@ -252,6 +293,8 @@ EDITOR_HTML = r"""<!doctype html>
     .status-pills, .preview-actions, .primary-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .status-pills { justify-content: flex-start; margin-top: 8px; }
     .editor-toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid #edf0eb; }
+    .backup-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 10px; border-top: 1px solid #edf0eb; }
+    .backup-actions label { font-weight: 700; }
     .primary-actions { order: 1; }
     .preview-actions { order: 2; margin-left: auto; }
     .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid #dbe3da; border-radius: 999px; background: var(--soft); color: #3f4d44; font-size: 12px; font-weight: 700; }
@@ -315,6 +358,8 @@ EDITOR_HTML = r"""<!doctype html>
     let currentImageOptions = [];
     let currentArticleFields = [];
     let currentTab = "essentiel";
+    let recentBackups = [];
+    let currentLocaleContract = defaultLocaleContract();
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -326,6 +371,7 @@ EDITOR_HTML = r"""<!doctype html>
     async function init() {
       fields = (await api("/api/fields")).fields;
       articles = (await api("/api/articles")).articles;
+      recentBackups = (await api("/api/backups")).backups || [];
       renderArticleList();
     }
 
@@ -361,6 +407,7 @@ EDITOR_HTML = r"""<!doctype html>
       savedValues = { ...currentValues };
       currentImageOptions = article.image_options || [];
       currentArticleFields = article.fields || [];
+      currentLocaleContract = article.locale_contract || defaultLocaleContract();
       currentTab = "essentiel";
       renderArticleList();
       renderEditor(article);
@@ -387,6 +434,7 @@ EDITOR_HTML = r"""<!doctype html>
                 <button id="validateButton" class="secondary" type="button">Vérifier les champs</button>
               </div>
             </div>
+            ${renderBackupActions()}
             <div class="editor-toolbar">
               ${renderEditorTabs()}
               ${renderPreviewActions(article.preview_urls || {})}
@@ -398,6 +446,8 @@ EDITOR_HTML = r"""<!doctype html>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+      const restoreButton = document.getElementById("restoreBackupButton");
+      if (restoreButton) restoreButton.addEventListener("click", restoreBackup);
       document.querySelectorAll("[data-preview-locale]").forEach((link) => {
         link.addEventListener("click", writeDraftPreview);
       });
@@ -440,6 +490,37 @@ EDITOR_HTML = r"""<!doctype html>
       `;
     }
 
+    function defaultLocaleContract() {
+      return {
+        default: "fr",
+        supported: [
+          { code: "fr", label: "FR", required: true, public: true, preview: true, editable: true },
+          { code: "en", label: "EN", required: false, public: true, preview: true, editable: true },
+          { code: "nl", label: "NL", required: false, public: false, preview: true, editable: false },
+        ],
+        editable: ["fr", "en"],
+        preview: ["fr", "en", "nl"],
+      };
+    }
+
+    function defaultLocale() {
+      return currentLocaleContract.default || "fr";
+    }
+
+    function renderBackupActions() {
+      const options = recentBackups.map((backup) => `<option value="${escapeAttr(backup.id)}">${escapeHtml(backup.label)}</option>`).join("");
+      const disabled = recentBackups.length ? "" : " disabled";
+      const help = recentBackups.length ? "Revient a une version locale recente de articles.json." : "Aucune sauvegarde locale disponible pour le moment.";
+      return `
+        <div class="backup-actions" aria-label="Sauvegardes locales">
+          <label for="backupSelect">Sauvegarde locale</label>
+          <select id="backupSelect"${disabled}>${options}</select>
+          <button id="restoreBackupButton" class="secondary" type="button"${disabled}>Restaurer</button>
+          <span class="meta">${help}</span>
+        </div>
+      `;
+    }
+
     function renderEditorTabs() {
       return `
         <nav class="tabs" aria-label="Parties de l'article">
@@ -467,7 +548,7 @@ EDITOR_HTML = r"""<!doctype html>
 
     function previewUrl(locale) {
       const base = `article.html?slug=${encodeURIComponent(currentSlug)}`;
-      return locale === "en" ? `${base}&previewLocale=en` : base;
+      return locale === defaultLocale() ? base : `${base}&previewLocale=${encodeURIComponent(locale)}`;
     }
 
     function draftPreviewUrl(href) {
@@ -823,10 +904,44 @@ EDITOR_HTML = r"""<!doctype html>
       try {
         const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/save`, postPayload({ changes: collectChanges() }));
         clearDraftPreview(currentSlug);
+        recentBackups = (await api("/api/backups")).backups || [];
         await openArticle(currentSlug);
-        renderResult(result, "Article enregistré dans articles.json. Validation du projet passée.");
+        renderResult(result, "Article enregistre. Une sauvegarde locale a ete creee avant l'enregistrement.");
       } catch (error) {
         renderResult(error, "L'enregistrement a échoué.");
+      }
+    }
+
+    async function restoreBackup() {
+      if (!confirmDiscardUnsavedChanges()) return;
+      const select = document.getElementById("backupSelect");
+      const backupId = select ? select.value : "";
+      if (!backupId) {
+        setMessage("Aucune sauvegarde locale a restaurer.", true);
+        return;
+      }
+      const backup = recentBackups.find((item) => item.id === backupId);
+      const label = backup ? backup.label : "la sauvegarde choisie";
+      if (!window.confirm(`Restaurer la sauvegarde locale du ${label} ? L'etat actuel sera aussi sauvegarde avant la restauration.`)) return;
+
+      clearAllFieldErrors();
+      setMessage("Restauration de la sauvegarde locale en cours...");
+      try {
+        const result = await api("/api/backups/restore", postPayload({ backup_id: backupId }));
+        articles = (await api("/api/articles")).articles;
+        recentBackups = result.backups || (await api("/api/backups")).backups || [];
+        if (currentSlug) {
+          const stillExists = articles.some((article) => article.slug === currentSlug);
+          if (stillExists) await openArticle(currentSlug);
+          else {
+            currentSlug = "";
+            renderArticleList();
+            document.getElementById("editor").innerHTML = `<p class="message">Sauvegarde restauree. Choisissez un article a modifier.</p>`;
+          }
+        }
+        setMessage("Sauvegarde locale restauree. La verification du projet est passee.");
+      } catch (error) {
+        renderResult(error, "La restauration a echoue.");
       }
     }
 

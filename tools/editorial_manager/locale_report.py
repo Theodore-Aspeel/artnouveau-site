@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .article_access import article_slug, is_mapping, locale_content, normalize_text
+from .locales import DEFAULT_LOCALE, normalize_locale
 
 
 Article = dict[str, Any]
@@ -18,22 +19,23 @@ class LocaleReportItem:
     missing_fields: tuple[str, ...]
 
 
-def analyze_article_locale(article: Article) -> LocaleReportItem:
-    """Return a simple FR/EN editorial status for one article."""
+def analyze_article_locale(article: Article, target_locale: str = "en") -> LocaleReportItem:
+    """Return a simple source/target editorial status for one article."""
     slug = article_slug(article) or "<missing slug>"
-    french = locale_content(article, "fr")
-    english = _raw_locale_content(article, "en")
+    source = locale_content(article, DEFAULT_LOCALE)
+    target = _raw_locale_content(article, target_locale)
+    target_locale = normalize_locale(target_locale)
 
-    if not _has_real_text(english):
-        return LocaleReportItem(slug, "fr-only", tuple(_required_field_names(french)))
+    if not _has_real_text(target):
+        return LocaleReportItem(slug, "fr-only", tuple(_required_field_names(source)))
 
-    missing_fields = tuple(_missing_english_fields(french, english))
-    status = "en-ready" if not missing_fields else "en-partial"
+    missing_fields = tuple(_missing_target_fields(source, target))
+    status = f"{target_locale}-ready" if not missing_fields else f"{target_locale}-partial"
     return LocaleReportItem(slug, status, missing_fields)
 
 
-def analyze_articles_locale(articles: list[Article]) -> list[LocaleReportItem]:
-    return [analyze_article_locale(article) for article in articles]
+def analyze_articles_locale(articles: list[Article], target_locale: str = "en") -> list[LocaleReportItem]:
+    return [analyze_article_locale(article, target_locale) for article in articles]
 
 
 def _raw_locale_content(article: Article, locale: str) -> dict[str, Any]:
@@ -45,24 +47,24 @@ def _raw_locale_content(article: Article, locale: str) -> dict[str, Any]:
     return selected if is_mapping(selected) else {}
 
 
-def _missing_english_fields(french: dict[str, Any], english: dict[str, Any]) -> list[str]:
+def _missing_target_fields(source: dict[str, Any], target: dict[str, Any]) -> list[str]:
     missing: list[str] = []
 
-    if not normalize_text(english.get("title")):
+    if not normalize_text(target.get("title")):
         missing.append("title")
 
-    if not normalize_text(english.get("dek")):
+    if not normalize_text(target.get("dek")):
         missing.append("dek")
 
-    seo = english.get("seo")
+    seo = target.get("seo")
     if not is_mapping(seo) or not normalize_text(seo.get("meta_description")):
         missing.append("seo.meta_description")
 
-    media = english.get("media")
+    media = target.get("media")
     if not is_mapping(media) or not normalize_text(media.get("hero_alt")):
         missing.append("media.hero_alt")
 
-    missing.extend(_missing_section_fields(french, english))
+    missing.extend(_missing_section_fields(source, target))
     return missing
 
 
