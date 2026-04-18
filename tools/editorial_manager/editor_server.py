@@ -352,7 +352,7 @@ EDITOR_HTML = r"""<!doctype html>
                 <h2>${escapeHtml(article.title || article.slug)}</h2>
                 <div class="meta">Article: ${escapeHtml(article.slug)}</div>
                 <div class="status-pills">
-                  <span class="pill save-state" id="saveState">Article enregistrÃ©</span>
+                  <span class="pill save-state" id="saveState">Article enregistré</span>
                   <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
                   <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
                 </div>
@@ -373,6 +373,9 @@ EDITOR_HTML = r"""<!doctype html>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+      document.querySelectorAll("[data-preview-locale]").forEach((link) => {
+        link.addEventListener("click", writeDraftPreview);
+      });
       document.querySelectorAll("[data-editor-tab]").forEach((button) => {
         button.addEventListener("click", () => activateTab(button.dataset.editorTab));
       });
@@ -400,12 +403,12 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     function renderPreviewActions(urls) {
-      const frUrl = urls.fr || previewUrl("fr");
-      const enUrl = urls.en || previewUrl("en");
+      const frUrl = draftPreviewUrl(urls.fr || previewUrl("fr"));
+      const enUrl = draftPreviewUrl(urls.en || previewUrl("en"));
       return `
         <div class="preview-actions" aria-label="Preview de l'article">
-          <a class="button-link tertiary" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Voir l'article FR</a>
-          <a class="button-link tertiary" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Voir l'aperçu EN</a>
+          <a class="button-link tertiary" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer" data-preview-locale="fr">Voir l'aperçu FR</a>
+          <a class="button-link tertiary" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer" data-preview-locale="en">Voir l'aperçu EN</a>
         </div>
       `;
     }
@@ -438,6 +441,12 @@ EDITOR_HTML = r"""<!doctype html>
     function previewUrl(locale) {
       const base = `article.html?slug=${encodeURIComponent(currentSlug)}`;
       return locale === "en" ? `${base}&previewLocale=en` : base;
+    }
+
+    function draftPreviewUrl(href) {
+      const url = new URL(href, window.location.href);
+      url.searchParams.set("editorDraft", "1");
+      return url.pathname.replace(/^\//, "") + url.search + url.hash;
     }
 
     function renderHeroPreview(src) {
@@ -666,6 +675,31 @@ EDITOR_HTML = r"""<!doctype html>
       }));
     }
 
+    function draftPreviewStorageKey(slug) {
+      return `artnouveau:editor-draft-preview:${slug}`;
+    }
+
+    function writeDraftPreview() {
+      if (!currentSlug) return;
+      try {
+        window.localStorage.setItem(draftPreviewStorageKey(currentSlug), JSON.stringify({
+          slug: currentSlug,
+          changes: collectChanges(),
+          expires_at: Date.now() + 24 * 60 * 60 * 1000
+        }));
+      } catch (error) {
+        setMessage("Le brouillon de preview n'a pas pu être préparé dans ce navigateur.", true);
+      }
+    }
+
+    function clearDraftPreview(slug) {
+      try {
+        window.localStorage.removeItem(draftPreviewStorageKey(slug));
+      } catch (error) {
+        return;
+      }
+    }
+
     function handleFieldEdit(control) {
       currentValues[control.dataset.field] = control.value;
       clearFieldError(control.dataset.field);
@@ -681,7 +715,7 @@ EDITOR_HTML = r"""<!doctype html>
       const state = document.getElementById("saveState");
       const button = document.getElementById("saveButton");
       if (state) {
-        state.textContent = dirty ? "Modifications non enregistrÃ©es" : "Article enregistrÃ©";
+        state.textContent = dirty ? "Modifications non enregistrées" : "Article enregistré";
         state.classList.toggle("dirty", dirty);
       }
       if (button) button.disabled = !dirty;
@@ -689,7 +723,7 @@ EDITOR_HTML = r"""<!doctype html>
 
     function confirmDiscardUnsavedChanges() {
       if (!currentSlug || !hasUnsavedChanges()) return true;
-      return window.confirm("Des modifications ne sont pas enregistrÃ©es. Changer d'article les fera perdre. Continuer ?");
+      return window.confirm("Des modifications ne sont pas enregistrées. Changer d'article les fera perdre. Continuer ?");
     }
 
     async function validateArticle() {
@@ -701,7 +735,7 @@ EDITOR_HTML = r"""<!doctype html>
 
     async function saveArticle() {
       if (!hasUnsavedChanges()) {
-        setMessage("Aucune modification Ã  enregistrer.");
+        setMessage("Aucune modification à enregistrer.");
         updateSaveState();
         return;
       }
@@ -709,6 +743,7 @@ EDITOR_HTML = r"""<!doctype html>
       setMessage("Enregistrement en cours...");
       try {
         const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/save`, postPayload({ changes: collectChanges() }));
+        clearDraftPreview(currentSlug);
         await openArticle(currentSlug);
         renderResult(result, "Article enregistré dans articles.json. Validation du projet passée.");
       } catch (error) {

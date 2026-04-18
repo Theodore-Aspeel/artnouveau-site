@@ -14,7 +14,8 @@
   const homeHref = script?.dataset.homeHref || '../index.html';
   const galleryHref = script?.dataset.galleryHref || '../index.html#galerie';
   const articleHrefBase = script?.dataset.articleHrefBase || 'article.html?slug=';
-  const slug = new URLSearchParams(window.location.search).get('slug');
+  const searchParams = new URLSearchParams(window.location.search);
+  const slug = searchParams.get('slug');
 
   if (!root || !access) return;
 
@@ -208,6 +209,67 @@
     root.appendChild(wrap);
   }
 
+  function editorDraftStorageKey(articleSlug) {
+    return `artnouveau:editor-draft-preview:${articleSlug}`;
+  }
+
+  function cloneJson(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function applyDraftPath(target, path, value) {
+    const parts = String(path || '').split('.').filter(Boolean);
+    if (!parts.length) return false;
+
+    let cursor = target;
+    for (let index = 0; index < parts.length - 1; index += 1) {
+      const part = parts[index];
+      if (part === '__proto__' || part === 'constructor' || part === 'prototype') return false;
+      cursor = Array.isArray(cursor) ? cursor[Number(part)] : cursor && cursor[part];
+      if (!cursor || typeof cursor !== 'object') return false;
+    }
+
+    const last = parts[parts.length - 1];
+    if (last === '__proto__' || last === 'constructor' || last === 'prototype') return false;
+    if (Array.isArray(cursor)) {
+      const itemIndex = Number(last);
+      if (!Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= cursor.length) return false;
+      cursor[itemIndex] = value;
+      return true;
+    }
+    if (!cursor || typeof cursor !== 'object' || !(last in cursor)) return false;
+    cursor[last] = value;
+    return true;
+  }
+
+  function articleWithEditorDraft(article) {
+    if (searchParams.get('editorDraft') !== '1') return article;
+
+    let draft;
+    try {
+      draft = JSON.parse(window.localStorage.getItem(editorDraftStorageKey(slug)) || 'null');
+    } catch (error) {
+      return article;
+    }
+
+    if (!draft || draft.slug !== slug || !Array.isArray(draft.changes)) return article;
+    if (Number(draft.expires_at) && Number(draft.expires_at) < Date.now()) {
+      try {
+        window.localStorage.removeItem(editorDraftStorageKey(slug));
+      } catch (error) {
+        return article;
+      }
+      return article;
+    }
+
+    const candidate = cloneJson(article);
+    draft.changes.forEach((change) => {
+      if (!change || typeof change !== 'object') return;
+      applyDraftPath(candidate, change.field, typeof change.value === 'string' ? change.value : '');
+    });
+    return candidate;
+  }
+
   if (!slug) {
     renderNotFound();
     return;
@@ -223,11 +285,12 @@
     return;
   }
 
-  const article = data.articles.find((item) => item.slug === slug);
+  let article = data.articles.find((item) => item.slug === slug);
   if (!article) {
     renderNotFound();
     return;
   }
+  article = articleWithEditorDraft(article);
 
   const locale = currentLocale();
   const articleTitle = access.getArticleTitle(article, locale);

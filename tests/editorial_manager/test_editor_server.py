@@ -42,6 +42,8 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn('class="primary"', EDITOR_HTML)
         self.assertIn('class="secondary"', EDITOR_HTML)
         self.assertIn("button-link tertiary", EDITOR_HTML)
+        self.assertIn("Voir l'aperçu FR", EDITOR_HTML)
+        self.assertIn("Voir l'aperçu EN", EDITOR_HTML)
         self.assertIn("article-button__chip", EDITOR_HTML)
         self.assertIn("tabForField", EDITOR_HTML)
         self.assertIn("Article enregistr", EDITOR_HTML)
@@ -51,6 +53,26 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("confirmDiscardUnsavedChanges", EDITOR_HTML)
         self.assertIn("beforeunload", EDITOR_HTML)
         self.assertIn("Changer d'article les fera perdre", EDITOR_HTML)
+
+    def test_editor_html_prepares_local_draft_preview(self):
+        self.assertIn('data-preview-locale="fr"', EDITOR_HTML)
+        self.assertIn('data-preview-locale="en"', EDITOR_HTML)
+        self.assertIn('editorDraft", "1"', EDITOR_HTML)
+        self.assertIn("artnouveau:editor-draft-preview", EDITOR_HTML)
+        self.assertIn("writeDraftPreview", EDITOR_HTML)
+        self.assertIn("clearDraftPreview", EDITOR_HTML)
+        self.assertIn("localStorage.setItem", EDITOR_HTML)
+        self.assertIn("localStorage.removeItem", EDITOR_HTML)
+
+    def test_article_template_reads_local_draft_preview_only_when_requested(self):
+        script = Path("src/assets/scripts/article-template.js").read_text(encoding="utf-8")
+
+        self.assertIn("articleWithEditorDraft", script)
+        self.assertIn("editorDraftStorageKey", script)
+        self.assertIn("searchParams.get('editorDraft') !== '1'", script)
+        self.assertIn("localStorage.getItem", script)
+        self.assertIn("applyDraftPath", script)
+        self.assertIn("draft.changes.forEach", script)
 
 
 if __name__ == "__main__":
