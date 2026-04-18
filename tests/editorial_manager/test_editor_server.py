@@ -44,6 +44,13 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("button-link tertiary", EDITOR_HTML)
         self.assertIn("article-button__chip", EDITOR_HTML)
         self.assertIn("tabForField", EDITOR_HTML)
+        self.assertIn("Article enregistr", EDITOR_HTML)
+        self.assertIn("Modifications non enregistr", EDITOR_HTML)
+        self.assertIn("hasUnsavedChanges", EDITOR_HTML)
+        self.assertIn("updateSaveState", EDITOR_HTML)
+        self.assertIn("confirmDiscardUnsavedChanges", EDITOR_HTML)
+        self.assertIn("beforeunload", EDITOR_HTML)
+        self.assertIn("Changer d'article les fera perdre", EDITOR_HTML)
 
 
 if __name__ == "__main__":

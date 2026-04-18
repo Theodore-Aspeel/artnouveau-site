@@ -209,6 +209,7 @@ EDITOR_HTML = r"""<!doctype html>
     .button-link { color: inherit; display: inline-block; text-decoration: none; }
     button.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 8px 18px rgba(31, 107, 93, 0.18); font-weight: 700; }
     button.primary:hover { background: var(--accent-dark); }
+    button.primary:disabled:hover { background: var(--accent); }
     button.secondary { background: #ffffff; border-color: #7b9b8d; color: var(--accent-dark); font-weight: 700; }
     .button-link.tertiary { border-color: transparent; background: transparent; color: var(--accent-dark); padding-inline: 6px; text-decoration: underline; text-underline-offset: 3px; }
     button:disabled { cursor: not-allowed; opacity: 0.55; }
@@ -234,6 +235,8 @@ EDITOR_HTML = r"""<!doctype html>
     .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid #dbe3da; border-radius: 999px; background: var(--soft); color: #3f4d44; font-size: 12px; font-weight: 700; }
     .pill.required { border-color: #efcfca; background: #fff5f3; color: #8a2f25; }
     .pill.optional { color: var(--muted); }
+    .save-state { border-color: #cfe1d4; background: var(--success-bg); color: var(--success); }
+    .save-state.dirty { border-color: #eed39b; background: #fff7e8; color: #7b4e12; }
     .tabs { display: flex; gap: 7px; overflow-x: auto; padding: 3px 2px 2px; }
     .tab-button { border-color: #d6dfd5; background: #ffffff; color: #43504a; font-weight: 700; white-space: nowrap; }
     .tab-button.active { background: var(--accent); border-color: var(--accent); color: #ffffff; }
@@ -283,6 +286,7 @@ EDITOR_HTML = r"""<!doctype html>
     let articles = [];
     let currentSlug = "";
     let currentValues = {};
+    let savedValues = {};
     let currentImageOptions = [];
     let currentArticleFields = [];
     let currentTab = "essentiel";
@@ -324,10 +328,12 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     async function openArticle(slug) {
+      if (slug !== currentSlug && !confirmDiscardUnsavedChanges()) return;
       const article = await api(`/api/articles/${encodeURIComponent(slug)}`);
       currentSlug = slug;
       currentValues = {};
       article.fields.forEach((item) => currentValues[item.path] = item.value || "");
+      savedValues = { ...currentValues };
       currentImageOptions = article.image_options || [];
       currentArticleFields = article.fields || [];
       currentTab = "essentiel";
@@ -346,6 +352,7 @@ EDITOR_HTML = r"""<!doctype html>
                 <h2>${escapeHtml(article.title || article.slug)}</h2>
                 <div class="meta">Article: ${escapeHtml(article.slug)}</div>
                 <div class="status-pills">
+                  <span class="pill save-state" id="saveState">Article enregistrÃ©</span>
                   <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
                   <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
                 </div>
@@ -370,8 +377,8 @@ EDITOR_HTML = r"""<!doctype html>
         button.addEventListener("click", () => activateTab(button.dataset.editorTab));
       });
       document.querySelectorAll("[data-field]").forEach((control) => {
-        control.addEventListener("input", () => clearFieldError(control.dataset.field));
-        control.addEventListener("change", () => clearFieldError(control.dataset.field));
+        control.addEventListener("input", () => handleFieldEdit(control));
+        control.addEventListener("change", () => handleFieldEdit(control));
       });
       const heroSelect = document.querySelector('[data-field="media.hero.src"]');
       if (heroSelect) {
@@ -389,6 +396,7 @@ EDITOR_HTML = r"""<!doctype html>
           if (preview) preview.outerHTML = renderSupportFieldPreview(select.dataset.field, select.value);
         });
       });
+      updateSaveState();
     }
 
     function renderPreviewActions(urls) {
@@ -658,6 +666,32 @@ EDITOR_HTML = r"""<!doctype html>
       }));
     }
 
+    function handleFieldEdit(control) {
+      currentValues[control.dataset.field] = control.value;
+      clearFieldError(control.dataset.field);
+      updateSaveState();
+    }
+
+    function hasUnsavedChanges() {
+      return collectChanges().some((change) => change.value !== (savedValues[change.field] || ""));
+    }
+
+    function updateSaveState() {
+      const dirty = hasUnsavedChanges();
+      const state = document.getElementById("saveState");
+      const button = document.getElementById("saveButton");
+      if (state) {
+        state.textContent = dirty ? "Modifications non enregistrÃ©es" : "Article enregistrÃ©";
+        state.classList.toggle("dirty", dirty);
+      }
+      if (button) button.disabled = !dirty;
+    }
+
+    function confirmDiscardUnsavedChanges() {
+      if (!currentSlug || !hasUnsavedChanges()) return true;
+      return window.confirm("Des modifications ne sont pas enregistrÃ©es. Changer d'article les fera perdre. Continuer ?");
+    }
+
     async function validateArticle() {
       clearAllFieldErrors();
       setMessage("Vérification en cours...");
@@ -666,6 +700,11 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     async function saveArticle() {
+      if (!hasUnsavedChanges()) {
+        setMessage("Aucune modification Ã  enregistrer.");
+        updateSaveState();
+        return;
+      }
       clearAllFieldErrors();
       setMessage("Enregistrement en cours...");
       try {
@@ -757,6 +796,12 @@ EDITOR_HTML = r"""<!doctype html>
     function encodeImagePath(src) {
       return String(src).split("/").map((part) => encodeURIComponent(part)).join("/");
     }
+
+    window.addEventListener("beforeunload", (event) => {
+      if (!hasUnsavedChanges()) return;
+      event.preventDefault();
+      event.returnValue = "";
+    });
 
     init().catch((error) => {
       document.getElementById("editor").innerHTML = `<p class="message error">${escapeHtml(error.error || error.message || "L'éditeur n'a pas pu démarrer.")}</p>`;
