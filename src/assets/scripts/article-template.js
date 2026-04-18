@@ -652,6 +652,18 @@
     if (typeof access.getArticleMapLink === 'function') {
       const mapLink = access.getArticleMapLink(article, locale);
       if (mapLink) {
+        if (mapLink.embedHref) {
+          const mapEmbed = make('div', 'article-map-embed');
+          const frame = document.createElement('iframe');
+          frame.className = 'article-map-embed__frame';
+          frame.src = mapLink.embedHref;
+          frame.title = t('article.map.embedTitle', { address: mapLink.address });
+          frame.loading = 'lazy';
+          frame.referrerPolicy = 'no-referrer-when-downgrade';
+          mapEmbed.appendChild(frame);
+          block.appendChild(mapEmbed);
+        }
+
         const link = make('a', 'article-map-link', t('article.map.open'));
         link.href = mapLink.href;
         link.target = '_blank';

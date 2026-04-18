@@ -26,6 +26,7 @@ const articleWithAddress = {
 const mapLink = access.getArticleMapLink(articleWithAddress, 'fr');
 assert.equal(mapLink.address, '14 rue de Fleurus');
 assert.equal(mapLink.href, 'https://www.google.com/maps/search/14%20rue%20de%20Fleurus%2C%20Lille%2C%20France');
+assert.equal(mapLink.embedHref, 'https://www.google.com/maps?q=14%20rue%20de%20Fleurus%2C%20Lille%2C%20France&output=embed');
 
 const articleWithoutAddress = {
   facts: { location: { city: 'Charleroi', country: 'Belgique' } },

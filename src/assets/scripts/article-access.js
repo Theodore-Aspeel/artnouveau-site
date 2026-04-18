@@ -330,10 +330,12 @@
     const queryParts = [address];
     appendDistinctLocationPart(queryParts, articleTaxonomy.city);
     appendDistinctLocationPart(queryParts, articleTaxonomy.country);
+    const query = queryParts.join(', ');
 
     return {
       address,
-      href: `https://www.google.com/maps/search/${encodeURIComponent(queryParts.join(', '))}`,
+      href: `https://www.google.com/maps/search/${encodeURIComponent(query)}`,
+      embedHref: `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`,
     };
   }
 

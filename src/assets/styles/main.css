@@ -1528,6 +1528,28 @@ main {
   color: var(--an-ink);
 }
 
+.article-map-embed {
+  height: 10.5rem;
+  margin-top: 0.95rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--an-line);
+}
+
+.article-map-embed__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--an-line);
+  border-radius: 8px;
+  background: rgba(255, 252, 247, 0.72);
+}
+
+.article-map-embed + .article-map-link {
+  margin-top: 0.65rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
 .article-tpl__facts {
   background: linear-gradient(180deg, rgba(255, 252, 247, 0.82), rgba(242, 234, 219, 0.7));
 }
