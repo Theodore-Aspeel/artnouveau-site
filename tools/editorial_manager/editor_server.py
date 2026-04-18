@@ -194,44 +194,66 @@ EDITOR_HTML = r"""<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Éditeur éditorial</title>
   <style>
-    :root { --border: #d7dde2; --muted: #64717f; --text: #1f2933; --panel: #ffffff; --soft: #f4f7f8; --accent: #155e75; --error: #b42318; --error-bg: #fff0ee; --success: #1f6f43; --success-bg: #edf7ef; }
-    body { margin: 0; font-family: Arial, sans-serif; color: var(--text); background: #f6f7f8; }
+    :root { --border: #d8ded7; --muted: #667381; --text: #21313b; --panel: #ffffff; --soft: #f5f8f3; --soft-strong: #edf3eb; --accent: #1f6b5d; --accent-dark: #174f45; --accent-soft: #e7f2ee; --gold: #b88122; --rose: #b85852; --error: #b42318; --error-bg: #fff0ee; --success: #1f6f43; --success-bg: #edf7ef; --shadow: 0 16px 36px rgba(38, 51, 44, 0.08); }
+    body { margin: 0; font-family: Arial, sans-serif; color: var(--text); background: linear-gradient(180deg, #f4f7f2 0%, #f8f5f1 52%, #f6f7f8 100%); }
     header { padding: 18px 24px; background: var(--panel); border-bottom: 1px solid var(--border); }
-    main { display: grid; grid-template-columns: 320px 1fr; min-height: calc(100vh - 71px); }
-    aside { border-right: 1px solid var(--border); background: var(--panel); overflow: auto; }
+    main { display: grid; grid-template-columns: 340px 1fr; height: calc(100vh - 71px); min-height: 620px; }
+    aside { border-right: 1px solid var(--border); background: #fbfcf9; overflow: auto; }
     .editor-pane { padding: 22px; overflow: auto; }
-    h1 { margin: 0; font-size: 22px; }
+    h1 { margin: 0; font-size: 22px; letter-spacing: 0; }
     h2 { margin: 0; font-size: 24px; }
     h3 { margin: 0; font-size: 18px; }
     p { margin: 0; }
     button, select, input, textarea { font: inherit; }
-    button, .button-link { border: 1px solid #9aa6b2; border-radius: 6px; background: #ffffff; padding: 9px 12px; cursor: pointer; }
+    button, .button-link { border: 1px solid #a8b2a9; border-radius: 8px; background: #ffffff; padding: 9px 12px; cursor: pointer; }
     .button-link { color: inherit; display: inline-block; text-decoration: none; }
-    button.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    button.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); box-shadow: 0 8px 18px rgba(31, 107, 93, 0.18); font-weight: 700; }
+    button.primary:hover { background: var(--accent-dark); }
+    button.secondary { background: #ffffff; border-color: #7b9b8d; color: var(--accent-dark); font-weight: 700; }
+    .button-link.tertiary { border-color: transparent; background: transparent; color: var(--accent-dark); padding-inline: 6px; text-decoration: underline; text-underline-offset: 3px; }
     button:disabled { cursor: not-allowed; opacity: 0.55; }
-    .article-button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid #e4e8eb; border-radius: 0; padding: 13px 14px; }
-    .article-button.active { background: #e7f2f5; }
+    .article-list-header { position: sticky; top: 0; z-index: 2; display: grid; gap: 5px; padding: 16px; background: #fbfcf9; border-bottom: 1px solid var(--border); }
+    .article-list-title { font-weight: 800; }
+    .article-count { color: var(--muted); font-size: 13px; }
+    .article-button { display: grid; gap: 7px; width: calc(100% - 16px); text-align: left; border: 1px solid transparent; border-radius: 8px; margin: 8px; padding: 12px 13px; background: transparent; }
+    .article-button:hover { background: #ffffff; border-color: #e1e7df; }
+    .article-button.active { background: #ffffff; border-color: #99b8aa; box-shadow: 0 8px 22px rgba(33, 49, 59, 0.08); }
+    .article-button__title { font-weight: 800; line-height: 1.25; }
+    .article-button__meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 12px; }
+    .article-button__chip { display: inline-flex; align-items: center; min-height: 20px; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-dark); font-weight: 700; }
+    .article-button__chip.warning { background: #fff4df; color: #7b4e12; }
     .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
-    .editor-shell { display: grid; gap: 18px; max-width: 1080px; }
-    .editor-header { display: grid; gap: 12px; padding: 18px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); }
-    .editor-title-row { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
-    .status-pills, .preview-actions, .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-    .pill { display: inline-flex; align-items: center; min-height: 26px; padding: 2px 9px; border: 1px solid var(--border); border-radius: 999px; background: var(--soft); color: #33414f; font-size: 13px; }
-    .pill.required { border-color: #e2b9b3; background: #fff5f3; color: #8a2f25; }
+    .editor-shell { display: grid; gap: 16px; max-width: 1160px; }
+    .editor-header { position: sticky; top: 0; z-index: 5; display: grid; gap: 14px; padding: 18px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.96); box-shadow: var(--shadow); }
+    .editor-title-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: start; }
+    .status-pills, .preview-actions, .primary-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .status-pills { justify-content: flex-start; margin-top: 10px; }
+    .editor-toolbar { display: flex; justify-content: space-between; gap: 14px; align-items: center; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid #edf0eb; }
+    .primary-actions { order: 1; }
+    .preview-actions { order: 2; margin-left: auto; }
+    .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid #dbe3da; border-radius: 999px; background: var(--soft); color: #3f4d44; font-size: 12px; font-weight: 700; }
+    .pill.required { border-color: #efcfca; background: #fff5f3; color: #8a2f25; }
     .pill.optional { color: var(--muted); }
-    .form-grid { display: grid; gap: 16px; }
-    .field-panel { border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden; }
-    .field-panel__header { display: grid; gap: 5px; padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--soft); }
+    .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 2px; }
+    .tab-button { border-color: #d6dfd5; background: #ffffff; color: #43504a; font-weight: 700; white-space: nowrap; }
+    .tab-button.active { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+    .form-grid { display: grid; gap: 14px; }
+    .tab-panel { display: none; gap: 14px; }
+    .tab-panel.active { display: grid; }
+    .field-panel { border: 1px solid var(--border); border-radius: 8px; background: var(--panel); overflow: hidden; box-shadow: 0 8px 24px rgba(38, 51, 44, 0.05); }
+    .field-panel__header { display: grid; gap: 5px; padding: 13px 16px; border-bottom: 1px solid var(--border); background: linear-gradient(90deg, var(--soft-strong), #ffffff); }
     .field-panel__description { color: var(--muted); font-size: 14px; }
-    .field-group { display: grid; gap: 14px; padding: 16px; }
+    .field-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; padding: 16px; }
     .field-row { display: grid; gap: 7px; }
-    .field-label-line { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-weight: 700; }
+    .field-row--wide { grid-column: 1 / -1; }
+    .field-label-line { display: flex; gap: 8px; align-items: center; justify-content: flex-start; flex-wrap: wrap; font-weight: 700; }
     .field-help { color: var(--muted); font-size: 13px; line-height: 1.4; }
     .field-error { display: none; color: var(--error); font-size: 13px; font-weight: 700; }
     .field-row.has-error .field-error { display: block; }
     .field-row.has-error input, .field-row.has-error textarea, .field-row.has-error select { border-color: var(--error); box-shadow: 0 0 0 2px rgba(180, 35, 24, 0.08); }
     input, textarea, select { border: 1px solid #b8c2cc; border-radius: 6px; padding: 10px; background: #ffffff; max-width: 100%; }
-    textarea { min-height: 112px; resize: vertical; line-height: 1.45; }
+    textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+    .field-row--wide textarea { min-height: 132px; }
     .hero-preview { display: grid; gap: 8px; max-width: 460px; }
     .hero-preview img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; }
     .image-empty, .support-preview .empty { padding: 12px; border: 1px dashed #b8c2cc; border-radius: 6px; background: #ffffff; color: var(--muted); }
@@ -239,12 +261,11 @@ EDITOR_HTML = r"""<!doctype html>
     .support-summary__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
     .support-preview { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: #ffffff; }
     .support-preview img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; }
-    .actions { position: sticky; bottom: 0; padding: 12px 0; background: linear-gradient(to top, #f6f7f8 75%, rgba(246, 247, 248, 0)); }
     .message { padding: 12px 14px; border-radius: 6px; border: 1px solid #b9ddc2; background: var(--success-bg); color: var(--success); }
     .message.error { border-color: #e6b7b0; background: var(--error-bg); color: var(--error); }
     .message ul { margin: 8px 0 0; padding-left: 20px; }
     .empty { color: var(--muted); }
-    @media (max-width: 760px) { main { grid-template-columns: 1fr; } aside { max-height: 36vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } }
+    @media (max-width: 920px) { main { grid-template-columns: 1fr; height: auto; min-height: 100vh; } aside { max-height: 34vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } .editor-title-row { grid-template-columns: 1fr; } .preview-actions { margin-left: 0; } .field-group { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -264,6 +285,7 @@ EDITOR_HTML = r"""<!doctype html>
     let currentValues = {};
     let currentImageOptions = [];
     let currentArticleFields = [];
+    let currentTab = "essentiel";
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -280,11 +302,22 @@ EDITOR_HTML = r"""<!doctype html>
 
     function renderArticleList() {
       const list = document.getElementById("articleList");
-      list.innerHTML = "";
+      list.innerHTML = `
+        <div class="article-list-header">
+          <div class="article-list-title">Articles</div>
+          <div class="article-count">${articles.length} article${articles.length > 1 ? "s" : ""} disponibles</div>
+        </div>
+      `;
       articles.forEach((article) => {
         const button = document.createElement("button");
         button.className = "article-button" + (article.slug === currentSlug ? " active" : "");
-        button.innerHTML = `<strong>${escapeHtml(article.title || article.slug)}</strong><div class="meta">${escapeHtml(statusLabel(article.status))} · ${article.has_hero ? "image principale" : "image à choisir"}</div>`;
+        button.innerHTML = `
+          <span class="article-button__title">${escapeHtml(article.title || article.slug)}</span>
+          <span class="article-button__meta">
+            <span>${escapeHtml(statusLabel(article.status))}</span>
+            <span class="article-button__chip${article.has_hero ? "" : " warning"}">${article.has_hero ? "image choisie" : "image à choisir"}</span>
+          </span>
+        `;
         button.addEventListener("click", () => openArticle(article.slug));
         list.appendChild(button);
       });
@@ -297,6 +330,7 @@ EDITOR_HTML = r"""<!doctype html>
       article.fields.forEach((item) => currentValues[item.path] = item.value || "");
       currentImageOptions = article.image_options || [];
       currentArticleFields = article.fields || [];
+      currentTab = "essentiel";
       renderArticleList();
       renderEditor(article);
     }
@@ -311,24 +345,30 @@ EDITOR_HTML = r"""<!doctype html>
               <div>
                 <h2>${escapeHtml(article.title || article.slug)}</h2>
                 <div class="meta">Article: ${escapeHtml(article.slug)}</div>
+                <div class="status-pills">
+                  <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
+                  <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
+                </div>
               </div>
-              <div class="status-pills">
-                <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
-                <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
+              <div class="primary-actions" aria-label="Actions principales">
+                <button id="saveButton" class="primary" type="button">Enregistrer</button>
+                <button id="validateButton" class="secondary" type="button">Vérifier les champs</button>
               </div>
             </div>
-            ${renderPreviewActions(article.preview_urls || {})}
+            <div class="editor-toolbar">
+              ${renderEditorTabs()}
+              ${renderPreviewActions(article.preview_urls || {})}
+            </div>
           </div>
           <div id="message"></div>
           <form class="form-grid" id="articleForm">${controls}</form>
-          <div class="actions">
-            <button id="validateButton" type="button">Vérifier les champs</button>
-            <button id="saveButton" class="primary" type="button">Enregistrer</button>
-          </div>
         </div>
       `;
       document.getElementById("validateButton").addEventListener("click", validateArticle);
       document.getElementById("saveButton").addEventListener("click", saveArticle);
+      document.querySelectorAll("[data-editor-tab]").forEach((button) => {
+        button.addEventListener("click", () => activateTab(button.dataset.editorTab));
+      });
       document.querySelectorAll("[data-field]").forEach((control) => {
         control.addEventListener("input", () => clearFieldError(control.dataset.field));
         control.addEventListener("change", () => clearFieldError(control.dataset.field));
@@ -356,10 +396,35 @@ EDITOR_HTML = r"""<!doctype html>
       const enUrl = urls.en || previewUrl("en");
       return `
         <div class="preview-actions" aria-label="Preview de l'article">
-          <a class="button-link" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Voir l'article FR</a>
-          <a class="button-link" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Voir l'aperçu EN</a>
+          <a class="button-link tertiary" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer">Voir l'article FR</a>
+          <a class="button-link tertiary" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer">Voir l'aperçu EN</a>
         </div>
       `;
+    }
+
+    function renderEditorTabs() {
+      return `
+        <nav class="tabs" aria-label="Parties de l'article">
+          ${renderTabButton("essentiel", "Essentiel")}
+          ${renderTabButton("fr", "Texte FR")}
+          ${renderTabButton("en", "Texte EN")}
+          ${renderTabButton("images", "Images")}
+        </nav>
+      `;
+    }
+
+    function renderTabButton(tab, label) {
+      return `<button class="tab-button${currentTab === tab ? " active" : ""}" type="button" data-editor-tab="${escapeAttr(tab)}">${escapeHtml(label)}</button>`;
+    }
+
+    function activateTab(tab) {
+      currentTab = tab || "essentiel";
+      document.querySelectorAll("[data-editor-tab]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.editorTab === currentTab);
+      });
+      document.querySelectorAll("[data-tab-panel]").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.tabPanel === currentTab);
+      });
     }
 
     function previewUrl(locale) {
@@ -412,32 +477,45 @@ EDITOR_HTML = r"""<!doctype html>
         groupForField(groups, field).fields.push(field);
       });
 
-      return groups.filter((group) => group.fields.length).map((group) => {
-        const controls = group.fields.map((field) => renderField(field, currentValues[field.path] || "")).join("");
-        return `
-          <section class="field-panel" aria-labelledby="${escapeAttr(group.id)}">
-            <div class="field-panel__header">
-              <h3 id="${escapeAttr(group.id)}">${escapeHtml(group.name)}</h3>
-              <p class="field-panel__description">${escapeHtml(group.description)}</p>
-            </div>
-            <div class="field-group">${controls}</div>
-          </section>
-        `;
+      return editorTabs().map((tab) => {
+        const groupMarkup = groups.filter((group) => group.tab === tab.key && group.fields.length).map((group) => {
+          const controls = group.fields.map((field) => renderField(field, currentValues[field.path] || "")).join("");
+          return `
+            <section class="field-panel" aria-labelledby="${escapeAttr(group.id)}">
+              <div class="field-panel__header">
+                <h3 id="${escapeAttr(group.id)}">${escapeHtml(group.name)}</h3>
+                <p class="field-panel__description">${escapeHtml(group.description)}</p>
+              </div>
+              <div class="field-group">${controls}</div>
+            </section>
+          `;
+        }).join("");
+        if (!groupMarkup) return "";
+        return `<div class="tab-panel${currentTab === tab.key ? " active" : ""}" data-tab-panel="${escapeAttr(tab.key)}">${groupMarkup}</div>`;
       }).join("");
+    }
+
+    function editorTabs() {
+      return [
+        { key: "essentiel" },
+        { key: "fr" },
+        { key: "en" },
+        { key: "images" },
+      ];
     }
 
     function editorGroups() {
       return [
-        { id: "group-status", key: "status", name: "Publication", description: "Etat de travail de l'article.", fields: [] },
-        { id: "group-hero", key: "hero", name: "Image principale", description: "Image affichée en tête d'article et texte associé.", fields: [] },
-        { id: "group-fr-main", key: "fr-main", name: "Texte principal FR", description: "Titre, chapeau, épigraphe, SEO et note liée en français.", fields: [] },
-        { id: "group-en-main", key: "en-main", name: "Texte principal EN", description: "Champs anglais, à compléter progressivement quand le contenu existe.", fields: [] },
-        { id: "group-fr-practical", key: "fr-practical", name: "Informations pratiques FR", description: "Valeurs visibles dans le bloc pratique français.", fields: [] },
-        { id: "group-en-practical", key: "en-practical", name: "Informations pratiques EN", description: "Valeurs visibles dans le bloc pratique anglais.", fields: [] },
-        { id: "group-fr-sections", key: "fr-sections", name: "Sections FR", description: "Titres et paragraphes du corps de l'article français.", fields: [] },
-        { id: "group-en-sections", key: "en-sections", name: "Sections EN", description: "Titres et paragraphes du corps anglais si disponibles.", fields: [] },
-        { id: "group-support", key: "support", name: "Images support", description: "Images secondaires déjà présentes dans l'article.", fields: [] },
-        { id: "group-other", key: "other", name: "Autres champs", description: "Champs éditables complémentaires.", fields: [] },
+        { id: "group-status", key: "status", tab: "essentiel", name: "Publication", description: "Etat de travail de l'article.", fields: [] },
+        { id: "group-fr-main", key: "fr-main", tab: "essentiel", name: "Texte principal FR", description: "Titre, chapeau, épigraphe, SEO et note liée en français.", fields: [] },
+        { id: "group-fr-practical", key: "fr-practical", tab: "fr", name: "Informations pratiques FR", description: "Valeurs visibles dans le bloc pratique français.", fields: [] },
+        { id: "group-fr-sections", key: "fr-sections", tab: "fr", name: "Sections FR", description: "Titres et paragraphes du corps de l'article français.", fields: [] },
+        { id: "group-en-main", key: "en-main", tab: "en", name: "Texte principal EN", description: "Champs anglais, à compléter progressivement quand le contenu existe.", fields: [] },
+        { id: "group-en-practical", key: "en-practical", tab: "en", name: "Informations pratiques EN", description: "Valeurs visibles dans le bloc pratique anglais.", fields: [] },
+        { id: "group-en-sections", key: "en-sections", tab: "en", name: "Sections EN", description: "Titres et paragraphes du corps anglais si disponibles.", fields: [] },
+        { id: "group-hero", key: "hero", tab: "images", name: "Image principale", description: "Image affichée en tête d'article et texte associé.", fields: [] },
+        { id: "group-support", key: "support", tab: "images", name: "Images support", description: "Images secondaires déjà présentes dans l'article.", fields: [] },
+        { id: "group-other", key: "other", tab: "essentiel", name: "Autres champs", description: "Champs éditables complémentaires.", fields: [] },
       ];
     }
 
@@ -465,20 +543,26 @@ EDITOR_HTML = r"""<!doctype html>
       const badge = `<span class="pill ${field.required ? "required" : "optional"}">${field.required ? "Obligatoire" : "Optionnel"}</span>`;
       const label = `<div class="field-label-line"><label for="${escapeAttr(fieldId)}">${fieldLabel(field)}</label>${badge}</div>`;
       const error = `<p class="field-error" id="${escapeAttr(fieldId)}-error"></p>`;
+      const rowClass = isWideField(field) ? "field-row field-row--wide" : "field-row";
       if (field.control === "select") {
         const options = field.choices.map((choice) => `<option value="${escapeAttr(choice)}"${choice === value ? " selected" : ""}>${escapeHtml(choice)}</option>`).join("");
-        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}</div>`;
+        return `<div class="${rowClass}" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}</div>`;
       }
       if (field.control === "image-select") {
         const options = `<option value="">Choisir une image...</option>` + currentImageOptions.map((image) => `<option value="${escapeAttr(image.src)}"${image.src === value ? " selected" : ""}>${escapeHtml(image.label || image.src)}</option>`).join("");
         const preview = field.path.startsWith("media.support.") ? renderSupportFieldPreview(field.path, value) : "";
         const heroPreview = field.path === "media.hero.src" ? renderHeroPreview(value) : "";
-        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-control="image-select" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}${heroPreview}${preview}</div>`;
+        return `<div class="${rowClass}" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<select id="${escapeAttr(fieldId)}" data-control="image-select" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${options}</select>${error}${heroPreview}${preview}</div>`;
       }
       if (field.control === "textarea") {
-        return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<textarea id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${escapeHtml(value)}</textarea>${error}</div>`;
+        return `<div class="${rowClass}" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<textarea id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}"${required}${describedBy}>${escapeHtml(value)}</textarea>${error}</div>`;
       }
-      return `<div class="field-row" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<input id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}${describedBy}>${error}</div>`;
+      return `<div class="${rowClass}" data-field-row="${escapeAttr(field.path)}">${label}${helpMarkup}<input id="${escapeAttr(fieldId)}" data-field="${escapeAttr(field.path)}" value="${escapeAttr(value)}"${required}${describedBy}>${error}</div>`;
+    }
+
+    function isWideField(field) {
+      const path = field.path || "";
+      return field.control === "textarea" || path === "media.hero.src" || path.startsWith("media.support.");
     }
 
     function fieldLabel(field) {
@@ -616,6 +700,8 @@ EDITOR_HTML = r"""<!doctype html>
     function applyErrors(errors) {
       clearAllFieldErrors();
       const items = errors.map((item) => ({ ...item, message: friendlyError(item) }));
+      const firstFieldError = items.find((item) => item.field);
+      if (firstFieldError) activateTab(tabForField(firstFieldError.field));
       items.forEach((item) => {
         if (!item.field) return;
         const row = fieldRow(item.field);
@@ -627,6 +713,11 @@ EDITOR_HTML = r"""<!doctype html>
       });
       const list = items.map((item) => `<li>${escapeHtml(item.message)}</li>`).join("");
       setMessage(`<strong>${items.length} point${items.length > 1 ? "s" : ""} à corriger avant d'enregistrer.</strong><ul>${list}</ul>`, true);
+    }
+
+    function tabForField(fieldPath) {
+      const group = groupForField(editorGroups(), { path: fieldPath });
+      return group.tab || "essentiel";
     }
 
     function clearAllFieldErrors() {

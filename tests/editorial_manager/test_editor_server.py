@@ -37,6 +37,13 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("Optionnel", EDITOR_HTML)
         self.assertIn("field-error", EDITOR_HTML)
         self.assertIn("à corriger avant d'enregistrer", EDITOR_HTML)
+        self.assertIn('class="tabs"', EDITOR_HTML)
+        self.assertIn("data-editor-tab", EDITOR_HTML)
+        self.assertIn('class="primary"', EDITOR_HTML)
+        self.assertIn('class="secondary"', EDITOR_HTML)
+        self.assertIn("button-link tertiary", EDITOR_HTML)
+        self.assertIn("article-button__chip", EDITOR_HTML)
+        self.assertIn("tabForField", EDITOR_HTML)
 
 
 if __name__ == "__main__":
