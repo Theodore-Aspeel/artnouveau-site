@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -6,6 +7,7 @@ import unittest
 from tools.editorial_manager.editor_store import (
     build_editor_article_payload,
     build_preview_urls,
+    npm_executable,
     save_article_changes,
     validate_changes,
 )
@@ -200,6 +202,21 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Updated FR")
         self.assertEqual(payload["articles"][0]["slug"], "demo")
 
+    def test_validate_then_save_flow_updates_json(self):
+        changes = [{"field": "content.fr.title", "value": "Updated FR"}]
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            article = sample_article("assets/images/articles/current.png")
+            write_payload(path, [article])
+
+            validation_errors = validate_changes(article, changes, project_root=Path(directory))
+            result = save_article_changes("demo", changes, path=path, validator=lambda: (True, []))
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertEqual(validation_errors, [])
+        self.assertTrue(result["ok"])
+        self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Updated FR")
+
     def test_save_article_changes_writes_existing_section_fields(self):
         with tempfile.TemporaryDirectory() as directory:
             path = temp_articles_path(directory)
@@ -329,6 +346,30 @@ class EditorStoreTests(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertTrue(result["rolled_back"])
         self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Demo FR")
+
+    def test_save_article_changes_rolls_back_when_validation_cannot_run(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+
+            result = save_article_changes(
+                "demo",
+                [{"field": "content.fr.title", "value": "Updated FR"}],
+                path=path,
+                validator=lambda: (_ for _ in ()).throw(OSError("npm not found")),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertFalse(result["ok"])
+        self.assertTrue(result["rolled_back"])
+        self.assertEqual(result["errors"][0]["code"], "project-validation")
+        self.assertIn("Project validation could not run", result["errors"][0]["message"])
+        self.assertEqual(payload["articles"][0]["content"]["fr"]["title"], "Demo FR")
+
+    def test_project_validation_uses_windows_npm_command(self):
+        expected = "npm.cmd" if os.name == "nt" else "npm"
+
+        self.assertEqual(npm_executable(), expected)
 
 
 def write_payload(path: Path, articles):

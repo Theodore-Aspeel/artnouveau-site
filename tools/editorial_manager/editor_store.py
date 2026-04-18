@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -113,7 +114,12 @@ def save_article_changes(
 
     write_payload_atomic(path, payload)
     validate = validator or run_project_validation
-    ok, validation_errors = validate()
+    try:
+        ok, validation_errors = validate()
+    except Exception as exc:
+        ok = False
+        validation_errors = [f"Project validation could not run: {exc}"]
+
     if not ok:
         write_payload_atomic(path, original_payload)
         return {
@@ -212,7 +218,7 @@ def write_payload_atomic(path: Path, payload: Payload) -> None:
 
 def run_project_validation() -> tuple[bool, list[str]]:
     completed = subprocess.run(
-        ["npm", "run", "validate"],
+        [npm_executable(), "run", "validate"],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,
@@ -223,6 +229,10 @@ def run_project_validation() -> tuple[bool, list[str]]:
 
     messages = [completed.stdout.strip(), completed.stderr.strip()]
     return False, [message for message in messages if message]
+
+
+def npm_executable() -> str:
+    return "npm.cmd" if os.name == "nt" else "npm"
 
 
 def error(code: str, message: str, field: str = "") -> dict[str, str]:
