@@ -60,6 +60,7 @@ const REQUIRED_DIST_FILES = [
   'icon.svg',
   'icon.png',
   'robots.txt',
+  'sitemap.xml',
   'site.webmanifest',
 ];
 

@@ -40,6 +40,7 @@ const OG_LOCALES = {
 };
 
 const SITE_TITLE = 'Art Nouveau et Art Déco';
+const SITE_ORIGIN = normalizeSiteOrigin(process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com');
 
 function getImagePath(entry) {
   if (typeof entry === 'string') {
@@ -154,8 +155,29 @@ function escapeAttribute(value) {
   return escapeHtml(value).replaceAll('"', '&quot;');
 }
 
+function escapeXml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
+}
+
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeSiteOrigin(value) {
+  const origin = typeof value === 'string' ? value.trim().replace(/\/+$/, '') : '';
+  if (!/^https?:\/\/[^/]+$/i.test(origin)) {
+    throw new TypeError('SITE_ORIGIN must be an absolute http(s) origin.');
+  }
+  return origin;
+}
+
+function absolutePublicUrl(route) {
+  return SITE_ORIGIN + route;
 }
 
 function setAttributeInTag(tag, attribute, value) {
@@ -191,6 +213,28 @@ function insertOrReplaceOgImage(content, imagePath) {
   return content.replace(
     /(<meta id="og-description" property="og:description" content="[^"]*">)/,
     `$1\n  ${tag}`
+  );
+}
+
+function buildSeoLinks(routeName, locale, routeParams, contracts) {
+  const { routes } = contracts;
+  const params = routeParams || {};
+  const canonicalRoute = routes.route(routeName, locale, params);
+  const defaultRoute = routes.route(routeName, routes.defaultLocale, params);
+  const alternateLinks = routes.alternates(routeName, params)
+    .map((alternate) => `<link rel="alternate" hreflang="${escapeAttribute(alternate.hreflang)}" href="${escapeAttribute(absolutePublicUrl(alternate.href))}">`);
+
+  return [
+    `<link rel="canonical" href="${escapeAttribute(absolutePublicUrl(canonicalRoute))}">`,
+    ...alternateLinks,
+    `<link rel="alternate" hreflang="x-default" href="${escapeAttribute(absolutePublicUrl(defaultRoute))}">`,
+  ].join('\n  ');
+}
+
+function applyPublicSeoLinks(content, routeName, locale, routeParams, contracts) {
+  return content.replace(
+    /(<meta name="robots" content="[^"]*">)/,
+    `$1\n  ${buildSeoLinks(routeName, locale, routeParams, contracts)}`
   );
 }
 
@@ -266,6 +310,8 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     .replaceAll('../assets/scripts/', `${relativeRoot}assets/scripts/`)
     .replaceAll("../data/articles.json", `${relativeRoot}data/articles.json`);
 
+  rewritten = applyPublicSeoLinks(rewritten, routeName, locale, {}, contracts);
+
   if (routeName === 'home') {
     rewritten = rewritten.replace(
       '<body class="page-home">',
@@ -328,6 +374,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = setMetaContentById(rewritten, 'twitter-title', metadata.title);
   rewritten = setMetaContentById(rewritten, 'twitter-description', metadata.description);
   rewritten = insertOrReplaceOgImage(rewritten, metadata.ogImage);
+  rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
 
   return rewritten;
 }
@@ -375,6 +422,65 @@ async function copyRuntimeImages() {
   for (const imagePath of runtimeImagePaths) {
     await copyFile(path.join('src', imagePath), imagePath);
   }
+}
+
+function buildSitemapUrlEntry(routeName, locale, routeParams, contracts) {
+  const { routes } = contracts;
+  const params = routeParams || {};
+  const route = routes.route(routeName, locale, params);
+  const defaultRoute = routes.route(routeName, routes.defaultLocale, params);
+  const alternateLinks = routes.alternates(routeName, params)
+    .map((alternate) => `    <xhtml:link rel="alternate" hreflang="${escapeXml(alternate.hreflang)}" href="${escapeXml(absolutePublicUrl(alternate.href))}" />`);
+
+  return [
+    '  <url>',
+    `    <loc>${escapeXml(absolutePublicUrl(route))}</loc>`,
+    ...alternateLinks,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(absolutePublicUrl(defaultRoute))}" />`,
+    '  </url>',
+  ].join('\n');
+}
+
+function buildSitemapXml(articles, contracts) {
+  const entries = [];
+
+  for (const locale of contracts.routes.publicLocaleCodes()) {
+    for (const job of SIMPLE_PUBLIC_PAGE_JOBS) {
+      entries.push(buildSitemapUrlEntry(job.routeName, locale, {}, contracts));
+    }
+
+    for (const article of articles) {
+      const slug = getArticleSlug(article);
+      if (!slug) continue;
+      entries.push(buildSitemapUrlEntry(ARTICLE_PUBLIC_PAGE.routeName, locale, { slug }, contracts));
+    }
+  }
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+    '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    ...entries,
+    '</urlset>',
+    '',
+  ].join('\n');
+}
+
+async function writeSitemap(articles, contracts) {
+  await fs.writeFile(path.join(DIST, 'sitemap.xml'), buildSitemapXml(articles, contracts), 'utf8');
+}
+
+async function writeRobotsTxt() {
+  const robots = [
+    'User-agent: *',
+    'Disallow:',
+    'Allow: /',
+    '',
+    `Sitemap: ${absolutePublicUrl('/sitemap.xml')}`,
+    '',
+  ].join('\n');
+
+  await fs.writeFile(path.join(DIST, 'robots.txt'), robots, 'utf8');
 }
 
 async function build() {
@@ -434,6 +540,9 @@ async function build() {
       await fs.writeFile(target, rewritten, 'utf8');
     }
   }
+
+  await writeSitemap(articles, contracts);
+  await writeRobotsTxt();
 
   const distValidation = await validateProject({
     rootDir: ROOT,
