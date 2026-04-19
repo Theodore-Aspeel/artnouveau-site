@@ -2,6 +2,7 @@
   'use strict';
 
   const media = window.ArticleMedia;
+  const imageManifest = window.SiteImageManifest;
   const taxonomy = window.ArticleTags;
   const access = window.ArticleAccess;
   const i18n = window.SiteI18n;
@@ -17,8 +18,13 @@
   const articleHrefSuffix = script?.dataset.articleHrefSuffix || '';
   const searchParams = new URLSearchParams(window.location.search);
   const slug = script?.dataset.articleSlug || searchParams.get('slug');
+  let manifestReady = Promise.resolve(null);
 
   if (!root || !access) return;
+
+  if (imageManifest && typeof imageManifest.load === 'function') {
+    manifestReady = imageManifest.load({ basePath: imageBase });
+  }
 
   function make(tag, className, text) {
     const el = document.createElement(tag);
@@ -35,6 +41,18 @@
       : (path.startsWith('http') || path.startsWith('/') ? path : imageBase + path);
 
     return new URL(candidate, window.location.href).href;
+  }
+
+  function applyArticleImageAttributes(img, imagePath, sizes) {
+    if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
+      const attrs = imageManifest.applyResponsiveImage(img, imagePath, {
+        basePath: imageBase,
+        sizes,
+      });
+      if (attrs && attrs.src) return;
+    }
+
+    img.src = imgSrc(imagePath);
   }
 
   function articleTagHref(tag) {
@@ -290,7 +308,10 @@
 
   let data;
   try {
-    const res = await fetch(articleJsonPath);
+    const [res] = await Promise.all([
+      fetch(articleJsonPath),
+      manifestReady,
+    ]);
     if (!res.ok) throw new Error('fetch ' + res.status);
     data = await res.json();
   } catch (error) {
@@ -467,7 +488,7 @@
     const figure = make('figure', 'article-intake__figure');
     const image = document.createElement('img');
     image.className = 'article-intake__image';
-    image.src = imgSrc(primaryImage);
+    applyArticleImageAttributes(image, primaryImage, '(min-width: 1100px) 42vw, 100vw');
     image.alt = primaryImageEntry && primaryImageEntry.alt
       ? primaryImageEntry.alt
       : access.getArticleHeroAlt(article, locale);

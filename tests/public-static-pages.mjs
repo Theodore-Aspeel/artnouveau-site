@@ -48,8 +48,11 @@ assert.match(fs.readFileSync('dist/en/about/index.html', 'utf8'), /href="\/en\/m
 assert.match(fs.readFileSync('dist/nl/mentions/index.html', 'utf8'), /href="\/nl\/about\/"/);
 
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/public-routes\.js"><\/script>/);
+assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/image-manifest\.js"><\/script>/);
+assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-responsive-image-source="assets\/images\/site\/saint-gilles-brussels\.png"/);
 assert.match(galleryScript, /publicRoutes\.article\(currentLocale\(\), normalizedSlug\)/);
 assert.match(galleryScript, /publicRoutes\.home\(currentLocale\(\)\)/);
+assert.match(galleryScript, /SiteImageManifest/);
 
 for (const locale of publicLocales) {
   const homeHtml = fs.readFileSync(`dist/${locale}/index.html`, 'utf8');
@@ -101,6 +104,7 @@ for (const locale of publicLocales) {
   assert.match(html, /<meta property="og:image" content="\.\.\/\.\.\/\.\.\/assets\/images\/articles\/maison-coilliot-lille-hector-guimard\.png">/);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
   assert.ok(html.includes(`href="/${locale}/articles/${sampleArticle.slug}/"`), `${filePath} should link to its public route`);
+  assert.ok(html.includes(`src="../../../assets/scripts/image-manifest.js"`), `${filePath} should load the image manifest helper`);
   assert.ok(html.includes(`href="/fr/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for FR language link`);
   assert.ok(html.includes(`href="/en/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for EN language link`);
   assert.ok(html.includes(`href="/nl/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for NL language link`);

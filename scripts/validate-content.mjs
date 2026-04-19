@@ -20,6 +20,7 @@ const REQUIRED_SOURCE_FILES = [
   'src/assets/scripts/main.js',
   'src/assets/scripts/gallery.js',
   'src/assets/scripts/article-media.js',
+  'src/assets/scripts/image-manifest.js',
   'src/assets/scripts/article-taxonomy.js',
   'src/assets/scripts/article-template.js',
   'src/data/articles.json',
@@ -53,6 +54,7 @@ const REQUIRED_DIST_FILES = [
   'assets/scripts/main.js',
   'assets/scripts/gallery.js',
   'assets/scripts/article-media.js',
+  'assets/scripts/image-manifest.js',
   'assets/scripts/article-taxonomy.js',
   'assets/scripts/article-template.js',
   'assets/generated-images/manifest.json',
@@ -150,6 +152,7 @@ const SOURCE_TEXT_FILES = [
   'src/assets/scripts/main.js',
   'src/assets/scripts/gallery.js',
   'src/assets/scripts/article-media.js',
+  'src/assets/scripts/image-manifest.js',
   'src/assets/scripts/article-taxonomy.js',
   'src/assets/scripts/article-template.js',
 ];

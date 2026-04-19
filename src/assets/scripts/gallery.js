@@ -2,6 +2,7 @@
   'use strict';
 
   const media = window.ArticleMedia;
+  const imageManifest = window.SiteImageManifest;
   const taxonomy = window.ArticleTags;
   const access = window.ArticleAccess;
   const i18n = window.SiteI18n;
@@ -32,6 +33,16 @@
   let activeTag = null;
   let galleryItems = [];
   let allTags = [];
+  let manifestReady = Promise.resolve(null);
+
+  if (imageManifest && typeof imageManifest.load === 'function') {
+    manifestReady = imageManifest.load({ basePath: assetBasePath }).then((manifest) => {
+      if (typeof imageManifest.applyDeclarativeImages === 'function') {
+        imageManifest.applyDeclarativeImages(document, { basePath: assetBasePath });
+      }
+      return manifest;
+    });
+  }
 
   function currentLocale() {
     if (i18n && typeof i18n.resolveLocale === 'function') {
@@ -113,6 +124,18 @@
       : normalizedPath;
 
     return new URL(candidate, window.location.href).href;
+  }
+
+  function applyCardImageAttributes(img, imagePath, sizes) {
+    if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
+      const attrs = imageManifest.applyResponsiveImage(img, imagePath, {
+        basePath: assetBasePath,
+        sizes,
+      });
+      if (attrs && attrs.src) return;
+    }
+
+    img.src = resolveCardImageSrc(imagePath);
   }
 
   function getCardTagEntries(article) {
@@ -229,7 +252,7 @@
 
     if (item.image) {
       const img = document.createElement('img');
-      img.src = resolveCardImageSrc(item.image);
+      applyCardImageAttributes(img, item.image, '(min-width: 1100px) 25vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       img.addEventListener('error', () => {
@@ -316,7 +339,9 @@
     if (item.image) {
       const img = document.createElement('img');
       img.className = 'home-curated__image';
-      img.src = resolveCardImageSrc(item.image);
+      applyCardImageAttributes(img, item.image, index === 0
+        ? '(min-width: 1100px) 48vw, 100vw'
+        : '(min-width: 1100px) 24vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       mediaWrap.appendChild(img);
@@ -659,7 +684,10 @@
   }
 
   try {
-    const response = await fetch(articleDataUrl);
+    const [response] = await Promise.all([
+      fetch(articleDataUrl),
+      manifestReady,
+    ]);
     if (!response.ok) throw new Error('fetch ' + response.status);
 
     const data = await response.json();
