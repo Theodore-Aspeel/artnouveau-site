@@ -3,6 +3,11 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { validateProject } from './validate-content.mjs';
+import {
+  collectPublishedImagePaths,
+  copyPublishedImages,
+  generateImageManifest,
+} from './image-pipeline.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +31,11 @@ const SIMPLE_PUBLIC_PAGE_JOBS = [
 
 const ARTICLE_PUBLIC_PAGE = { routeName: 'article', from: 'src/pages/article-redirect.html' };
 
+const PUBLIC_IMAGE_SOURCE_PAGES = [
+  ...SIMPLE_PUBLIC_PAGE_JOBS.map((job) => job.from),
+  ARTICLE_PUBLIC_PAGE.from,
+];
+
 const COPY_JOBS = [
   { from: 'src/assets/styles', to: 'assets/styles' },
   { from: 'src/assets/scripts', to: 'assets/scripts' },
@@ -41,41 +51,6 @@ const OG_LOCALES = {
 
 const SITE_TITLE = 'Art Nouveau et Art Déco';
 const SITE_ORIGIN = normalizeSiteOrigin(process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com');
-
-function getImagePath(entry) {
-  if (typeof entry === 'string') {
-    return entry.trim();
-  }
-
-  if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
-    return '';
-  }
-
-  const candidate = entry.src || entry.path || entry.image;
-  return typeof candidate === 'string' ? candidate.trim() : '';
-}
-
-function getArticleImageEntries(article) {
-  const entries = [];
-  const media = article && typeof article === 'object' && !Array.isArray(article)
-    ? article.media
-    : null;
-
-  if (media && typeof media === 'object' && !Array.isArray(media)) {
-    entries.push(media.hero);
-    if (Array.isArray(media.support)) {
-      entries.push(...media.support);
-    }
-    return entries;
-  }
-
-  entries.push(article?.hero_image);
-  if (Array.isArray(article?.support_images)) {
-    entries.push(...article.support_images);
-  }
-
-  return entries;
-}
 
 function rewritePageForDist(relativeTargetPath, content) {
   if (relativeTargetPath === 'index.html') {
@@ -396,34 +371,6 @@ async function copyDir(relativeFrom, relativeTo) {
   await fs.cp(source, target, { recursive: true, force: true });
 }
 
-async function copyFile(relativeFrom, relativeTo) {
-  const source = path.join(ROOT, relativeFrom);
-  const target = path.join(DIST, relativeTo);
-  await ensureParentDir(target);
-  await fs.copyFile(source, target);
-}
-
-async function copyRuntimeImages() {
-  await copyDir('src/assets/images/site', 'assets/images/site');
-
-  const raw = await fs.readFile(path.join(ROOT, 'src/data/articles.json'), 'utf8');
-  const data = JSON.parse(raw);
-  const runtimeImagePaths = new Set();
-
-  for (const article of Array.isArray(data.articles) ? data.articles : []) {
-    for (const image of getArticleImageEntries(article)) {
-      const imagePath = getImagePath(image);
-      if (imagePath) {
-        runtimeImagePaths.add(imagePath);
-      }
-    }
-  }
-
-  for (const imagePath of runtimeImagePaths) {
-    await copyFile(path.join('src', imagePath), imagePath);
-  }
-}
-
 function buildSitemapUrlEntry(routeName, locale, routeParams, contracts) {
   const { routes } = contracts;
   const params = routeParams || {};
@@ -498,12 +445,26 @@ async function build() {
   await fs.mkdir(DIST, { recursive: true });
   const contracts = await getRuntimeContracts();
   const articles = await readArticles();
+  const publishedImagePaths = await collectPublishedImagePaths({
+    rootDir: ROOT,
+    articles,
+    sitePagePaths: PUBLIC_IMAGE_SOURCE_PAGES,
+  });
 
   for (const job of COPY_JOBS) {
     await copyDir(job.from, job.to);
   }
 
-  await copyRuntimeImages();
+  await copyPublishedImages({
+    rootDir: ROOT,
+    distDir: DIST,
+    imagePaths: publishedImagePaths,
+  });
+  await generateImageManifest({
+    rootDir: ROOT,
+    distDir: DIST,
+    imagePaths: publishedImagePaths,
+  });
 
   for (const job of PAGE_JOBS) {
     const source = path.join(ROOT, job.from);

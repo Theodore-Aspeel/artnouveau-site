@@ -55,6 +55,7 @@ const REQUIRED_DIST_FILES = [
   'assets/scripts/article-media.js',
   'assets/scripts/article-taxonomy.js',
   'assets/scripts/article-template.js',
+  'assets/generated-images/manifest.json',
   'data/articles.json',
   'favicon.ico',
   'icon.svg',
