@@ -4,6 +4,7 @@ import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
 
+from tools.editorial_manager.article_creation import ArticleCreationResult
 from tools.editorial_manager.cli import main
 
 
@@ -91,6 +92,53 @@ class CliTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertIn("Publication checklist", output.getvalue())
         self.assertIn("Articles checked: 1", output.getvalue())
+
+    def test_create_article_command_runs_as_dry_run(self):
+        output = io.StringIO()
+        article = {
+            "schema_version": 2,
+            "slug": "demo-create",
+            "publication": {"order": 15},
+        }
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[]):
+            with patch(
+                "tools.editorial_manager.cli.create_article",
+                return_value=ArticleCreationResult(ok=True, article=article),
+            ) as create_article:
+                with redirect_stdout(output):
+                    exit_code = main([
+                        "create-article",
+                        "--slug",
+                        "demo-create",
+                        "--title-fr",
+                        "Demo",
+                        "--dek-fr",
+                        "Dek FR.",
+                        "--epigraph-fr",
+                        "Epigraph FR.",
+                        "--meta-description-fr",
+                        "Meta FR.",
+                        "--hero-alt-fr",
+                        "Alt FR.",
+                        "--section-heading-fr",
+                        "Heading FR",
+                        "--section-body-fr",
+                        "Body FR.",
+                        "--hero-src",
+                        "assets/images/articles/demo.png",
+                        "--city",
+                        "Lille",
+                        "--country",
+                        "France",
+                        "--style-key",
+                        "art_nouveau",
+                    ])
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(json.loads(output.getvalue())["slug"], "demo-create")
+        create_article.assert_called_once()
+        self.assertFalse(create_article.call_args.kwargs["write"])
 
     def test_social_brief_slug_command_runs(self):
         article = {

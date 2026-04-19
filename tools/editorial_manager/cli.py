@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 
+from .article_creation import ArticleCreationInput, CONTROLLED_STYLE_KEYS, CONTROLLED_TAG_KEYS, create_article
 from .checks import check_article, check_articles, publication_check_article, publication_check_articles
 from .editor_server import run_editor_server
 from .locale_report import analyze_article_locale, analyze_articles_locale
@@ -44,7 +46,7 @@ def positive_int(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m tools.editorial_manager",
-        description="Read-only editorial explorer for the article dataset.",
+        description="Small local editorial helper for the article dataset.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -74,6 +76,49 @@ def build_parser() -> argparse.ArgumentParser:
 
     show_parser = subparsers.add_parser("show", help="Show a simple article card.")
     show_parser.add_argument("slug", help="Article slug to inspect.")
+
+    create_parser = subparsers.add_parser(
+        "create-article",
+        help="Create one guarded v2 draft article from explicit source fields.",
+    )
+    create_parser.add_argument("--slug", required=True, help="Unique lowercase article slug.")
+    create_parser.add_argument("--title-fr", required=True, help="French article title.")
+    create_parser.add_argument("--dek-fr", required=True, help="French dek/chapeau.")
+    create_parser.add_argument("--epigraph-fr", required=True, help="French epigraph.")
+    create_parser.add_argument("--meta-description-fr", required=True, help="French SEO description.")
+    create_parser.add_argument("--hero-alt-fr", required=True, help="French hero image alt text.")
+    create_parser.add_argument("--section-heading-fr", required=True, help="First French section heading.")
+    create_parser.add_argument("--section-body-fr", required=True, help="First French section body.")
+    create_parser.add_argument("--hero-src", required=True, help="Existing image path under assets/images.")
+    create_parser.add_argument("--city", required=True, help="City name for facts and practical items.")
+    create_parser.add_argument("--country", required=True, help="Country name for facts and practical items.")
+    create_parser.add_argument(
+        "--style-key",
+        required=True,
+        choices=sorted(CONTROLLED_STYLE_KEYS),
+        help="Stable style key.",
+    )
+    create_parser.add_argument(
+        "--tag-key",
+        action="append",
+        choices=sorted(CONTROLLED_TAG_KEYS),
+        default=[],
+        help="Additional stable tag key. May be repeated.",
+    )
+    create_parser.add_argument("--format", choices=("long", "short"), default="long", help="Article format.")
+    create_parser.add_argument("--order", type=positive_int, help="Publication order. Defaults to next order.")
+    create_parser.add_argument("--canonical-name", default="", help="Stable canonical name. Defaults to title.")
+    create_parser.add_argument("--exact-name", default="", help="Stable exact name. Defaults to title.")
+    create_parser.add_argument("--address", default="", help="Optional address.")
+    create_parser.add_argument("--architect", default="", help="Optional architect.")
+    create_parser.add_argument("--date", default="", help="Optional date.")
+    create_parser.add_argument("--access", default="", help="Optional access note.")
+    create_parser.add_argument("--author", default="Antoine Aspeel", help="Editorial author.")
+    create_parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Append the article to src/data/articles.json. Without this, print a dry-run JSON article.",
+    )
 
     check_parser = subparsers.add_parser("check", help="Run simple read-only editorial checks.")
     check_parser.add_argument("slug", nargs="?", help="Optional article slug to check.")
@@ -271,6 +316,44 @@ def main(argv: list[str] | None = None) -> int:
         if article is None:
             parser.error(f"unknown article slug: {args.slug}")
         print(render_article_detail(article))
+        return 0
+
+    if args.command == "create-article":
+        creation_input = ArticleCreationInput(
+            slug=args.slug,
+            title_fr=args.title_fr,
+            dek_fr=args.dek_fr,
+            epigraph_fr=args.epigraph_fr,
+            meta_description_fr=args.meta_description_fr,
+            hero_alt_fr=args.hero_alt_fr,
+            section_heading_fr=args.section_heading_fr,
+            section_body_fr=args.section_body_fr,
+            hero_src=args.hero_src,
+            city=args.city,
+            country=args.country,
+            style_key=args.style_key,
+            tag_keys=tuple(args.tag_key),
+            format=args.format,
+            order=args.order,
+            canonical_name=args.canonical_name,
+            exact_name=args.exact_name,
+            address=args.address,
+            architect=args.architect,
+            date=args.date,
+            access=args.access,
+            author=args.author,
+        )
+        result = create_article(creation_input, write=args.write)
+        if not result.ok:
+            for error in result.errors:
+                print(f"ERROR: {error}")
+            return 1
+        if args.write:
+            print(f"Created draft article: {result.article['slug']}")
+            print(f"Publication order: {result.article['publication']['order']}")
+            print("Validation passed.")
+        else:
+            print(json.dumps(result.article, ensure_ascii=False, indent=2))
         return 0
 
     if args.command == "check":

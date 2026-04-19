@@ -1,6 +1,6 @@
 # Editorial Manager
 
-Editorial Manager is a small internal Python CLI for inspecting the article dataset and running read-only editorial checks.
+Editorial Manager is a small internal Python CLI for inspecting the article dataset, running read-only editorial checks, and performing a few guarded local edits.
 
 It lives in `tools/editorial_manager/` and reads the public runtime payload from `src/data/articles.json`. It supports the current mixed article model: legacy v1 articles and progressive v2 articles.
 
@@ -18,6 +18,7 @@ Available commands:
 python -m tools.editorial_manager summary
 python -m tools.editorial_manager list
 python -m tools.editorial_manager show <slug>
+python -m tools.editorial_manager create-article --slug <slug> --title-fr "..." --dek-fr "..." --epigraph-fr "..." --meta-description-fr "..." --hero-alt-fr "..." --section-heading-fr "..." --section-body-fr "..." --hero-src assets/images/articles/example.png --city "..." --country "..." --style-key art_nouveau
 python -m tools.editorial_manager check
 python -m tools.editorial_manager check <slug>
 python -m tools.editorial_manager publication-check
@@ -48,6 +49,7 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 - `summary`: prints global article counts, model counts, publication statuses, and v2 entries without English content.
 - `list`: lists articles in publication order with model, status, slug, title, city, and style.
 - `show <slug>`: prints a compact article card for one article.
+- `create-article`: prepares one new v2 draft article from explicit French source fields. By default it is a dry run and prints the JSON article. Add `--write` to append it to `src/data/articles.json`; the command then runs project validation and rolls back if validation fails.
 - `check`: runs simple read-only checks across all articles.
 - `check <slug>`: runs the same checks for one article.
 - `publication-check`: runs a publication preparation checklist across all articles.
@@ -72,6 +74,43 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 - `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. It also accepts `--locale fr|en` for the caption/package locale.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
+
+## Creating One New Article
+
+Article creation is intentionally small and explicit. It is not a CMS and it does not generate editorial text, translate content, upload images, or publish the site.
+
+The first creation command writes only a v2 draft article. It requires the minimum French source content that the public runtime schema already validates:
+
+- stable identity: `--slug`
+- French visible content: `--title-fr`, `--dek-fr`, `--epigraph-fr`, `--meta-description-fr`, `--hero-alt-fr`
+- first French section: `--section-heading-fr`, `--section-body-fr`
+- existing image: `--hero-src`, pointing to a file already under `src/assets/images`
+- basic facts/taxonomy: `--city`, `--country`, `--style-key`
+
+Optional fields can be supplied immediately when known: `--tag-key`, `--canonical-name`, `--exact-name`, `--address`, `--architect`, `--date`, `--access`, `--author`, `--format`, and `--order`.
+
+If `--order` is omitted, the next publication order is selected. The command scaffolds empty `content.en` and `content.nl` blocks with the same first section and practical item slots, so translation can be filled later through the existing editor without changing article shape. Empty EN/NL content is allowed at creation time; it will appear as `fr-only` / `nl-missing` in locale reports.
+
+Recommended flow:
+
+```bash
+python -m tools.editorial_manager create-article --slug nouvel-article-demo --title-fr "Nouvel article demo" --dek-fr "Chapeau FR." --epigraph-fr "Epigraphe FR." --meta-description-fr "Description SEO FR." --hero-alt-fr "Texte alternatif FR." --section-heading-fr "Premier regard" --section-body-fr "Premier texte FR." --hero-src assets/images/articles/example.png --city "Lille" --country "France" --style-key art_nouveau
+```
+
+Review the printed JSON. When it is correct, rerun the same command with `--write`:
+
+```bash
+python -m tools.editorial_manager create-article --slug nouvel-article-demo --title-fr "Nouvel article demo" --dek-fr "Chapeau FR." --epigraph-fr "Epigraphe FR." --meta-description-fr "Description SEO FR." --hero-alt-fr "Texte alternatif FR." --section-heading-fr "Premier regard" --section-body-fr "Premier texte FR." --hero-src assets/images/articles/example.png --city "Lille" --country "France" --style-key art_nouveau --write
+```
+
+Guardrails:
+
+- the slug must be lowercase letters/numbers/hyphens and unique
+- the publication order must be unique
+- the style and tag keys must be controlled keys
+- the hero image must already exist under `src/assets/images`
+- no placeholder article is written if required French source fields are empty
+- after writing, `npm run validate` must pass or the JSON file is restored
 
 `locale-report` uses a deliberately simple status rule:
 
@@ -246,7 +285,7 @@ Small example:
 
 ## Deliberate Limits
 
-Editorial Manager V1 keeps the CLI inspection commands read-only, and the local browser editor deliberately small. The editor can update only whitelisted article fields, including `media.hero.src` and existing `media.support[*].src` slots by selecting an existing image under `src/assets/images`. It does not upload image files, edit image binaries, add, remove, or reorder support images, migrate articles, generate translations, build the website, or replace the Node validation/build pipeline.
+Editorial Manager V1 keeps the inspection commands read-only, and the local browser editor deliberately small. The editor can update only whitelisted article fields, including `media.hero.src` and existing `media.support[*].src` slots by selecting an existing image under `src/assets/images`. The `create-article` command can append one guarded v2 draft when called with `--write`, but it does not generate text, upload image files, edit image binaries, add, remove, or reorder support images, migrate existing articles, generate translations, build the website, or replace the Node validation/build pipeline.
 
 It is a repo-local editorial helper, not a publishing workflow manager.
 
