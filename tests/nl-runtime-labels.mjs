@@ -42,11 +42,25 @@ assert.equal(i18n.resolveLocale(), 'nl');
 
 assert.equal(i18n.t('article.facts'), 'Kerngegevens');
 assert.equal(i18n.t('gallery.all'), 'Alle');
+assert.equal(i18n.t('home.hero.title'), 'Eerst kijken. Daarna benoemen.');
+assert.equal(i18n.t('home.curated.title'), 'Drie directe ingangen');
+assert.equal(i18n.t('home.path.title'), 'Via een stad binnenkomen en dan de blik verruimen');
+assert.equal(i18n.t('home.rhythm.title'), 'Twee manieren van lezen');
+assert.equal(i18n.t('home.gallery.note'), 'De bedoeling van de site wordt toegelicht bij <a href="about.html">Over</a>. Foto\u2019s, details en verkenningen lopen verder op <a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a>.');
+assert.equal(i18n.t('home.aria.curatedGrid'), 'Openende redactionele selectie');
+assert.equal(i18n.t('home.aria.pathsGrid'), 'Redactionele routes per stad');
+assert.equal(i18n.t('home.aria.rhythmGrid'), 'Routes per leesritme');
 assert.equal(i18n.t('home.footer.body'), 'Een auteurspublicatie over Europese steden, hun drempels, hun gevels en wat in het detail blijft bestaan.');
 assert.equal(i18n.t('home.footer.copyright'), '\u00a9 2026 Art Nouveau en Art Deco in Europa.');
 assert.equal(i18n.articleCountLabel(1, 'nl'), 'artikel');
 assert.equal(i18n.articleCountLabel(2, 'nl'), 'artikelen');
 assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Partir du d\u00e9tail, puis revenir \u00e0 la ville');
+
+const homeHtml = fs.readFileSync('src/pages/index.html', 'utf8');
+assert.match(homeHtml, /id="home-curated-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.curatedGrid"/);
+assert.match(homeHtml, /id="home-paths-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.pathsGrid"/);
+assert.match(homeHtml, /id="home-rhythm-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.rhythmGrid"/);
+assert.doesNotMatch(homeHtml, /data-preview-locale-link="nl"/);
 
 const articleTemplateHtml = fs.readFileSync('src/pages/article-redirect.html', 'utf8');
 assert.match(articleTemplateHtml, /class="site-nav"[^>]+data-i18n-attr="aria-label:home\.aria\.mainNav"/);
@@ -116,6 +130,29 @@ assert.deepEqual(
 
 assert.equal(access.getArticleAround(v2Article, 'nl').relationLabel, 'Zelfde stad');
 assert.equal(access.getArticleAround(v2Article, 'nl').note, 'Note fran\u00e7aise');
+
+const nlHomeCardArticle = {
+  title: 'Legacy title',
+  meta_description: 'Legacy meta',
+  media: { hero: { src: 'assets/images/demo.png' } },
+  content: {
+    fr: {
+      title: 'Titre FR',
+      dek: 'Chap\u00f4 FR',
+      seo: { meta_description: 'Meta FR' },
+      media: { hero_alt: 'Alt FR' },
+    },
+    nl: {
+      title: 'Titel NL',
+      media: { hero_alt: 'Alt NL' },
+    },
+  },
+};
+
+assert.equal(access.getArticleTitle(nlHomeCardArticle, 'nl'), 'Titel NL');
+assert.equal(access.getArticleDek(nlHomeCardArticle, 'nl'), 'Chap\u00f4 FR');
+assert.equal(access.getArticleMetaDescription(nlHomeCardArticle, 'nl'), 'Meta FR');
+assert.equal(access.getArticleHeroAlt(nlHomeCardArticle, 'nl'), 'Alt NL');
 
 const v1Article = {
   style: 'Art Nouveau',
