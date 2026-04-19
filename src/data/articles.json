@@ -2089,6 +2089,62 @@
             "note": "Read also: in the same city, the move from an inhabited facade to a public building clearly shifts the scale of looking."
           },
           "resources": []
+        },
+        "nl": {
+          "title": "Casa Campanini, Milaan (1904)",
+          "dek": "Casa Campanini geeft Milaan een bijzonder precieze ingang. Het gebouw, gedateerd in 1904-1905 en verbonden met de Milanese Liberty, houdt eerst stand door de gevel en door de drempel. Het heeft geen omlijsting van commentaar nodig om zich op te dringen. Het volstaat om het op straatniveau te lezen, in de verhouding tussen het geheel, de ingang en de dichtere punten waar de blik blijft rusten.",
+          "epigraph": "Een goed gedragen ingang kan de maat van een heel gebouw geven.",
+          "sections": [
+            {
+              "heading": "Milanese Liberty op drempelniveau",
+              "body": "Het belang van Casa Campanini ligt in zijn leesschaal. Men moet niet beginnen bij Milaan in het algemeen, maar bij het gebouw zelf. De gevel, de drempel en de manier waarop de ingang een deel van de intensiteit van de plek verzamelt, geven al veel.\n\nDe Milanese Liberty, zoals die hier voelbaar wordt, behandelt de gevel als een zorgvuldig geordend geheel. Decor is aanwezig, maar het dient vooral om spanningen te verdelen en de doorgang een bijzondere dichtheid te geven."
+            },
+            {
+              "heading": "Een gevel die Milaan anders verankert",
+              "body": "Met Casa Campanini laat Milaan zich lezen via een bewoonde gevel, niet via een publiek gebouw of een te algemene stadsblik. Dat verandert de kwaliteit van het kijken. De stad wordt tastbaarder, dichterbij, directer verbonden met de straat.\n\nHet gebouw speelt die rol met grote juistheid. Het geeft Milaan een sterk adres, helder genoeg om daarna naar andere vormen te verbreden zonder het vertrekpunt te verliezen."
+            },
+            {
+              "heading": "Wat ter plaatse te lezen valt",
+              "body": "De nuttige benadering is te beginnen bij de algemene compositie, en daarna terug te keren naar de drempel en naar de punten waar het gebouw zich verdicht. Het geheel moet leesbaar blijven. Pas dan begrijpt men dat Liberty geen eenvoudige smaak voor motief is, maar een manier om de gevel te organiseren.\n\nCasa Campanini wint er vervolgens bij om naast het Aquarium te worden gelezen. Het ene gebouw installeert een meer bewoond register. Het andere opent Milaan naar het publieke gebouw."
+            }
+          ],
+          "seo": {
+            "meta_description": "Casa Campanini in Milaan. Een gevellezing op straatniveau rond drempel en Milanese Liberty, met 1904 als beschikbaar aanknopingspunt."
+          },
+          "media": {
+            "hero_alt": "Casa Campanini in Milaan, een Liberty-gevel uit 1904 binnen het corpus van het project.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milaan"
+            },
+            {
+              "key": "country",
+              "value": "Italië"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Alfredo Campanini"
+            },
+            {
+              "key": "address",
+              "value": "Via Vincenzo Bellini 11, hoek Via Livorno, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1904-1905"
+            }
+          ],
+          "around": {
+            "note": "Lees ook: in dezelfde stad verschuift de overgang van een bewoonde gevel naar een publiek gebouw duidelijk de schaal van het kijken."
+          },
+          "resources": []
         }
       }
     },
