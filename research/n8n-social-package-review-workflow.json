@@ -1,0 +1,181 @@
+{
+  "name": "Art Nouveau Local Social Package Review",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "command": "python -m tools.editorial_manager social-package --next --locale en"
+      },
+      "id": "run-social-package-cli",
+      "name": "Run social-package CLI",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        0
+      ],
+      "notes": "Run n8n from the repository root, or edit this command to cd into the repo first. This node reads a JSON handoff from stdout only."
+    },
+    {
+      "parameters": {
+        "jsCode": "const stdout = $json.stdout || $json.data || '';\nlet payload;\ntry {\n  payload = JSON.parse(stdout);\n} catch (error) {\n  throw new Error(`social-package stdout was not valid JSON: ${error.message}`);\n}\nreturn [{ json: payload }];"
+      },
+      "id": "parse-cli-json",
+      "name": "Parse CLI JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        0
+      ],
+      "notes": "Converts Execute Command stdout into the social-package object."
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $json;\nconst errors = [];\nconst isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);\nif (!isObject(payload.contract)) errors.push('contract must be an object');\nif (payload.contract?.name !== 'artnouveau.social_package') errors.push('contract.name must be artnouveau.social_package');\nif (payload.contract?.version !== 1) errors.push('contract.version must be 1');\nif (payload.contract?.kind !== 'read_only_social_handoff') errors.push('contract.kind must be read_only_social_handoff');\nif (!payload.slug) errors.push('slug is required');\nif (!payload.queue_status) errors.push('queue_status is required');\nif (!isObject(payload.caption)) errors.push('caption must be an object');\nif (!isObject(payload.media)) errors.push('media must be an object');\nif (!isObject(payload.links)) errors.push('links must be an object');\nif (errors.length) {\n  throw new Error(`Invalid social-package handoff: ${errors.join('; ')}`);\n}\nreturn [{ json: payload }];"
+      },
+      "id": "validate-social-package-contract",
+      "name": "Validate social-package contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        0
+      ],
+      "notes": "Validates only the n8n-facing boundary. Full article validation stays in the project tools."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.queue_status}}",
+              "operation": "equal",
+              "value2": "candidate"
+            }
+          ]
+        }
+      },
+      "id": "candidate-gate",
+      "name": "Candidate gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        60,
+        0
+      ],
+      "notes": "Only candidate payloads move to the future-publication review object. Other valid statuses stop in local review."
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $json;\nconst review = {\n  prototype: 'local_n8n_social_review',\n  contract: `${payload.contract.name}@${payload.contract.version}`,\n  status: payload.queue_status,\n  slug: payload.slug,\n  requested_locale: payload.requested_locale,\n  source_locale: payload.source_locale,\n  title: payload.caption.title || '',\n  caption: payload.caption.caption || '',\n  cta: payload.caption.cta || '',\n  hashtags: payload.caption.hashtags || [],\n  hero: payload.media.hero || {},\n  public_paths: payload.links.public_paths || {},\n  preview_paths: payload.links.preview_paths || {},\n  reasons: payload.reasons || []\n};\nreturn [{ json: review }];"
+      },
+      "id": "build-local-review-object",
+      "name": "Build local review object",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -120
+      ],
+      "notes": "This is the local human review packet. It is not a publish command."
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $json;\nconst review = {\n  prototype: 'local_n8n_social_review_stop',\n  contract: payload.contract ? `${payload.contract.name}@${payload.contract.version}` : 'unknown',\n  status: payload.queue_status || 'unknown',\n  slug: payload.slug || '',\n  readiness: payload.readiness || {},\n  locale_status: payload.locale_status || {},\n  preview_paths: payload.links?.preview_paths || {},\n  reasons: payload.reasons || []\n};\nreturn [{ json: review }];"
+      },
+      "id": "build-local-stop-review",
+      "name": "Build local stop review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        120
+      ],
+      "notes": "Valid but non-candidate payloads stop here for human review."
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Run social-package CLI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run social-package CLI": {
+      "main": [
+        [
+          {
+            "node": "Parse CLI JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse CLI JSON": {
+      "main": [
+        [
+          {
+            "node": "Validate social-package contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate social-package contract": {
+      "main": [
+        [
+          {
+            "node": "Candidate gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate gate": {
+      "main": [
+        [
+          {
+            "node": "Build local review object",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build local stop review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-19T00:00:00.000Z",
+  "versionId": "local-pedagogical-prototype"
+}

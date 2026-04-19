@@ -57,6 +57,11 @@ This keeps n8n replaceable. Another automation tool can consume the same JSON wi
 
 The first prototype is a learning workflow, not a publishing workflow. It should be possible to run it on a local machine, inspect each node, and delete it without changing the website.
 
+Concrete local prototype artifacts:
+
+- `research/n8n-local-prototype.md`: step-by-step pedagogical workflow spec.
+- `research/n8n-social-package-review-workflow.json`: importable example workflow for local experimentation.
+
 Recommended workflow shape:
 
 1. Manual Trigger.
