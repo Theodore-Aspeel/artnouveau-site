@@ -115,6 +115,21 @@
     return dateItem && dateItem.value ? dateItem.value : '';
   }
 
+  function isNlPreviewFallback(article) {
+    const previewLocale = i18n && typeof i18n.previewLocale === 'function' ? i18n.previewLocale() : '';
+    return previewLocale === 'nl'
+      && access
+      && typeof access.isArticleLocaleReady === 'function'
+      && !access.isArticleLocaleReady(article, 'nl');
+  }
+
+  function makeLocaleFallbackBadge(className) {
+    const badge = document.createElement('span');
+    badge.className = className || 'locale-fallback-badge';
+    badge.textContent = t('article.localeFallback.nlOnly');
+    return badge;
+  }
+
   function deriveGalleryItems(articles) {
     const seenSlugs = new Set();
 
@@ -148,6 +163,7 @@
         image: getCardImage(article),
         imageAlt: getCardImageAlt(article),
         tags: getCardTagEntries(article),
+        nlFallback: isNlPreviewFallback(article),
       }));
   }
 
@@ -205,6 +221,10 @@
       tag.className = 'card__tag';
       tag.textContent = item.style;
       imageWrapper.appendChild(tag);
+    }
+
+    if (item.nlFallback) {
+      imageWrapper.appendChild(makeLocaleFallbackBadge('locale-fallback-badge locale-fallback-badge--overlay'));
     }
 
     const body = document.createElement('div');
@@ -280,6 +300,10 @@
       placeholder.className = 'home-curated__placeholder';
       placeholder.textContent = item.city || item.country || t('gallery.placeholder');
       mediaWrap.appendChild(placeholder);
+    }
+
+    if (item.nlFallback) {
+      mediaWrap.appendChild(makeLocaleFallbackBadge('locale-fallback-badge locale-fallback-badge--overlay'));
     }
 
     const body = document.createElement('div');
@@ -362,6 +386,9 @@
 
       link.appendChild(label);
       link.appendChild(itemTitle);
+      if (item.nlFallback) {
+        link.appendChild(makeLocaleFallbackBadge('locale-fallback-badge locale-fallback-badge--inline'));
+      }
       if (itemMeta.textContent) {
         link.appendChild(itemMeta);
       }
@@ -407,6 +434,9 @@
       itemMeta.textContent = [item.city, item.style].filter(Boolean).join(' · ');
 
       link.appendChild(itemTitle);
+      if (item.nlFallback) {
+        link.appendChild(makeLocaleFallbackBadge('locale-fallback-badge locale-fallback-badge--inline'));
+      }
       if (itemMeta.textContent) {
         link.appendChild(itemMeta);
       }

@@ -57,6 +57,14 @@
     return i18n && typeof i18n.t === 'function' ? i18n.t(key, params, currentLocale()) : key;
   }
 
+  function isNlPreviewFallback(articleData) {
+    const previewLocale = i18n && typeof i18n.previewLocale === 'function' ? i18n.previewLocale() : '';
+    return previewLocale === 'nl'
+      && access
+      && typeof access.isArticleLocaleReady === 'function'
+      && !access.isArticleLocaleReady(articleData, 'nl');
+  }
+
   function previewHref(href) {
     return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
   }
@@ -362,6 +370,13 @@
   `;
   breadcrumb.querySelector('[aria-current="page"]').textContent = articleTitle;
   shell.appendChild(breadcrumb);
+
+  if (isNlPreviewFallback(article)) {
+    const localeNotice = make('div', 'article-locale-notice');
+    localeNotice.setAttribute('role', 'note');
+    localeNotice.appendChild(make('p', 'article-locale-notice__text', t('article.localeFallback.nlOnlyMessage')));
+    shell.appendChild(localeNotice);
+  }
 
   const primaryImageEntry = media && typeof media.getPrimaryImageEntry === 'function'
     ? media.getPrimaryImageEntry(article, locale)

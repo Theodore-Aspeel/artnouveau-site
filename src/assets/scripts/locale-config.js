@@ -4,7 +4,7 @@
   const LOCALES = [
     { code: 'fr', label: 'FR', required: true, public: true, preview: true },
     { code: 'en', label: 'EN', required: false, public: true, preview: true },
-    { code: 'nl', label: 'NL', required: false, public: false, preview: true },
+    { code: 'nl', label: 'NL', required: false, public: true, preview: true },
   ];
   const DEFAULT_LOCALE = 'fr';
   const FALLBACK_LOCALES = ['fr', 'en'];

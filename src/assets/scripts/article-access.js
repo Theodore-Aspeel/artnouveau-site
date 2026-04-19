@@ -115,6 +115,25 @@
     return Object.assign({}, required, selected);
   }
 
+  function hasNonEmptySection(sections) {
+    return Array.isArray(sections) && sections.some((section) => (
+      isPlainObject(section)
+      && (normalizeText(section.heading) || normalizeText(section.body))
+    ));
+  }
+
+  function isArticleLocaleReady(article, locale) {
+    const content = isPlainObject(article && article.content) ? article.content : {};
+    const lang = normalizeLocale(locale);
+    const localeContent = isPlainObject(content[lang]) ? content[lang] : {};
+
+    return Boolean(
+      normalizeText(localeContent.title)
+      && normalizeText(localeContent.dek)
+      && hasNonEmptySection(localeContent.sections)
+    );
+  }
+
   function getArticleTitle(article, locale = DEFAULT_LOCALE) {
     const content = getArticleContent(article, locale);
     return normalizeText(content.title) || normalizeText(article && article.title);
@@ -408,6 +427,7 @@
     getArticleSections,
     getArticleTaxonomy,
     getArticleTitle,
+    isArticleLocaleReady,
     localizedValue,
     normalizeLocale,
     normalizeText,

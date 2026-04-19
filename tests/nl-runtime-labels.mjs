@@ -41,6 +41,8 @@ assert.equal(i18n.previewLocale(), 'nl');
 assert.equal(i18n.resolveLocale(), 'nl');
 
 assert.equal(i18n.t('article.facts'), 'Kerngegevens');
+assert.equal(i18n.t('article.localeFallback.nlOnly'), 'Alleen in het Frans');
+assert.equal(i18n.t('article.localeFallback.nlOnlyMessage'), 'Dit artikel is voorlopig alleen in het Frans beschikbaar.');
 assert.equal(i18n.t('gallery.all'), 'Alle');
 assert.equal(i18n.t('home.hero.title'), 'Eerst kijken. Daarna benoemen.');
 assert.equal(i18n.t('home.curated.title'), 'Drie directe ingangen');
@@ -155,6 +157,36 @@ assert.deepEqual(
 
 assert.equal(access.getArticleAround(v2Article, 'nl').relationLabel, 'Zelfde stad');
 assert.equal(access.getArticleAround(v2Article, 'nl').note, 'Note fran\u00e7aise');
+assert.equal(access.isArticleLocaleReady(v2Article, 'nl'), false);
+
+const nlReadyArticle = {
+  content: {
+    nl: {
+      title: 'Titel NL',
+      dek: 'Dek NL.',
+      sections: [{ heading: '', body: 'Nederlandse tekst.' }],
+    },
+  },
+};
+
+assert.equal(access.isArticleLocaleReady(nlReadyArticle, 'nl'), true);
+assert.equal(access.isArticleLocaleReady({
+  content: {
+    nl: {
+      title: 'Titel NL',
+      dek: 'Dek NL.',
+      sections: [{ heading: '  ', body: '  ' }],
+    },
+  },
+}, 'nl'), false);
+assert.equal(access.isArticleLocaleReady({
+  content: {
+    nl: {
+      title: 'Titel NL',
+      sections: [{ body: 'Nederlandse tekst.' }],
+    },
+  },
+}, 'nl'), false);
 
 const nlHomeCardArticle = {
   title: 'Legacy title',
@@ -178,6 +210,7 @@ assert.equal(access.getArticleTitle(nlHomeCardArticle, 'nl'), 'Titel NL');
 assert.equal(access.getArticleDek(nlHomeCardArticle, 'nl'), 'Chap\u00f4 FR');
 assert.equal(access.getArticleMetaDescription(nlHomeCardArticle, 'nl'), 'Meta FR');
 assert.equal(access.getArticleHeroAlt(nlHomeCardArticle, 'nl'), 'Alt NL');
+assert.equal(access.isArticleLocaleReady(nlHomeCardArticle, 'nl'), false);
 
 const v1Article = {
   style: 'Art Nouveau',
@@ -201,3 +234,16 @@ assert.deepEqual(
 );
 
 assert.equal(access.localizedValue({ fr: 'Texte fran\u00e7ais' }, 'nl'), 'Texte fran\u00e7ais');
+
+const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
+assert.match(galleryScript, /previewLocale === 'nl'/);
+assert.match(galleryScript, /isArticleLocaleReady\(article, 'nl'\)/);
+assert.match(galleryScript, /article\.localeFallback\.nlOnly/);
+assert.match(galleryScript, /locale-fallback-badge--overlay/);
+assert.match(galleryScript, /locale-fallback-badge--inline/);
+
+const articleTemplateScript = fs.readFileSync('src/assets/scripts/article-template.js', 'utf8');
+assert.match(articleTemplateScript, /previewLocale === 'nl'/);
+assert.match(articleTemplateScript, /isArticleLocaleReady\(articleData, 'nl'\)/);
+assert.match(articleTemplateScript, /article\.localeFallback\.nlOnlyMessage/);
+assert.match(articleTemplateScript, /article-locale-notice/);

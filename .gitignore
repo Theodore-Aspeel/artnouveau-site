@@ -17,6 +17,7 @@ pnpm-debug.log*
 
 # Caches and temp files
 /.cache/
+/.editor-backups/
 /.parcel-cache/
 /.turbo/
 /.sass-cache/

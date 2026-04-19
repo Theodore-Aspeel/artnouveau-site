@@ -42,13 +42,49 @@ LOCALIZED_MAIN_FIELDS = (
 def localized_main_fields() -> tuple[EditableField, ...]:
     fields: list[EditableField] = []
     for locale in editable_locale_specs():
+        fields.extend(localized_main_fields_for_locale(locale.code))
+    return tuple(fields)
+
+
+def localized_main_fields_for_locale(locale_code: str) -> tuple[EditableField, ...]:
+    current_locale = next((locale for locale in editable_locale_specs() if locale.code == locale_code), None)
+    if current_locale is None:
+        return ()
+
+    fields: list[EditableField] = []
+    for path_suffix, label, control, required_in_source in LOCALIZED_MAIN_FIELDS:
+        fields.append(
+            EditableField(
+                f"content.{current_locale.code}.{path_suffix}",
+                f"{label} {current_locale.label}",
+                control,
+                required=required_in_source and current_locale.required,
+            )
+        )
+    return tuple(fields)
+
+
+def article_editable_locale_codes(article: Article) -> tuple[str, ...]:
+    content = article.get("content") if isinstance(article, dict) else None
+    codes: list[str] = []
+    for locale in editable_locale_specs():
+        locale_content = content.get(locale.code) if isinstance(content, dict) else None
+        if locale.required or isinstance(locale_content, dict):
+            codes.append(locale.code)
+    return tuple(codes)
+
+
+def localized_main_fields_for_article(article: Article) -> tuple[EditableField, ...]:
+    fields: list[EditableField] = []
+    for locale_code in article_editable_locale_codes(article):
         for path_suffix, label, control, required_in_source in LOCALIZED_MAIN_FIELDS:
+            current_locale_label = locale_label(locale_code)
             fields.append(
                 EditableField(
-                    f"content.{locale.code}.{path_suffix}",
-                    f"{label} {locale.label}",
+                    f"content.{locale_code}.{path_suffix}",
+                    f"{label} {current_locale_label}",
                     control,
-                    required=required_in_source and locale.required,
+                    required=required_in_source and is_required_locale(locale_code),
                 )
             )
     return tuple(fields)
@@ -84,7 +120,9 @@ def editable_field_payload() -> list[dict[str, Any]]:
 
 def editable_fields_for_article(article: Article) -> list[EditableField]:
     return [
-        *EDITABLE_FIELDS,
+        EditableField("status", "Statut de publication", "select", required=True, choices=STATUS_VALUES),
+        EditableField("media.hero.src", "Image principale", "image-select", required=True, group="Image principale"),
+        *localized_main_fields_for_article(article),
         *support_image_editable_fields(article),
         *section_editable_fields(article),
         *practical_item_editable_fields(article),
@@ -92,9 +130,9 @@ def editable_fields_for_article(article: Article) -> list[EditableField]:
 
 
 def editable_field_for_path(article: Article, path: str) -> EditableField | None:
-    field = EDITABLE_FIELD_BY_PATH.get(path)
-    if field is not None:
-        return field
+    for field in editable_fields_for_article(article):
+        if field.path == path:
+            return field
 
     support_match = SUPPORT_IMAGE_FIELD_RE.match(path)
     if support_match:
