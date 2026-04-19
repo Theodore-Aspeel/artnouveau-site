@@ -61,6 +61,11 @@ class SocialPackageTests(unittest.TestCase):
         package = build_social_package(ready_article(), "en")
         payload = social_package_to_dict(package)
 
+        self.assertEqual(payload["contract"], {
+            "name": "artnouveau.social_package",
+            "version": 1,
+            "kind": "read_only_social_handoff",
+        })
         self.assertEqual(payload["slug"], "demo")
         self.assertEqual(payload["requested_locale"], "en")
         self.assertEqual(payload["source_locale"], "en")
@@ -91,6 +96,11 @@ class SocialPackageTests(unittest.TestCase):
         self.assertEqual(payload["links"]["article_fr_path"], "article.html?slug=demo")
         self.assertEqual(payload["links"]["article_en_preview_path"], "article.html?slug=demo&previewLocale=en")
         self.assertEqual(payload["links"]["preview_paths"]["nl"], "article.html?slug=demo&previewLocale=nl")
+        self.assertEqual(payload["links"]["canonical_public_path"], "/fr/articles/demo/")
+        self.assertEqual(payload["links"]["public_paths"], {
+            "fr": "/fr/articles/demo/",
+            "en": "/en/articles/demo/",
+        })
         self.assertEqual(payload["readiness"]["status"], "ready")
         self.assertEqual(payload["reasons"], [
             "Publication checklist is ready.",
@@ -165,6 +175,15 @@ class SocialPackageTests(unittest.TestCase):
             payload["links"]["preview_paths"]["nl"],
             "article.html?slug=demo%2Flille%20ete&previewLocale=nl",
         )
+        self.assertEqual(
+            payload["links"]["canonical_public_path"],
+            "/fr/articles/demo%2Flille%20ete/",
+        )
+        self.assertEqual(
+            payload["links"]["public_paths"]["en"],
+            "/en/articles/demo%2Flille%20ete/",
+        )
+        self.assertNotIn("nl", payload["links"]["public_paths"])
 
 
 if __name__ == "__main__":

@@ -13,13 +13,15 @@ from .article_access import (
     locale_content,
     normalize_text,
 )
-from .locales import DEFAULT_LOCALE, normalize_locale, preview_locale_codes
+from .locales import DEFAULT_LOCALE, normalize_locale, preview_locale_codes, public_locale_codes
 from .social_brief import SocialBrief, build_social_brief, social_brief_to_dict
 from .social_caption import SocialCaption, build_social_caption, social_caption_to_dict
 from .social_queue import SocialQueueItem, build_social_queue
 
 
 Article = dict[str, Any]
+SOCIAL_PACKAGE_CONTRACT_NAME = "artnouveau.social_package"
+SOCIAL_PACKAGE_CONTRACT_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -40,6 +42,8 @@ class SocialPackageLinks:
     article_fr_path: str
     article_en_preview_path: str
     preview_paths: dict[str, str]
+    canonical_public_path: str
+    public_paths: dict[str, str]
 
 
 @dataclass(frozen=True)
@@ -79,6 +83,11 @@ def social_package_to_dict(package: SocialPackage) -> dict[str, Any]:
     caption_payload = social_caption_to_dict(package.caption)
 
     return {
+        "contract": {
+            "name": SOCIAL_PACKAGE_CONTRACT_NAME,
+            "version": SOCIAL_PACKAGE_CONTRACT_VERSION,
+            "kind": "read_only_social_handoff",
+        },
         "slug": package.slug,
         "requested_locale": package.requested_locale,
         "source_locale": package.source_locale,
@@ -99,6 +108,8 @@ def _links_to_dict(links: SocialPackageLinks) -> dict[str, Any]:
         "article_fr_path": links.article_fr_path,
         "article_en_preview_path": links.article_en_preview_path,
         "preview_paths": links.preview_paths,
+        "canonical_public_path": links.canonical_public_path,
+        "public_paths": links.public_paths,
     }
 
 
@@ -143,11 +154,17 @@ def _links_package(slug: str) -> SocialPackageLinks:
         locale: article_fr_path if locale == DEFAULT_LOCALE else f"{article_fr_path}&previewLocale={locale}"
         for locale in preview_locale_codes()
     }
+    public_paths = {
+        locale: f"/{locale}/articles/{encoded_slug}/"
+        for locale in public_locale_codes()
+    }
 
     return SocialPackageLinks(
         article_fr_path=article_fr_path,
         article_en_preview_path=preview_paths.get("en", article_fr_path),
         preview_paths=preview_paths,
+        canonical_public_path=public_paths.get(DEFAULT_LOCALE, article_fr_path),
+        public_paths=public_paths,
     )
 
 

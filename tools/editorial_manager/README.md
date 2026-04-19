@@ -139,8 +139,11 @@ When multiple `social-queue` filters are used together, they are combined as AND
 
 `social-package` is the stable read-only payload intended for future social/editorial automation. It combines existing helper outputs; it does not add private workflow state and does not modify `src/data/articles.json`.
 
+The payload is the current n8n / Instagram handoff boundary. A future workflow may execute the CLI and parse the JSON, but this repository still does not call Instagram APIs, schedule posts, store credentials, or mark anything as published.
+
 Top-level structure:
 
+- `contract`: explicit handoff contract marker with `name`, `version`, and `kind`.
 - `slug`: stable article slug.
 - `requested_locale`: locale requested by the caller, currently `fr` or `en`.
 - `source_locale`: locale actually used for visible caption/media text. If English is requested but no English title or dek exists, this is `fr`.
@@ -149,7 +152,7 @@ Top-level structure:
 - `brief`: the full `social-brief` payload for the article.
 - `caption`: the full `social-caption` payload for the selected source locale.
 - `media`: hero and support images prepared for social use.
-- `links`: relative article links for the published FR page and EN preview.
+- `links`: local preview links plus public multilingual article paths for automation handoff.
 - `image_summary`: compact image presence summary copied from `brief`.
 - `readiness`: publication checklist summary copied from `brief`.
 - `reasons`: human-readable queue reasons explaining `queue_status`.
@@ -170,7 +173,8 @@ Status fields have different roles:
 `media`, `links`, `brief`, and `caption` are deliberately separate:
 
 - `media` contains image paths plus localized/fallback alt and caption text for the selected `source_locale`.
-- `links` contains relative site paths only; it does not publish externally.
+- `links.preview_paths` contains local editor preview paths, including non-public preview locales such as `nl`.
+- `links.public_paths` contains only public static routes, currently `fr` and `en`.
 - `brief` is the editorial context block: FR/EN title and dek, locale status, quote, practical items, image summary, and checklist readiness.
 - `caption` is a deterministic draft for social copy: title, hook, short caption, CTA, and hashtags.
 
@@ -178,6 +182,11 @@ Small example:
 
 ```json
 {
+  "contract": {
+    "name": "artnouveau.social_package",
+    "version": 1,
+    "kind": "read_only_social_handoff"
+  },
   "slug": "demo",
   "requested_locale": "en",
   "source_locale": "en",
@@ -252,7 +261,17 @@ Small example:
   },
   "links": {
     "article_fr_path": "article.html?slug=demo",
-    "article_en_preview_path": "article.html?slug=demo&previewLocale=en"
+    "article_en_preview_path": "article.html?slug=demo&previewLocale=en",
+    "preview_paths": {
+      "fr": "article.html?slug=demo",
+      "en": "article.html?slug=demo&previewLocale=en",
+      "nl": "article.html?slug=demo&previewLocale=nl"
+    },
+    "canonical_public_path": "/fr/articles/demo/",
+    "public_paths": {
+      "fr": "/fr/articles/demo/",
+      "en": "/en/articles/demo/"
+    }
   },
   "image_summary": {
     "has_hero": true,
