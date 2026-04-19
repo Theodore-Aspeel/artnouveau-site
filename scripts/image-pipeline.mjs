@@ -7,6 +7,7 @@ export const IMAGE_MANIFEST_PATH = `${GENERATED_IMAGE_DIR}/manifest.json`;
 
 const GENERATED_WIDTHS = [640, 960, 1280, 1600];
 const SUPPORTED_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png']);
+const GENERATED_FORMATS = ['source', 'webp', 'avif'];
 
 function normalizeImagePath(value) {
   return typeof value === 'string' ? value.trim().replaceAll('\\', '/') : '';
@@ -116,21 +117,49 @@ function outputOptions(format) {
     return { compressionLevel: 9, palette: true, quality: 82 };
   }
 
+  if (format === 'webp') {
+    return { quality: 84, smartSubsample: true };
+  }
+
+  if (format === 'avif') {
+    return { quality: 60, effort: 4, chromaSubsampling: '4:4:4' };
+  }
+
   return {};
 }
 
-async function generatedVariantRecord({ rootDir, distDir, sourcePath, sourceMetadata, width }) {
+function normalizedSourceFormat(sourceMetadata, sourcePath) {
+  const format = sourceMetadata.format || path.extname(sourcePath).toLowerCase().replace('.', '');
+  return format === 'jpg' ? 'jpeg' : format;
+}
+
+function outputExtensionForFormat(format, sourcePath) {
+  if (format === 'source') {
+    return path.extname(sourcePath).toLowerCase();
+  }
+
+  if (format === 'jpeg') {
+    return '.jpg';
+  }
+
+  return `.${format}`;
+}
+
+function outputFormatForVariant(format, sourceMetadata, sourcePath) {
+  return format === 'source' ? normalizedSourceFormat(sourceMetadata, sourcePath) : format;
+}
+
+async function generatedVariantRecord({ rootDir, distDir, sourcePath, sourceMetadata, width, format }) {
   const sourceAbsolutePath = path.join(rootDir, 'src', sourcePath);
-  const sourceExtension = path.extname(sourcePath).toLowerCase();
-  const distRelativePath = generatedRelativePath(sourcePath, width, sourceExtension);
+  const outputFormat = outputFormatForVariant(format, sourceMetadata, sourcePath);
+  const distRelativePath = generatedRelativePath(sourcePath, width, outputExtensionForFormat(format, sourcePath));
   const distAbsolutePath = path.join(distDir, distRelativePath);
-  const format = sourceMetadata.format === 'jpg' ? 'jpeg' : sourceMetadata.format;
 
   await ensureParentDir(distAbsolutePath);
   await sharp(sourceAbsolutePath)
     .rotate()
     .resize({ width, withoutEnlargement: true })
-    .toFormat(format, outputOptions(format))
+    .toFormat(outputFormat, outputOptions(outputFormat))
     .toFile(distAbsolutePath);
 
   const [metadata, stats] = await Promise.all([
@@ -139,7 +168,7 @@ async function generatedVariantRecord({ rootDir, distDir, sourcePath, sourceMeta
   ]);
 
   return {
-    format: metadata.format || format,
+    format: outputFormat,
     width: metadata.width,
     height: metadata.height,
     bytes: stats.size,
@@ -166,23 +195,27 @@ async function buildManifestEntry({ rootDir, distDir, sourcePath }) {
   const variants = [];
 
   for (const width of generatedWidths) {
-    variants.push(await generatedVariantRecord({
-      rootDir,
-      distDir,
-      sourcePath,
-      sourceMetadata,
-      width,
-    }));
+    for (const format of GENERATED_FORMATS) {
+      variants.push(await generatedVariantRecord({
+        rootDir,
+        distDir,
+        sourcePath,
+        sourceMetadata,
+        width,
+        format,
+      }));
+    }
   }
 
   return {
     source_path: sourcePath,
     source: {
-      format: sourceMetadata.format || extension.replace('.', ''),
+      format: normalizedSourceFormat(sourceMetadata, sourcePath),
       width: sourceMetadata.width,
       height: sourceMetadata.height,
       bytes: sourceStats.size,
     },
+    generated_formats: GENERATED_FORMATS.map((format) => outputFormatForVariant(format, sourceMetadata, sourcePath)),
     variants,
   };
 }
@@ -207,8 +240,9 @@ export async function generateImageManifest({ rootDir, distDir, imagePaths }) {
   }
 
   const manifest = {
-    version: 1,
+    version: 2,
     generated_dir: GENERATED_IMAGE_DIR,
+    generated_formats: ['source', 'webp', 'avif'],
     images,
   };
   const manifestPath = path.join(distDir, IMAGE_MANIFEST_PATH);

@@ -31,8 +31,13 @@ const manifestPath = path.join('dist', IMAGE_MANIFEST_PATH);
 assert.ok(fs.existsSync(manifestPath), 'image manifest should be generated in dist');
 
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-assert.equal(manifest.version, 1, 'manifest should expose its schema version');
+assert.equal(manifest.version, 2, 'manifest should expose its schema version');
 assert.equal(manifest.generated_dir, 'assets/generated-images', 'manifest should expose generated image directory');
+assert.deepEqual(
+  manifest.generated_formats,
+  ['source', 'webp', 'avif'],
+  'manifest should expose the generated output format families'
+);
 
 const manifestSources = manifest.images
   .map((image) => image.source_path)
@@ -46,6 +51,11 @@ for (const image of manifest.images) {
   assert.ok(Number.isInteger(image.source.height) && image.source.height > 0, `${image.source_path} should record source height`);
   assert.ok(Number.isInteger(image.source.bytes) && image.source.bytes > 0, `${image.source_path} should record source byte size`);
   assert.ok(image.source.format, `${image.source_path} should record source format`);
+  assert.deepEqual(
+    [...new Set(image.variants.map((variant) => variant.format))].sort(),
+    ['avif', image.source.format, 'webp'].sort(),
+    `${image.source_path} should generate source, WebP and AVIF variants`
+  );
   assert.ok(Array.isArray(image.variants) && image.variants.length > 0, `${image.source_path} should have generated variants`);
 
   for (const variant of image.variants) {
