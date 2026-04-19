@@ -54,13 +54,38 @@ assert.equal(i18n.t('home.footer.body'), 'Een auteurspublicatie over Europese st
 assert.equal(i18n.t('home.footer.copyright'), '\u00a9 2026 Art Nouveau en Art Deco in Europa.');
 assert.equal(i18n.articleCountLabel(1, 'nl'), 'artikel');
 assert.equal(i18n.articleCountLabel(2, 'nl'), 'artikelen');
-assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Partir du d\u00e9tail, puis revenir \u00e0 la ville');
+assert.equal(i18n.t('about.meta.title', null, 'nl'), 'Over \u00b7 Art Nouveau en Art Deco in Europa');
+assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Van het detail vertrekken en daarna terugkeren naar de stad');
+assert.equal(i18n.t('about.trust.title', null, 'nl'), 'Discrete feitelijke nauwkeurigheid, zonder overbodig apparaat');
+assert.equal(i18n.t('about.card.method.title', null, 'nl'), 'Van het terrein vertrekken en daarna kaderen');
+assert.equal(i18n.t('about.cta.label', null, 'nl'), 'Redactioneel contact');
+assert.equal(i18n.t('mentions.meta.title', null, 'nl'), 'Vermelding en contact \u00b7 Art Nouveau en Art Deco in Europa');
+assert.equal(i18n.t('mentions.hero.title', null, 'nl'), 'Een eenvoudig en leesbaar kader, zonder overbodig apparaat');
+assert.equal(i18n.t('mentions.publication.title', null, 'nl'), 'Uitgever van de site');
+assert.equal(i18n.t('mentions.content.title', null, 'nl'), 'Teksten en beelden');
+assert.equal(i18n.t('mentions.usage.title', null, 'nl'), 'Hergebruik en meldingen');
+assert.equal(i18n.t('error404.title', null, 'nl'), 'Pagina niet gevonden');
+assert.equal(i18n.t('error404.cta', null, 'nl'), 'Terug naar home');
 
 const homeHtml = fs.readFileSync('src/pages/index.html', 'utf8');
 assert.match(homeHtml, /id="home-curated-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.curatedGrid"/);
 assert.match(homeHtml, /id="home-paths-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.pathsGrid"/);
 assert.match(homeHtml, /id="home-rhythm-grid"[^>]+data-i18n-attr="aria-label:home\.aria\.rhythmGrid"/);
 assert.doesNotMatch(homeHtml, /data-preview-locale-link="nl"/);
+
+const staticPreviewPages = [
+  ['src/pages/about.html', 'about\\.hero\\.title'],
+  ['src/pages/mentions.html', 'mentions\\.hero\\.title'],
+  ['src/pages/404.html', 'error404\\.title'],
+];
+
+for (const [filePath, titleKey] of staticPreviewPages) {
+  const html = fs.readFileSync(filePath, 'utf8');
+  assert.match(html, new RegExp(`data-i18n="${titleKey}"`));
+  assert.match(html, /data-i18n-attr="aria-label:home\.aria\.mainNav"/);
+  assert.match(html, /data-i18n-attr="aria-label:nav\.language"/);
+  assert.doesNotMatch(html, /data-preview-locale-link="nl"/);
+}
 
 const articleTemplateHtml = fs.readFileSync('src/pages/article-redirect.html', 'utf8');
 assert.match(articleTemplateHtml, /class="site-nav"[^>]+data-i18n-attr="aria-label:home\.aria\.mainNav"/);
