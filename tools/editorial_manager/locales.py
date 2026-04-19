@@ -22,7 +22,7 @@ class LocaleSpec:
 SUPPORTED_LOCALES: tuple[LocaleSpec, ...] = (
     LocaleSpec("fr", "FR", required=True, public=True, preview=True, editable=True),
     LocaleSpec("en", "EN", required=False, public=True, preview=True, editable=True),
-    LocaleSpec("nl", "NL", required=False, public=False, preview=True, editable=False),
+    LocaleSpec("nl", "NL", required=False, public=False, preview=True, editable=True),
 )
 
 DEFAULT_LOCALE = "fr"
@@ -74,5 +74,8 @@ def is_required_locale(locale: str) -> bool:
 def locale_status_choices() -> tuple[str, ...]:
     choices = ["fr-only"]
     for locale in optional_locale_codes():
+        missing_status = "fr-only" if locale == "en" else f"{locale}-missing"
+        if missing_status not in choices:
+            choices.append(missing_status)
         choices.extend((f"{locale}-partial", f"{locale}-ready"))
     return tuple(choices)

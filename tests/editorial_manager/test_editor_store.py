@@ -7,6 +7,9 @@ import unittest
 from tools.editorial_manager.editor_store import (
     build_editor_article_payload,
     build_preview_urls,
+    find_payload_article,
+    load_article_payload,
+    list_editor_articles,
     npm_executable,
     save_article_changes,
     validate_changes,
@@ -56,6 +59,19 @@ def sample_article(hero_src=VALID_HERO_SRC, support=None):
                     {"key": "address", "value": "Demo Street"},
                 ],
             },
+            "nl": {
+                "title": "Demo NL",
+                "dek": "Dek NL.",
+                "epigraph": "Epigraph NL.",
+                "sections": [{"heading": "Heading NL", "body": "Body NL."}],
+                "seo": {"meta_description": "Meta NL."},
+                "media": {"hero_alt": "Alt NL."},
+                "around": {"note": "Around NL."},
+                "practical_items": [
+                    {"key": "city", "value": "Rijsel"},
+                    {"key": "address", "value": "Demo straat"},
+                ],
+            },
         },
     }
 
@@ -71,7 +87,8 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(payload["preview_urls"]["nl"], "article.html?slug=demo&previewLocale=nl")
         self.assertEqual(payload["locale_contract"]["default"], "fr")
         self.assertIn("nl", payload["locale_contract"]["preview"])
-        self.assertNotIn("nl", payload["locale_contract"]["editable"])
+        self.assertIn("nl", payload["locale_contract"]["editable"])
+        self.assertEqual(payload["locale_statuses"]["nl"]["status"], "nl-ready")
         self.assertIn(VALID_HERO_SRC, [image["src"] for image in payload["image_options"]])
         self.assertEqual(payload["support_images"], [{"index": 0, "src": VALID_SUPPORT_SRC}])
         self.assertIn("status", field_paths)
@@ -83,13 +100,71 @@ class EditorStoreTests(unittest.TestCase):
         self.assertIn("content.fr.sections.0.body", field_paths)
         self.assertIn("content.en.sections.0.heading", field_paths)
         self.assertIn("content.en.sections.0.body", field_paths)
+        self.assertIn("content.nl.title", field_paths)
+        self.assertIn("content.nl.media.hero_alt", field_paths)
+        self.assertIn("content.nl.sections.0.heading", field_paths)
+        self.assertIn("content.nl.sections.0.body", field_paths)
         self.assertIn("content.fr.practical_items.0.value", field_paths)
         self.assertIn("content.en.practical_items.1.value", field_paths)
+        self.assertIn("content.nl.practical_items.1.value", field_paths)
         self.assertNotIn("slug", field_paths)
         self.assertNotIn("taxonomy.style_key", field_paths)
         self.assertNotIn("content.fr.sections", field_paths)
         self.assertNotIn("content.fr.practical_items", field_paths)
         self.assertNotIn("content.fr.practical_items.0.key", field_paths)
+
+    def test_editor_payload_exposes_nl_for_real_pilot_articles(self):
+        payload = load_article_payload()
+
+        for slug in ("den-tijd-le-temps-anvers", "maison-lotus-anvers"):
+            with self.subTest(slug=slug):
+                article = find_payload_article(payload, slug)
+                self.assertIsNotNone(article)
+                editor_payload = build_editor_article_payload(article)
+                field_paths = [field["path"] for field in editor_payload["fields"]]
+
+                self.assertIn("nl", editor_payload["locale_contract"]["editable"])
+                self.assertIn("nl", editor_payload["locale_contract"]["preview"])
+                self.assertEqual(
+                    editor_payload["preview_urls"]["nl"],
+                    f"article.html?slug={slug}&previewLocale=nl",
+                )
+                self.assertIn("content.nl.title", field_paths)
+                self.assertIn("content.nl.dek", field_paths)
+                self.assertIn("content.nl.epigraph", field_paths)
+                self.assertIn("content.nl.seo.meta_description", field_paths)
+                self.assertIn("content.nl.media.hero_alt", field_paths)
+                self.assertIn("content.nl.around.note", field_paths)
+                self.assertTrue(any(path.startswith("content.nl.sections.") for path in field_paths))
+                self.assertTrue(any(path.startswith("content.nl.practical_items.") for path in field_paths))
+
+    def test_editor_payload_does_not_expose_nl_when_article_has_no_nl_content(self):
+        article = sample_article()
+        del article["content"]["nl"]
+
+        payload = build_editor_article_payload(article)
+        field_paths = [field["path"] for field in payload["fields"]]
+
+        self.assertNotIn("nl", payload["locale_contract"]["editable"])
+        self.assertNotIn("nl", payload["locale_contract"]["preview"])
+        self.assertEqual(payload["locale_statuses"]["nl"]["status"], "nl-missing")
+        self.assertFalse(any(path.startswith("content.nl.") for path in field_paths))
+
+    def test_article_list_exposes_internal_nl_readiness(self):
+        article = sample_article()
+        missing = sample_article()
+        missing["slug"] = "missing"
+        del missing["content"]["nl"]
+        partial = sample_article()
+        partial["slug"] = "partial"
+        partial["content"]["nl"]["media"]["hero_alt"] = ""
+
+        rows = list_editor_articles({"articles": [article, missing, partial]})
+        statuses = {row["slug"]: row["locale_statuses"]["nl"]["status"] for row in rows}
+
+        self.assertEqual(statuses["demo"], "nl-ready")
+        self.assertEqual(statuses["missing"], "nl-missing")
+        self.assertEqual(statuses["partial"], "nl-partial")
 
     def test_section_fields_are_grouped_for_non_technical_editor(self):
         payload = build_editor_article_payload(sample_article(support=[{"src": VALID_SUPPORT_SRC}]))
@@ -109,6 +184,9 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(fields["content.fr.sections.0.body"]["control"], "textarea")
         self.assertTrue(fields["content.fr.sections.0.body"]["required"])
         self.assertFalse(fields["content.en.sections.0.body"]["required"])
+        self.assertEqual(fields["content.nl.sections.0.heading"]["label"], "Section 1 - titre (NL)")
+        self.assertEqual(fields["content.nl.sections.0.heading"]["group"], "Sections NL")
+        self.assertFalse(fields["content.nl.sections.0.body"]["required"])
 
     def test_practical_item_fields_are_grouped_with_readonly_keys(self):
         payload = build_editor_article_payload(sample_article())
@@ -122,6 +200,9 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(fields["content.en.practical_items.1.value"]["label"], "Adresse (EN)")
         self.assertEqual(fields["content.en.practical_items.1.value"]["readonly_key"], "address")
         self.assertFalse(fields["content.en.practical_items.1.value"]["required"])
+        self.assertEqual(fields["content.nl.practical_items.0.value"]["label"], "Ville (NL)")
+        self.assertEqual(fields["content.nl.practical_items.0.value"]["group"], "Informations pratiques NL")
+        self.assertFalse(fields["content.nl.practical_items.0.value"]["required"])
 
     def test_preview_urls_keep_encoded_slug_and_locale_parameter(self):
         urls = build_preview_urls("demo/lille ete")
@@ -139,6 +220,18 @@ class EditorStoreTests(unittest.TestCase):
         errors = validate_changes(sample_article(), [{"field": "content.fr.sections.1.body", "value": "New section"}])
 
         self.assertEqual(errors[0]["code"], "field-not-editable")
+
+    def test_validate_changes_accepts_existing_optional_nl_fields(self):
+        errors = validate_changes(
+            sample_article(),
+            [
+                {"field": "content.nl.title", "value": "Titel NL"},
+                {"field": "content.nl.sections.0.body", "value": "Nieuwe tekst NL."},
+                {"field": "content.nl.practical_items.0.value", "value": "Antwerpen"},
+            ],
+        )
+
+        self.assertEqual(errors, [])
 
     def test_validate_changes_rejects_section_shape_change(self):
         errors = validate_changes(sample_article(), [{"field": "content.fr.sections", "value": []}])
@@ -316,6 +409,29 @@ class EditorStoreTests(unittest.TestCase):
         self.assertEqual(practical_fr[1], {"key": "address", "value": "Rue de Demo"})
         self.assertEqual(practical_en[0], {"key": "city", "value": "Lille"})
         self.assertEqual(practical_en[1], {"key": "address", "value": "Updated street"})
+
+    def test_save_article_changes_writes_existing_nl_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = temp_articles_path(directory)
+            write_payload(path, [sample_article("assets/images/articles/current.png")])
+
+            result = save_article_changes(
+                "demo",
+                [
+                    {"field": "content.nl.title", "value": "Updated NL"},
+                    {"field": "content.nl.sections.0.heading", "value": "Updated heading NL"},
+                    {"field": "content.nl.practical_items.1.value", "value": "Updated straat"},
+                ],
+                path=path,
+                validator=lambda: (True, []),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+
+        content_nl = payload["articles"][0]["content"]["nl"]
+        self.assertTrue(result["ok"])
+        self.assertEqual(content_nl["title"], "Updated NL")
+        self.assertEqual(content_nl["sections"][0]["heading"], "Updated heading NL")
+        self.assertEqual(content_nl["practical_items"][1], {"key": "address", "value": "Updated straat"})
 
     def test_save_article_changes_writes_existing_hero_image_path(self):
         with tempfile.TemporaryDirectory() as directory:

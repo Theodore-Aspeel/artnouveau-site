@@ -68,7 +68,7 @@ class CliTests(unittest.TestCase):
                 exit_code = main(["locale-report", "demo", "--locale", "nl"])
 
         self.assertEqual(exit_code, 0)
-        self.assertIn("fr-only", output.getvalue())
+        self.assertIn("nl-missing", output.getvalue())
 
     def test_publication_check_slug_command_runs(self):
         article = {

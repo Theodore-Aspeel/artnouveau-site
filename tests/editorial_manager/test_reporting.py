@@ -93,6 +93,19 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("media.hero_alt", output)
         self.assertIn("three", output)
 
+    def test_locale_report_renders_explicit_nl_readiness_counts(self):
+        output = render_locale_report([
+            LocaleReportItem("missing", "nl-missing", ("title", "sections"), "nl"),
+            LocaleReportItem("partial", "nl-partial", ("media.hero_alt",), "nl"),
+            LocaleReportItem("ready", "nl-ready", (), "nl"),
+        ])
+
+        self.assertIn("nl-missing: 1", output)
+        self.assertIn("nl-partial: 1", output)
+        self.assertIn("nl-ready: 1", output)
+        self.assertIn("Missing fields", output)
+        self.assertNotIn("Missing EN fields", output)
+
     def test_social_brief_renders_terminal_readable_sections(self):
         output = render_social_brief(SocialBrief(
             slug="demo",

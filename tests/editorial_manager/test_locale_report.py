@@ -67,10 +67,11 @@ class LocaleReportTests(unittest.TestCase):
         self.assertEqual(item.status, "nl-ready")
         self.assertEqual(item.missing_fields, ())
 
-    def test_missing_prepared_target_locale_stays_fr_only(self):
+    def test_missing_prepared_target_locale_is_explicit(self):
         item = analyze_article_locale(article_with_english({"title": "Demo"}), "nl")
 
-        self.assertEqual(item.status, "fr-only")
+        self.assertEqual(item.status, "nl-missing")
+        self.assertEqual(item.target_locale, "nl")
         self.assertIn("title", item.missing_fields)
 
     def test_articles_locale_preserves_one_item_per_article(self):

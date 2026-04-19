@@ -14,8 +14,16 @@ from urllib.parse import quote
 from .article_access import article_hero_image, article_publication_order, article_slug, article_title
 from .checks import publication_check_article
 from .editor_backups import create_articles_backup
-from .editor_fields import editable_field_for_path, editable_field_value_payload, editable_fields_for_article, get_path, set_path
+from .editor_fields import (
+    article_editable_locale_codes,
+    editable_field_for_path,
+    editable_field_value_payload,
+    editable_fields_for_article,
+    get_path,
+    set_path,
+)
 from .editor_images import is_valid_editor_image_src, list_editor_image_options, project_root_from_articles_path
+from .locale_report import analyze_article_locale
 from .locales import DEFAULT_LOCALE, SUPPORTED_LOCALES, editable_locale_specs, preview_locale_codes
 from .repository import ARTICLES_JSON, PROJECT_ROOT
 
@@ -45,6 +53,7 @@ def list_editor_articles(payload: Payload) -> list[dict[str, Any]]:
                 "status": str(article.get("status") or ""),
                 "order": article_publication_order(article),
                 "has_hero": bool(article_hero_image(article)),
+                "locale_statuses": editor_locale_statuses(article),
             }
         )
     return rows
@@ -68,7 +77,8 @@ def build_editor_article_payload(article: Article, project_root: Path = PROJECT_
         "hero_src": article_hero_image(article),
         "support_images": current_support_images(article),
         "preview_urls": build_preview_urls(slug),
-        "locale_contract": editor_locale_contract(),
+        "locale_contract": editor_locale_contract(article),
+        "locale_statuses": editor_locale_statuses(article),
         "image_options": list_editor_image_options(project_root),
         "fields": [editable_field_value_payload(article, field) for field in editable_fields_for_article(article)],
         "checks": validate_article_for_editor(article, project_root=project_root),
@@ -84,7 +94,13 @@ def build_preview_urls(slug: str) -> dict[str, str]:
     return urls
 
 
-def editor_locale_contract() -> dict[str, Any]:
+def editor_locale_contract(article: Article | None = None) -> dict[str, Any]:
+    editable_codes = (
+        list(article_editable_locale_codes(article))
+        if article is not None
+        else [locale.code for locale in editable_locale_specs()]
+    )
+    preview_codes = [locale for locale in preview_locale_codes() if locale in editable_codes]
     return {
         "default": DEFAULT_LOCALE,
         "supported": [
@@ -98,9 +114,22 @@ def editor_locale_contract() -> dict[str, Any]:
             }
             for locale in SUPPORTED_LOCALES
         ],
-        "editable": [locale.code for locale in editable_locale_specs()],
-        "preview": list(preview_locale_codes()),
+        "editable": editable_codes,
+        "preview": preview_codes,
     }
+
+
+def editor_locale_statuses(article: Article) -> dict[str, dict[str, Any]]:
+    statuses: dict[str, dict[str, Any]] = {}
+    for locale in preview_locale_codes():
+        if locale == DEFAULT_LOCALE:
+            continue
+        item = analyze_article_locale(article, locale)
+        statuses[locale] = {
+            "status": item.status,
+            "missing_fields": list(item.missing_fields),
+        }
+    return statuses
 
 
 def validate_changes(

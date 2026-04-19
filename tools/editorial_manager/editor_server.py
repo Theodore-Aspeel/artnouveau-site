@@ -300,6 +300,7 @@ EDITOR_HTML = r"""<!doctype html>
     .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid #dbe3da; border-radius: 999px; background: var(--soft); color: #3f4d44; font-size: 12px; font-weight: 700; }
     .pill.required { border-color: #efcfca; background: #fff5f3; color: #8a2f25; }
     .pill.optional { color: var(--muted); }
+    .pill.warning { border-color: #eed39b; background: #fff7e8; color: #7b4e12; }
     .save-state { border-color: #cfe1d4; background: var(--success-bg); color: var(--success); }
     .save-state.dirty { border-color: #eed39b; background: #fff7e8; color: #7b4e12; }
     .tabs { display: flex; gap: 7px; overflow-x: auto; padding: 3px 2px 2px; }
@@ -391,6 +392,7 @@ EDITOR_HTML = r"""<!doctype html>
           <span class="article-button__meta">
             <span>${escapeHtml(statusLabel(article.status))}</span>
             <span class="article-button__chip${article.has_hero ? "" : " warning"}">${article.has_hero ? "image choisie" : "image à choisir"}</span>
+            ${renderLocaleChip(article.locale_statuses, "nl", "article-button__chip")}
           </span>
         `;
         button.addEventListener("click", () => openArticle(article.slug));
@@ -427,6 +429,7 @@ EDITOR_HTML = r"""<!doctype html>
                   <span class="pill save-state" id="saveState">Article enregistré</span>
                   <span class="pill">Statut: ${escapeHtml(statusLabel(article.status))}</span>
                   <span class="pill">${article.hero_src ? "Image principale choisie" : "Image principale à choisir"}</span>
+                  ${renderLocaleChip(article.locale_statuses, "nl", "pill")}
                 </div>
               </div>
               <div class="primary-actions" aria-label="Actions principales">
@@ -480,12 +483,13 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     function renderPreviewActions(urls) {
-      const frUrl = draftPreviewUrl(urls.fr || previewUrl("fr"));
-      const enUrl = draftPreviewUrl(urls.en || previewUrl("en"));
+      const links = previewLocales().map((locale) => {
+        const url = draftPreviewUrl(urls[locale.code] || previewUrl(locale.code));
+        return `<a class="button-link tertiary" href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" data-preview-locale="${escapeAttr(locale.code)}">Voir l'aperçu ${escapeHtml(locale.label)}</a>`;
+      }).join("");
       return `
         <div class="preview-actions" aria-label="Preview de l'article">
-          <a class="button-link tertiary" href="${escapeAttr(frUrl)}" target="_blank" rel="noopener noreferrer" data-preview-locale="fr">Voir l'aperçu FR</a>
-          <a class="button-link tertiary" href="${escapeAttr(enUrl)}" target="_blank" rel="noopener noreferrer" data-preview-locale="en">Voir l'aperçu EN</a>
+          ${links}
         </div>
       `;
     }
@@ -496,15 +500,38 @@ EDITOR_HTML = r"""<!doctype html>
         supported: [
           { code: "fr", label: "FR", required: true, public: true, preview: true, editable: true },
           { code: "en", label: "EN", required: false, public: true, preview: true, editable: true },
-          { code: "nl", label: "NL", required: false, public: false, preview: true, editable: false },
+          { code: "nl", label: "NL", required: false, public: false, preview: true, editable: true },
         ],
-        editable: ["fr", "en"],
+        editable: ["fr", "en", "nl"],
         preview: ["fr", "en", "nl"],
       };
     }
 
     function defaultLocale() {
       return currentLocaleContract.default || "fr";
+    }
+
+    function localeSpecs() {
+      return Array.isArray(currentLocaleContract.supported) ? currentLocaleContract.supported : [];
+    }
+
+    function editableLocales() {
+      const editableCodes = localeCodeSet(currentLocaleContract.editable);
+      return localeSpecs().filter((locale) => locale && locale.editable && editableCodes.has(locale.code));
+    }
+
+    function previewLocales() {
+      const previewCodes = localeCodeSet(currentLocaleContract.preview);
+      return localeSpecs().filter((locale) => locale && locale.preview && previewCodes.has(locale.code));
+    }
+
+    function localeSpec(code) {
+      return localeSpecs().find((locale) => locale.code === code) || { code, label: String(code || "").toUpperCase() };
+    }
+
+    function localeCodeSet(codes) {
+      if (!Array.isArray(codes)) return new Set(localeSpecs().map((locale) => locale.code));
+      return new Set(codes);
     }
 
     function renderBackupActions() {
@@ -522,11 +549,11 @@ EDITOR_HTML = r"""<!doctype html>
     }
 
     function renderEditorTabs() {
+      const localeButtons = editableLocales().map((locale) => renderTabButton(locale.code, `Texte ${locale.label}`)).join("");
       return `
         <nav class="tabs" aria-label="Parties de l'article">
           ${renderTabButton("essentiel", "Essentiel")}
-          ${renderTabButton("fr", "Texte FR")}
-          ${renderTabButton("en", "Texte EN")}
+          ${localeButtons}
           ${renderTabButton("images", "Images")}
         </nav>
       `;
@@ -549,6 +576,16 @@ EDITOR_HTML = r"""<!doctype html>
     function previewUrl(locale) {
       const base = `article.html?slug=${encodeURIComponent(currentSlug)}`;
       return locale === defaultLocale() ? base : `${base}&previewLocale=${encodeURIComponent(locale)}`;
+    }
+
+    function renderLocaleChip(statuses, locale, className) {
+      const item = statuses && statuses[locale];
+      if (!item || !item.status) return "";
+      const warning = item.status.endsWith("-missing") || item.status.endsWith("-partial");
+      const title = item.missing_fields && item.missing_fields.length
+        ? ` title="${escapeAttr("Champs manquants: " + item.missing_fields.join(", "))}"`
+        : "";
+      return `<span class="${className}${warning ? " warning" : ""}"${title}>${escapeHtml(localeStatusLabel(item.status))}</span>`;
     }
 
     function draftPreviewUrl(href) {
@@ -645,39 +682,46 @@ EDITOR_HTML = r"""<!doctype html>
     function editorTabs() {
       return [
         { key: "essentiel" },
-        { key: "fr" },
-        { key: "en" },
+        ...editableLocales().map((locale) => ({ key: locale.code })),
         { key: "images" },
       ];
     }
 
     function editorGroups() {
-      return [
+      const groups = [
         { id: "group-status", key: "status", tab: "essentiel", name: "Publication", description: "Etat de travail de l'article.", fields: [] },
-        { id: "group-fr-main", key: "fr-main", tab: "essentiel", name: "Texte principal FR", description: "Titre, chapeau, épigraphe, SEO et note liée en français.", fields: [] },
-        { id: "group-fr-practical", key: "fr-practical", tab: "fr", name: "Informations pratiques FR", description: "Valeurs visibles dans le bloc pratique français.", fields: [] },
-        { id: "group-fr-sections", key: "fr-sections", tab: "fr", name: "Sections FR", description: "Titres et paragraphes du corps de l'article français.", fields: [] },
-        { id: "group-en-main", key: "en-main", tab: "en", name: "Texte principal EN", description: "Champs anglais, à compléter progressivement quand le contenu existe.", fields: [] },
-        { id: "group-en-practical", key: "en-practical", tab: "en", name: "Informations pratiques EN", description: "Valeurs visibles dans le bloc pratique anglais.", fields: [] },
-        { id: "group-en-sections", key: "en-sections", tab: "en", name: "Sections EN", description: "Titres et paragraphes du corps anglais si disponibles.", fields: [] },
-        { id: "group-hero", key: "hero", tab: "images", name: "Image principale", description: "Image affichée en tête d'article et texte associé.", fields: [] },
+      ];
+      editableLocales().forEach((locale) => {
+        const tab = locale.required ? "essentiel" : locale.code;
+        const description = locale.required
+          ? `Titre, chapeau, épigraphe, SEO et note liée en ${locale.label}.`
+          : `Champs ${locale.label}, à compléter progressivement quand le contenu existe.`;
+        groups.push(
+          { id: `group-${locale.code}-main`, key: `${locale.code}-main`, tab, name: `Texte principal ${locale.label}`, description, fields: [] },
+          { id: `group-${locale.code}-practical`, key: `${locale.code}-practical`, tab: locale.code, name: `Informations pratiques ${locale.label}`, description: `Valeurs visibles dans le bloc pratique ${locale.label}.`, fields: [] },
+          { id: `group-${locale.code}-sections`, key: `${locale.code}-sections`, tab: locale.code, name: `Sections ${locale.label}`, description: `Titres et paragraphes du corps ${locale.label} si disponibles.`, fields: [] }
+        );
+      });
+      groups.push(
+        { id: "group-hero", key: "hero", tab: "images", name: "Image principale", description: "Image affichée en tête d'article.", fields: [] },
         { id: "group-support", key: "support", tab: "images", name: "Images support", description: "Images secondaires déjà présentes dans l'article.", fields: [] },
         { id: "group-other", key: "other", tab: "essentiel", name: "Autres champs", description: "Champs éditables complémentaires.", fields: [] },
-      ];
+      );
+      return groups;
     }
 
     function groupForField(groups, field) {
       const path = field.path || "";
       let key = "other";
       if (path === "status") key = "status";
-      else if (path === "media.hero.src" || path === "content.fr.media.hero_alt" || path === "content.en.media.hero_alt") key = "hero";
+      else if (path === "media.hero.src") key = "hero";
       else if (path.startsWith("media.support.")) key = "support";
-      else if (path.startsWith("content.fr.practical_items.")) key = "fr-practical";
-      else if (path.startsWith("content.en.practical_items.")) key = "en-practical";
-      else if (path.startsWith("content.fr.sections.")) key = "fr-sections";
-      else if (path.startsWith("content.en.sections.")) key = "en-sections";
-      else if (path.startsWith("content.fr.")) key = "fr-main";
-      else if (path.startsWith("content.en.")) key = "en-main";
+      else {
+        const locale = contentLocale(path);
+        if (locale && path.includes(".practical_items.")) key = `${locale}-practical`;
+        else if (locale && path.includes(".sections.")) key = `${locale}-sections`;
+        else if (locale) key = `${locale}-main`;
+      }
       return groups.find((group) => group.key === key) || groups[groups.length - 1];
     }
 
@@ -721,31 +765,33 @@ EDITOR_HTML = r"""<!doctype html>
       const labels = {
         "status": "Statut",
         "media.hero.src": "Image principale",
-        "content.fr.title": "Titre FR",
-        "content.en.title": "Titre EN",
-        "content.fr.dek": "Chapeau FR",
-        "content.en.dek": "Chapeau EN",
-        "content.fr.epigraph": "Épigraphe FR",
-        "content.en.epigraph": "Épigraphe EN",
-        "content.fr.seo.meta_description": "Description courte FR",
-        "content.en.seo.meta_description": "Description courte EN",
-        "content.fr.media.hero_alt": "Description de l'image FR",
-        "content.en.media.hero_alt": "Description de l'image EN",
-        "content.fr.around.note": "Note d'article lié FR",
-        "content.en.around.note": "Note d'article lié EN",
       };
       if (labels[path]) return labels[path];
 
-      const section = path.match(/^content\.(fr|en)\.sections\.(\d+)\.(heading|body)$/);
+      const main = path.match(/^content\.([a-z]{2})\.(title|dek|epigraph|seo\.meta_description|media\.hero_alt|around\.note)$/);
+      if (main) {
+        const locale = localeSpec(main[1]).label;
+        const labelsByField = {
+          title: "Titre",
+          dek: "Chapeau",
+          epigraph: "Épigraphe",
+          "seo.meta_description": "Description courte",
+          "media.hero_alt": "Description de l'image",
+          "around.note": "Note d'article lié",
+        };
+        return `${labelsByField[main[2]] || field.label} ${locale}`;
+      }
+
+      const section = path.match(/^content\.([a-z]{2})\.sections\.(\d+)\.(heading|body)$/);
       if (section) {
-        const locale = section[1].toUpperCase();
+        const locale = localeSpec(section[1]).label;
         const number = Number(section[2]) + 1;
         return section[3] === "heading" ? `Section ${number} - titre ${locale}` : `Section ${number} - texte ${locale}`;
       }
 
-      const practical = path.match(/^content\.(fr|en)\.practical_items\.(\d+)\.value$/);
+      const practical = path.match(/^content\.([a-z]{2})\.practical_items\.(\d+)\.value$/);
       if (practical) {
-        const locale = practical[1].toUpperCase();
+        const locale = localeSpec(practical[1]).label;
         const labelsByKey = { city: "Ville", country: "Pays", style: "Style", architect: "Architecte", address: "Adresse", date: "Date", access: "Accès" };
         return `${labelsByKey[field.readonly_key] || field.label} ${locale}`;
       }
@@ -772,12 +818,30 @@ EDITOR_HTML = r"""<!doctype html>
       return "";
     }
 
+    function contentLocale(path) {
+      const match = String(path || "").match(/^content\.([a-z]{2})\./);
+      return match ? match[1] : "";
+    }
+
     function fieldDomId(path) {
       return `field-${String(path).replace(/[^a-z0-9]+/gi, "-")}`;
     }
 
     function statusLabel(status) {
       const labels = { draft: "brouillon", ready: "prêt", published: "publié" };
+      return labels[status] || status || "-";
+    }
+
+    function localeStatusLabel(status) {
+      const labels = {
+        "fr-only": "EN absent",
+        "en-missing": "EN absent",
+        "en-partial": "EN partiel",
+        "en-ready": "EN prêt",
+        "nl-missing": "NL absent",
+        "nl-partial": "NL partiel",
+        "nl-ready": "NL prêt"
+      };
       return labels[status] || status || "-";
     }
 

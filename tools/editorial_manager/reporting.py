@@ -20,6 +20,7 @@ from .article_access import (
 )
 from .checks import CheckIssue, PublicationCheckItem
 from .locale_report import LocaleReportItem
+from .locales import normalize_locale, optional_locale_codes
 from .social_brief import SocialBrief, social_brief_to_dict
 from .social_caption import SocialCaption, social_caption_to_dict
 from .social_package import SocialPackage, social_package_to_dict
@@ -163,18 +164,45 @@ def render_locale_report(items: list[LocaleReportItem]) -> str:
     lines = [
         "Locale report",
         f"Articles checked: {len(items)}",
-        f"fr-only: {counts.get('fr-only', 0)}",
-        f"en-partial: {counts.get('en-partial', 0)}",
-        f"en-ready: {counts.get('en-ready', 0)}",
     ]
+    target_locales = {item.target_locale for item in items}
+    lines.extend(render_locale_status_counts(counts, target_locales))
 
     if rows:
         lines.append("")
-        lines.append(render_table(["Status", "Slug", "Missing EN fields"], rows))
+        lines.append(render_table(["Status", "Slug", "Missing fields"], rows))
     else:
         lines.append("No articles found.")
 
     return "\n".join(lines)
+
+
+def render_locale_status_counts(counts: Counter[str], target_locales: set[str] | None = None) -> list[str]:
+    lines: list[str] = []
+    if counts.get("fr-only", 0):
+        lines.append(f"fr-only: {counts.get('fr-only', 0)}")
+
+    selected_locales = (
+        {normalize_locale(locale) for locale in target_locales}
+        if target_locales
+        else set(optional_locale_codes())
+    )
+    expected_statuses: list[str] = []
+    for locale in optional_locale_codes():
+        if locale not in selected_locales:
+            continue
+        expected_statuses.extend([f"{locale}-missing", f"{locale}-partial", f"{locale}-ready"])
+
+    for status in expected_statuses:
+        if status == "en-missing" and counts.get(status, 0) == 0:
+            continue
+        lines.append(f"{status}: {counts.get(status, 0)}")
+
+    for status in sorted(counts):
+        if status != "fr-only" and status not in expected_statuses:
+            lines.append(f"{status}: {counts.get(status, 0)}")
+
+    return lines
 
 
 def render_social_brief(brief: SocialBrief) -> str:

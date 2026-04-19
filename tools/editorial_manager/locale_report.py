@@ -17,25 +17,37 @@ class LocaleReportItem:
     slug: str
     status: str
     missing_fields: tuple[str, ...]
+    target_locale: str = "en"
 
 
 def analyze_article_locale(article: Article, target_locale: str = "en") -> LocaleReportItem:
     """Return a simple source/target editorial status for one article."""
     slug = article_slug(article) or "<missing slug>"
     source = locale_content(article, DEFAULT_LOCALE)
-    target = _raw_locale_content(article, target_locale)
     target_locale = normalize_locale(target_locale)
+    target = _raw_locale_content(article, target_locale)
 
     if not _has_real_text(target):
-        return LocaleReportItem(slug, "fr-only", tuple(_required_field_names(source)))
+        return LocaleReportItem(
+            slug,
+            missing_locale_status(target_locale),
+            tuple(_required_field_names(source)),
+            target_locale,
+        )
 
     missing_fields = tuple(_missing_target_fields(source, target))
     status = f"{target_locale}-ready" if not missing_fields else f"{target_locale}-partial"
-    return LocaleReportItem(slug, status, missing_fields)
+    return LocaleReportItem(slug, status, missing_fields, target_locale)
 
 
 def analyze_articles_locale(articles: list[Article], target_locale: str = "en") -> list[LocaleReportItem]:
     return [analyze_article_locale(article, target_locale) for article in articles]
+
+
+def missing_locale_status(target_locale: str) -> str:
+    """Keep the historic EN status while making newer preview locales explicit."""
+    normalized = normalize_locale(target_locale)
+    return "fr-only" if normalized == "en" else f"{normalized}-missing"
 
 
 def _raw_locale_content(article: Article, locale: str) -> dict[str, Any]:

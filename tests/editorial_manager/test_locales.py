@@ -18,14 +18,16 @@ class LocaleContractTests(unittest.TestCase):
         self.assertIn("en", preview_locale_codes())
         self.assertIn("nl", preview_locale_codes())
         self.assertNotIn("nl", public_locale_codes())
-        self.assertEqual([locale.code for locale in editable_locale_specs()], ["fr", "en"])
+        self.assertEqual([locale.code for locale in editable_locale_specs()], ["fr", "en", "nl"])
 
     def test_normalize_locale_accepts_language_regions(self):
         self.assertEqual(normalize_locale("nl-BE"), "nl")
         self.assertEqual(normalize_locale("unknown"), "fr")
 
     def test_status_choices_include_prepared_optional_locales(self):
+        self.assertIn("fr-only", locale_status_choices())
         self.assertIn("en-ready", locale_status_choices())
+        self.assertIn("nl-missing", locale_status_choices())
         self.assertIn("nl-partial", locale_status_choices())
 
 

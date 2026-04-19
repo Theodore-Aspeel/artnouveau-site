@@ -24,6 +24,7 @@ python -m tools.editorial_manager publication-check
 python -m tools.editorial_manager publication-check <slug>
 python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
+python -m tools.editorial_manager locale-report --locale nl
 python -m tools.editorial_manager social-brief <slug>
 python -m tools.editorial_manager social-brief <slug> --json
 python -m tools.editorial_manager social-caption <slug>
@@ -51,8 +52,9 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 - `check <slug>`: runs the same checks for one article.
 - `publication-check`: runs a publication preparation checklist across all articles.
 - `publication-check <slug>`: runs the publication checklist for one article.
-- `locale-report`: shows the read-only FR/EN editorial status for all articles.
+- `locale-report`: shows the read-only source/target locale editorial status for all articles. It defaults to English.
 - `locale-report <slug>`: shows the same locale status for one article.
+- `locale-report --locale nl`: shows internal Dutch readiness for all articles without making NL public.
 - `social-brief <slug>`: prepares a simple read-only publication brief for one article, with FR/EN titles and dek, locale status, quote, practical items, image presence, and a readiness summary.
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
 - `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
@@ -76,6 +78,9 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 - `fr-only`: no real English text is present under `content.en`.
 - `en-partial`: some English text exists, but one or more main fields are missing.
 - `en-ready`: English title, dek, meta description, hero alt text, and section heading/body coverage are present.
+- `nl-missing`: no real Dutch text is present under `content.nl`.
+- `nl-partial`: some Dutch text exists, but one or more main fields are missing.
+- `nl-ready`: Dutch title, dek, meta description, hero alt text, and section heading/body coverage are present.
 
 `social-queue` uses a deliberately small status rule:
 
