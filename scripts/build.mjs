@@ -38,6 +38,7 @@ const PUBLIC_IMAGE_SOURCE_PAGES = [
 
 const COPY_JOBS = [
   { from: 'src/assets/styles', to: 'assets/styles' },
+  { from: 'src/assets/fonts', to: 'assets/fonts' },
   { from: 'src/assets/scripts', to: 'assets/scripts' },
   { from: 'src/data', to: 'data' },
   { from: 'public', to: '.' },
