@@ -820,8 +820,12 @@ function validateCanonicalRoutes(rootDir) {
     fs.readFile(path.join(rootDir, 'src/assets/scripts/article-template.js'), 'utf8'),
     fs.readFile(path.join(rootDir, 'src/pages/articles/template.html'), 'utf8'),
   ]).then(([galleryScript, articleTemplateScript, compatibilityPage]) => {
+    if (!galleryScript.includes('publicRoutes.article(currentLocale(), normalizedSlug)')) {
+      errors.push('Gallery cards must prefer the public article route contract.');
+    }
+
     if (!galleryScript.includes("return 'article.html?slug=' + encodeURIComponent(normalizedSlug);")) {
-      errors.push('Gallery cards must link to the canonical article.html?slug= route.');
+      errors.push('Gallery cards must keep the legacy article.html?slug= fallback.');
     }
 
     if (articleTemplateScript.includes('template.html?slug=')) {

@@ -3,6 +3,7 @@ import fs from 'node:fs';
 
 const articleData = JSON.parse(fs.readFileSync('src/data/articles.json', 'utf8'));
 const publicLocales = ['fr', 'en', 'nl'];
+const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
 
 const EXPECTED_PAGES = [
   ['fr', 'home', 'dist/fr/index.html', 'Regarder d\u2019abord. Nommer ensuite.'],
@@ -46,6 +47,18 @@ assert.match(fs.readFileSync('dist/fr/about/index.html', 'utf8'), /href="\/fr\/"
 assert.match(fs.readFileSync('dist/en/about/index.html', 'utf8'), /href="\/en\/mentions\/"/);
 assert.match(fs.readFileSync('dist/nl/mentions/index.html', 'utf8'), /href="\/nl\/about\/"/);
 
+assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/public-routes\.js"><\/script>/);
+assert.match(galleryScript, /publicRoutes\.article\(currentLocale\(\), normalizedSlug\)/);
+assert.match(galleryScript, /publicRoutes\.home\(currentLocale\(\)\)/);
+
+for (const locale of publicLocales) {
+  const homeHtml = fs.readFileSync(`dist/${locale}/index.html`, 'utf8');
+  assert.ok(homeHtml.includes(`href="/${locale}/"`), `dist/${locale}/index.html should link to localized home`);
+  assert.ok(homeHtml.includes(`href="/${locale}/about/"`), `dist/${locale}/index.html should link to localized about`);
+  assert.ok(homeHtml.includes(`href="/${locale}/mentions/"`), `dist/${locale}/index.html should link to localized mentions`);
+  assert.doesNotMatch(homeHtml, /href="(?:index|about|mentions)\.html/, `dist/${locale}/index.html should not target legacy page links`);
+}
+
 for (const locale of publicLocales) {
   for (const article of articleData.articles) {
     const filePath = `dist/${locale}/articles/${article.slug}/index.html`;
@@ -88,6 +101,9 @@ for (const locale of publicLocales) {
   assert.match(html, /<meta property="og:image" content="\.\.\/\.\.\/\.\.\/assets\/images\/articles\/maison-coilliot-lille-hector-guimard\.png">/);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
   assert.ok(html.includes(`href="/${locale}/articles/${sampleArticle.slug}/"`), `${filePath} should link to its public route`);
+  assert.ok(html.includes(`href="/fr/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for FR language link`);
+  assert.ok(html.includes(`href="/en/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for EN language link`);
+  assert.ok(html.includes(`href="/nl/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for NL language link`);
   assert.doesNotMatch(html, /Chargement/, `${filePath} should not keep loading SEO title text`);
   assert.doesNotMatch(html, /previewLocale=/, `${filePath} should not use previewLocale links`);
 }

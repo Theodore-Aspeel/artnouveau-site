@@ -5,6 +5,7 @@
   const taxonomy = window.ArticleTags;
   const access = window.ArticleAccess;
   const i18n = window.SiteI18n;
+  const publicRoutes = window.SitePublicRoutes;
   const grid = document.getElementById('gallery-grid');
   const paginationEl = document.getElementById('gallery-pagination');
   const stateEl = document.getElementById('gallery-state');
@@ -53,11 +54,32 @@
   function canonicalArticleHref(slug) {
     const normalizedSlug = normalizeText(slug);
     if (!normalizedSlug) return 'article.html';
+
+    if (publicRoutes && typeof publicRoutes.article === 'function') {
+      return publicRoutes.article(currentLocale(), normalizedSlug);
+    }
+
     return 'article.html?slug=' + encodeURIComponent(normalizedSlug);
   }
 
   function buildArticleHref(slug) {
     const href = canonicalArticleHref(slug);
+    if (publicRoutes && typeof publicRoutes.article === 'function') return href;
+    return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
+  }
+
+  function galleryHomeHref() {
+    return publicRoutes && typeof publicRoutes.home === 'function'
+      ? publicRoutes.home(currentLocale())
+      : 'index.html';
+  }
+
+  function galleryHref() {
+    return galleryHomeHref() + '#galerie';
+  }
+
+  function buildGalleryHref(href) {
+    if (publicRoutes && typeof publicRoutes.home === 'function') return href;
     return i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
   }
 
@@ -186,9 +208,9 @@
     const label = tag && typeof tag === 'object' ? tag.label : tag;
     link.className = className + (isActive ? ' tag-chip--active' : '');
     const href = taxonomy && typeof taxonomy.buildTagHref === 'function'
-      ? taxonomy.buildTagHref(tag, 'index.html')
-      : 'index.html#galerie';
-    link.href = i18n && typeof i18n.withPreviewLocale === 'function' ? i18n.withPreviewLocale(href) : href;
+      ? taxonomy.buildTagHref(tag, galleryHomeHref())
+      : galleryHref();
+    link.href = buildGalleryHref(href);
     link.textContent = label;
     return link;
   }
@@ -520,9 +542,7 @@
 
     const allLink = document.createElement('a');
     allLink.className = 'tag-chip tag-chip--ghost' + (activeTag ? '' : ' tag-chip--active');
-    allLink.href = i18n && typeof i18n.withPreviewLocale === 'function'
-      ? i18n.withPreviewLocale('index.html#galerie')
-      : 'index.html#galerie';
+    allLink.href = buildGalleryHref(galleryHref());
     allLink.textContent = t('gallery.all');
     tagsEl.appendChild(allLink);
 
@@ -571,7 +591,7 @@
 
     const reset = document.createElement('a');
     reset.className = 'gallery-state__reset';
-    reset.href = 'index.html#galerie';
+    reset.href = buildGalleryHref(galleryHref());
     reset.textContent = t('gallery.reset');
 
     stateEl.appendChild(eyebrow);
