@@ -52,6 +52,7 @@ const OG_LOCALES = {
 
 const SITE_TITLE = 'Art Nouveau et Art Déco';
 const SITE_ORIGIN = normalizeSiteOrigin(process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com');
+const ANALYTICS = getAnalyticsConfig(process.env);
 
 function rewritePageForDist(relativeTargetPath, content) {
   if (relativeTargetPath === 'index.html') {
@@ -152,6 +153,23 @@ function normalizeSiteOrigin(value) {
   return origin;
 }
 
+function getAnalyticsConfig(env) {
+  const domain = typeof env.PLAUSIBLE_DOMAIN === 'string' ? env.PLAUSIBLE_DOMAIN.trim() : '';
+
+  if (!domain) {
+    return null;
+  }
+
+  if (!/^[a-z0-9.-]+$/i.test(domain) || domain.includes('..')) {
+    throw new TypeError('PLAUSIBLE_DOMAIN must be a bare domain, for example artnouveauetdeco.com.');
+  }
+
+  return {
+    domain,
+    scriptSrc: 'https://plausible.io/js/script.js',
+  };
+}
+
 function absolutePublicUrl(route) {
   return SITE_ORIGIN + route;
 }
@@ -212,6 +230,24 @@ function applyPublicSeoLinks(content, routeName, locale, routeParams, contracts)
     /(<meta name="robots" content="[^"]*">)/,
     `$1\n  ${buildSeoLinks(routeName, locale, routeParams, contracts)}`
   );
+}
+
+function renderAnalyticsScript() {
+  if (!ANALYTICS) {
+    return '';
+  }
+
+  return `<script defer data-domain="${escapeAttribute(ANALYTICS.domain)}" src="${escapeAttribute(ANALYTICS.scriptSrc)}"></script>`;
+}
+
+function applyPublicAnalytics(content) {
+  const analyticsScript = renderAnalyticsScript();
+
+  if (!analyticsScript || content.includes(analyticsScript)) {
+    return content;
+  }
+
+  return content.replace('</head>', `  ${analyticsScript}\n</head>`);
 }
 
 function applyStaticI18n(content, locale, i18n) {
@@ -287,6 +323,7 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     .replaceAll("../data/articles.json", `${relativeRoot}data/articles.json`);
 
   rewritten = applyPublicSeoLinks(rewritten, routeName, locale, {}, contracts);
+  rewritten = applyPublicAnalytics(rewritten);
 
   if (routeName === 'home') {
     rewritten = rewritten.replace(
@@ -351,6 +388,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = setMetaContentById(rewritten, 'twitter-description', metadata.description);
   rewritten = insertOrReplaceOgImage(rewritten, metadata.ogImage);
   rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
+  rewritten = applyPublicAnalytics(rewritten);
 
   return rewritten;
 }

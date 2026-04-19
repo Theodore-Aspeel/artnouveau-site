@@ -54,6 +54,25 @@ npm run preview
 - `build`: recreates `dist/`, copies the public runtime, rewrites page paths, then validates the published artifact
 - `preview`: serves `dist/` locally on `http://localhost:4173`
 
+## Analytics
+
+Public multilingual pages can include Plausible Analytics at build time.
+
+Analytics is disabled by default. To enable it for a production build, set `PLAUSIBLE_DOMAIN` to the public site domain before running `npm run build`.
+
+```bash
+PLAUSIBLE_DOMAIN=artnouveauetdeco.com npm run build
+```
+
+On PowerShell:
+
+```powershell
+$env:PLAUSIBLE_DOMAIN = 'artnouveauetdeco.com'
+npm run build
+```
+
+The build injects only the Plausible script tag. No cookie banner, consent system, or event tracking layer is included.
+
 ## Internal Tools
 
 - `tools/editorial_manager/`: read-only Python helper for inspecting and checking the article dataset. See `tools/editorial_manager/README.md`.
