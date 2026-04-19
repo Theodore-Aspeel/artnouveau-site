@@ -1521,6 +1521,60 @@
           ],
           "around": null,
           "resources": []
+        },
+        "nl": {
+          "title": "Maison aux Tulipes, Bratislava",
+          "dek": "Maison aux Tulipes verbreedt de kaart zonder de stem van de site te veranderen. In Bratislava, op 10 rue Sturova volgens de beschikbare gegevens, met Jeno Schiller als beschikbare architecturale referentie, houdt het gebouw eerst stand door zijn gevel en zijn drempel. De naam nodigt gemakkelijk uit tot commentaar. Juister is het om terug te keren naar de compositie, naar de manier waarop een motief een heel gebouw kan richten zonder het te verzwaren.",
+          "epigraph": "Een gevel kan zijn bloemen bewaren zonder zijn houding te verliezen.",
+          "sections": [
+            {
+              "heading": "Het motief zonder gemak",
+              "body": "Een huis dat Maison aux Tulipes heet, roept vanzelf een hele woordenschat op die de tekst beter niet overdrijft. Nauwkeuriger is het om te kijken hoe het motief de gevel buigt, hoe het circuleert, hoe het de blik richting geeft zonder het hele gebouw op te slorpen.\n\nHet onderwerp is dus niet de bloem als afzonderlijk beeld. Het is de manier waarop een decoratief principe erin slaagt oppervlak, ritme en de aanwezigheid van de plek bijeen te houden."
+            },
+            {
+              "heading": "Wat het in Bratislava opent",
+              "body": "Maison aux Tulipes geeft Bratislava een ingang op de juiste schaal. Een precies adres volgens de beschikbare gegevens, een leesbare gevel, een onderwerp dat stevig genoeg is om een stad anders te laten verschijnen dan via een algemeen gezicht.\n\nDe blik blijft dezelfde als elders. Hij vertrekt van de straat, van het gebouw, van het detail dat blijft hangen, en verbreedt pas daarna. Alleen onder die voorwaarde kan Bratislava de site binnenkomen zonder toonbreuk."
+            },
+            {
+              "heading": "Wat ter plaatse te lezen valt",
+              "body": "De blik wint erbij om tussen het geheel en de drempel te bewegen. De gevel zet de toon. De ingang verscherpt de lezing en toont of die eerste indruk ook in het detail standhoudt. Vaak wordt art nouveau precies daar het overtuigendst.\n\nDan begrijpt men dat het decor geen extra laag is. Het begeleidt al de overgang tussen de straat, de deur en de rest van het gebouw."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison aux Tulipes in Bratislava. Een gevellezing tussen motief, drempel en algemene houding, met Jeno Schiller als beschikbare referentie."
+          },
+          "media": {
+            "hero_alt": "Maison aux Tulipes in Bratislava, art-nouveaugevel op 10 rue Sturova volgens de beschikbare gegevens en toegeschreven aan Jeno Schiller.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Bratislava"
+            },
+            {
+              "key": "country",
+              "value": "Slowakije"
+            },
+            {
+              "key": "style",
+              "value": "Art nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jeno Schiller"
+            },
+            {
+              "key": "address",
+              "value": "10 rue Sturova"
+            },
+            {
+              "key": "date",
+              "value": "Te bevestigen"
+            }
+          ],
+          "around": null,
+          "resources": []
         }
       }
     },
@@ -3467,6 +3521,56 @@
             {
               "key": "address",
               "value": "To be confirmed"
+            }
+          ],
+          "around": null,
+          "resources": []
+        },
+        "nl": {
+          "title": "Art-decogevel, Charleroi",
+          "dek": "Deze art-decogevel volstaat om Charleroi zonder omweg in het corpus binnen te brengen. Het adres, de datering en de architect moeten nog worden bevestigd, maar het gebouw houdt al stand door zijn helderheid. Het geeft de straat een vastere, sterker gekaderde vorm en biedt de blik genoeg houvast om een korte notitie te rechtvaardigen, zonder haar te verzwaren.",
+          "epigraph": "Soms volstaat één gevel om een stad haar accent te geven.",
+          "sections": [
+            {
+              "heading": "Een heldere en beheerste straatgevel",
+              "body": "Het voornaamste belang van het onderwerp ligt in zijn helderheid. De gevel leest eerst als geheel. De lijnen zijn sterker gekaderd, de massa's beter gehouden, en het decor, als het aanwezig is, werkt eerder vanuit orde dan vanuit overdaad.\n\nHet detail dat in het corpus bewaard is, bevestigt die eerste indruk. Het toont dat de algemene houding van het gebouw ook steunt op een plaatselijke precisie van tekening en materiaal."
+            },
+            {
+              "heading": "Charleroi op de juiste schaal",
+              "body": "Het onderwerp hoeft niet als een groot manifestgebouw te worden behandeld. Zijn kracht ligt elders. Het toont dat een stad in het geheugen kan komen via een eenvoudige gevel, op voorwaarde dat die helder genoeg is om de blik te dragen.\n\nIn Charleroi telt die juistheid meer dan een te breed discours. Het gebouw doet al wat nodig is: het geeft de straat een accent dat duidelijk genoeg is om ernaar terug te keren."
+            }
+          ],
+          "seo": {
+            "meta_description": "Art-decogevel in Charleroi. Een korte notitie over een helder en beheerst straatgebouw, stevig genoeg om de stad een plaats in het corpus te geven."
+          },
+          "media": {
+            "hero_alt": "Art-decogevel in Charleroi, hier gelezen als stedelijk herkenningspunt en toegang tot de stad.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Charleroi"
+            },
+            {
+              "key": "country",
+              "value": "België"
+            },
+            {
+              "key": "style",
+              "value": "Art deco"
+            },
+            {
+              "key": "date",
+              "value": "Te bevestigen"
+            },
+            {
+              "key": "architect",
+              "value": "Te bevestigen"
+            },
+            {
+              "key": "address",
+              "value": "Te bevestigen"
             }
           ],
           "around": null,
