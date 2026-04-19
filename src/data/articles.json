@@ -2540,6 +2540,62 @@
             "note": "Read next: the return to an inhabited facade makes the distance between domestic register and civic presence easier to feel."
           },
           "resources": []
+        },
+        "nl": {
+          "title": "Aquarium van Milaan (1906)",
+          "dek": "Het Aquarium van Milaan verschuift de blik op een nuttige manier. Met dit gebouw wordt de Liberty niet alleen gelezen op de schaal van het woonhuis of de private gevel. Hij verschijnt ook in een publiek gebouw, gericht tot de stad als geheel. Volgens de beschikbare gegevens gedateerd in 1906, houdt het onderwerp vooral stand door die verruiming van de blik: van huiselijk ornament naar een bredere stedelijke aanwezigheid.",
+          "epigraph": "De stad bewaart haar helderste vormen niet alleen in de woningbouw.",
+          "sections": [
+            {
+              "heading": "Wanneer Liberty het huis verlaat",
+              "body": "Daar ligt het eerste belang van het Aquarium. Het herinnert eraan dat een architecturale taal niet stopt bij het wonen of bij de private gevel. Hier verplaatsen decor en compositie zich naar een publiek gebouw. Dat verandert meteen de schaal van de lezing.\n\nDe blik zoekt niet langer alleen een huiselijke drempel of een uitzonderlijke ingang. Hij ontmoet een gebouw dat op een andere manier plaatsneemt in de stad, met een collectiever adres, een ruimere functie en een andere manier om ruimte vast te houden."
+            },
+            {
+              "heading": "De functie lezen zonder de gevel te verlaten",
+              "body": "Bij een onderwerp als dit telt de functie mee omdat ze verandert hoe men het gebouw benadert. Een aquarium lees je niet zoals een huis. De verwachtingen verschuiven. De verhouding tot publieke leesbaarheid, stedelijke aanwezigheid en collectief gebruik wordt voelbaarder.\n\nZelfs met gedeeltelijke documentatie is dat genoeg om de tekst richting te geven. Het benoemt het register, en laat daarna toe om terug te keren naar de gevel zelf, naar zijn houding en naar wat hij al zichtbaar maakt."
+            },
+            {
+              "heading": "Wat het in Milaan opent",
+              "body": "Het Aquarium wint erbij om samen met Casa Campanini te worden gelezen. Het ene verankert Milaan in een sterk geïndividualiseerde woongevel. Het andere opent de stad naar een publiek gebouw. De vergelijking wist de verschillen niet uit. Ze maakt ze beter leesbaar.\n\nTussen beide houdt Milaan op één enkel beeld te zijn. De stad opent zich via meerdere drempels, meerdere gebruiken en meerdere manieren om een vorm te dragen."
+            }
+          ],
+          "seo": {
+            "meta_description": "Aquarium van Milaan, 1906. Een lezing van een publiek gebouw waarin de Milanese Liberty verschuift van de private gevel naar de hele stad."
+          },
+          "media": {
+            "hero_alt": "Aquarium van Milaan, een Liberty-monument uit 1906 binnen het corpus van het project.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Milaan"
+            },
+            {
+              "key": "country",
+              "value": "Italië"
+            },
+            {
+              "key": "style",
+              "value": "Liberty / Art nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Sebastiano Locati"
+            },
+            {
+              "key": "address",
+              "value": "Viale Gadio 2, Milano"
+            },
+            {
+              "key": "date",
+              "value": "1906"
+            }
+          ],
+          "around": {
+            "note": "Lees daarna: de terugkeer naar een bewoonde gevel maakt het verschil tussen huiselijk register en stedelijke aanwezigheid scherper voelbaar."
+          },
+          "resources": []
         }
       }
     },
