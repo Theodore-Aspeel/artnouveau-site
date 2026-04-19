@@ -19,7 +19,10 @@
 
   const PAGE_SIZE = 12;
   const searchParams = new URLSearchParams(window.location.search);
-  const articleDataUrl = new URL('data/articles.json', window.location.href);
+  const pageConfig = document.body ? document.body.dataset : {};
+  const articleDataPath = pageConfig.articleDataUrl || 'data/articles.json';
+  const assetBasePath = pageConfig.assetBase || '';
+  const articleDataUrl = new URL(articleDataPath, window.location.href);
   const requestedTag = taxonomy && typeof taxonomy.slugifyTag === 'function'
     ? taxonomy.slugifyTag(searchParams.get('tag'))
     : '';
@@ -84,7 +87,7 @@
     if (!normalizedPath) return '';
 
     const candidate = media && typeof media.resolveImagePath === 'function'
-      ? media.resolveImagePath(normalizedPath, '')
+      ? media.resolveImagePath(normalizedPath, assetBasePath)
       : normalizedPath;
 
     return new URL(candidate, window.location.href).href;
