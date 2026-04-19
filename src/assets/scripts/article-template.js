@@ -14,8 +14,9 @@
   const homeHref = script?.dataset.homeHref || '../index.html';
   const galleryHref = script?.dataset.galleryHref || '../index.html#galerie';
   const articleHrefBase = script?.dataset.articleHrefBase || 'article.html?slug=';
+  const articleHrefSuffix = script?.dataset.articleHrefSuffix || '';
   const searchParams = new URLSearchParams(window.location.search);
-  const slug = searchParams.get('slug');
+  const slug = script?.dataset.articleSlug || searchParams.get('slug');
 
   if (!root || !access) return;
 
@@ -625,7 +626,7 @@
 
     function buildSequenceCard(item, direction) {
       const link = make('a', 'article-sequence__card');
-      link.href = previewHref(articleHrefBase + encodeURIComponent(item.slug));
+      link.href = previewHref(articleHrefBase + encodeURIComponent(item.slug) + articleHrefSuffix);
 
       const eyebrow = make('span', 'article-sequence__eyebrow', direction);
       const sequenceTitle = access.getArticleTitle(item, locale);

@@ -24,6 +24,8 @@ const SIMPLE_PUBLIC_PAGE_JOBS = [
   { routeName: 'mentions', from: 'src/pages/mentions.html' },
 ];
 
+const ARTICLE_PUBLIC_PAGE = { routeName: 'article', from: 'src/pages/article-redirect.html' };
+
 const COPY_JOBS = [
   { from: 'src/assets/styles', to: 'assets/styles' },
   { from: 'src/assets/scripts', to: 'assets/scripts' },
@@ -36,6 +38,8 @@ const OG_LOCALES = {
   en: 'en_US',
   nl: 'nl_NL',
 };
+
+const SITE_TITLE = 'Art Nouveau et Art Déco';
 
 function getImagePath(entry) {
   if (typeof entry === 'string') {
@@ -126,11 +130,15 @@ async function runBrowserScript(filePath, context) {
 async function getRuntimeContracts() {
   const context = { window: {} };
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/locale-config.js'), context);
+  await runBrowserScript(path.join(ROOT, 'src/assets/scripts/article-access.js'), context);
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/i18n.js'), context);
+  await runBrowserScript(path.join(ROOT, 'src/assets/scripts/article-media.js'), context);
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/public-routes.js'), context);
 
   return {
+    access: context.window.ArticleAccess,
     i18n: context.window.SiteI18n,
+    media: context.window.ArticleMedia,
     routes: context.window.SitePublicRoutes,
   };
 }
@@ -159,6 +167,31 @@ function setAttributeInTag(tag, attribute, value) {
   }
 
   return tag.replace(/>$/, ` ${attribute}="${escapedValue}">`);
+}
+
+function setTagContentById(content, tagName, id, value) {
+  const pattern = new RegExp(`(<${tagName}[^>]*\\sid="${escapeRegExp(id)}"[^>]*>)([\\s\\S]*?)(</${tagName}>)`);
+  return content.replace(pattern, `$1${escapeHtml(value)}$3`);
+}
+
+function setMetaContentById(content, id, value) {
+  const pattern = new RegExp(`<meta[^>]*\\sid="${escapeRegExp(id)}"[^>]*>`);
+  return content.replace(pattern, (tag) => setAttributeInTag(tag, 'content', value));
+}
+
+function insertOrReplaceOgImage(content, imagePath) {
+  if (!imagePath) return content;
+
+  const tag = `<meta property="og:image" content="${escapeAttribute(imagePath)}">`;
+
+  if (/<meta property="og:image" content="[^"]*">/.test(content)) {
+    return content.replace(/<meta property="og:image" content="[^"]*">/, tag);
+  }
+
+  return content.replace(
+    /(<meta id="og-description" property="og:description" content="[^"]*">)/,
+    `$1\n  ${tag}`
+  );
 }
 
 function applyStaticI18n(content, locale, i18n) {
@@ -201,11 +234,11 @@ function relativeRootFromDistPath(relativeTargetPath) {
   return depth > 0 ? '../'.repeat(depth) : '';
 }
 
-function replaceSimplePublicLinks(content, locale, routeName, contracts) {
+function replaceSimplePublicLinks(content, locale, routeName, contracts, routeParams = {}) {
   const { i18n, routes } = contracts;
-  const currentRoute = routes.route(routeName, locale);
+  const currentRoute = routes.route(routeName, locale, routeParams);
   const languageLinks = routes.publicLocaleCodes().map((targetLocale) => {
-    const href = routes.route(routeName, targetLocale);
+    const href = routes.route(routeName, targetLocale, routeParams);
     const active = targetLocale === locale ? ' is-active" aria-current="true' : '';
     return `<a href="${href}" class="site-nav__lang-link${active}" lang="${targetLocale}">${targetLocale.toUpperCase()}</a>`;
   }).join('\n          <span aria-hidden="true">/</span>\n          ');
@@ -241,6 +274,68 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
   }
 
   return rewritten;
+}
+
+function getArticleSlug(article) {
+  return contractsSafeText(article && article.slug);
+}
+
+function contractsSafeText(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function buildArticleHeadMeta(article, locale, contracts, relativeRoot) {
+  const title = contracts.access.getArticleTitle(article, locale);
+  const pageTitle = `${title} · ${SITE_TITLE}`;
+  const description = contracts.access.getArticleMetaDescription(article, locale);
+  const heroImage = contracts.media && typeof contracts.media.getPrimaryImage === 'function'
+    ? contracts.media.getPrimaryImage(article, locale)
+    : '';
+
+  return {
+    title: pageTitle,
+    description,
+    ogImage: heroImage ? `${relativeRoot}${heroImage}` : '',
+  };
+}
+
+function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, article, contracts) {
+  const relativeRoot = relativeRootFromDistPath(relativeTargetPath);
+  const slug = getArticleSlug(article);
+  const routeParams = { slug };
+  const { routes } = contracts;
+  const metadata = buildArticleHeadMeta(article, locale, contracts, relativeRoot);
+
+  let rewritten = applyStaticI18n(content, locale, contracts.i18n);
+
+  rewritten = replaceSimplePublicLinks(rewritten, locale, ARTICLE_PUBLIC_PAGE.routeName, contracts, routeParams)
+    .replaceAll('../assets/styles/main.css', `${relativeRoot}assets/styles/main.css`)
+    .replaceAll('../assets/scripts/', `${relativeRoot}assets/scripts/`)
+    .replaceAll("../data/articles.json", `${relativeRoot}data/articles.json`)
+    .replaceAll('data-article-json="../data/articles.json"', `data-article-json="${relativeRoot}data/articles.json"`)
+    .replaceAll('data-image-base="../"', `data-image-base="${relativeRoot}"`)
+    .replaceAll('data-home-href="index.html"', `data-home-href="${routes.home(locale)}"`)
+    .replaceAll('data-gallery-href="index.html#galerie"', `data-gallery-href="${routes.home(locale)}#galerie"`)
+    .replace(
+      'data-article-href-base="article.html?slug="',
+      `data-article-href-base="${routes.article(locale, '__ARTICLE_SLUG__').replace('__ARTICLE_SLUG__/', '')}" data-article-href-suffix="/" data-article-slug="${escapeAttribute(slug)}"`
+    );
+
+  rewritten = setTagContentById(rewritten, 'title', 'page-title', metadata.title);
+  rewritten = setMetaContentById(rewritten, 'page-description', metadata.description);
+  rewritten = setMetaContentById(rewritten, 'og-title', metadata.title);
+  rewritten = setMetaContentById(rewritten, 'og-description', metadata.description);
+  rewritten = setMetaContentById(rewritten, 'twitter-title', metadata.title);
+  rewritten = setMetaContentById(rewritten, 'twitter-description', metadata.description);
+  rewritten = insertOrReplaceOgImage(rewritten, metadata.ogImage);
+
+  return rewritten;
+}
+
+async function readArticles() {
+  const raw = await fs.readFile(path.join(ROOT, 'src/data/articles.json'), 'utf8');
+  const data = JSON.parse(raw);
+  return Array.isArray(data.articles) ? data.articles : [];
 }
 
 async function ensureParentDir(filePath) {
@@ -296,6 +391,7 @@ async function build() {
   await fs.rm(DIST, { recursive: true, force: true });
   await fs.mkdir(DIST, { recursive: true });
   const contracts = await getRuntimeContracts();
+  const articles = await readArticles();
 
   for (const job of COPY_JOBS) {
     await copyDir(job.from, job.to);
@@ -320,6 +416,20 @@ async function build() {
       const target = path.join(DIST, relativeTargetPath);
       const raw = await fs.readFile(source, 'utf8');
       const rewritten = rewritePublicPageForDist(job.routeName, relativeTargetPath, raw, locale, contracts);
+      await ensureParentDir(target);
+      await fs.writeFile(target, rewritten, 'utf8');
+    }
+
+    for (const article of articles) {
+      const slug = getArticleSlug(article);
+      if (!slug) continue;
+
+      const publicRoute = contracts.routes.route(ARTICLE_PUBLIC_PAGE.routeName, locale, { slug });
+      const relativeTargetPath = routeToDistPath(publicRoute);
+      const source = path.join(ROOT, ARTICLE_PUBLIC_PAGE.from);
+      const target = path.join(DIST, relativeTargetPath);
+      const raw = await fs.readFile(source, 'utf8');
+      const rewritten = rewritePublicArticlePageForDist(relativeTargetPath, raw, locale, article, contracts);
       await ensureParentDir(target);
       await fs.writeFile(target, rewritten, 'utf8');
     }
