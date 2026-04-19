@@ -1,0 +1,110 @@
+{
+  "contract": {
+    "name": "artnouveau.social_package",
+    "version": 1,
+    "kind": "read_only_social_handoff"
+  },
+  "slug": "demo",
+  "requested_locale": "en",
+  "source_locale": "en",
+  "locale_status": {
+    "status": "en-ready",
+    "missing_fields": []
+  },
+  "queue_status": "candidate",
+  "brief": {
+    "slug": "demo",
+    "locale_status": {
+      "status": "en-ready",
+      "missing_fields": []
+    },
+    "title_fr": "Maison Demo",
+    "title_en": "Demo House",
+    "dek_fr": "Dek FR.",
+    "dek_en": "Dek EN.",
+    "quote": null,
+    "practical_items": [
+      {
+        "key": "city",
+        "value": "Lille"
+      },
+      {
+        "key": "style",
+        "value": "Art Nouveau"
+      }
+    ],
+    "image_summary": {
+      "has_hero": true,
+      "hero_src": "assets/images/demo.png",
+      "support_count": 1
+    },
+    "readiness": {
+      "status": "ready",
+      "ok_count": 8,
+      "error_count": 0,
+      "warning_count": 0,
+      "notes": []
+    }
+  },
+  "caption": {
+    "slug": "demo",
+    "requested_locale": "en",
+    "source_locale": "en",
+    "locale_status": "en-ready",
+    "title": "Demo House",
+    "hook": "Look closer: Demo House",
+    "caption": "Dek EN.",
+    "cta": "Read the article on the site.",
+    "hashtags": [
+      "#ArtNouveau",
+      "#Lille",
+      "#Architecture",
+      "#Patrimoine"
+    ]
+  },
+  "media": {
+    "hero": {
+      "src": "assets/images/demo.png",
+      "alt": "Alt EN.",
+      "caption": "Caption EN."
+    },
+    "support": [
+      {
+        "src": "assets/images/support.png",
+        "alt": "Support alt EN.",
+        "caption": "Support caption EN."
+      }
+    ]
+  },
+  "links": {
+    "article_fr_path": "article.html?slug=demo",
+    "article_en_preview_path": "article.html?slug=demo&previewLocale=en",
+    "preview_paths": {
+      "fr": "article.html?slug=demo",
+      "en": "article.html?slug=demo&previewLocale=en",
+      "nl": "article.html?slug=demo&previewLocale=nl"
+    },
+    "canonical_public_path": "/fr/articles/demo/",
+    "public_paths": {
+      "fr": "/fr/articles/demo/",
+      "en": "/en/articles/demo/"
+    }
+  },
+  "image_summary": {
+    "has_hero": true,
+    "hero_src": "assets/images/demo.png",
+    "support_count": 1
+  },
+  "readiness": {
+    "status": "ready",
+    "ok_count": 8,
+    "error_count": 0,
+    "warning_count": 0,
+    "notes": []
+  },
+  "reasons": [
+    "Publication checklist is ready.",
+    "English content is ready.",
+    "Hero image is present."
+  ]
+}

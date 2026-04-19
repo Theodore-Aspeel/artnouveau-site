@@ -42,6 +42,7 @@ python -m tools.editorial_manager social-next --json
 python -m tools.editorial_manager social-next --status needs-review --locale-status fr-only
 python -m tools.editorial_manager social-workflow
 python -m tools.editorial_manager social-workflow --locale en --status needs-review --locale-status fr-only
+python -m tools.editorial_manager validate-social-package research/social-package-example.json
 ```
 
 ## Commands
@@ -72,6 +73,7 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 - `social-next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`.
 - `social-workflow`: prepares a small local handoff for the first matching social publication candidate. It reuses `social-next` selection and `social-package` payload building, then prints the selected article, caption draft, media paths, article links, reasons, and follow-up local commands.
 - `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. It also accepts `--locale fr|en` for the caption/package locale.
+- `validate-social-package <path>`: validates an exported `social-package` JSON payload against the minimal handoff contract intended for a first local n8n prototype.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
 
@@ -134,6 +136,8 @@ When multiple `social-queue` filters are used together, they are combined as AND
 `social-package --next` reuses `social-next` selection, then builds the usual package for the selected article. The JSON structure is the same as `social-package <slug>`.
 
 `social-workflow` is intentionally a human-facing local entry point. It does not create files, update article data, call APIs, or publish anything. Use `social-package <slug> --locale <locale>` when the full JSON payload is needed.
+
+`validate-social-package` is intentionally a consumer-boundary check. It verifies that an exported JSON file has the expected contract marker, required top-level blocks, queue/readiness values, and basic media/link shapes. It does not validate the full article model or decide whether a real external publication should happen.
 
 ## `social-package` JSON Contract
 

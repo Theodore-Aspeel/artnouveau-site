@@ -1,7 +1,9 @@
 import io
 import json
+import tempfile
 import unittest
 from contextlib import redirect_stdout
+from pathlib import Path
 from unittest.mock import patch
 
 from tools.editorial_manager.article_creation import ArticleCreationResult
@@ -709,6 +711,50 @@ class CliTests(unittest.TestCase):
             "python -m tools.editorial_manager social-package candidate --locale en",
             rendered,
         )
+
+    def test_validate_social_package_command_does_not_load_articles(self):
+        payload = {
+            "contract": {
+                "name": "artnouveau.social_package",
+                "version": 1,
+                "kind": "read_only_social_handoff",
+            },
+            "slug": "demo",
+            "requested_locale": "en",
+            "source_locale": "en",
+            "locale_status": {"status": "en-ready", "missing_fields": []},
+            "queue_status": "candidate",
+            "brief": {"slug": "demo"},
+            "caption": {"slug": "demo", "source_locale": "en", "hashtags": []},
+            "media": {
+                "hero": {"src": "assets/images/demo.png", "alt": "Alt.", "caption": ""},
+                "support": [],
+            },
+            "links": {
+                "canonical_public_path": "/fr/articles/demo/",
+                "public_paths": {"fr": "/fr/articles/demo/", "en": "/en/articles/demo/"},
+            },
+            "image_summary": {
+                "has_hero": True,
+                "hero_src": "assets/images/demo.png",
+                "support_count": 0,
+            },
+            "readiness": {"status": "ready", "notes": []},
+            "reasons": [],
+        }
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "social-package.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with patch("tools.editorial_manager.cli.load_articles") as load_articles:
+                with redirect_stdout(output):
+                    exit_code = main(["validate-social-package", str(path)])
+
+        self.assertEqual(exit_code, 0)
+        load_articles.assert_not_called()
+        self.assertIn("Status: valid", output.getvalue())
 
 
 if __name__ == "__main__":

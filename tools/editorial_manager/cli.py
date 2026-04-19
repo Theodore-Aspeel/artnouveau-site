@@ -32,6 +32,7 @@ from .reporting import (
 from .social_brief import build_social_brief
 from .social_caption import build_social_caption
 from .social_package import build_social_package
+from .social_package_validation import validate_social_package_file
 from .social_queue import SocialQueueFilters, build_social_next, build_social_queue
 from .social_workflow import build_social_workflow
 
@@ -290,6 +291,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Keep only queue items that have, or do not have, a hero image.",
     )
 
+    validate_social_package_parser = subparsers.add_parser(
+        "validate-social-package",
+        help="Validate an exported social-package JSON handoff payload.",
+    )
+    validate_social_package_parser.add_argument("path", help="Path to a social-package JSON file.")
+
     return parser
 
 
@@ -300,6 +307,21 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "editor":
         run_editor_server(args.host, args.port, open_browser=not args.no_browser)
         return 0
+
+    if args.command == "validate-social-package":
+        result = validate_social_package_file(args.path)
+        print("Social package validation")
+        print(f"File: {args.path}")
+        print(f"Status: {'valid' if result.ok else 'invalid'}")
+        if result.errors:
+            print("Errors:")
+            for error in result.errors:
+                print(f"  - {error}")
+        if result.warnings:
+            print("Warnings:")
+            for warning in result.warnings:
+                print(f"  - {warning}")
+        return 0 if result.ok else 1
 
     articles = load_articles()
 
