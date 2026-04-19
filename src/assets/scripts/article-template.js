@@ -44,15 +44,22 @@
   }
 
   function applyArticleImageAttributes(img, imagePath, sizes) {
-    if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
+    if (imageManifest && typeof imageManifest.applyResponsivePicture === 'function') {
+      const attrs = imageManifest.applyResponsivePicture(img, imagePath, {
+        basePath: imageBase,
+        sizes,
+      });
+      if (attrs && attrs.img && attrs.img.src) return attrs.element || img;
+    } else if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
       const attrs = imageManifest.applyResponsiveImage(img, imagePath, {
         basePath: imageBase,
         sizes,
       });
-      if (attrs && attrs.src) return;
+      if (attrs && attrs.src) return img;
     }
 
     img.src = imgSrc(imagePath);
+    return img;
   }
 
   function articleTagHref(tag) {
@@ -488,7 +495,7 @@
     const figure = make('figure', 'article-intake__figure');
     const image = document.createElement('img');
     image.className = 'article-intake__image';
-    applyArticleImageAttributes(image, primaryImage, '(min-width: 1100px) 42vw, 100vw');
+    const imageElement = applyArticleImageAttributes(image, primaryImage, '(min-width: 1100px) 42vw, 100vw');
     image.alt = primaryImageEntry && primaryImageEntry.alt
       ? primaryImageEntry.alt
       : access.getArticleHeroAlt(article, locale);
@@ -499,7 +506,7 @@
       figure.remove();
       intake.classList.add('article-intake--no-image');
     }, { once: true });
-    figure.appendChild(image);
+    figure.appendChild(imageElement);
 
     const caption = makeImageCaption(primaryImageEntry);
     if (caption) {
@@ -561,7 +568,7 @@
       }
 
       const im = document.createElement('img');
-      applyArticleImageAttributes(im, entry.src, '(min-width: 900px) 34vw, 100vw');
+      const imageElement = applyArticleImageAttributes(im, entry.src, '(min-width: 900px) 34vw, 100vw');
       im.alt = entry.alt || '';
       im.loading = 'lazy';
       im.setAttribute('decoding', 'async');
@@ -571,7 +578,7 @@
           grid.remove();
         }
       }, { once: true });
-      fig.appendChild(im);
+      fig.appendChild(imageElement);
 
       const caption = makeImageCaption(entry);
       if (caption) {

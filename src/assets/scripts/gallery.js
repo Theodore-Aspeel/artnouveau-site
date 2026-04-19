@@ -127,15 +127,22 @@
   }
 
   function applyCardImageAttributes(img, imagePath, sizes) {
-    if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
+    if (imageManifest && typeof imageManifest.applyResponsivePicture === 'function') {
+      const attrs = imageManifest.applyResponsivePicture(img, imagePath, {
+        basePath: assetBasePath,
+        sizes,
+      });
+      if (attrs && attrs.img && attrs.img.src) return attrs.element || img;
+    } else if (imageManifest && typeof imageManifest.applyResponsiveImage === 'function') {
       const attrs = imageManifest.applyResponsiveImage(img, imagePath, {
         basePath: assetBasePath,
         sizes,
       });
-      if (attrs && attrs.src) return;
+      if (attrs && attrs.src) return img;
     }
 
     img.src = resolveCardImageSrc(imagePath);
+    return img;
   }
 
   function getCardTagEntries(article) {
@@ -252,15 +259,15 @@
 
     if (item.image) {
       const img = document.createElement('img');
-      applyCardImageAttributes(img, item.image, '(min-width: 1100px) 25vw, (min-width: 700px) 45vw, 100vw');
+      const imageElement = applyCardImageAttributes(img, item.image, '(min-width: 1100px) 25vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       img.setAttribute('decoding', 'async');
       img.addEventListener('error', () => {
-        img.remove();
+        imageElement.remove();
         addPlaceholder(imageWrapper, item);
       }, { once: true });
-      imageWrapper.appendChild(img);
+      imageWrapper.appendChild(imageElement);
     } else {
       addPlaceholder(imageWrapper, item);
     }
@@ -340,13 +347,13 @@
     if (item.image) {
       const img = document.createElement('img');
       img.className = 'home-curated__image';
-      applyCardImageAttributes(img, item.image, index === 0
+      const imageElement = applyCardImageAttributes(img, item.image, index === 0
         ? '(min-width: 1100px) 48vw, 100vw'
         : '(min-width: 1100px) 24vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
       img.setAttribute('decoding', 'async');
-      mediaWrap.appendChild(img);
+      mediaWrap.appendChild(imageElement);
     } else {
       const placeholder = document.createElement('div');
       placeholder.className = 'home-curated__placeholder';
