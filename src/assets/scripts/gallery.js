@@ -255,6 +255,7 @@
       applyCardImageAttributes(img, item.image, '(min-width: 1100px) 25vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
+      img.setAttribute('decoding', 'async');
       img.addEventListener('error', () => {
         img.remove();
         addPlaceholder(imageWrapper, item);
@@ -344,6 +345,7 @@
         : '(min-width: 1100px) 24vw, (min-width: 700px) 45vw, 100vw');
       img.alt = item.imageAlt || item.title;
       img.loading = 'lazy';
+      img.setAttribute('decoding', 'async');
       mediaWrap.appendChild(img);
     } else {
       const placeholder = document.createElement('div');

@@ -493,6 +493,8 @@
       ? primaryImageEntry.alt
       : access.getArticleHeroAlt(article, locale);
     image.loading = 'eager';
+    image.setAttribute('fetchpriority', 'high');
+    image.setAttribute('decoding', 'async');
     image.addEventListener('error', () => {
       figure.remove();
       intake.classList.add('article-intake--no-image');
@@ -559,9 +561,10 @@
       }
 
       const im = document.createElement('img');
-      im.src = imgSrc(entry.src);
+      applyArticleImageAttributes(im, entry.src, '(min-width: 900px) 34vw, 100vw');
       im.alt = entry.alt || '';
       im.loading = 'lazy';
+      im.setAttribute('decoding', 'async');
       im.addEventListener('error', () => {
         fig.remove();
         if (!grid.children.length) {
