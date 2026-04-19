@@ -1031,6 +1031,62 @@
           "around": {
             "note": "Read also: another Antwerp facade where the name helps the place remain memorable without replacing the reading of the composition."
           }
+        },
+        "nl": {
+          "title": "Maison Lotus, Antwerpen",
+          "dek": "Maison Lotus is meteen leesbaar. De naam, de architect en de datum geven de blik al een houvast. Deze gevel, ontworpen door Jos Bascourt in 1901, behoort tot die familie van art-nouveaugevels waar het bloemmotief geen los toegevoegd detail is. Het stuurt de compositie, buigt de blik en geeft het gebouw een identiteit die stevig genoeg is om te blijven hangen.",
+          "epigraph": "Soms volstaat een naam om de manier van kijken naar een gevel te sturen.",
+          "sections": [
+            {
+              "heading": "Het bloemmotief zonder overdaad",
+              "body": "Bij Maison Lotus moet de lezing precies blijven. Het meest zinvolle is te kijken hoe het florale vocabulaire door de gevel loopt zonder hem te overspoelen. Het kan een detail richten, een overgang verzachten, het geheel licht doen kantelen. Belangrijk is niet om op elke lijn een symbool te vinden. Belangrijk is te voelen hoe eenzelfde vormprincipe meerdere delen van het gebouw bijeenhoudt.\n\nIn de art nouveau werkt de plantaardige verwijzing vaak op dat niveau. Ze is niet alleen zichtbaar. Ze organiseert. Maison Lotus lijkt tot die familie van gevels te behoren waarin het motief de blik ook een manier geeft om de lezing op te bouwen."
+            },
+            {
+              "heading": "Een juiste ingang tot Antwerpen",
+              "body": "Maison Lotus geeft Antwerpen een goed afgemeten ingang. Geen groot monument, maar ook geen detail dat te smal is om aandacht te dragen. Het is een genoemde en gedateerde gevel, uitgesproken genoeg om een artikel op zichzelf te dragen. Vaak begint een stad zo mee te tellen in een persoonlijke herinnering: via een huis dat al een lokale manier van gevel maken samenbrengt.\n\nDe tekst moet die schaal bewaren. Over Antwerpen spreken, ja, maar vanuit wat deze gevel waarneembaar maakt: zijn ritme, zijn verticaliteit, zijn manier om plaats te nemen in de straat."
+            },
+            {
+              "heading": "Wat ter plaatse blijft hangen",
+              "body": "Het belangrijkste is om de naam niet los te maken van de echte lezing van de gevel. De lotus is hier geen eenvoudig etiket. Hij wekt een verwachting waarop het gebouw antwoordt met zijn compositie, zijn houding en een voelbare continuïteit tussen motief en geheel.\n\nDie overeenstemming geeft Maison Lotus zijn juistheid. Een stevige identiteit, maar ook rustig genoeg om Antwerpen te openen zonder de toon te forceren."
+            }
+          ],
+          "seo": {
+            "meta_description": "Maison Lotus in Antwerpen. Een gevellezing rond een floraal art-nouveaumotief, met Jos Bascourt en 1901 als vaste aanknopingspunten."
+          },
+          "media": {
+            "hero_alt": "Maison Lotus in Antwerpen, een art-nouveaugevel ontworpen door Jos Bascourt in 1901.",
+            "support_alt": []
+          },
+          "practical_items": [
+            {
+              "key": "city",
+              "value": "Antwerpen"
+            },
+            {
+              "key": "country",
+              "value": "België"
+            },
+            {
+              "key": "style",
+              "value": "Art nouveau"
+            },
+            {
+              "key": "architect",
+              "value": "Jos Bascourt"
+            },
+            {
+              "key": "address",
+              "value": "Transvaalstraat 52, Berchem (Antwerpen)"
+            },
+            {
+              "key": "date",
+              "value": "1901"
+            }
+          ],
+          "around": {
+            "note": "Lees ook: een andere Antwerpse gevel waar de naam de plek goed laat onthouden zonder de lezing van de compositie te vervangen."
+          },
+          "resources": []
         }
       }
     },
