@@ -2,7 +2,9 @@
   'use strict';
 
   const localeConfig = global.SiteLocales || {};
+  const deploymentConfig = global.SiteDeployment || {};
   const DEFAULT_LOCALE = localeConfig.defaultLocale || 'fr';
+  const PUBLIC_BASE_PATH = normalizePublicBasePath(deploymentConfig.publicBasePath || '');
   const ROUTE_NAMES = Object.freeze({
     home: 'home',
     about: 'about',
@@ -56,10 +58,16 @@
     return encodeURIComponent(normalized);
   }
 
+  function normalizePublicBasePath(value) {
+    const normalized = typeof value === 'string' ? value.trim() : '';
+    if (!normalized || normalized === '/') return '';
+    return '/' + normalized.replace(/^\/+|\/+$/g, '');
+  }
+
   function publicPath(locale, segments) {
     const lang = normalizePublicLocale(locale);
     const cleanSegments = segments.filter(Boolean);
-    return '/' + lang + '/' + (cleanSegments.length ? cleanSegments.join('/') + '/' : '');
+    return PUBLIC_BASE_PATH + '/' + lang + '/' + (cleanSegments.length ? cleanSegments.join('/') + '/' : '');
   }
 
   function home(locale) {
@@ -104,6 +112,7 @@
   global.SitePublicRoutes = {
     routeNames: ROUTE_NAMES,
     defaultLocale: DEFAULT_LOCALE,
+    publicBasePath: PUBLIC_BASE_PATH,
     publicLocaleCodes,
     previewLocaleCodes,
     supportedPublicLocale,

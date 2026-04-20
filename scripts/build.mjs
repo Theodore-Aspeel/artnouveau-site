@@ -52,6 +52,7 @@ const OG_LOCALES = {
 
 const SITE_TITLE = 'Art Nouveau et Art Déco';
 const SITE_ORIGIN = normalizeSiteOrigin(process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com');
+const PUBLIC_BASE_PATH = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '');
 const ANALYTICS = getAnalyticsConfig(process.env);
 
 function rewritePageForDist(relativeTargetPath, content) {
@@ -106,7 +107,13 @@ async function runBrowserScript(filePath, context) {
 }
 
 async function getRuntimeContracts() {
-  const context = { window: {} };
+  const context = {
+    window: {
+      SiteDeployment: {
+        publicBasePath: PUBLIC_BASE_PATH,
+      },
+    },
+  };
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/locale-config.js'), context);
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/article-access.js'), context);
   await runBrowserScript(path.join(ROOT, 'src/assets/scripts/i18n.js'), context);
@@ -153,6 +160,15 @@ function normalizeSiteOrigin(value) {
   return origin;
 }
 
+function normalizePublicBasePath(value) {
+  const normalized = typeof value === 'string' ? value.trim() : '';
+  if (!normalized || normalized === '/') return '';
+  if (/^https?:\/\//i.test(normalized) || normalized.includes('?') || normalized.includes('#')) {
+    throw new TypeError('PUBLIC_BASE_PATH must be a path such as /artnouveau-site, not a URL.');
+  }
+  return '/' + normalized.replace(/^\/+|\/+$/g, '');
+}
+
 function getAnalyticsConfig(env) {
   const domain = typeof env.PLAUSIBLE_DOMAIN === 'string' ? env.PLAUSIBLE_DOMAIN.trim() : '';
 
@@ -172,6 +188,20 @@ function getAnalyticsConfig(env) {
 
 function absolutePublicUrl(route) {
   return SITE_ORIGIN + route;
+}
+
+function deploymentConfigScript() {
+  return `<script>window.SiteDeployment=${JSON.stringify({ publicBasePath: PUBLIC_BASE_PATH })};</script>`;
+}
+
+function applyDeploymentConfig(content) {
+  const script = deploymentConfigScript();
+  if (content.includes(script)) return content;
+
+  return content.replace(
+    /(\s*)<script src="([^"]*assets\/scripts\/public-routes\.js)"><\/script>/,
+    `$1${script}\n$1<script src="$2"></script>`
+  );
 }
 
 function setAttributeInTag(tag, attribute, value) {
@@ -281,7 +311,11 @@ function applyStaticI18n(content, locale, i18n) {
 }
 
 function routeToDistPath(route) {
-  const cleanRoute = route.replace(/^\/+|\/+$/g, '');
+  let cleanRoute = route;
+  if (PUBLIC_BASE_PATH && (cleanRoute === PUBLIC_BASE_PATH || cleanRoute.startsWith(PUBLIC_BASE_PATH + '/'))) {
+    cleanRoute = cleanRoute.slice(PUBLIC_BASE_PATH.length) || '/';
+  }
+  cleanRoute = cleanRoute.replace(/^\/+|\/+$/g, '');
   return cleanRoute ? path.posix.join(cleanRoute, 'index.html') : 'index.html';
 }
 
@@ -332,7 +366,7 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     );
   }
 
-  return rewritten;
+  return applyDeploymentConfig(rewritten);
 }
 
 function getArticleSlug(article) {
@@ -390,7 +424,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
   rewritten = applyPublicAnalytics(rewritten);
 
-  return rewritten;
+  return applyDeploymentConfig(rewritten);
 }
 
 async function readArticles() {
@@ -462,7 +496,7 @@ async function writeRobotsTxt() {
     'Disallow:',
     'Allow: /',
     '',
-    `Sitemap: ${absolutePublicUrl('/sitemap.xml')}`,
+    `Sitemap: ${absolutePublicUrl(PUBLIC_BASE_PATH + '/sitemap.xml')}`,
     '',
   ].join('\n');
 
@@ -509,7 +543,7 @@ async function build() {
     const source = path.join(ROOT, job.from);
     const target = path.join(DIST, job.to);
     const raw = await fs.readFile(source, 'utf8');
-    const rewritten = rewritePageForDist(job.to, raw);
+    const rewritten = applyDeploymentConfig(rewritePageForDist(job.to, raw));
     await ensureParentDir(target);
     await fs.writeFile(target, rewritten, 'utf8');
   }

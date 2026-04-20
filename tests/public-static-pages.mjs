@@ -4,6 +4,7 @@ import fs from 'node:fs';
 const articleData = JSON.parse(fs.readFileSync('src/data/articles.json', 'utf8'));
 const publicLocales = ['fr', 'en', 'nl'];
 const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
+const publicBasePath = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '');
 
 const EXPECTED_PAGES = [
   ['fr', 'home', 'dist/fr/index.html', 'Regarder d\u2019abord. Nommer ensuite.'],
@@ -28,6 +29,20 @@ function escapeAttribute(value) {
   return escapeHtml(value).replaceAll('"', '&quot;');
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizePublicBasePath(value) {
+  const normalized = typeof value === 'string' ? value.trim() : '';
+  if (!normalized || normalized === '/') return '';
+  return '/' + normalized.replace(/^\/+|\/+$/g, '');
+}
+
+function publicRoute(pathname) {
+  return `${publicBasePath}${pathname}`;
+}
+
 function localeContent(article, locale) {
   return article.content?.[locale] || article.content?.fr || {};
 }
@@ -43,11 +58,17 @@ for (const [locale, routeName, filePath, expectedText] of EXPECTED_PAGES) {
 
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-article-data-url="\.\.\/data\/articles\.json"/);
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-asset-base="\.\.\/"/);
-assert.match(fs.readFileSync('dist/fr/about/index.html', 'utf8'), /href="\/fr\/"/);
-assert.match(fs.readFileSync('dist/en/about/index.html', 'utf8'), /href="\/en\/mentions\/"/);
-assert.match(fs.readFileSync('dist/nl/mentions/index.html', 'utf8'), /href="\/nl\/about\/"/);
+assert.match(fs.readFileSync('dist/fr/about/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/fr/'))}"`));
+assert.match(fs.readFileSync('dist/en/about/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/en/mentions/'))}"`));
+assert.match(fs.readFileSync('dist/nl/mentions/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/nl/about/'))}"`));
 
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/public-routes\.js"><\/script>/);
+assert.ok(
+  fs.readFileSync('dist/fr/index.html', 'utf8').includes(
+    `<script>window.SiteDeployment=${JSON.stringify({ publicBasePath })};</script>`
+  ),
+  'public home should expose the deployment base path before route helpers'
+);
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/image-manifest\.js"><\/script>/);
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-responsive-image-source="assets\/images\/site\/saint-gilles-brussels\.png"/);
 assert.match(galleryScript, /publicRoutes\.article\(currentLocale\(\), normalizedSlug\)/);
@@ -56,9 +77,9 @@ assert.match(galleryScript, /SiteImageManifest/);
 
 for (const locale of publicLocales) {
   const homeHtml = fs.readFileSync(`dist/${locale}/index.html`, 'utf8');
-  assert.ok(homeHtml.includes(`href="/${locale}/"`), `dist/${locale}/index.html should link to localized home`);
-  assert.ok(homeHtml.includes(`href="/${locale}/about/"`), `dist/${locale}/index.html should link to localized about`);
-  assert.ok(homeHtml.includes(`href="/${locale}/mentions/"`), `dist/${locale}/index.html should link to localized mentions`);
+  assert.ok(homeHtml.includes(`href="${publicRoute(`/${locale}/`)}"`), `dist/${locale}/index.html should link to localized home`);
+  assert.ok(homeHtml.includes(`href="${publicRoute(`/${locale}/about/`)}"`), `dist/${locale}/index.html should link to localized about`);
+  assert.ok(homeHtml.includes(`href="${publicRoute(`/${locale}/mentions/`)}"`), `dist/${locale}/index.html should link to localized mentions`);
   assert.doesNotMatch(homeHtml, /href="(?:index|about|mentions)\.html/, `dist/${locale}/index.html should not target legacy page links`);
 }
 
@@ -103,11 +124,11 @@ for (const locale of publicLocales) {
   );
   assert.match(html, /<meta property="og:image" content="\.\.\/\.\.\/\.\.\/assets\/images\/articles\/maison-coilliot-lille-hector-guimard\.png">/);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
-  assert.ok(html.includes(`href="/${locale}/articles/${sampleArticle.slug}/"`), `${filePath} should link to its public route`);
+  assert.ok(html.includes(`href="${publicRoute(`/${locale}/articles/${sampleArticle.slug}/`)}"`), `${filePath} should link to its public route`);
   assert.ok(html.includes(`src="../../../assets/scripts/image-manifest.js"`), `${filePath} should load the image manifest helper`);
-  assert.ok(html.includes(`href="/fr/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for FR language link`);
-  assert.ok(html.includes(`href="/en/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for EN language link`);
-  assert.ok(html.includes(`href="/nl/articles/${sampleArticle.slug}/"`), `${filePath} should keep article context for NL language link`);
+  assert.ok(html.includes(`href="${publicRoute(`/fr/articles/${sampleArticle.slug}/`)}"`), `${filePath} should keep article context for FR language link`);
+  assert.ok(html.includes(`href="${publicRoute(`/en/articles/${sampleArticle.slug}/`)}"`), `${filePath} should keep article context for EN language link`);
+  assert.ok(html.includes(`href="${publicRoute(`/nl/articles/${sampleArticle.slug}/`)}"`), `${filePath} should keep article context for NL language link`);
   assert.doesNotMatch(html, /Chargement/, `${filePath} should not keep loading SEO title text`);
   assert.doesNotMatch(html, /previewLocale=/, `${filePath} should not use previewLocale links`);
 }

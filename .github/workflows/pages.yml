@@ -19,6 +19,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      SITE_ORIGIN: https://theodore-aspeel.github.io
+      PUBLIC_BASE_PATH: /artnouveau-site
       PLAUSIBLE_DOMAIN: ${{ vars.PLAUSIBLE_DOMAIN }}
 
     steps:
@@ -40,11 +42,13 @@ jobs:
       - name: Debug build inputs
         run: |
           echo "SITE_ORIGIN shell=<$SITE_ORIGIN>"
+          echo "PUBLIC_BASE_PATH shell=<$PUBLIC_BASE_PATH>"
           node -e "console.log('SITE_ORIGIN node=', JSON.stringify(process.env.SITE_ORIGIN))"
+          node -e "console.log('PUBLIC_BASE_PATH node=', JSON.stringify(process.env.PUBLIC_BASE_PATH))"
           sed -n '52,56p' scripts/build.mjs
 
       - name: Build site
-        run: SITE_ORIGIN=https://theodore-aspeel.github.io npm run build
+        run: npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
