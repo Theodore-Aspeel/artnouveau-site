@@ -1,6 +1,8 @@
 # Project-level Codex configuration, intentionally versioned for this repository.
+# ANAD 2.0 defaults routine implementation work to Terra to preserve Plus allowance.
+# Escalate individual difficult tasks to Sol or Astra from Work/Codex when justified.
 
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_provider = "openai"
 
 approval_policy = "on-request"
