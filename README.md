@@ -44,6 +44,18 @@ npm install
 
 ## Commands
 
+Run the complete local quality gate before opening or updating a pull request:
+
+```bash
+npm ci
+npm run quality
+```
+
+The quality gate validates and builds the publishable `dist/` artifact, then runs
+the Node and Python test suites. Individual commands remain available as
+`npm run validate`, `npm run build`, `npm run test:node`, and
+`npm run test:python`.
+
 ```bash
 npm run validate
 npm run build

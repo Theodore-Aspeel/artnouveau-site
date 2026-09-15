@@ -137,3 +137,21 @@ Recovery is complete when:
 - one Reel can move through brief -> storyboard -> media selection -> render -> human review without ad-hoc steps
 
 After these conditions are met, ANAD 2.0 can move from recovery to controlled production and automation.
+
+## Recovery progress
+
+Measured on 2026-09-15 on `anad-2.0/recovery`:
+
+- canonical recovery and orchestration documents: complete
+- Plus-aware model routing and Terra repository default: complete
+- article corpus inventory: complete; see `research/anad-2-corpus-inventory.md`
+- local quality command and pull-request CI gate: implemented on the recovery branch
+- missing Editorial Manager backup module: restored and covered by the existing test suite
+- obsolete GitHub Pages diagnostic step: removed on the recovery branch
+- branch/PR preview decision: pending
+- desktop/mobile visual audit: pending
+- technical SEO audit and structured-data design: pending
+- end-to-end article pilot: pending
+- deterministic Reel pilot: pending
+
+The first clean quality run covers content validation, a deterministic build, 9 Node checks and 154 Python tests.

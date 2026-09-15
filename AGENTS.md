@@ -46,14 +46,14 @@ If a field is present in runtime content, assume it may become inspectable by us
 
 ## Current article model status
 
-The repository currently supports a mixed article model:
+The runtime supports a mixed article model:
 - legacy article format: v1
 - new progressive bilingual-ready format: v2
 
-At this stage:
-- some articles remain in v1
-- a limited number of pilot articles are in v2
-- the runtime must continue to support mixed v1/v2 safely
+As measured on 2026-09-15:
+- all 14 current articles use v2
+- the v1 compatibility layer remains in place as a regression safeguard
+- future imports or historical fixtures may still exercise v1 behavior
 
 Do not migrate all articles at once unless explicitly asked.
 
@@ -288,9 +288,9 @@ For migration tasks, also report:
 
 ---
 
-## Learning-first rule
+## Production-quality and learning rule
 
-This project is also used for learning.
+This project is also used for learning, but production quality is the governing standard.
 
 Therefore:
 - prefer explicit and understandable code over clever abstraction
@@ -298,5 +298,4 @@ Therefore:
 - prefer maintainable structure over maximum automation
 - do not introduce complexity just because it is technically possible
 
-The goal is not only to make the site work.
-The goal is to build a project that remains understandable, teachable, and reusable for future Python tooling and automation.
+The goal is not only to make the site work. It is to build a professional publication system that remains understandable, teachable, and reusable for future Python tooling and automation.

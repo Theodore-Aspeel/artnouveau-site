@@ -15,7 +15,11 @@
   "scripts": {
     "validate": "node scripts/validate-content.mjs",
     "build": "node scripts/build.mjs",
-    "preview": "node scripts/preview.mjs"
+    "preview": "node scripts/preview.mjs",
+    "test:node": "node --test tests/*.mjs",
+    "test:python": "python -m unittest discover tests",
+    "test": "npm run build && npm run test:node && npm run test:python",
+    "quality": "npm run validate && npm test"
   },
   "engines": {
     "node": ">=20"
