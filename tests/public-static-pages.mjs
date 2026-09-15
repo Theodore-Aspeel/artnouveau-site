@@ -87,6 +87,24 @@ assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-asset-base="\.
 assert.match(fs.readFileSync('dist/fr/about/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/fr/'))}"`));
 assert.match(fs.readFileSync('dist/en/about/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/en/mentions/'))}"`));
 assert.match(fs.readFileSync('dist/nl/mentions/index.html', 'utf8'), new RegExp(`href="${escapeRegExp(publicRoute('/nl/about/'))}"`));
+assert.ok(
+  fs.readFileSync('dist/fr/mentions/index.html', 'utf8').includes(
+    'Les photographies publiées sont des œuvres originales de Christophe Aspel.'
+  ),
+  'French legal notice should identify the original text and photography author'
+);
+assert.ok(
+  fs.readFileSync('dist/en/mentions/index.html', 'utf8').includes(
+    'The published photographs are original works by Christophe Aspel.'
+  ),
+  'English legal notice should identify the original text and photography author'
+);
+assert.ok(
+  fs.readFileSync('dist/nl/mentions/index.html', 'utf8').includes(
+    'De gepubliceerde foto’s zijn originele werken van Christophe Aspel.'
+  ),
+  'Dutch legal notice should identify the original text and photography author'
+);
 
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/public-routes\.js"><\/script>/);
 assert.ok(

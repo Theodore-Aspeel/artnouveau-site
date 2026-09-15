@@ -158,5 +158,12 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
 - image rights/credit contract and corpus audit: newly identified blocker
 - end-to-end article pilot: pending
 - deterministic Reel pilot: pending
+- current runtime media-rights inventory: complete on
+  `anad-2.0/rights-and-review-flow`; 21/21 assets cleared from the explicit
+  project-owner confirmation, with no wildcard inheritance
+- single-article publication preflight: implemented on
+  `anad-2.0/rights-and-review-flow`; the Maison Coilliot pilot passes content,
+  locale and rights checks, with its existing `draft` status correctly
+  preventing a ready-for-human-review result
 
 The first clean quality run covers content validation, a deterministic build, 9 Node checks and 154 Python tests.

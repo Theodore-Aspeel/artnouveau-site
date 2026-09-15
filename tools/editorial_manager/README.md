@@ -23,6 +23,10 @@ python -m tools.editorial_manager check
 python -m tools.editorial_manager check <slug>
 python -m tools.editorial_manager publication-check
 python -m tools.editorial_manager publication-check <slug>
+python -m tools.editorial_manager media-rights-check
+python -m tools.editorial_manager media-rights-check --json
+python -m tools.editorial_manager publication-gate <slug>
+python -m tools.editorial_manager publication-gate <slug> --json
 python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
 python -m tools.editorial_manager locale-report --locale nl
@@ -55,6 +59,12 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `check <slug>`: runs the same checks for one article.
 - `publication-check`: runs a publication preparation checklist across all articles.
 - `publication-check <slug>`: runs the publication checklist for one article.
+- `media-rights-check`: verifies that every image used by the public runtime is
+  explicitly registered, cleared, credited and present on disk. The JSON mode
+  provides a stable report for CI and future automation.
+- `publication-gate <slug>`: combines the article checklist, English locale
+  readiness and media-rights evidence into one preflight. A successful result
+  means ready for human review, never automatic publication.
 - `locale-report`: shows the read-only source/target locale editorial status for all articles. It defaults to English.
 - `locale-report <slug>`: shows the same locale status for one article.
 - `locale-report --locale nl`: shows internal Dutch readiness for all articles without making NL public.

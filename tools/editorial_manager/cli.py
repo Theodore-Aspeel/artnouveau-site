@@ -10,7 +10,14 @@ from .checks import check_article, check_articles, publication_check_article, pu
 from .editor_server import run_editor_server
 from .locale_report import analyze_article_locale, analyze_articles_locale
 from .locales import locale_status_choices, preview_locale_codes
-from .repository import find_article_by_slug, load_articles
+from .media_rights import (
+    check_media_rights,
+    collect_runtime_assets,
+    load_media_rights_registry,
+    render_media_rights_report,
+)
+from .publication_gate import build_publication_gate, render_publication_gate
+from .repository import PROJECT_ROOT, find_article_by_slug, load_articles
 from .reporting import (
     render_article_detail,
     render_article_list,
@@ -114,7 +121,7 @@ def build_parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--architect", default="", help="Optional architect.")
     create_parser.add_argument("--date", default="", help="Optional date.")
     create_parser.add_argument("--access", default="", help="Optional access note.")
-    create_parser.add_argument("--author", default="Antoine Aspeel", help="Editorial author.")
+    create_parser.add_argument("--author", default="Christophe Aspel", help="Editorial author.")
     create_parser.add_argument(
         "--write",
         action="store_true",
@@ -129,6 +136,27 @@ def build_parser() -> argparse.ArgumentParser:
         help="Run a read-only publication preparation checklist.",
     )
     publication_check_parser.add_argument("slug", nargs="?", help="Optional article slug to check.")
+
+    media_rights_parser = subparsers.add_parser(
+        "media-rights-check",
+        help="Verify that every runtime image has a cleared internal rights record.",
+    )
+    media_rights_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output a stable machine-readable report.",
+    )
+
+    publication_gate_parser = subparsers.add_parser(
+        "publication-gate",
+        help="Run the complete automated preflight before final human review.",
+    )
+    publication_gate_parser.add_argument("slug", help="Article slug to prepare for review.")
+    publication_gate_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output a stable machine-readable gate report.",
+    )
 
     locale_report_parser = subparsers.add_parser(
         "locale-report",
@@ -401,6 +429,35 @@ def main(argv: list[str] | None = None) -> int:
             items = publication_check_articles(articles)
             print(render_publication_check_report(items, len(articles)))
         return 1 if any(item.status == "ERROR" for item in items) else 0
+
+    if args.command == "media-rights-check":
+        try:
+            registry = load_media_rights_registry()
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Media rights registry could not be loaded: {exc}")
+            return 1
+        report = check_media_rights(collect_runtime_assets(articles), registry)
+        if args.json:
+            print(json.dumps(report.to_payload(), ensure_ascii=False, indent=2))
+        else:
+            print(render_media_rights_report(report))
+        return 0 if report.ok else 1
+
+    if args.command == "publication-gate":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        try:
+            registry = load_media_rights_registry()
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Media rights registry could not be loaded: {exc}")
+            return 1
+        report = build_publication_gate(article, registry, project_root=PROJECT_ROOT)
+        if args.json:
+            print(json.dumps(report.to_payload(), ensure_ascii=False, indent=2))
+        else:
+            print(render_publication_gate(report))
+        return 0 if report.ok else 1
 
     if args.command == "locale-report":
         if args.slug:

@@ -82,7 +82,7 @@ class ArticleCreationInput:
     architect: str = ""
     date: str = ""
     access: str = ""
-    author: str = "Antoine Aspeel"
+    author: str = "Christophe Aspel"
 
 
 @dataclass(frozen=True)
