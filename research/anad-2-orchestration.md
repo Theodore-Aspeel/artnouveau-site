@@ -61,6 +61,29 @@ Expected behavior:
 
 Codex may implement, refactor, test, debug and prepare migrations. It should not independently redefine editorial strategy.
 
+## Model routing for ChatGPT Plus
+
+ANAD 2.0 is designed to remain practical on a ChatGPT Plus subscription. Do not use the most expensive model by default.
+
+Default routing:
+
+- **Luna**: high-volume, low-risk mechanical work such as extraction, formatting, deduplication, metadata normalization, simple classification and first-pass batch transforms.
+- **Terra**: default implementation and operational model for routine Codex work, structured analysis, test writing, data cleanup, batch localization drafts and repetitive pipeline tasks.
+- **Sol Medium**: default orchestration and professional reasoning model for planning, editorial work, SEO analysis, code review and decisions involving several constraints.
+- **Sol High**: use selectively for architecture decisions, difficult debugging, final editorial/SEO review, ambiguous research synthesis and consequential changes.
+- **Astra**: reserve for unusually difficult end-to-end tasks where Sol has demonstrably insufficient headroom, such as a major architecture decision, a stubborn cross-system failure, or a high-stakes synthesis spanning many tools and files.
+
+Principles:
+
+- model escalation must follow task difficulty, not prestige
+- split large jobs into bounded packages before escalating the model
+- use deterministic scripts for work that does not require model intelligence
+- do not ask Astra to perform bulk repetitive work
+- do not use a high-reasoning model for file copying, formatting, routine tagging or simple test execution
+- prefer one strong final review over running every intermediate step on the strongest model
+
+The repository-level Codex default is intentionally `gpt-5.6-terra`; individual complex tasks may be escalated from Work/Codex when justified.
+
 ## Specialized roles
 
 Roles are logical responsibilities. They may initially be implemented as agent instructions/skills rather than separate persistent services.
