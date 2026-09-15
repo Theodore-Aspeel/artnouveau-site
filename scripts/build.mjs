@@ -190,6 +190,14 @@ function absolutePublicUrl(route) {
   return SITE_ORIGIN + route;
 }
 
+function publicAssetPath(assetPath) {
+  return `${PUBLIC_BASE_PATH}/${String(assetPath).replace(/^\/+/, '')}`;
+}
+
+function absolutePublicAssetUrl(assetPath) {
+  return absolutePublicUrl(publicAssetPath(assetPath));
+}
+
 function deploymentConfigScript() {
   return `<script>window.SiteDeployment=${JSON.stringify({ publicBasePath: PUBLIC_BASE_PATH })};</script>`;
 }
@@ -202,6 +210,13 @@ function applyDeploymentConfig(content) {
     /(\s*)<script src="([^"]*assets\/scripts\/public-routes\.js)"><\/script>/,
     `$1${script}\n$1<script src="$2"></script>`
   );
+}
+
+function applyDeploymentAssetPaths(content) {
+  return content
+    .replaceAll('href="/favicon.ico"', `href="${publicAssetPath('favicon.ico')}"`)
+    .replaceAll('href="/icon.svg"', `href="${publicAssetPath('icon.svg')}"`)
+    .replaceAll('href="/icon.png"', `href="${publicAssetPath('icon.png')}"`);
 }
 
 function setAttributeInTag(tag, attribute, value) {
@@ -240,6 +255,20 @@ function insertOrReplaceOgImage(content, imagePath) {
   );
 }
 
+function insertOrReplaceMetaProperty(content, property, value) {
+  const tag = `<meta property="${escapeAttribute(property)}" content="${escapeAttribute(value)}">`;
+  const pattern = new RegExp(`<meta[^>]* property="${escapeRegExp(property)}"[^>]*>`);
+
+  if (pattern.test(content)) {
+    return content.replace(pattern, tag);
+  }
+
+  return content.replace(
+    /(<meta[^>]* property="og:description"[^>]*>)/,
+    `$1\n  ${tag}`
+  );
+}
+
 function buildSeoLinks(routeName, locale, routeParams, contracts) {
   const { routes } = contracts;
   const params = routeParams || {};
@@ -256,10 +285,19 @@ function buildSeoLinks(routeName, locale, routeParams, contracts) {
 }
 
 function applyPublicSeoLinks(content, routeName, locale, routeParams, contracts) {
-  return content.replace(
-    /(<meta name="robots" content="[^"]*">)/,
-    `$1\n  ${buildSeoLinks(routeName, locale, routeParams, contracts)}`
+  const params = routeParams || {};
+  const canonicalRoute = contracts.routes.route(routeName, locale, params);
+  let rewritten = content.replace(
+    /<meta name="robots" content="[^"]*">/,
+    '<meta name="robots" content="index,follow">'
   );
+
+  rewritten = rewritten.replace(
+    /(<meta name="robots" content="[^"]*">)/,
+    `$1\n  ${buildSeoLinks(routeName, locale, params, contracts)}`
+  );
+
+  return insertOrReplaceMetaProperty(rewritten, 'og:url', absolutePublicUrl(canonicalRoute));
 }
 
 function renderAnalyticsScript() {
@@ -366,7 +404,7 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     );
   }
 
-  return applyDeploymentConfig(rewritten);
+  return applyDeploymentConfig(applyDeploymentAssetPaths(rewritten));
 }
 
 function getArticleSlug(article) {
@@ -377,7 +415,7 @@ function contractsSafeText(value) {
   return typeof value === 'string' ? value.trim() : '';
 }
 
-function buildArticleHeadMeta(article, locale, contracts, relativeRoot) {
+function buildArticleHeadMeta(article, locale, contracts) {
   const title = contracts.access.getArticleTitle(article, locale);
   const pageTitle = `${title} · ${SITE_TITLE}`;
   const description = contracts.access.getArticleMetaDescription(article, locale);
@@ -388,7 +426,7 @@ function buildArticleHeadMeta(article, locale, contracts, relativeRoot) {
   return {
     title: pageTitle,
     description,
-    ogImage: heroImage ? `${relativeRoot}${heroImage}` : '',
+    ogImage: heroImage ? absolutePublicAssetUrl(heroImage) : '',
   };
 }
 
@@ -397,7 +435,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   const slug = getArticleSlug(article);
   const routeParams = { slug };
   const { routes } = contracts;
-  const metadata = buildArticleHeadMeta(article, locale, contracts, relativeRoot);
+  const metadata = buildArticleHeadMeta(article, locale, contracts);
 
   let rewritten = applyStaticI18n(content, locale, contracts.i18n);
 
@@ -424,7 +462,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
   rewritten = applyPublicAnalytics(rewritten);
 
-  return applyDeploymentConfig(rewritten);
+  return applyDeploymentConfig(applyDeploymentAssetPaths(rewritten));
 }
 
 async function readArticles() {
@@ -543,7 +581,7 @@ async function build() {
     const source = path.join(ROOT, job.from);
     const target = path.join(DIST, job.to);
     const raw = await fs.readFile(source, 'utf8');
-    const rewritten = applyDeploymentConfig(rewritePageForDist(job.to, raw));
+    const rewritten = applyDeploymentConfig(applyDeploymentAssetPaths(rewritePageForDist(job.to, raw)));
     await ensureParentDir(target);
     await fs.writeFile(target, rewritten, 'utf8');
   }
