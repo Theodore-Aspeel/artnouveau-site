@@ -71,14 +71,14 @@ Impact:
 - a future draft can become public merely by entering the runtime dataset;
 - publication readiness and actual distribution can diverge silently.
 
-Required decision before implementation:
+Decision recorded on 2026-09-15: keep the 14 existing articles online during
+Recovery. Before enforcing the production filter, audit rights, credits and
+editorial readiness, then mark the approved existing set as `published`. Once that
+migration is complete, the production build, gallery and sitemap must exclude all
+future drafts.
 
-1. mark the 14 current live articles as intentionally published after human review,
-   then exclude future drafts from production; or
-2. keep their draft status and remove drafts from the production build until each
-   article is approved.
-
-No bulk status change belongs in an audit PR.
+No bulk status change belongs in an audit PR, and no currently live article should
+disappear as a side effect of introducing the gate.
 
 ### P0 - Image rights and credit gate is not demonstrable
 
@@ -211,8 +211,9 @@ the footer.
 
 ## Recommended execution order
 
-1. Decide and implement the production publication-status contract.
-2. Define the image-rights/credit contract and audit all current images.
+1. Define the image-rights/credit contract and audit all current images.
+2. Review the current live set, mark approved articles as `published`, then enforce
+   the production publication-status contract for future drafts.
 3. Add GitHub Pages deployment-profile tests.
 4. Fix compatibility indexation, absolute social URLs and base-path icons.
 5. Complete real mobile visual QA.

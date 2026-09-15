@@ -153,7 +153,8 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
 - branch/PR preview decision: pending
 - mobile visual audit at real device widths: pending
 - structured-data implementation: pending
-- production publication-status gate: newly identified blocker
+- publication strategy decided: keep the current live set online, audit it, migrate
+  approved articles to `published`, then exclude future drafts from production
 - image rights/credit contract and corpus audit: newly identified blocker
 - end-to-end article pilot: pending
 - deterministic Reel pilot: pending
