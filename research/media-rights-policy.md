@@ -12,12 +12,12 @@ operational metadata. Reader-facing credit remains a presentation concern.
 ## Current corpus decision
 
 On 2026-09-15, the project owner confirmed that all 21 images currently used
-by the public runtime were made by his father, Antoine Aspeel, and are cleared
+by the public runtime were made by his father, Christophe Aspel, and are cleared
 for ANAD. The registry records the exact snapshot of files covered by that
 statement. It deliberately does not use a wildcard, so a future import cannot
 inherit clearance silently.
 
-The public credit for this collection is Photographie : Antoine Aspeel.
+The public credit for this collection is Photographie : Christophe Aspel.
 For contract version 1, this value is the internal reference used by the
 general attribution on the public Mentions page; it is not repeated under
 every photograph.

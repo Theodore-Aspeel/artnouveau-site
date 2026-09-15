@@ -121,7 +121,7 @@ def build_parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--architect", default="", help="Optional architect.")
     create_parser.add_argument("--date", default="", help="Optional date.")
     create_parser.add_argument("--access", default="", help="Optional access note.")
-    create_parser.add_argument("--author", default="Antoine Aspeel", help="Editorial author.")
+    create_parser.add_argument("--author", default="Christophe Aspel", help="Editorial author.")
     create_parser.add_argument(
         "--write",
         action="store_true",

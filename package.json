@@ -10,7 +10,7 @@
     "static-site",
     "vanilla-js"
   ],
-  "author": "Antoine",
+  "author": "Christophe Aspel",
   "license": "MIT",
   "scripts": {
     "validate": "node scripts/validate-content.mjs",
