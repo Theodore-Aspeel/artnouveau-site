@@ -19,7 +19,8 @@
     "test:node": "node --test tests/*.mjs",
     "test:python": "python -m unittest discover tests",
     "test": "npm run build && npm run test:node && npm run test:python",
-    "quality": "npm run validate && npm test"
+    "rights:check": "python -m tools.editorial_manager media-rights-check",
+    "quality": "npm run validate && npm run rights:check && npm test"
   },
   "engines": {
     "node": ">=20"

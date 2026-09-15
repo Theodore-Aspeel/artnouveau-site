@@ -33,11 +33,19 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Verify media rights
+        run: npm run rights:check
 
       - name: Build site
         run: npm run build

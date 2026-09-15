@@ -1,0 +1,41 @@
+{
+  "contract": {
+    "name": "artnouveau.media_rights",
+    "version": 1
+  },
+  "collections": [
+    {
+      "id": "antoine-aspeel-original-photography-2026-09-15",
+      "creator": "Antoine Aspeel",
+      "rights_holder": "Antoine Aspeel",
+      "public_credit": "Photographie : Antoine Aspeel",
+      "source_type": "original_photography",
+      "rights_status": "cleared",
+      "confirmed_on": "2026-09-15",
+      "confirmation_basis": "project_owner_statement",
+      "assets": [
+        "assets/images/articles/aquarium-de-milan-1906.png",
+        "assets/images/articles/bow-window-tournaisien.png",
+        "assets/images/articles/casa-campani-1904-liberty-milanais.png",
+        "assets/images/articles/den-tijd-le-temps-anvers.png",
+        "assets/images/articles/facade-art-deco-charleroi.png",
+        "assets/images/articles/gros-plan-sur-le-sgraffito-de-la-maison-des-hiboux-bruxelles.png",
+        "assets/images/articles/le-jour-anvers.png",
+        "assets/images/articles/lhuitriere-lille-art-deco.png",
+        "assets/images/articles/loge-maconnique-lumiere-du-nord-albert-baert-1914.png",
+        "assets/images/articles/maison-aux-majoliques-vienne.png",
+        "assets/images/articles/maison-aux-tulipes-bratislava-jeno-schiller.png",
+        "assets/images/articles/maison-coilliot-lille-hector-guimard.png",
+        "assets/images/articles/maison-des-hiboux-saint-gilles.png",
+        "assets/images/articles/maison-ernest-delune-maitre-verrier.png",
+        "assets/images/articles/maison-fernand-lefever-bruxelles.png",
+        "assets/images/articles/maison-lotus-anvers.png",
+        "assets/images/articles/palais-de-la-secession-vienne-18971898.png",
+        "assets/images/articles/the-tulip-housse.png",
+        "assets/images/articles/tournai-art-nouveau-door-ironwork.png",
+        "assets/images/site/author/author-portrait-2026.jpg",
+        "assets/images/site/saint-gilles-brussels.png"
+      ]
+    }
+  ]
+}

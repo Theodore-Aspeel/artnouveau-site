@@ -31,6 +31,7 @@ Runtime public content:
 
 Internal non-published material:
 - `research/`
+- `research/media-rights.json` for the auditable image-rights registry
 
 Build / validation logic:
 - `scripts/`
@@ -198,6 +199,12 @@ Before considering a task complete, run the relevant checks.
 Minimum expected checks for content/model work:
 - `npm run validate`
 - `npm run build`
+
+Any change that adds, removes or replaces a public runtime image must also pass:
+- `npm run rights:check`
+
+Do not infer rights from an image path, folder or previous asset. Every new
+runtime image must be entered explicitly in the internal rights registry.
 
 If a task changes rendering behavior significantly, also check local preview if available.
 
