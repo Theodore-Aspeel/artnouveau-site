@@ -5,6 +5,7 @@ const articleData = JSON.parse(fs.readFileSync('src/data/articles.json', 'utf8')
 const publicLocales = ['fr', 'en', 'nl'];
 const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
 const publicBasePath = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '');
+const siteOrigin = (process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com').replace(/\/+$/, '');
 
 const EXPECTED_PAGES = [
   ['fr', 'home', 'dist/fr/index.html', 'Regarder d\u2019abord. Nommer ensuite.'],
@@ -43,6 +44,10 @@ function publicRoute(pathname) {
   return `${publicBasePath}${pathname}`;
 }
 
+function absolutePublicUrl(pathname) {
+  return `${siteOrigin}${publicRoute(pathname)}`;
+}
+
 function localeContent(article, locale) {
   return article.content?.[locale] || article.content?.fr || {};
 }
@@ -53,7 +58,28 @@ for (const [locale, routeName, filePath, expectedText] of EXPECTED_PAGES) {
   const html = fs.readFileSync(filePath, 'utf8');
   assert.match(html, new RegExp(`<html lang="${locale}">`), `${filePath} should set the HTML language`);
   assert.ok(html.includes(expectedText), `${filePath} should include localized ${locale} ${routeName} content`);
+  assert.match(html, /<meta name="robots" content="index,follow">/, `${filePath} should be indexable`);
+  assert.ok(
+    html.includes(`<link rel="canonical" href="${absolutePublicUrl(`/${locale}/${routeName === 'home' ? '' : `${routeName}/`}`)}">`),
+    `${filePath} should expose an absolute canonical URL`
+  );
+  assert.ok(
+    html.includes(`<meta property="og:url" content="${absolutePublicUrl(`/${locale}/${routeName === 'home' ? '' : `${routeName}/`}`)}">`),
+    `${filePath} should expose an absolute og:url`
+  );
+  assert.ok(html.includes(`href="${publicRoute('/favicon.ico')}"`), `${filePath} should use the deployment path for favicon.ico`);
+  assert.ok(html.includes(`href="${publicRoute('/icon.svg')}"`), `${filePath} should use the deployment path for icon.svg`);
+  assert.ok(html.includes(`href="${publicRoute('/icon.png')}"`), `${filePath} should use the deployment path for icon.png`);
   assert.doesNotMatch(html, /previewLocale=/, `${filePath} should not use previewLocale links`);
+}
+
+for (const filePath of ['dist/index.html', 'dist/about.html', 'dist/mentions.html', 'dist/article.html']) {
+  const html = fs.readFileSync(filePath, 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex,follow">/, `${filePath} should not compete with public routes`);
+  assert.doesNotMatch(html, /rel="canonical"/, `${filePath} should not claim a canonical public route`);
+  assert.ok(html.includes(`href="${publicRoute('/favicon.ico')}"`), `${filePath} should use the deployment path for favicon.ico`);
+  assert.ok(html.includes(`href="${publicRoute('/icon.svg')}"`), `${filePath} should use the deployment path for icon.svg`);
+  assert.ok(html.includes(`href="${publicRoute('/icon.png')}"`), `${filePath} should use the deployment path for icon.png`);
 }
 
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-article-data-url="\.\.\/data\/articles\.json"/);
@@ -140,7 +166,16 @@ for (const locale of publicLocales) {
     html.includes(`<meta id="twitter-description" name="twitter:description" content="${escapeAttribute(expectedDescription)}">`),
     `${filePath} should include final twitter:description`
   );
-  assert.match(html, /<meta property="og:image" content="\.\.\/\.\.\/\.\.\/assets\/images\/articles\/maison-coilliot-lille-hector-guimard\.png">/);
+  assert.ok(
+    html.includes(`<meta property="og:image" content="${absolutePublicUrl('/assets/images/articles/maison-coilliot-lille-hector-guimard.png')}">`),
+    `${filePath} should expose an absolute og:image URL`
+  );
+  assert.ok(
+    html.includes(`<meta property="og:url" content="${absolutePublicUrl(`/${locale}/articles/${sampleArticle.slug}/`)}">`),
+    `${filePath} should expose an absolute og:url`
+  );
+  assert.match(html, /<meta name="robots" content="index,follow">/, `${filePath} should be indexable`);
+  assert.ok(html.includes(`href="${publicRoute('/favicon.ico')}"`), `${filePath} should use the deployment path for favicon.ico`);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
   assert.ok(html.includes(`href="${publicRoute(`/${locale}/articles/${sampleArticle.slug}/`)}"`), `${filePath} should link to its public route`);
   assert.ok(html.includes(`src="../../../assets/scripts/image-manifest.js"`), `${filePath} should load the image manifest helper`);

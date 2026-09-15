@@ -38,3 +38,28 @@ jobs:
 
       - name: Run quality gate
         run: npm run quality
+
+  pages-profile:
+    runs-on: ubuntu-latest
+    env:
+      SITE_ORIGIN: https://theodore-aspeel.github.io
+      PUBLIC_BASE_PATH: /artnouveau-site
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build GitHub Pages profile
+        run: npm run build
+
+      - name: Test GitHub Pages profile
+        run: npm run test:node

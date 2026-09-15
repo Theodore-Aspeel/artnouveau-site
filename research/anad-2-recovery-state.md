@@ -1,8 +1,8 @@
 # ANAD 2.0 — Recovery State
 
 Date: 2026-09-15
-Branch: `anad-2.0/recovery`
-Baseline: `main` at `7a6690600734d6035096e38236d71d2fcedaf1d2`
+Current audit branch: `anad-2.0/audit-baseline`
+Merged Recovery baseline: `main` at `afe9b1b8b013c4716e423c7ec24a851fcceb2516`
 
 ## Purpose
 
@@ -140,17 +140,22 @@ After these conditions are met, ANAD 2.0 can move from recovery to controlled pr
 
 ## Recovery progress
 
-Measured on 2026-09-15 on `anad-2.0/recovery`:
+Measured on 2026-09-15 after Recovery PR #1 was merged:
 
 - canonical recovery and orchestration documents: complete
 - Plus-aware model routing and Terra repository default: complete
 - article corpus inventory: complete; see `research/anad-2-corpus-inventory.md`
-- local quality command and pull-request CI gate: implemented on the recovery branch
+- local quality command and pull-request CI gate: merged to `main`
 - missing Editorial Manager backup module: restored and covered by the existing test suite
-- obsolete GitHub Pages diagnostic step: removed on the recovery branch
+- obsolete GitHub Pages diagnostic step: removed
+- desktop live/static baseline audit: complete; see `research/anad-2-baseline-audit.md`
+- technical SEO baseline audit: complete; see `research/anad-2-baseline-audit.md`
 - branch/PR preview decision: pending
-- desktop/mobile visual audit: pending
-- technical SEO audit and structured-data design: pending
+- mobile visual audit at real device widths: pending
+- structured-data implementation: pending
+- publication strategy decided: keep the current live set online, audit it, migrate
+  approved articles to `published`, then exclude future drafts from production
+- image rights/credit contract and corpus audit: newly identified blocker
 - end-to-end article pilot: pending
 - deterministic Reel pilot: pending
 - current runtime media-rights inventory: complete on
