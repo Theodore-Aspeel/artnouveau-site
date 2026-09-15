@@ -145,16 +145,16 @@ should be narrow and evidence-backed:
 Do not emit an architect, date, address or authorship claim in JSON-LD unless it is
 derived from the stable verified article fields.
 
-### P1 - Deployment-specific URLs are not covered by the quality command
+### P2 - The PR quality workflow covers only the root deployment profile
 
-The standard quality workflow passes because it builds without a public base path.
-When the Node suite is run after a GitHub Pages-profile build, one static-page test
-fails because it hard-codes `/fr/` rather than the configured
-`/artnouveau-site/fr/` path.
+The static-page test already understands `PUBLIC_BASE_PATH`. A manual GitHub
+Pages-profile build followed by the correctly configured Node suite passes all 9
+checks. The pull-request quality workflow nevertheless runs only the default root
+profile, while the Pages workflow builds the project-site profile without running
+the Node suite.
 
-This does not indicate a broken live navigation link. It indicates that the tests
-do not currently validate both supported deployment profiles. Add a dedicated
-deployment-profile test command before changing routing or preview hosting.
+Add the GitHub Pages profile as a second CI check before changing routing or preview
+hosting. This is a coverage improvement, not evidence of a broken live route.
 
 ### P2 - Site icons ignore the GitHub Pages base path
 
