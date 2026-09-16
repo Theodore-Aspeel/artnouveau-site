@@ -60,11 +60,14 @@ the Node and Python test suites. Individual commands remain available as
 npm run validate
 npm run build
 npm run preview
+npm run editor
 ```
 
 - `validate`: checks required files and runtime asset references
 - `build`: recreates `dist/`, copies the public runtime, rewrites page paths, then validates the published artifact
 - `preview`: serves `dist/` locally on `http://localhost:4173`
+- `editor`: opens the local Editorial Manager with previews, guarded edits and
+  the human publication preflight
 
 The default publication policy remains `legacy-visible`, so the current public
 corpus does not change. The future strict profile can be tested explicitly:
@@ -85,6 +88,26 @@ npm run test:publication-filter
 Strict mode writes only articles whose status is `published` to the public JSON,
 article routes, sitemap and generated-image manifest. It is exercised in CI but
 is not enabled by the production deployment workflow.
+
+### Guarded publication pull request
+
+The GitHub Actions workflow `Prepare article publication PR` connects the
+approved editorial transition to the existing pull-request and deployment
+gates. Run it manually from the Actions tab with an article slug and a real
+publication date.
+
+- `dry-run` is the default and creates nothing.
+- `create-pr` requires the exact confirmation `PUBLISH`, repeats the preflight,
+  writes the transition, commits only `src/data/articles.json`, runs all three
+  existing quality profiles on that branch, and opens a review pull request
+  only if they pass.
+- The workflow never merges a pull request and never pushes `main`.
+- GitHub Pages deploys only after the publication PR is reviewed and merged.
+
+If repository settings prevent GitHub Actions from opening pull requests, the
+workflow stops safely after pushing its dedicated publication branch. Enable
+the repository option allowing Actions to create pull requests before retrying;
+do not bypass the normal PR checks.
 
 ## Analytics
 
@@ -107,7 +130,9 @@ The build injects only the Plausible script tag. No cookie banner, consent syste
 
 ## Internal Tools
 
-- `tools/editorial_manager/`: read-only Python helper for inspecting and checking the article dataset. See `tools/editorial_manager/README.md`.
+- `tools/editorial_manager/`: guarded Python helper for inspecting, checking,
+  editing and preparing publication of the article dataset. See
+  `tools/editorial_manager/README.md`.
 
 ## Publication Model
 

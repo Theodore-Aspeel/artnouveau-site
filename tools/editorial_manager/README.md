@@ -9,6 +9,12 @@ It lives in `tools/editorial_manager/` and reads the public runtime payload from
 From the repository root:
 
 ```bash
+npm run editor
+```
+
+or directly:
+
+```bash
 python -m tools.editorial_manager <command>
 ```
 

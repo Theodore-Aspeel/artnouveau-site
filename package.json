@@ -13,6 +13,7 @@
   "author": "Christophe Aspel",
   "license": "MIT",
   "scripts": {
+    "editor": "python -m tools.editorial_manager editor",
     "validate": "node scripts/validate-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/preview.mjs",
