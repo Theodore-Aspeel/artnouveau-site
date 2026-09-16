@@ -3,6 +3,12 @@
 Date: 2026-09-15
 Status: recovery / operating design
 
+Active execution documents:
+
+- `research/anad-2-roadmap-90-days.md`
+- `research/anad-2-publication-readiness.md`
+- `research/anad-2-preview-decision.md`
+
 ## Objective
 
 Turn ANAD into a professional, AI-assisted editorial and distribution system built around the existing Art Nouveau / Art Deco publication and Instagram audience.
