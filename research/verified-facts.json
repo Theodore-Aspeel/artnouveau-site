@@ -284,26 +284,34 @@
   },
   "ernest-delune-maitre-verrier": {
     "confirmed": {
-      "display_title": "Une maison d’Ernest Delune pour un maître verrier",
+      "display_title": "La maison-atelier d’Ernest Delune à Ixelles",
       "exact_name": "Ancien atelier et habitation de Clas Grüner Sterner",
       "address": "Rue du Lac 6 / Rue de la Vallée 5, Ixelles",
       "architect": [
         "Ernest Delune"
       ],
-      "date": "1902",
+      "construction_phases": {
+        "rue_de_la_vallee_house": "1893, built for Victor Marchal; attribution to Ernest Delune is very likely but not certain",
+        "rue_du_lac_annex": "1902, built by Ernest Delune for Victor Marchal"
+      },
+      "article_focus_date": "1902 (Rue du Lac annex)",
       "city": "Ixelles",
-      "country": "Belgique"
+      "country": "Belgique",
+      "commissioner": "Victor Marchal",
+      "later_occupant": "Clas Grüner Sterner",
+      "later_use": "Dwelling and workshop of master glassmaker Clas Grüner Sterner"
     },
     "probable_or_pending": {
-      "initial_commissioner": "Victor Marchal",
-      "later_occupant": "Clas Grüner Sterner",
-      "editorial_note": "The official notice confirms the building as later occupied by Clas Grüner Sterner, but does not clearly support the claim that it was originally commissioned directly for a master glassmaker."
+      "regular_collaboration": "The official inventory considers regular collaboration between Clas Grüner Sterner and Ernest Delune probable, not confirmed."
     },
     "do_not_integrate_as_fact": [
-      "Commissioned directly for a master glassmaker"
+      "Commissioned or built directly for Clas Grüner Sterner",
+      "Certain attribution of the 1893 Rue de la Vallée house to Ernest Delune",
+      "Regular collaboration between Sterner and Delune as an established fact"
     ],
     "source_urls": [
-      "https://monument.heritage.brussels/fr/buildings/19656"
+      "https://monument.heritage.brussels/fr/buildings/19656",
+      "https://crms.brussels/avis?combine=&commune=All&numero=&page=1&rue=All&seance=All&type=15488"
     ]
   },
   "facade-art-deco-charleroi": {
