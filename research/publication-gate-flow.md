@@ -40,6 +40,7 @@ Current measured result:
 - article fields: pass;
 - English locale: en-ready;
 - media rights: 3/3 cleared;
+- localized support-image alternatives: 6/6 present;
 - human approval: required;
 - overall status: needs-review, solely because the article is still draft.
 
