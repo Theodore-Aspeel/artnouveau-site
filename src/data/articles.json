@@ -404,7 +404,10 @@
           },
           "media": {
             "hero_alt": "Façade Art déco de L’Huîtrière à Lille, au 3-7 rue des Chats-Bossus.",
-            "support_alt": []
+            "support_alt": [
+              "Façade de la Maison Coilliot à Lille, revêtue de céramique verte et surmontée d’une structure en bois rouge.",
+              "Façade en brique de la loge Lumière du Nord à Lille, avec une colonnade de pierre sous un grand relief sculpté."
+            ]
           },
           "practical_items": [
             {
@@ -464,7 +467,10 @@
           },
           "media": {
             "hero_alt": "Art Deco facade of L'Huitriere in Lille, at 3-7 rue des Chats-Bossus.",
-            "support_alt": []
+            "support_alt": [
+              "Facade of Maison Coilliot in Lille, clad in green ceramic and topped by a red timber structure.",
+              "Brick facade of the Lumière du Nord lodge in Lille, with a stone colonnade beneath a large sculpted relief."
+            ]
           },
           "practical_items": [
             {
@@ -523,7 +529,10 @@
           },
           "media": {
             "hero_alt": "Art-decogevel van L'Huitriere in Rijsel, aan 3-7 rue des Chats-Bossus.",
-            "support_alt": []
+            "support_alt": [
+              "Gevel van Maison Coilliot in Rijsel, bekleed met groene keramiek en bekroond door een rode houtconstructie.",
+              "Bakstenen gevel van de loge Lumière du Nord in Rijsel, met een stenen zuilengalerij onder een groot gebeeldhouwd reliëf."
+            ]
           },
           "practical_items": [
             {
@@ -933,7 +942,9 @@
           },
           "media": {
             "hero_alt": "Maison des Hiboux à Saint-Gilles, façade Art Nouveau couronnée par deux oiseaux sculptés.",
-            "support_alt": []
+            "support_alt": [
+              "Gros plan du sgraffite au-dessus d’une ouverture cintrée, avec l’inscription « Les Hiboux » encadrée de deux chouettes et de motifs végétaux."
+            ]
           },
           "practical_items": [
             {
@@ -989,7 +1000,9 @@
           },
           "media": {
             "hero_alt": "Maison des Hiboux in Saint-Gilles, an Art Nouveau facade crowned by two sculpted birds.",
-            "support_alt": []
+            "support_alt": [
+              "Close view of the sgraffito above an arched opening, with the words “Les Hiboux” framed by two owls and plant motifs."
+            ]
           },
           "practical_items": [
             {
@@ -1046,7 +1059,7 @@
           "media": {
             "hero_alt": "Maison des Hiboux in Sint-Gillis, een art-nouveaugevel bekroond door twee gebeeldhouwde vogels.",
             "support_alt": [
-              "Detail van het sgraffito van Maison des Hiboux in Sint-Gillis."
+              "Detailopname van het sgraffito boven een rondboogopening, met het opschrift ‘Les Hiboux’ tussen twee uilen en plantmotieven."
             ]
           },
           "practical_items": [
@@ -1701,7 +1714,9 @@
           },
           "media": {
             "hero_alt": "Maison Art Nouveau de Gustave et Félix Strauven à Tournai, sur l’avenue Van Cutsem et la rue des Volontaires.",
-            "support_alt": []
+            "support_alt": [
+              "Façade en briques rouges et claires à Tournai, avec un oriel et une porte double peints en vert."
+            ]
           },
           "practical_items": [
             {
@@ -1755,7 +1770,9 @@
           },
           "media": {
             "hero_alt": "Art Nouveau house by Gustave and Félix Strauven in Tournai, on Avenue Van Cutsem and Rue des Volontaires.",
-            "support_alt": []
+            "support_alt": [
+              "Red-and-light-brick facade in Tournai, with a green-painted bay window and double door."
+            ]
           },
           "practical_items": [
             {
@@ -1809,7 +1826,9 @@
           },
           "media": {
             "hero_alt": "Art-nouveauhuis van Gustave en Félix Strauven in Doornik, aan avenue Van Cutsem en rue des Volontaires.",
-            "support_alt": []
+            "support_alt": [
+              "Gevel in rode en lichte baksteen in Doornik, met een groen geschilderde erker en dubbele deur."
+            ]
           },
           "practical_items": [
             {
@@ -2720,7 +2739,9 @@
           },
           "media": {
             "hero_alt": "Façade Art Nouveau à Anvers avec la mention Den Tijd, Le Temps, intégrée à la composition.",
-            "support_alt": []
+            "support_alt": [
+              "Panneau de carreaux portant l’inscription « Den Dag » au-dessus de deux fenêtres cintrées, sur une façade en briques jaunes."
+            ]
           },
           "practical_items": [
             {
@@ -2772,7 +2793,9 @@
           },
           "media": {
             "hero_alt": "Art Nouveau facade in Antwerp with the words Den Tijd, Le Temps, integrated into the composition.",
-            "support_alt": []
+            "support_alt": [
+              "Tiled panel bearing the words “Den Dag” above two arched windows, on a yellow-brick facade."
+            ]
           },
           "practical_items": [
             {
@@ -2824,7 +2847,7 @@
           "media": {
             "hero_alt": "Art-nouveaugevel in Antwerpen met de woorden Den Tijd, Le Temps, opgenomen in de compositie.",
             "support_alt": [
-              "Ondersteunend gevelbeeld in Antwerpen met de vermelding Le Jour."
+              "Tegelpaneel met het opschrift ‘Den Dag’ boven twee rondboogvensters in een gele bakstenen gevel."
             ]
           },
           "practical_items": [
