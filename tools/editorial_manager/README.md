@@ -29,6 +29,8 @@ python -m tools.editorial_manager publication-gate <slug>
 python -m tools.editorial_manager publication-gate <slug> --json
 python -m tools.editorial_manager publication-plan
 python -m tools.editorial_manager publication-plan --json
+python -m tools.editorial_manager publish-article <slug> --date YYYY-MM-DD
+python -m tools.editorial_manager publish-article <slug> --date YYYY-MM-DD --write --approve
 python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
 python -m tools.editorial_manager locale-report --locale nl
@@ -72,6 +74,12 @@ python -m tools.editorial_manager validate-social-package research/social-packag
   that strict mode would hide and never changes content, statuses or the build.
 - `publication-plan --json`: emits the same comparison as the versioned
   `artnouveau.publication_plan@1` contract for CI and later workflow automation.
+- `publish-article <slug> --date YYYY-MM-DD`: performs a read-only dry run of
+  the complete transition. It evaluates the proposed `published` article,
+  verifies FR/EN/NL structure, image rights and previews, and writes nothing.
+- `publish-article <slug> --date YYYY-MM-DD --write --approve`: writes the
+  transition only after explicit human approval. It creates a local safety
+  backup, validates the project and restores the original JSON on failure.
 - `locale-report`: shows the read-only source/target locale editorial status for all articles. It defaults to English.
 - `locale-report <slug>`: shows the same locale status for one article.
 - `locale-report --locale nl`: shows internal Dutch readiness for all articles without making NL public.

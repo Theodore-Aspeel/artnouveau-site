@@ -18,6 +18,7 @@ from .media_rights import (
 )
 from .publication_gate import build_publication_gate, render_publication_gate
 from .publication_plan import build_publication_plan, render_publication_plan
+from .publication_transition import publish_article, render_publication_transition
 from .repository import PROJECT_ROOT, find_article_by_slug, load_articles
 from .reporting import (
     render_article_detail,
@@ -167,6 +168,32 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output a stable machine-readable corpus plan.",
+    )
+
+    publish_article_parser = subparsers.add_parser(
+        "publish-article",
+        help="Prepare or execute one guarded draft-to-published transition.",
+    )
+    publish_article_parser.add_argument("slug", help="Article slug to prepare for publication.")
+    publish_article_parser.add_argument(
+        "--date",
+        required=True,
+        help="Real publication date in YYYY-MM-DD format.",
+    )
+    publish_article_parser.add_argument(
+        "--write",
+        action="store_true",
+        help="Write the transition after all gates pass. Default is a dry run.",
+    )
+    publish_article_parser.add_argument(
+        "--approve",
+        action="store_true",
+        help="Confirm that a human reviewed the previews. Required with --write.",
+    )
+    publish_article_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the versioned machine-readable transition report.",
     )
 
     locale_report_parser = subparsers.add_parser(
@@ -482,6 +509,25 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(render_publication_plan(report))
         return 0
+
+    if args.command == "publish-article":
+        try:
+            registry = load_media_rights_registry()
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Media rights registry could not be loaded: {exc}")
+            return 1
+        result = publish_article(
+            args.slug,
+            args.date,
+            registry,
+            write=args.write,
+            approved=args.approve,
+        )
+        if args.json:
+            print(json.dumps(result.to_payload(), ensure_ascii=False, indent=2))
+        else:
+            print(render_publication_transition(result))
+        return 0 if result.ok else 1
 
     if args.command == "locale-report":
         if args.slug:
