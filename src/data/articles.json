@@ -117,7 +117,10 @@
           },
           "media": {
             "hero_alt": "Façade Art Nouveau de la Maison Coilliot à Lille, bâtiment associé à Hector Guimard.",
-            "support_alt": []
+            "support_alt": [
+              "Bow-window de L’Huîtrière à Lille, encadré de mosaïques florales bleues et surmonté de l’enseigne du restaurant.",
+              "Façade en brique de la loge Lumière du Nord à Lille, avec colonnade de pierre et grand relief sculpté."
+            ]
           },
           "practical_items": [
             {
@@ -177,7 +180,10 @@
           },
           "media": {
             "hero_alt": "Art Nouveau facade of Maison Coilliot in Lille, a building associated with Hector Guimard.",
-            "support_alt": []
+            "support_alt": [
+              "Bay window of L’Huîtrière in Lille, framed by blue floral mosaics and topped by the restaurant sign.",
+              "Brick facade of the Lumière du Nord lodge in Lille, with a stone colonnade and a large sculpted relief."
+            ]
           },
           "practical_items": [
             {
@@ -236,7 +242,10 @@
           },
           "media": {
             "hero_alt": "Art-nouveaugevel van Maison Coilliot in Rijsel, een gebouw dat met Hector Guimard verbonden is.",
-            "support_alt": []
+            "support_alt": [
+              "Erker van L’Huîtrière in Rijsel, omlijst door blauwe bloemenmozaïeken en bekroond door het restaurantopschrift.",
+              "Bakstenen gevel van de loge Lumière du Nord in Rijsel, met een stenen zuilengalerij en een groot gebeeldhouwd reliëf."
+            ]
           },
           "practical_items": [
             {
