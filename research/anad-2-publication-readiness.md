@@ -1,7 +1,7 @@
 # ANAD 2.0 - Publication readiness audit
 
 Date: 2026-09-16
-Baseline: `main` at `c714b7e`
+Baseline: `main` at `666ce83`
 Scope: 14 runtime articles, no web re-research and no status change
 
 ## Decision
@@ -19,9 +19,9 @@ accessibility readiness. The transition must happen in reviewed batches.
 - 14/14 contain structurally complete FR, EN and NL content.
 - 14/14 identify `Christophe Aspel` as author.
 - 21/21 runtime images are present and cleared in the explicit rights registry.
-- 14/14 hero images have localized alternative text.
+- 14/14 hero images and every runtime support image have localized alternative text.
 - All `published_on` and `updated_on` values remain null.
-- 12 subjects have an entry in `research/verified-facts.json`; 11 have no known
+- 14/14 subjects have an entry in `research/verified-facts.json`; 12 have no known
   contradiction in that internal packet.
 - Public resource links mainly support quotations. They do not yet expose the full
   factual provenance packet to readers.
@@ -41,13 +41,16 @@ accessibility readiness. The transition must happen in reviewed batches.
 | `READY_STRUCTURE` | Maison des Hiboux, Saint-Gilles | Final multilingual read, image framing approval, publication date |
 | `READY_STRUCTURE` | Maison Strauven, Tournai | Final multilingual read, image framing approval, publication date |
 | `READY_STRUCTURE` | Den Tijd, Anvers | Final multilingual read, image framing approval, publication date |
-| `NEEDS_FACT_REVIEW` | Maison aux Tulipes, Bratislava | Build a verified fact packet, resolve the pending date and add three image alternatives |
+| `READY_STRUCTURE` | Maison aux Tulipes, Bratislava | Approve the cautious architect attribution and editorial title, final multilingual and visual review, publication date |
 | `NEEDS_FACT_REVIEW` | Maison d’Ernest Delune | Remove or prove the implied direct commission “pour un maître verrier” |
 | `BLOCKED` | Façade Art Déco, Charleroi | Identify the building and resolve address/date/architect, or explicitly retire the page |
 
-After the reviewed accessibility batches, three localized alternative texts remain
-missing. They all belong to the support image for Maison aux Tulipes, which stays in
-`NEEDS_FACT_REVIEW`.
+The accessibility gap is now closed across every runtime article. The Maison aux
+Tulipes fact review confirms its address, 1903 date, registered name and style from
+the official Slovak heritage open data. The article keeps Jenő Schiller as an
+explicit attribution because the register does not identify an architect. Details
+and source boundaries are recorded in
+`research/pilots/maison-aux-tulipes-fact-review.md`.
 
 ## Why the draft filter remains disabled
 

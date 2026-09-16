@@ -1361,7 +1361,7 @@
       "identity": {
         "type": "building",
         "canonical_name": "Maison aux Tulipes",
-        "exact_name": "Maison aux Tulipes, Bratislava"
+        "exact_name": "Tulipán, hotel Roset"
       },
       "taxonomy": {
         "style_key": "art_nouveau",
@@ -1380,17 +1380,12 @@
           "city": "Bratislava",
           "country": "Slovaquie",
           "country_code": "SK",
-          "address": "10 rue Sturova"
+          "address": "Štúrova 10"
         },
         "dates": {
-          "built": null
+          "built": "1903"
         },
-        "people": [
-          {
-            "role": "architect",
-            "name": "Jeno Schiller"
-          }
-        ],
+        "people": [],
         "notes": null
       },
       "media": {
@@ -1431,14 +1426,14 @@
         "source_note": null,
         "method_note": null,
         "gaps": [
-          "Datation précise à confirmer avant publication."
+          "Attribution à Jenő Schiller à confirmer par une source institutionnelle ou académique directement consultée."
         ],
         "flags": []
       },
       "content": {
         "fr": {
           "title": "Maison aux Tulipes, Bratislava",
-          "dek": "La Maison aux Tulipes permet d'élargir la carte sans changer de voix. À Bratislava, au 10 rue Sturova selon les données disponibles, avec Jeno Schiller comme repère d'auteur, le bâtiment tient d'abord par sa façade et par son seuil. Le nom invite facilement au commentaire. Le plus juste est de revenir à la composition, à la manière dont un motif peut orienter tout un bâtiment sans l'alourdir.",
+          "dek": "La Maison aux Tulipes permet d'élargir la carte sans changer de voix. À Bratislava, au 10, rue Štúrova, ce bâtiment de 1903 est attribué à Jenő Schiller dans les sources disponibles. Il tient d'abord par sa façade et par son seuil. Le nom invite facilement au commentaire. Le plus juste est de revenir à la composition, à la manière dont un motif peut orienter tout un bâtiment sans l'alourdir.",
           "epigraph": "Une façade peut garder ses fleurs sans perdre sa tenue.",
           "sections": [
             {
@@ -1455,11 +1450,13 @@
             }
           ],
           "seo": {
-            "meta_description": "Maison aux Tulipes à Bratislava. Une lecture de façade entre motif, seuil et tenue d'ensemble, avec Jeno Schiller comme repère disponible."
+            "meta_description": "Maison aux Tulipes à Bratislava. Une façade Art Nouveau de 1903 au 10, rue Štúrova, attribuée à Jenő Schiller."
           },
           "media": {
-            "hero_alt": "Maison aux Tulipes à Bratislava, façade Art Nouveau située au 10 rue Sturova et attribuée à Jeno Schiller.",
-            "support_alt": []
+            "hero_alt": "Maison aux Tulipes à Bratislava, façade Art Nouveau de 1903 située au 10, rue Štúrova et attribuée à Jenő Schiller.",
+            "support_alt": [
+              "Entrée vitrée aux lignes courbes, encadrée de noir, de blanc et de brun-rouge, avec des motifs répétés en forme de goutte."
+            ]
           },
           "practical_items": [
             {
@@ -1476,15 +1473,15 @@
             },
             {
               "key": "architect",
-              "value": "Jeno Schiller"
+              "value": "Jenő Schiller (attribution)"
             },
             {
               "key": "address",
-              "value": "10 rue Sturova"
+              "value": "10, rue Štúrova"
             },
             {
               "key": "date",
-              "value": "À confirmer"
+              "value": "1903"
             }
           ],
           "around": null,
@@ -1492,7 +1489,7 @@
         },
         "en": {
           "title": "Maison aux Tulipes, Bratislava",
-          "dek": "Maison aux Tulipes widens the map without changing the site's voice. In Bratislava, at 10 rue Sturova according to the available data, with Jeno Schiller as the architectural reference, the building first holds through its facade and its threshold. The name easily invites commentary. The fairer approach is to return to the composition, to the way a motif can guide a whole building without weighing it down.",
+          "dek": "Maison aux Tulipes widens the map without changing the site's voice. In Bratislava, at Štúrova 10, this 1903 building is attributed to Jenő Schiller in the available sources. It first holds through its facade and its threshold. The name easily invites commentary. The fairer approach is to return to the composition, to the way a motif can guide a whole building without weighing it down.",
           "epigraph": "A facade can keep its flowers without losing its composure.",
           "sections": [
             {
@@ -1509,11 +1506,13 @@
             }
           ],
           "seo": {
-            "meta_description": "Maison aux Tulipes in Bratislava. A facade reading between motif, threshold, and overall composure, with Jeno Schiller as the available reference."
+            "meta_description": "Maison aux Tulipes in Bratislava. A 1903 Art Nouveau facade at Štúrova 10, attributed to Jenő Schiller."
           },
           "media": {
-            "hero_alt": "Maison aux Tulipes in Bratislava, an Art Nouveau facade at 10 rue Sturova and attributed to Jeno Schiller.",
-            "support_alt": []
+            "hero_alt": "Maison aux Tulipes in Bratislava, a 1903 Art Nouveau facade at Štúrova 10 attributed to Jenő Schiller.",
+            "support_alt": [
+              "Glazed entrance with curved lines, framed in black, white and reddish brown, with repeated teardrop-shaped motifs."
+            ]
           },
           "practical_items": [
             {
@@ -1530,15 +1529,15 @@
             },
             {
               "key": "architect",
-              "value": "Jeno Schiller"
+              "value": "Jenő Schiller (attributed)"
             },
             {
               "key": "address",
-              "value": "10 rue Sturova"
+              "value": "Štúrova 10"
             },
             {
               "key": "date",
-              "value": "To be confirmed"
+              "value": "1903"
             }
           ],
           "around": null,
@@ -1546,7 +1545,7 @@
         },
         "nl": {
           "title": "Maison aux Tulipes, Bratislava",
-          "dek": "Maison aux Tulipes verbreedt de kaart zonder de stem van de site te veranderen. In Bratislava, op 10 rue Sturova volgens de beschikbare gegevens, met Jeno Schiller als beschikbare architecturale referentie, houdt het gebouw eerst stand door zijn gevel en zijn drempel. De naam nodigt gemakkelijk uit tot commentaar. Juister is het om terug te keren naar de compositie, naar de manier waarop een motief een heel gebouw kan richten zonder het te verzwaren.",
+          "dek": "Maison aux Tulipes verbreedt de kaart zonder de stem van de site te veranderen. In Bratislava, aan Štúrova 10, wordt dit gebouw uit 1903 in de beschikbare bronnen aan Jenő Schiller toegeschreven. Het houdt eerst stand door zijn gevel en zijn drempel. De naam nodigt gemakkelijk uit tot commentaar. Juister is het om terug te keren naar de compositie, naar de manier waarop een motief een heel gebouw kan richten zonder het te verzwaren.",
           "epigraph": "Een gevel kan zijn bloemen bewaren zonder zijn houding te verliezen.",
           "sections": [
             {
@@ -1563,11 +1562,13 @@
             }
           ],
           "seo": {
-            "meta_description": "Maison aux Tulipes in Bratislava. Een gevellezing tussen motief, drempel en algemene houding, met Jeno Schiller als beschikbare referentie."
+            "meta_description": "Maison aux Tulipes in Bratislava. Een art-nouveaugevel uit 1903 aan Štúrova 10, toegeschreven aan Jenő Schiller."
           },
           "media": {
-            "hero_alt": "Maison aux Tulipes in Bratislava, art-nouveaugevel op 10 rue Sturova volgens de beschikbare gegevens en toegeschreven aan Jeno Schiller.",
-            "support_alt": []
+            "hero_alt": "Maison aux Tulipes in Bratislava, art-nouveaugevel uit 1903 aan Štúrova 10, toegeschreven aan Jenő Schiller.",
+            "support_alt": [
+              "Beglaasde ingang met gebogen lijnen, omlijst in zwart, wit en roodbruin, met herhaalde druppelvormige motieven."
+            ]
           },
           "practical_items": [
             {
@@ -1584,15 +1585,15 @@
             },
             {
               "key": "architect",
-              "value": "Jeno Schiller"
+              "value": "Jenő Schiller (toeschrijving)"
             },
             {
               "key": "address",
-              "value": "10 rue Sturova"
+              "value": "Štúrova 10"
             },
             {
               "key": "date",
-              "value": "Te bevestigen"
+              "value": "1903"
             }
           ],
           "around": null,

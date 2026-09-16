@@ -246,6 +246,42 @@
       "https://inventaris.onroerenderfgoed.be/aanduidingsobjecten/5272"
     ]
   },
+  "maison-aux-tulipes-bratislava": {
+    "confirmed": {
+      "display_title": "Maison aux Tulipes, Bratislava",
+      "exact_name": "Tulipán, hotel Roset",
+      "address": "Štúrova 10, Bratislava-Staré Mesto",
+      "date": "1903",
+      "style": "Sécession / Art nouveau",
+      "building_type": "Immeuble d’habitation d’angle",
+      "city": "Bratislava",
+      "country": "Slovaquie",
+      "heritage_register": {
+        "nnkp_id": "NNKP508",
+        "uzpf_number": "637",
+        "object_id": "PO883",
+        "object_uzpf_number": "637/1"
+      }
+    },
+    "probable_or_pending": {
+      "architect": "Jenő Schiller",
+      "editorial_note": "The attribution is stated by the current building operator and corroborated by cultural and specialist sources, but it is absent from the official heritage open-data record. Keep attributed wording until the relevant academic study or municipal archive file has been consulted directly."
+    },
+    "do_not_integrate_as_fact": [
+      "Dr Samuel Fischer and Anna as commissioners",
+      "Jenő Schiller's age at the time of design",
+      "The original number of storeys",
+      "A precise Viennese Secession classification",
+      "The detailed restoration chronology"
+    ],
+    "source_urls": [
+      "https://www.pamiatky.sk/online-sluzby/open-data",
+      "https://www.pamiatky.sk/fileadmin/documents/opendata/nehnutelne-narodne-kulturne-pamiatky.xml",
+      "https://www.pamiatky.sk/fileadmin/documents/opendata/pamiatkove-objekty.xml",
+      "https://rosethotel.sk/hotel",
+      "https://ais2.uniba.sk/repo2/repository/default/ais/zamestnanec/FiF/SK/buday4.uniba.sk.html"
+    ]
+  },
   "ernest-delune-maitre-verrier": {
     "confirmed": {
       "display_title": "Une maison d’Ernest Delune pour un maître verrier",
