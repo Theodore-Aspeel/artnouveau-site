@@ -9,6 +9,7 @@ from unittest.mock import patch
 from tools.editorial_manager.article_creation import ArticleCreationResult
 from tools.editorial_manager.cli import main
 from tools.editorial_manager.publication_plan import PublicationPlanReport
+from tools.editorial_manager.publication_transition import PublicationTransitionResult
 
 
 class CliTests(unittest.TestCase):
@@ -116,6 +117,38 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["contract"], {"name": "artnouveau.publication_plan", "version": 1})
         self.assertEqual(payload["activation_status"], "ready-for-human-activation")
         self.assertTrue(payload["read_only"])
+
+    def test_publish_article_dry_run_json_command_runs(self):
+        output = io.StringIO()
+        result = PublicationTransitionResult(
+            slug="demo",
+            status="ready-for-human-approval",
+            status_before="draft",
+            status_after="published",
+            published_on="2026-09-16",
+            human_approval="pending",
+            preview_urls={"fr": "article.html?slug=demo"},
+            locale_statuses={"en": "en-ready", "nl": "nl-ready"},
+            reasons=(),
+        )
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[]):
+            with patch("tools.editorial_manager.cli.load_media_rights_registry", return_value={}):
+                with patch("tools.editorial_manager.cli.publish_article", return_value=result) as publish_article:
+                    with redirect_stdout(output):
+                        exit_code = main(["publish-article", "demo", "--date", "2026-09-16", "--json"])
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["status"], "ready-for-human-approval")
+        self.assertFalse(payload["written"])
+        publish_article.assert_called_once_with(
+            "demo",
+            "2026-09-16",
+            {},
+            write=False,
+            approved=False,
+        )
 
     def test_create_article_command_runs_as_dry_run(self):
         output = io.StringIO()

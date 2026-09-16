@@ -88,3 +88,15 @@ adding and testing the filter does not remove any existing public page.
 CI builds the strict profile separately and verifies that draft articles do not
 leak into any of those surfaces. Production must not set this variable until the
 publication plan is ready and a human explicitly approves activation.
+
+## Controlled article transition
+
+`publish-article <slug> --date YYYY-MM-DD` is always a dry run unless both
+`--write` and `--approve` are supplied. The dry run evaluates the proposed
+published state, requires complete English and Dutch locales, verifies media
+rights and returns the three preview URLs for the human review.
+
+The write path accepts only `draft` or `ready`, rejects future dates, creates a
+local safety backup and rolls back if project validation fails. It changes only
+the selected article status and `publication.published_on`; deployment and
+strict-mode activation remain separate decisions.
