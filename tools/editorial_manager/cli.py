@@ -17,6 +17,7 @@ from .media_rights import (
     render_media_rights_report,
 )
 from .publication_gate import build_publication_gate, render_publication_gate
+from .publication_plan import build_publication_plan, render_publication_plan
 from .repository import PROJECT_ROOT, find_article_by_slug, load_articles
 from .reporting import (
     render_article_detail,
@@ -156,6 +157,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--json",
         action="store_true",
         help="Output a stable machine-readable gate report.",
+    )
+
+    publication_plan_parser = subparsers.add_parser(
+        "publication-plan",
+        help="Compare current visibility with the future published-only policy.",
+    )
+    publication_plan_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output a stable machine-readable corpus plan.",
     )
 
     locale_report_parser = subparsers.add_parser(
@@ -458,6 +469,19 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(render_publication_gate(report))
         return 0 if report.ok else 1
+
+    if args.command == "publication-plan":
+        try:
+            registry = load_media_rights_registry()
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Media rights registry could not be loaded: {exc}")
+            return 1
+        report = build_publication_plan(articles, registry, project_root=PROJECT_ROOT)
+        if args.json:
+            print(json.dumps(report.to_payload(), ensure_ascii=False, indent=2))
+        else:
+            print(render_publication_plan(report))
+        return 0
 
     if args.command == "locale-report":
         if args.slug:

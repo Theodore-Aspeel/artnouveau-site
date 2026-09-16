@@ -27,6 +27,8 @@ python -m tools.editorial_manager media-rights-check
 python -m tools.editorial_manager media-rights-check --json
 python -m tools.editorial_manager publication-gate <slug>
 python -m tools.editorial_manager publication-gate <slug> --json
+python -m tools.editorial_manager publication-plan
+python -m tools.editorial_manager publication-plan --json
 python -m tools.editorial_manager locale-report
 python -m tools.editorial_manager locale-report <slug>
 python -m tools.editorial_manager locale-report --locale nl
@@ -65,6 +67,11 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `publication-gate <slug>`: combines the article checklist, English locale
   readiness and media-rights evidence into one preflight. A successful result
   means ready for human review, never automatic publication.
+- `publication-plan`: compares the current legacy-visible behaviour with the
+  future published-only policy for the complete corpus. It reports every page
+  that strict mode would hide and never changes content, statuses or the build.
+- `publication-plan --json`: emits the same comparison as the versioned
+  `artnouveau.publication_plan@1` contract for CI and later workflow automation.
 - `locale-report`: shows the read-only source/target locale editorial status for all articles. It defaults to English.
 - `locale-report <slug>`: shows the same locale status for one article.
 - `locale-report --locale nl`: shows internal Dutch readiness for all articles without making NL public.

@@ -58,3 +58,22 @@ For the pilot, the reviewer should only need to:
 
 After several successful pilots, the same gate can become the basis for a
 single review screen in the Editorial Manager.
+
+## Corpus activation plan
+
+`publication-plan` applies the individual gate to the whole corpus and compares
+the current `legacy-visible` behaviour with the future `published-only` policy.
+It is deliberately read-only: it does not change statuses and it does not enable
+the build filter.
+
+The `artnouveau.publication_plan@1` JSON contract records:
+
+- current and strict visibility for every article;
+- the exact set of pages that strict mode would hide;
+- individual automated-gate results and publication dates;
+- a corpus-level activation status;
+- the mandatory final human approval.
+
+The command exits successfully when the report is generated, even if activation
+is blocked. Automation must read `activation_status`; generating a truthful
+blocked plan is not itself a command failure.

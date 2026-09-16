@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from tools.editorial_manager.article_creation import ArticleCreationResult
 from tools.editorial_manager.cli import main
+from tools.editorial_manager.publication_plan import PublicationPlanReport
 
 
 class CliTests(unittest.TestCase):
@@ -94,6 +95,27 @@ class CliTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertIn("Publication checklist", output.getvalue())
         self.assertIn("Articles checked: 1", output.getvalue())
+
+    def test_publication_plan_json_command_runs(self):
+        output = io.StringIO()
+        report = PublicationPlanReport(
+            activation_status="ready-for-human-activation",
+            human_approval="required",
+            reasons=(),
+            items=(),
+        )
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[]):
+            with patch("tools.editorial_manager.cli.load_media_rights_registry", return_value={}):
+                with patch("tools.editorial_manager.cli.build_publication_plan", return_value=report):
+                    with redirect_stdout(output):
+                        exit_code = main(["publication-plan", "--json"])
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["contract"], {"name": "artnouveau.publication_plan", "version": 1})
+        self.assertEqual(payload["activation_status"], "ready-for-human-activation")
+        self.assertTrue(payload["read_only"])
 
     def test_create_article_command_runs_as_dry_run(self):
         output = io.StringIO()
