@@ -3225,24 +3225,24 @@
       },
       "content": {
         "fr": {
-          "title": "Une maison d’Ernest Delune pour un maître verrier",
-          "dek": "Cette maison d’Ernest Delune demande une lecture simple et nette. À Ixelles, en 1902, elle tient d’abord par la relation entre atelier, habitation et façade. Le sujet n’a pas besoin d’être élargi davantage pour justifier une note courte.",
-          "epigraph": "Parfois le commanditaire suffit à déplacer la manière de lire une façade.",
+          "title": "La maison-atelier d’Ernest Delune à Ixelles",
+          "dek": "Réalisée en 1902 par Ernest Delune pour Victor Marchal, l’annexe Art Nouveau de la rue du Lac fut ensuite longtemps occupée par Clas Grüner Sterner, qui y avait son atelier de maître verrier. Cette chronologie invite à lire avec précision la relation entre atelier, habitation et façade.",
+          "epigraph": "L’usage d’un bâtiment suffit parfois à déplacer la manière de lire sa façade.",
           "sections": [
             {
               "heading": "Atelier et habitation",
-              "body": "Savoir qu’il s’agit d’un ancien atelier et d’une habitation change immédiatement la lecture. On devient plus attentif à la place des baies, au rapport entre usage et façade, à la manière dont le seuil organise déjà une présence plus mixte dans la rue.\n\nLe nom d’Ernest Delune donne au sujet sa fermeté. Il permet de rester au plus près du bâtiment, sans lui demander un récit plus large que ce que les données confirmées autorisent."
+              "body": "Le bâtiment a longtemps été occupé par le maître verrier autrichien Clas Grüner Sterner, qui y associait atelier et habitation. Cette double fonction rend plus attentif à la place des baies, au rapport entre usage et façade, à la manière dont le seuil organise déjà une présence plus mixte dans la rue.\n\nLe dessin d’Ernest Delune donne sa cohérence à cette lecture. Il permet de rester au plus près du bâtiment et de ce que les données confirmées autorisent."
             },
             {
-              "heading": "Rester à la juste échelle",
-              "body": "Ce sujet ne demande pas un long article. Une note courte, tenue, vaut mieux ici qu’un texte qui voudrait surinterpréter le bâtiment. L’essentiel est déjà là, une relation entre façade, usage et regard, assez précise pour justifier sa place.\n\nLe texte peut donc rester à cette échelle. Il accompagne la lecture sans forcer le bâtiment à dire plus que ce qu’il donne."
+              "heading": "Une lecture resserrée",
+              "body": "La façade concentre l’essentiel dans un espace étroit. L’entrée, les baies et le volume de l’atelier rendent lisible la coexistence du travail et de l’habitation sans multiplier les effets.\n\nUne lecture resserrée suffit ici. Elle accompagne le regard depuis la rue sans demander au bâtiment de porter un récit plus large que les sources disponibles."
             }
           ],
           "seo": {
-            "meta_description": "Une maison d’Ernest Delune à Ixelles. Une note courte sur un ancien atelier et habitation, entre usage, façade et lecture de rue."
+            "meta_description": "Une maison-atelier d’Ernest Delune à Ixelles, réalisée en 1902 pour Victor Marchal puis occupée par le maître verrier Clas Grüner Sterner."
           },
           "media": {
-            "hero_alt": "Maison Art Nouveau d’Ernest Delune à Ixelles, ancien atelier et habitation de Clas Grüner Sterner.",
+            "hero_alt": "Porte d’entrée en bois et vitraux dans un encadrement circulaire de pierre, rue du Lac à Ixelles.",
             "support_alt": []
           },
           "practical_items": [
@@ -3264,7 +3264,7 @@
             },
             {
               "key": "date",
-              "value": "1902"
+              "value": "1902 (rue du Lac)"
             },
             {
               "key": "address",
@@ -3275,24 +3275,24 @@
           "resources": []
         },
         "en": {
-          "title": "An Ernest Delune House for a Master Glassmaker",
-          "dek": "This house by Ernest Delune asks for a simple, clear reading. In Ixelles, in 1902, it first holds through the relation between workshop, dwelling, and facade. The subject does not need to be widened further to justify a short note.",
-          "epigraph": "Sometimes the client is enough to shift the way a facade is read.",
+          "title": "Ernest Delune’s House and Studio in Ixelles",
+          "dek": "Built in 1902 by Ernest Delune for Victor Marchal, the Art Nouveau annex on Rue du Lac was later occupied for many years by Clas Grüner Sterner, who kept his master glassmaker’s studio there. This chronology calls for a precise reading of the relation between workshop, dwelling, and facade.",
+          "epigraph": "A building’s use can be enough to change the way its facade is read.",
           "sections": [
             {
               "heading": "Workshop and dwelling",
-              "body": "Knowing that this was once both a workshop and a dwelling immediately changes the reading. One becomes more attentive to the place of the bays, to the relation between use and facade, to the way the threshold already organizes a more mixed presence in the street.\n\nErnest Delune's name gives the subject its firmness. It allows the text to stay close to the building, without asking it for a broader story than the confirmed data allows."
+              "body": "The building was occupied for many years by the Austrian master glassmaker Clas Grüner Sterner, who combined workshop and dwelling there. That dual use draws attention to the placement of the windows, the relation between use and facade, and the way the entrance mediates between work, domestic life, and the street.\n\nErnest Delune’s design gives this reading its coherence. It keeps the focus on the building and on what the confirmed record supports."
             },
             {
-              "heading": "Stay at the right scale",
-              "body": "This subject does not call for a long article. A short, held note is better here than a text that would overinterpret the building. The essential point is already there: a relation between facade, use, and gaze, precise enough to justify its place.\n\nThe text can therefore remain at this scale. It accompanies the reading without forcing the building to say more than it gives."
+              "heading": "A focused reading",
+              "body": "The facade concentrates its essential ideas within a narrow frontage. The entrance, windows, and studio volume make the coexistence of work and domestic life legible without multiplying effects.\n\nA focused reading is enough here. It follows the view from the street without asking the building to carry a broader story than the available sources support."
             }
           ],
           "seo": {
-            "meta_description": "A house by Ernest Delune in Ixelles. A short note on a former workshop and dwelling, between use, facade, and street-level reading."
+            "meta_description": "A house and studio by Ernest Delune in Ixelles, built in 1902 for Victor Marchal and later occupied by master glassmaker Clas Grüner Sterner."
           },
           "media": {
-            "hero_alt": "Art Nouveau house by Ernest Delune in Ixelles, formerly the workshop and dwelling of Clas Grüner Sterner.",
+            "hero_alt": "Wooden entrance door and stained glass within a circular stone surround on Rue du Lac in Ixelles.",
             "support_alt": []
           },
           "practical_items": [
@@ -3314,7 +3314,7 @@
             },
             {
               "key": "date",
-              "value": "1902"
+              "value": "1902 (Rue du Lac)"
             },
             {
               "key": "address",
@@ -3325,24 +3325,24 @@
           "resources": []
         },
         "nl": {
-          "title": "Een huis van Ernest Delune voor een meester-glazenier",
-          "dek": "Dit huis van Ernest Delune vraagt om een eenvoudige, duidelijke lezing. In Elsene, in 1902, houdt het eerst stand door de verhouding tussen atelier, woning en gevel. Het onderwerp hoeft niet verder te worden verbreed om een korte notitie te rechtvaardigen.",
-          "epigraph": "Soms volstaat de opdrachtgever om de manier waarop men een gevel leest te verschuiven.",
+          "title": "De atelierwoning van Ernest Delune in Elsene",
+          "dek": "Het art-nouveauaanbouwsel aan de Meerstraat werd in 1902 door Ernest Delune voor Victor Marchal gebouwd. Later werd het jarenlang bewoond door Clas Grüner Sterner, die er zijn atelier als meester-glazenier had. Die chronologie vraagt om een nauwkeurige lezing van de verhouding tussen atelier, woning en gevel.",
+          "epigraph": "Het gebruik van een gebouw kan volstaan om de gevel anders te lezen.",
           "sections": [
             {
               "heading": "Atelier en woning",
-              "body": "Weten dat dit vroeger zowel een atelier als een woning was, verandert de lezing meteen. Men let sterker op de plaats van de vensters, op de verhouding tussen gebruik en gevel, op de manier waarop de drempel al een gemengdere aanwezigheid in de straat organiseert.\n\nDe naam Ernest Delune geeft het onderwerp zijn stevigheid. Hij maakt het mogelijk dicht bij het gebouw te blijven, zonder het een ruimer verhaal te vragen dan de bevestigde gegevens toelaten."
+              "body": "Het gebouw werd lange tijd gebruikt door de Oostenrijkse meester-glazenier Clas Grüner Sterner, die er atelier en woning combineerde. Die dubbele functie vestigt de aandacht op de plaats van de vensters, de verhouding tussen gebruik en gevel, en de manier waarop de ingang werk, wonen en straat met elkaar verbindt.\n\nHet ontwerp van Ernest Delune geeft samenhang aan die lezing. Zo blijft de aandacht bij het gebouw en bij wat de bevestigde gegevens ondersteunen."
             },
             {
-              "heading": "Op de juiste schaal blijven",
-              "body": "Dit onderwerp vraagt geen lang artikel. Een korte, beheerste notitie is hier beter dan een tekst die het gebouw zou overinterpreteren. De kern is al aanwezig: een verhouding tussen gevel, gebruik en blik, precies genoeg om zijn plaats te rechtvaardigen.\n\nDe tekst kan dus op deze schaal blijven. Hij begeleidt de lezing zonder het gebouw te dwingen meer te zeggen dan het geeft."
+              "heading": "Een gerichte lezing",
+              "body": "De gevel bundelt zijn belangrijkste ideeën op een smal perceel. De ingang, de vensters en het ateliervolume maken de combinatie van werken en wonen leesbaar zonder een overvloed aan effecten.\n\nEen gerichte lezing volstaat hier. Ze volgt de blik vanaf de straat zonder het gebouw een ruimer verhaal op te leggen dan de beschikbare bronnen dragen."
             }
           ],
           "seo": {
-            "meta_description": "Een huis van Ernest Delune in Elsene. Een korte notitie over een voormalig atelier en woning, tussen gebruik, gevel en straatlezing."
+            "meta_description": "Een woonhuis en atelier van Ernest Delune in Elsene, gebouwd in 1902 voor Victor Marchal en later bewoond door meester-glazenier Clas Grüner Sterner."
           },
           "media": {
-            "hero_alt": "Art-nouveauhuis van Ernest Delune in Elsene, voormalig atelier en woning van Clas Grüner Sterner.",
+            "hero_alt": "Houten toegangsdeur en glas-in-lood in een ronde stenen omlijsting aan de Meerstraat in Elsene.",
             "support_alt": []
           },
           "practical_items": [
@@ -3364,7 +3364,7 @@
             },
             {
               "key": "date",
-              "value": "1902"
+              "value": "1902 (Meerstraat)"
             },
             {
               "key": "address",

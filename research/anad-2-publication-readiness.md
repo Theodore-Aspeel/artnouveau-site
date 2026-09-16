@@ -1,7 +1,7 @@
 # ANAD 2.0 - Publication readiness audit
 
 Date: 2026-09-16
-Baseline: `main` at `666ce83`
+Baseline: `main` at `55f332c`
 Scope: 14 runtime articles, no web re-research and no status change
 
 ## Decision
@@ -21,7 +21,7 @@ accessibility readiness. The transition must happen in reviewed batches.
 - 21/21 runtime images are present and cleared in the explicit rights registry.
 - 14/14 hero images and every runtime support image have localized alternative text.
 - All `published_on` and `updated_on` values remain null.
-- 14/14 subjects have an entry in `research/verified-facts.json`; 12 have no known
+- 14/14 subjects have an entry in `research/verified-facts.json`; 13 have no known
   contradiction in that internal packet.
 - Public resource links mainly support quotations. They do not yet expose the full
   factual provenance packet to readers.
@@ -42,7 +42,7 @@ accessibility readiness. The transition must happen in reviewed batches.
 | `READY_STRUCTURE` | Maison Strauven, Tournai | Final multilingual read, image framing approval, publication date |
 | `READY_STRUCTURE` | Den Tijd, Anvers | Final multilingual read, image framing approval, publication date |
 | `READY_STRUCTURE` | Maison aux Tulipes, Bratislava | Approve the cautious architect attribution and editorial title, final multilingual and visual review, publication date |
-| `NEEDS_FACT_REVIEW` | Maison d’Ernest Delune | Remove or prove the implied direct commission “pour un maître verrier” |
+| `READY_STRUCTURE` | Maison-atelier d’Ernest Delune, Ixelles | Final multilingual and visual review, publication date |
 | `BLOCKED` | Façade Art Déco, Charleroi | Identify the building and resolve address/date/architect, or explicitly retire the page |
 
 The accessibility gap is now closed across every runtime article. The Maison aux
@@ -51,6 +51,13 @@ the official Slovak heritage open data. The article keeps Jenő Schiller as an
 explicit attribution because the register does not identify an architect. Details
 and source boundaries are recorded in
 `research/pilots/maison-aux-tulipes-fact-review.md`.
+
+The Delune fact review removes the misleading implication that the 1902 annex was
+commissioned for Clas Grüner Sterner. The official inventory confirms Victor
+Marchal as commissioner and Sterner as a later long-term occupant who used the
+building as his dwelling and workshop. The two-phase 1893/1902 history and the
+editorial corrections are recorded in
+`research/pilots/maison-ernest-delune-fact-review.md`.
 
 ## Why the draft filter remains disabled
 
