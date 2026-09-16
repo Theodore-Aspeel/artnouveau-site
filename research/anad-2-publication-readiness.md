@@ -1,7 +1,7 @@
 # ANAD 2.0 - Publication readiness audit
 
-Date: 2026-09-16  
-Baseline: `main` at `326ef24`  
+Date: 2026-09-16
+Baseline: `main` at `c714b7e`
 Scope: 14 runtime articles, no web re-research and no status change
 
 ## Decision
@@ -36,16 +36,18 @@ accessibility readiness. The transition must happen in reviewed batches.
 | `READY_STRUCTURE` | Maison des Majoliques, Vienne | Final FR read, quick EN/NL check, image framing approval, publication date |
 | `READY_STRUCTURE` | Casa Campanini, Milan | Final FR read, quick EN/NL check, image framing approval, publication date |
 | `READY_STRUCTURE` | Aquarium de Milan | Final FR read, quick EN/NL check, image framing approval, publication date |
-| `NEEDS_ACCESSIBILITY` | Maison Coilliot, Lille | Add and review six localized support-image alternatives, then final approval |
-| `NEEDS_ACCESSIBILITY` | L’Huitrière, Lille | Add and review six localized support-image alternatives, then final approval |
-| `NEEDS_ACCESSIBILITY` | Maison des Hiboux, Saint-Gilles | Add and review FR/EN alternative for its support image |
-| `NEEDS_ACCESSIBILITY` | Maison Strauven, Tournai | Add and review three localized support-image alternatives |
-| `NEEDS_ACCESSIBILITY` | Den Tijd, Anvers | Add and review FR/EN alternative for its support image |
+| `READY_STRUCTURE` | Maison Coilliot, Lille | Resolve the two documented wording points, final visual approval, publication date |
+| `READY_STRUCTURE` | L’Huitrière, Lille | Final multilingual read, image framing approval, publication date |
+| `READY_STRUCTURE` | Maison des Hiboux, Saint-Gilles | Final multilingual read, image framing approval, publication date |
+| `READY_STRUCTURE` | Maison Strauven, Tournai | Final multilingual read, image framing approval, publication date |
+| `READY_STRUCTURE` | Den Tijd, Anvers | Final multilingual read, image framing approval, publication date |
 | `NEEDS_FACT_REVIEW` | Maison aux Tulipes, Bratislava | Build a verified fact packet, resolve the pending date and add three image alternatives |
 | `NEEDS_FACT_REVIEW` | Maison d’Ernest Delune | Remove or prove the implied direct commission “pour un maître verrier” |
 | `BLOCKED` | Façade Art Déco, Charleroi | Identify the building and resolve address/date/architect, or explicitly retire the page |
 
-There are 22 missing localized alternative texts across the eight support images.
+After the reviewed accessibility batches, three localized alternative texts remain
+missing. They all belong to the support image for Maison aux Tulipes, which stays in
+`NEEDS_FACT_REVIEW`.
 
 ## Why the draft filter remains disabled
 
@@ -70,6 +72,6 @@ photographs were merged in PR #8. The remaining gate is the final multilingual
 editorial and visual review, followed by an explicit publication date and approval.
 
 The detailed source and claims review is recorded in
-`research/pilots/maison-coilliot-fact-review.md`. It identifies one French sentence
-for human editorial reconsideration and keeps the publication-status change outside
-the research lot.
+`research/pilots/maison-coilliot-fact-review.md`. It identifies two formulations for
+human editorial reconsideration and keeps the publication-status change outside the
+research lot.
