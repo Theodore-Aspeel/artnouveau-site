@@ -65,7 +65,11 @@ The safe order is:
 ## Recommended pilot adjustment
 
 Maison Coilliot remains the best end-to-end subject because its content, rights and
-factual packet already pass. Its remaining blocker is narrow and visible: write and
-approve the six FR/EN/NL alternatives for its two supporting photographs, then set
-the real publication date at the approval gate.
+factual packet already pass. The six FR/EN/NL alternatives for its two supporting
+photographs were merged in PR #8. The remaining gate is the final multilingual
+editorial and visual review, followed by an explicit publication date and approval.
 
+The detailed source and claims review is recorded in
+`research/pilots/maison-coilliot-fact-review.md`. It identifies one French sentence
+for human editorial reconsideration and keeps the publication-status change outside
+the research lot.
