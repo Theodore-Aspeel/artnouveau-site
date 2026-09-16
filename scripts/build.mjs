@@ -12,6 +12,10 @@ import {
   buildArticleStructuredData,
   renderStructuredDataScript,
 } from './structured-data.mjs';
+import {
+  resolvePublicationMode,
+  selectPublicArticles,
+} from './publication-policy.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,6 +62,7 @@ const SITE_TITLE = 'Art Nouveau et Art Déco';
 const SITE_ORIGIN = normalizeSiteOrigin(process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com');
 const PUBLIC_BASE_PATH = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '');
 const ANALYTICS = getAnalyticsConfig(process.env);
+const PUBLICATION_MODE = resolvePublicationMode(process.env.PUBLICATION_MODE);
 
 function rewritePageForDist(relativeTargetPath, content) {
   if (relativeTargetPath === 'index.html') {
@@ -484,10 +489,21 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   return applyDeploymentConfig(applyDeploymentAssetPaths(rewritten));
 }
 
-async function readArticles() {
+async function readArticleData() {
   const raw = await fs.readFile(path.join(ROOT, 'src/data/articles.json'), 'utf8');
-  const data = JSON.parse(raw);
-  return Array.isArray(data.articles) ? data.articles : [];
+  return JSON.parse(raw);
+}
+
+async function writePublicArticleData(sourceData, articles) {
+  const publicData = {
+    ...sourceData,
+    articles,
+  };
+  await fs.writeFile(
+    path.join(DIST, 'data/articles.json'),
+    `${JSON.stringify(publicData, null, 2)}\n`,
+    'utf8'
+  );
 }
 
 async function ensureParentDir(filePath) {
@@ -574,7 +590,9 @@ async function build() {
   await fs.rm(DIST, { recursive: true, force: true });
   await fs.mkdir(DIST, { recursive: true });
   const contracts = await getRuntimeContracts();
-  const articles = await readArticles();
+  const articleData = await readArticleData();
+  const sourceArticles = Array.isArray(articleData.articles) ? articleData.articles : [];
+  const articles = selectPublicArticles(sourceArticles, PUBLICATION_MODE);
   const publishedImagePaths = await collectPublishedImagePaths({
     rootDir: ROOT,
     articles,
@@ -584,6 +602,8 @@ async function build() {
   for (const job of COPY_JOBS) {
     await copyDir(job.from, job.to);
   }
+
+  await writePublicArticleData(articleData, articles);
 
   await copyPublishedImages({
     rootDir: ROOT,
@@ -648,7 +668,10 @@ async function build() {
     return;
   }
 
-  console.log('Build completed: dist is the publishable artifact.');
+  console.log(
+    `Build completed: dist is the publishable artifact `
+    + `(${PUBLICATION_MODE}, ${articles.length}/${sourceArticles.length} articles).`
+  );
 }
 
 await build();

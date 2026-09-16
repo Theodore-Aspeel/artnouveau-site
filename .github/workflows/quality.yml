@@ -63,3 +63,27 @@ jobs:
 
       - name: Test GitHub Pages profile
         run: npm run test:node
+
+  publication-filter:
+    runs-on: ubuntu-latest
+    env:
+      PUBLICATION_MODE: published-only
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build published-only profile
+        run: npm run build
+
+      - name: Verify draft exclusion
+        run: npm run test:publication-filter
