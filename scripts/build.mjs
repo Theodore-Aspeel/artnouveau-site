@@ -8,6 +8,10 @@ import {
   copyPublishedImages,
   generateImageManifest,
 } from './image-pipeline.mjs';
+import {
+  buildArticleStructuredData,
+  renderStructuredDataScript,
+} from './structured-data.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -318,6 +322,12 @@ function applyPublicAnalytics(content) {
   return content.replace('</head>', `  ${analyticsScript}\n</head>`);
 }
 
+function applyStructuredData(content, structuredData) {
+  const script = renderStructuredDataScript(structuredData);
+  if (!script) return content;
+  return content.replace('</head>', `  ${script}\n</head>`);
+}
+
 function applyStaticI18n(content, locale, i18n) {
   let localized = content.replace(
     /<([a-zA-Z][\w:-]*)([^>]*\sdata-i18n-html="([^"]+)"[^>]*)>([\s\S]*?)<\/\1>/g,
@@ -436,6 +446,14 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   const routeParams = { slug };
   const { routes } = contracts;
   const metadata = buildArticleHeadMeta(article, locale, contracts);
+  const canonicalUrl = absolutePublicUrl(routes.article(locale, slug));
+  const structuredData = buildArticleStructuredData({
+    article,
+    locale,
+    canonicalUrl,
+    imageUrl: metadata.ogImage,
+    access: contracts.access,
+  });
 
   let rewritten = applyStaticI18n(content, locale, contracts.i18n);
 
@@ -461,6 +479,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = insertOrReplaceOgImage(rewritten, metadata.ogImage);
   rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
   rewritten = applyPublicAnalytics(rewritten);
+  rewritten = applyStructuredData(rewritten, structuredData);
 
   return applyDeploymentConfig(applyDeploymentAssetPaths(rewritten));
 }
