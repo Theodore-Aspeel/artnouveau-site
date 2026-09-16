@@ -150,15 +150,18 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
 - obsolete GitHub Pages diagnostic step: removed
 - desktop live/static baseline audit: complete; see `research/anad-2-baseline-audit.md`
 - technical SEO baseline audit: complete; see `research/anad-2-baseline-audit.md`
-- branch/PR preview decision: pending
-- mobile visual audit at real device widths: pending
-- minimal Article + Place structured data: implemented on
-  `anad-2.0/structured-data`, with evidence boundaries and double-profile tests;
-  merge review pending
+- branch/PR previews: deterministic Netlify preview contract merged, with `dist/`
+  as the only published artifact; GitHub Pages remains production
+- mobile editorial pilot: implemented on `anad-2.0/mobile-editorial-pilot` with
+  automated responsive guardrails; real-phone validation remains the human merge
+  gate
+- minimal Article + Place structured data: merged to `main`, with evidence boundaries
+  and double-profile tests
 - publication strategy decided: keep the current live set online, audit it, migrate
   approved articles to `published`, then exclude future drafts from production
-- image rights/credit contract and corpus audit: newly identified blocker
-- end-to-end article pilot: pending
+- image rights/credit contract and corpus audit: complete; 21/21 runtime assets cleared
+- end-to-end article pilot: Maison Coilliot accessibility merged; factual review and
+  final human editorial/visual approval remain
 - deterministic Reel pilot: pending
 - current runtime media-rights inventory: complete on
   `anad-2.0/rights-and-review-flow`; 21/21 assets cleared from the explicit
@@ -168,4 +171,5 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
   locale and rights checks, with its existing `draft` status correctly
   preventing a ready-for-human-review result
 
-The first clean quality run covers content validation, a deterministic build, 9 Node checks and 154 Python tests.
+With the mobile pilot applied, the clean quality baseline covers content validation,
+media-rights validation, a deterministic build, 19 Node checks and 167 Python tests.
