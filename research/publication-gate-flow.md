@@ -77,3 +77,14 @@ The `artnouveau.publication_plan@1` JSON contract records:
 The command exits successfully when the report is generated, even if activation
 is blocked. Automation must read `activation_status`; generating a truthful
 blocked plan is not itself a command failure.
+
+## Strict build profile
+
+`PUBLICATION_MODE=published-only` applies the candidate policy to the complete
+published artifact: runtime JSON, gallery input, canonical article pages,
+sitemap and generated article images. The default remains `legacy-visible`, so
+adding and testing the filter does not remove any existing public page.
+
+CI builds the strict profile separately and verifies that draft articles do not
+leak into any of those surfaces. Production must not set this variable until the
+publication plan is ready and a human explicitly approves activation.

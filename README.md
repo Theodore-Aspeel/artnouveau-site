@@ -66,6 +66,26 @@ npm run preview
 - `build`: recreates `dist/`, copies the public runtime, rewrites page paths, then validates the published artifact
 - `preview`: serves `dist/` locally on `http://localhost:4173`
 
+The default publication policy remains `legacy-visible`, so the current public
+corpus does not change. The future strict profile can be tested explicitly:
+
+```bash
+PUBLICATION_MODE=published-only npm run build
+npm run test:publication-filter
+```
+
+On PowerShell:
+
+```powershell
+$env:PUBLICATION_MODE = 'published-only'
+npm run build
+npm run test:publication-filter
+```
+
+Strict mode writes only articles whose status is `published` to the public JSON,
+article routes, sitemap and generated-image manifest. It is exercised in CI but
+is not enabled by the production deployment workflow.
+
 ## Analytics
 
 Public multilingual pages can include Plausible Analytics at build time.

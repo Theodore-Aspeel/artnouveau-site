@@ -17,6 +17,7 @@
     "build": "node scripts/build.mjs",
     "preview": "node scripts/preview.mjs",
     "test:node": "node --test tests/*.mjs",
+    "test:publication-filter": "node --test tests/publication-policy.mjs",
     "test:python": "python -m unittest discover tests",
     "test": "npm run build && npm run test:node && npm run test:python",
     "rights:check": "python -m tools.editorial_manager media-rights-check",
