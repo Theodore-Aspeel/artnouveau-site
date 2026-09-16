@@ -68,11 +68,13 @@ def find_payload_article(payload: Payload, slug: str) -> Article | None:
 
 def build_editor_article_payload(article: Article, project_root: Path = PROJECT_ROOT) -> dict[str, Any]:
     slug = article_slug(article)
+    publication = article.get("publication") if isinstance(article.get("publication"), dict) else {}
     return {
         "slug": slug,
         "title": article_title(article, "fr"),
         "title_en": article_title(article, "en"),
         "status": str(article.get("status") or ""),
+        "published_on": publication.get("published_on"),
         "order": article_publication_order(article),
         "hero_src": article_hero_image(article),
         "support_images": current_support_images(article),

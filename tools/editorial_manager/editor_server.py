@@ -14,6 +14,8 @@ import webbrowser
 from .editor_fields import editable_field_payload
 from .editor_backups import create_articles_backup, list_article_backups, restore_articles_backup
 from .editor_images import editor_image_path, import_editor_image, list_editor_image_options
+from .media_rights import load_media_rights_registry
+from .publication_transition import publish_article
 from .editor_store import (
     build_editor_article_payload,
     find_payload_article,
@@ -177,6 +179,26 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
             self.send_json(result, status)
             return
 
+        if route.endswith("/publication-check"):
+            slug = route_slug(route[: -len("/publication-check")], "/api/articles/")
+            if not slug:
+                self.send_json({"error": "Not found."}, HTTPStatus.NOT_FOUND)
+                return
+            result = run_editor_publication(slug, self.read_json(), write=False)
+            status = HTTPStatus.OK if "publication" in result else HTTPStatus.BAD_REQUEST
+            self.send_json(result, status)
+            return
+
+        if route.endswith("/publish"):
+            slug = route_slug(route[: -len("/publish")], "/api/articles/")
+            if not slug:
+                self.send_json({"error": "Not found."}, HTTPStatus.NOT_FOUND)
+                return
+            result = run_editor_publication(slug, self.read_json(), write=True)
+            status = HTTPStatus.OK if "publication" in result else HTTPStatus.BAD_REQUEST
+            self.send_json(result, status)
+            return
+
         self.send_json({"error": "Not found."}, HTTPStatus.NOT_FOUND)
 
     def log_message(self, format: str, *args: Any) -> None:
@@ -250,6 +272,39 @@ def import_filename(query: str) -> str:
     return values[0] if values else ""
 
 
+def run_editor_publication(slug: str, request: dict[str, Any], *, write: bool) -> dict[str, Any]:
+    publication_date = request.get("publication_date")
+    if not isinstance(publication_date, str) or not publication_date.strip():
+        return {
+            "ok": False,
+            "errors": [{"code": "publication-date-required", "message": "Choisissez une date de publication."}],
+        }
+    approved = request.get("approved") is True
+    if write and not approved:
+        return {
+            "ok": False,
+            "errors": [{"code": "approval-required", "message": "La confirmation humaine est obligatoire."}],
+        }
+    try:
+        registry = load_media_rights_registry()
+        transition = publish_article(
+            slug,
+            publication_date.strip(),
+            registry,
+            write=write,
+            approved=approved,
+        )
+    except (OSError, ValueError) as exc:
+        return {
+            "ok": False,
+            "errors": [{"code": "publication-check-failed", "message": str(exc)}],
+        }
+    return {
+        "ok": transition.ok and (not write or transition.written),
+        "publication": transition.to_payload(),
+    }
+
+
 EDITOR_HTML = r"""<!doctype html>
 <html lang="fr">
 <head>
@@ -295,6 +350,17 @@ EDITOR_HTML = r"""<!doctype html>
     .editor-toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid #edf0eb; }
     .backup-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 10px; border-top: 1px solid #edf0eb; }
     .backup-actions label { font-weight: 700; }
+    .publication-panel { display: grid; gap: 12px; padding: 14px; border: 1px solid #c9d9cf; border-radius: 8px; background: linear-gradient(135deg, #f2f8f4, #ffffff); box-shadow: 0 8px 24px rgba(38, 51, 44, 0.05); }
+    .publication-panel__header { display: grid; gap: 4px; }
+    .publication-flow { display: grid; grid-template-columns: minmax(210px, 0.8fr) minmax(260px, 1.2fr); gap: 12px; align-items: start; }
+    .publication-step { display: grid; gap: 8px; padding: 11px; border: 1px solid #dbe5dc; border-radius: 7px; background: #ffffff; }
+    .publication-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .publication-confirm { display: flex; gap: 8px; align-items: flex-start; line-height: 1.35; }
+    .publication-confirm input { margin-top: 3px; }
+    .publication-result { min-height: 22px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .publication-result.ready { color: var(--success); }
+    .publication-result.blocked { color: var(--error); }
+    .publication-result ul { margin: 6px 0 0; padding-left: 20px; }
     .primary-actions { order: 1; }
     .preview-actions { order: 2; margin-left: auto; }
     .pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid #dbe3da; border-radius: 999px; background: var(--soft); color: #3f4d44; font-size: 12px; font-weight: 700; }
@@ -337,7 +403,7 @@ EDITOR_HTML = r"""<!doctype html>
     .message.error { border-color: #e6b7b0; background: var(--error-bg); color: var(--error); }
     .message ul { margin: 8px 0 0; padding-left: 20px; font-weight: 400; }
     .empty { color: var(--muted); }
-    @media (max-width: 920px) { main { grid-template-columns: 1fr; height: auto; min-height: 100vh; } aside { max-height: 34vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } .editor-title-row { grid-template-columns: 1fr; } .preview-actions { margin-left: 0; } .field-group { grid-template-columns: 1fr; } }
+    @media (max-width: 920px) { main { grid-template-columns: 1fr; height: auto; min-height: 100vh; } aside { max-height: 34vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } .editor-title-row { grid-template-columns: 1fr; } .preview-actions { margin-left: 0; } .field-group, .publication-flow { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -361,6 +427,7 @@ EDITOR_HTML = r"""<!doctype html>
     let currentTab = "essentiel";
     let recentBackups = [];
     let currentLocaleContract = defaultLocaleContract();
+    let publicationReview = null;
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -410,6 +477,7 @@ EDITOR_HTML = r"""<!doctype html>
       currentImageOptions = article.image_options || [];
       currentArticleFields = article.fields || [];
       currentLocaleContract = article.locale_contract || defaultLocaleContract();
+      publicationReview = null;
       currentTab = "essentiel";
       renderArticleList();
       renderEditor(article);
@@ -440,10 +508,10 @@ EDITOR_HTML = r"""<!doctype html>
             ${renderBackupActions()}
             <div class="editor-toolbar">
               ${renderEditorTabs()}
-              ${renderPreviewActions(article.preview_urls || {})}
             </div>
           </div>
           <div id="message" aria-live="polite"></div>
+          ${renderPublicationPanel(article)}
           <form class="form-grid" id="articleForm">${controls}</form>
         </div>
       `;
@@ -463,6 +531,7 @@ EDITOR_HTML = r"""<!doctype html>
       });
       const imageImportButton = document.getElementById("imageImportButton");
       if (imageImportButton) imageImportButton.addEventListener("click", importImage);
+      bindPublicationActions();
       const heroSelect = document.querySelector('[data-field="media.hero.src"]');
       if (heroSelect) {
         heroSelect.addEventListener("change", () => {
@@ -480,6 +549,143 @@ EDITOR_HTML = r"""<!doctype html>
         });
       });
       updateSaveState();
+    }
+
+    function renderPublicationPanel(article) {
+      if (article.status === "published") {
+        return `
+          <section class="publication-panel" aria-label="Publication">
+            <div class="publication-panel__header">
+              <h3>Publication validée</h3>
+              <p class="meta">Cet article est publié${article.published_on ? ` depuis le ${escapeHtml(article.published_on)}` : ""}. Le déploiement du site reste géré séparément par GitHub.</p>
+            </div>
+            ${renderPreviewActions(article.preview_urls || {})}
+          </section>
+        `;
+      }
+      const disabled = ["draft", "ready"].includes(article.status) ? "" : " disabled";
+      return `
+        <section class="publication-panel" aria-label="Validation avant publication">
+          <div class="publication-panel__header">
+            <h3>Validation avant publication</h3>
+            <p class="meta">Relisez les trois versions, choisissez la vraie date, puis lancez le précontrôle. Cette action ne déploie pas le site.</p>
+          </div>
+          <div class="publication-flow">
+            <div class="publication-step">
+              <strong>1. Relire les aperçus</strong>
+              ${renderPreviewActions(article.preview_urls || {})}
+            </div>
+            <div class="publication-step">
+              <label for="publicationDate"><strong>2. Date de publication</strong></label>
+              <input id="publicationDate" type="date" max="${escapeAttr(localToday())}" value="${escapeAttr(localToday())}"${disabled}>
+              <div class="publication-actions">
+                <button id="publicationCheckButton" class="secondary" type="button"${disabled}>3. Lancer le précontrôle</button>
+              </div>
+              <div id="publicationResult" class="publication-result">Aucun précontrôle lancé.</div>
+              <label class="publication-confirm" for="publicationApproval">
+                <input id="publicationApproval" type="checkbox" disabled>
+                <span>J’ai relu les aperçus et je confirme la publication de cet article.</span>
+              </label>
+              <button id="publishArticleButton" class="primary" type="button" disabled>4. Publier l’article</button>
+              <p class="meta">Le statut et la date seront enregistrés avec sauvegarde et validation complète. Le déploiement reste séparé.</p>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function bindPublicationActions() {
+      const checkButton = document.getElementById("publicationCheckButton");
+      const publishButton = document.getElementById("publishArticleButton");
+      const approval = document.getElementById("publicationApproval");
+      const dateInput = document.getElementById("publicationDate");
+      if (checkButton) checkButton.addEventListener("click", runPublicationCheck);
+      if (publishButton) publishButton.addEventListener("click", publishArticle);
+      if (approval) approval.addEventListener("change", updatePublicationButton);
+      if (dateInput) dateInput.addEventListener("input", invalidatePublicationReview);
+    }
+
+    function localToday() {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function publicationDate() {
+      const input = document.getElementById("publicationDate");
+      return input ? input.value : "";
+    }
+
+    function invalidatePublicationReview() {
+      publicationReview = null;
+      const approval = document.getElementById("publicationApproval");
+      if (approval) { approval.checked = false; approval.disabled = true; }
+      const result = document.getElementById("publicationResult");
+      if (result) { result.className = "publication-result"; result.textContent = "Le précontrôle doit être relancé."; }
+      updatePublicationButton();
+    }
+
+    async function runPublicationCheck() {
+      if (hasUnsavedChanges()) {
+        setMessage("Enregistrez les modifications avant de lancer le précontrôle.", true);
+        return;
+      }
+      const date = publicationDate();
+      if (!date) {
+        setMessage("Choisissez une date de publication.", true);
+        return;
+      }
+      setMessage("Précontrôle de publication en cours...");
+      try {
+        const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/publication-check`, postPayload({ publication_date: date }));
+        publicationReview = result.publication || null;
+        renderPublicationResult(publicationReview);
+        setMessage(result.ok ? "Précontrôle réussi. La décision finale reste humaine." : "Le précontrôle a détecté des points bloquants.", !result.ok);
+      } catch (error) {
+        publicationReview = null;
+        renderResult(error, "Le précontrôle a échoué.");
+      }
+      updatePublicationButton();
+    }
+
+    function renderPublicationResult(result) {
+      const box = document.getElementById("publicationResult");
+      const approval = document.getElementById("publicationApproval");
+      if (!box) return;
+      const ready = result && result.status === "ready-for-human-approval";
+      const reasons = result && Array.isArray(result.reasons) ? result.reasons : [];
+      box.className = `publication-result ${ready ? "ready" : "blocked"}`;
+      box.innerHTML = ready
+        ? `<strong>Précontrôle réussi.</strong> EN et NL sont prêts, les médias sont autorisés et les validations automatiques sont passées.`
+        : `<strong>Publication bloquée.</strong>${reasons.length ? `<ul>${reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>` : ""}`;
+      if (approval) { approval.checked = false; approval.disabled = !ready; }
+    }
+
+    function updatePublicationButton() {
+      const button = document.getElementById("publishArticleButton");
+      const approval = document.getElementById("publicationApproval");
+      if (button) button.disabled = !(publicationReview && publicationReview.status === "ready-for-human-approval" && approval && approval.checked && !hasUnsavedChanges());
+    }
+
+    async function publishArticle() {
+      const approval = document.getElementById("publicationApproval");
+      if (!publicationReview || publicationReview.status !== "ready-for-human-approval" || !approval || !approval.checked) return;
+      if (!window.confirm(`Publier maintenant l’article ${currentSlug} avec la date ${publicationDate()} ?`)) return;
+      setMessage("Publication et validation complète en cours...");
+      try {
+        const result = await api(`/api/articles/${encodeURIComponent(currentSlug)}/publish`, postPayload({ publication_date: publicationDate(), approved: true }));
+        if (!result.ok || !result.publication || result.publication.status !== "published") {
+          publicationReview = result.publication || null;
+          renderPublicationResult(publicationReview);
+          setMessage("La publication a été bloquée. Aucun changement non validé n’a été conservé.", true);
+          return;
+        }
+        articles = (await api("/api/articles")).articles;
+        await openArticle(currentSlug);
+        setMessage("Article publié dans les données locales. Sauvegarde et validation complètes réussies. Le déploiement reste séparé.");
+      } catch (error) {
+        renderResult(error, "La publication a échoué.");
+      }
     }
 
     function renderPreviewActions(urls) {
@@ -898,6 +1104,7 @@ EDITOR_HTML = r"""<!doctype html>
       currentValues[control.dataset.field] = control.value;
       clearFieldError(control.dataset.field);
       updateSaveState();
+      invalidatePublicationReview();
     }
 
     async function importImage() {
@@ -943,6 +1150,7 @@ EDITOR_HTML = r"""<!doctype html>
         state.classList.toggle("dirty", dirty);
       }
       if (button) button.disabled = !dirty;
+      updatePublicationButton();
     }
 
     function confirmDiscardUnsavedChanges() {

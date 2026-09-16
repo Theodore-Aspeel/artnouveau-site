@@ -80,6 +80,11 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `publish-article <slug> --date YYYY-MM-DD --write --approve`: writes the
   transition only after explicit human approval. It creates a local safety
   backup, validates the project and restores the original JSON on failure.
+- `editor`: exposes the same guarded transition in the local browser editor.
+  The publication panel requires saved changes, FR/EN/NL preview review, a
+  real date, a successful read-only preflight, an explicit checkbox and a
+  final confirmation. It updates local article data only; GitHub deployment
+  remains a separate operation.
 - `locale-report`: shows the read-only source/target locale editorial status for all articles. It defaults to English.
 - `locale-report <slug>`: shows the same locale status for one article.
 - `locale-report --locale nl`: shows internal Dutch readiness for all articles without making NL public.

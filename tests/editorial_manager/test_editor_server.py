@@ -1,8 +1,15 @@
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import Mock, patch
 
-from tools.editorial_manager.editor_server import EDITOR_HTML, import_filename, resolve_static_path, route_slug
+from tools.editorial_manager.editor_server import (
+    EDITOR_HTML,
+    import_filename,
+    resolve_static_path,
+    route_slug,
+    run_editor_publication,
+)
 
 
 class EditorServerTests(unittest.TestCase):
@@ -79,6 +86,49 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("clearDraftPreview", EDITOR_HTML)
         self.assertIn("localStorage.setItem", EDITOR_HTML)
         self.assertIn("localStorage.removeItem", EDITOR_HTML)
+
+    def test_editor_html_contains_guarded_publication_flow(self):
+        self.assertIn("Validation avant publication", EDITOR_HTML)
+        self.assertIn('id="publicationDate"', EDITOR_HTML)
+        self.assertIn('id="publicationCheckButton"', EDITOR_HTML)
+        self.assertIn('id="publicationApproval"', EDITOR_HTML)
+        self.assertIn('id="publishArticleButton"', EDITOR_HTML)
+        self.assertIn("hasUnsavedChanges()", EDITOR_HTML)
+        self.assertIn("ready-for-human-approval", EDITOR_HTML)
+        self.assertIn("approved: true", EDITOR_HTML)
+        self.assertIn("Le déploiement reste séparé", EDITOR_HTML)
+
+    def test_editor_publication_requires_date_before_running_transition(self):
+        result = run_editor_publication("demo", {}, write=False)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["errors"][0]["code"], "publication-date-required")
+
+    def test_editor_publication_requires_explicit_approval_for_write(self):
+        result = run_editor_publication("demo", {"publication_date": "2026-09-16"}, write=True)
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["errors"][0]["code"], "approval-required")
+
+    @patch("tools.editorial_manager.editor_server.publish_article")
+    @patch("tools.editorial_manager.editor_server.load_media_rights_registry")
+    def test_editor_publication_returns_transition_payload(self, load_registry, publish):
+        load_registry.return_value = {"collections": []}
+        transition = Mock(ok=True, written=False)
+        transition.to_payload.return_value = {"status": "ready-for-human-approval"}
+        publish.return_value = transition
+
+        result = run_editor_publication("demo", {"publication_date": "2026-09-16"}, write=False)
+
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["publication"]["status"], "ready-for-human-approval")
+        publish.assert_called_once_with(
+            "demo",
+            "2026-09-16",
+            load_registry.return_value,
+            write=False,
+            approved=False,
+        )
 
     def test_article_template_reads_local_draft_preview_only_when_requested(self):
         script = Path("src/assets/scripts/article-template.js").read_text(encoding="utf-8")
