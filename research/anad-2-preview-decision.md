@@ -1,55 +1,55 @@
-# ANAD 2.0 - Pull-request preview decision
+# ANAD 2.0 - Pull-request preview contract
 
-Date: 2026-09-16  
-Decision: deliberately defer a third-party preview host during Recovery
+Date: 2026-09-16
+Decision: use the existing Netlify integration as an isolated review surface
 
 ## Context
 
-The site is a deterministic static build deployed to GitHub Pages from `main`.
-Pull requests already run the root and GitHub Pages build profiles, but GitHub Pages
-does not provide an isolated live URL for every branch in this repository.
+The site remains deployed to GitHub Pages from `main`, with GitHub and the repository
+as the technical source of truth. During Recovery, automatic Netlify comments were
+discovered on pull requests. No new host or account is required to obtain isolated
+preview URLs.
 
-## Decision and rationale
+The discovered preview initially returned Netlify's 404 page even though its bot
+reported a successful deployment. The repository did not declare a Netlify build or
+publish directory, so the preview contract was implicit and unreliable.
 
-Do not add Vercel, Cloudflare Pages, Netlify, a CMS or a second hosting source during
-Recovery only to obtain preview URLs.
+## Decision
 
-Current reasons:
+Keep GitHub Pages as production. Use Netlify only for ephemeral pull-request previews,
+with the following repository-owned contract:
 
-- the release cadence and contributor count remain low;
-- GitHub is already the single technical source of truth;
-- a second host introduces account, permission, environment and domain maintenance;
-- current build and deployment checks are deterministic;
-- no evidence yet shows that preview hosting saves more effort than it adds.
+- run `npm run build`;
+- publish only `dist/`;
+- use Node 20;
+- never publish source files, internal research or editorial tooling;
+- treat the preview as a review aid, never as a second production origin or content
+  source.
 
-This is a deliberate rejection for the Recovery exit criterion, not a permanent
-ban on previews.
+The contract lives in `netlify.toml` and is protected by
+`tests/netlify-preview.mjs`.
 
-## Interim review contract
+## Review flow
 
-- Non-visual changes: review the PR diff, require both CI jobs, merge only after the
-  documented human gate when one applies.
-- Visual changes: keep the PR in draft, use automated layout assertions and an
-  explicit device checklist, then perform a short real-device check after an
-  authorized reversible deployment.
-- If the live visual check fails, revert the isolated commit instead of stacking
-  unrelated fixes on production.
-- Never mix content publication approval with a visual or hosting experiment.
+- Non-visual changes: review the diff and require green CI. A preview is optional.
+- Visual changes: keep the PR in draft until the Netlify preview is successful and a
+  real-device check completes the documented checklist.
+- Verify that the preview URL resolves to the ANAD site, not Netlify's 404 page,
+  before asking for visual approval.
+- If the preview and local build disagree, stop and diagnose the deployment instead
+  of approving from either one alone.
+- Never use a preview to bypass factual, rights, editorial or publication gates.
 
-This interim contract is less convenient than a true branch preview. It is accepted
-only while visual releases remain infrequent and small.
+## Boundaries
 
-## Reconsideration triggers
+Netlify must not become:
 
-Evaluate an isolated preview host when any of these becomes true:
+- a CMS or content database;
+- the production host while GitHub Pages remains the recorded production contract;
+- a place for secrets or unpublished research;
+- a reason to change the deterministic `dist/` build;
+- an analytics source of record.
 
-- more than one visual/content release is prepared per week;
-- another regular contributor needs browser review;
-- a commercial or newsletter flow raises the cost of a production defect;
-- repeated mobile issues escape source and automated checks;
-- the Reel/social pipeline needs a stable campaign landing-page preview.
-
-At that point compare only lightweight static-preview options. The selected service
-must build from the GitHub PR, expose no internal research files, require no second
-content database and preserve `dist/` as the deployable contract.
-
+If the integration later introduces billing, account ownership, permission or privacy
+risk, disable previews and return to local/device validation until a new decision is
+recorded.
