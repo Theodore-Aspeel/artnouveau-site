@@ -162,7 +162,9 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
 - image rights/credit contract and corpus audit: complete; 21/21 runtime assets cleared
 - end-to-end article pilot: Maison Coilliot accessibility merged; factual review and
   final human editorial/visual approval remain
-- deterministic Reel pilot: pending
+- deterministic Reel pilot handoff: implemented as a read-only contract with a
+  source-bound storyboard, UTM plan, measurement fields and explicit human gates;
+  actual render and human review remain pending
 - current runtime media-rights inventory: complete on
   `anad-2.0/rights-and-review-flow`; 21/21 assets cleared from the explicit
   project-owner confirmation, with no wildcard inheritance

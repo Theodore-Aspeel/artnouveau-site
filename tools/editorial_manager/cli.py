@@ -20,6 +20,8 @@ from .publication_gate import build_publication_gate, render_publication_gate
 from .publication_plan import build_publication_plan, render_publication_plan
 from .publication_transition import publish_article, render_publication_transition
 from .repository import PROJECT_ROOT, find_article_by_slug, load_articles
+from .reel_pilot import DEFAULT_PUBLIC_BASE_URL, build_reel_pilot
+from .reel_pilot_validation import validate_reel_pilot_file
 from .reporting import (
     render_article_detail,
     render_article_list,
@@ -363,6 +365,29 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_social_package_parser.add_argument("path", help="Path to a social-package JSON file.")
 
+    reel_pilot_parser = subparsers.add_parser(
+        "reel-pilot",
+        help="Prepare a deterministic review-only Reel pilot handoff.",
+    )
+    reel_pilot_parser.add_argument("slug", help="Article slug to prepare.")
+    reel_pilot_parser.add_argument(
+        "--locale",
+        choices=preview_locale_codes(),
+        default="fr",
+        help="Reel locale to prepare. Defaults to fr.",
+    )
+    reel_pilot_parser.add_argument(
+        "--public-base-url",
+        default=DEFAULT_PUBLIC_BASE_URL,
+        help="Public site base URL, including a deployment subpath when needed.",
+    )
+
+    validate_reel_pilot_parser = subparsers.add_parser(
+        "validate-reel-pilot",
+        help="Validate an exported Reel pilot JSON handoff payload.",
+    )
+    validate_reel_pilot_parser.add_argument("path", help="Path to a Reel pilot JSON file.")
+
     return parser
 
 
@@ -387,6 +412,17 @@ def main(argv: list[str] | None = None) -> int:
             print("Warnings:")
             for warning in result.warnings:
                 print(f"  - {warning}")
+        return 0 if result.ok else 1
+
+    if args.command == "validate-reel-pilot":
+        result = validate_reel_pilot_file(args.path)
+        print("Reel pilot validation")
+        print(f"File: {args.path}")
+        print(f"Status: {'valid' if result.ok else 'invalid'}")
+        if result.errors:
+            print("Errors:")
+            for error in result.errors:
+                print(f"  - {error}")
         return 0 if result.ok else 1
 
     articles = load_articles()
@@ -584,6 +620,17 @@ def main(argv: list[str] | None = None) -> int:
             parser.error(f"unknown article slug: {selected_slug}")
         package = build_social_package(article, args.locale)
         print(render_social_package_json(package))
+        return 0
+
+    if args.command == "reel-pilot":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        try:
+            payload = build_reel_pilot(article, args.locale, args.public_base_url)
+        except ValueError as exc:
+            parser.error(str(exc))
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
 
     if args.command == "social-queue":
