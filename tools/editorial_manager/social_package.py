@@ -14,6 +14,7 @@ from .article_access import (
     normalize_text,
 )
 from .locales import DEFAULT_LOCALE, normalize_locale, preview_locale_codes, public_locale_codes
+from .locale_report import LocaleReportItem, analyze_article_locale
 from .social_brief import SocialBrief, build_social_brief, social_brief_to_dict
 from .social_caption import SocialCaption, build_social_caption, social_caption_to_dict
 from .social_queue import SocialQueueItem, build_social_queue
@@ -51,6 +52,7 @@ class SocialPackage:
     slug: str
     requested_locale: str
     source_locale: str
+    requested_locale_status: LocaleReportItem
     brief: SocialBrief
     caption: SocialCaption
     media: SocialPackageMedia
@@ -69,6 +71,11 @@ def build_social_package(article: Article, locale: str = "fr") -> SocialPackage:
         slug=brief.slug,
         requested_locale=requested_locale,
         source_locale=caption.source_locale,
+        requested_locale_status=(
+            analyze_article_locale(article, requested_locale)
+            if requested_locale != DEFAULT_LOCALE
+            else brief.locale_status
+        ),
         brief=brief,
         caption=caption,
         media=_media_package(article, caption.source_locale),
@@ -91,7 +98,10 @@ def social_package_to_dict(package: SocialPackage) -> dict[str, Any]:
         "slug": package.slug,
         "requested_locale": package.requested_locale,
         "source_locale": package.source_locale,
-        "locale_status": brief_payload["locale_status"],
+        "locale_status": {
+            "status": package.requested_locale_status.status,
+            "missing_fields": list(package.requested_locale_status.missing_fields),
+        },
         "queue_status": package.queue_item.queue_status,
         "brief": brief_payload,
         "caption": caption_payload,

@@ -97,10 +97,10 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `social-brief <slug>`: prepares a simple read-only publication brief for one article, with FR/EN titles and dek, locale status, quote, practical items, image presence, and a readiness summary.
 - `social-brief <slug> --json`: prints the same brief as a structured JSON payload for future automation workflows.
 - `social-caption <slug>`: prepares a simple read-only social caption proposal for one article, with title, hook, short caption, CTA, hashtags, and locale status.
-- `social-caption <slug> --locale fr|en --json`: prints the same caption proposal as a small structured JSON payload. When English is requested but unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
-- `social-package <slug> --locale fr|en`: prints one JSON payload for later social automation, combining the existing brief, caption, media block, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
-- `social-package --next --locale fr|en`: selects the first matching article through the same queue logic as `social-next`, then prints the same package payload as the slug mode.
-- `social-package --next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. These filters apply only to automatic selection. `--status` defaults to `candidate`.
+- `social-caption <slug> --locale fr|en|nl --json`: prints the same caption proposal as a small structured JSON payload. When the requested locale is unavailable, the proposal explicitly reports `source_locale: fr` instead of inventing a translation.
+- `social-package <slug> --locale fr|en|nl`: prints one JSON payload for later social automation, combining the existing brief, caption, media block, image summary, readiness, queue status, and reasons. It is read-only and always outputs JSON.
+- `social-package --next --locale fr|en|nl`: selects the first matching article through the same queue logic as `social-next`, then prints the same package payload as the slug mode.
+- `social-package --next` filters: accepts `--status candidate|needs-review|blocked`, the locale readiness statuses exposed by `--help`, and `--has-hero yes|no`. These filters apply only to automatic selection. `--status` defaults to `candidate`.
 - `social-queue`: shows a batch queue of articles for future social publication planning, with FR/EN titles, locale status, publication readiness, hero image presence, and a simple queue status.
 - `social-queue --json`: prints the same queue as a structured JSON payload for future automation workflows.
 - `social-queue` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, `--has-hero yes|no`, and `--limit N`.
@@ -108,7 +108,7 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `social-next --json`: prints the same next item as a small structured JSON payload for future automation workflows.
 - `social-next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`.
 - `social-workflow`: prepares a small local handoff for the first matching social publication candidate. It reuses `social-next` selection and `social-package` payload building, then prints the selected article, caption draft, media paths, article links, reasons, and follow-up local commands.
-- `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`. It also accepts `--locale fr|en` for the caption/package locale.
+- `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, the locale readiness statuses exposed by `--help`, and `--has-hero yes|no`. It also accepts `--locale fr|en|nl` for the caption/package locale.
 - `validate-social-package <path>`: validates an exported `social-package` JSON payload against the minimal handoff contract intended for a first local n8n prototype.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
