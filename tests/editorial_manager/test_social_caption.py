@@ -104,6 +104,62 @@ class SocialCaptionTests(unittest.TestCase):
         self.assertEqual(caption.hook, "À découvrir: Legacy title")
         self.assertEqual(caption.caption, "Legacy dek.")
 
+    def test_build_social_caption_uses_dutch_when_present(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "format": "long",
+            "publication": {"order": 1},
+            "media": {"hero": {"src": "assets/images/demo.png"}},
+            "content": {
+                "fr": {
+                    "title": "Maison Demo",
+                    "dek": "Dek FR.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Meta FR."},
+                    "media": {"hero_alt": "Alt FR."},
+                },
+                "en": {},
+                "nl": {
+                    "title": "Demohuis",
+                    "dek": "Een expressieve gevel in Rijsel.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Meta NL."},
+                    "media": {"hero_alt": "Alt NL."},
+                },
+            },
+        }
+
+        caption = build_social_caption(article, "nl")
+
+        self.assertEqual(caption.requested_locale, "nl")
+        self.assertEqual(caption.source_locale, "nl")
+        self.assertEqual(caption.locale_status, "nl-ready")
+        self.assertEqual(caption.title, "Demohuis")
+        self.assertEqual(caption.hook, "Van dichtbij: Demohuis")
+        self.assertEqual(caption.caption, "Een expressieve gevel in Rijsel.")
+        self.assertEqual(caption.cta, "Lees het artikel op de site.")
+
+    def test_build_social_caption_marks_french_fallback_for_missing_dutch(self):
+        article = {
+            "slug": "demo",
+            "title": "Legacy title",
+            "chapeau": "Legacy dek.",
+            "hero_image": "assets/images/demo.png",
+            "alt_text": "Alt.",
+            "meta_description": "Meta.",
+            "publication_order_recommended": 1,
+            "content": {"nl": {}},
+        }
+
+        caption = build_social_caption(article, "nl")
+
+        self.assertEqual(caption.requested_locale, "nl")
+        self.assertEqual(caption.source_locale, "fr")
+        self.assertEqual(caption.locale_status, "nl-missing")
+        self.assertEqual(caption.title, "Legacy title")
+        self.assertEqual(caption.hook, "À découvrir: Legacy title")
+
     def test_build_social_caption_keeps_caption_short(self):
         article = {
             "slug": "demo",

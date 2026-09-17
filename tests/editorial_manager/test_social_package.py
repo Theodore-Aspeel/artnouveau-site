@@ -52,6 +52,18 @@ def ready_article() -> dict:
                     "support_captions": ["Support caption EN."],
                 },
             },
+            "nl": {
+                "title": "Demohuis",
+                "dek": "Dek NL.",
+                "sections": [{"heading": "A", "body": "B"}],
+                "seo": {"meta_description": "Meta NL."},
+                "media": {
+                    "hero_alt": "Alt NL.",
+                    "hero_caption": "Caption NL.",
+                    "support_alt": ["Support alt NL."],
+                    "support_captions": ["Support caption NL."],
+                },
+            },
         },
     }
 
@@ -122,6 +134,18 @@ class SocialPackageTests(unittest.TestCase):
         self.assertEqual(payload["media"]["hero"]["alt"], "Alt FR.")
         self.assertEqual(payload["media"]["hero"]["caption"], "Caption FR.")
         self.assertIn("English content is missing.", payload["reasons"])
+
+    def test_social_package_uses_dutch_caption_and_media_when_ready(self):
+        payload = social_package_to_dict(build_social_package(ready_article(), "nl"))
+
+        self.assertEqual(payload["requested_locale"], "nl")
+        self.assertEqual(payload["source_locale"], "nl")
+        self.assertEqual(payload["locale_status"], {"status": "nl-ready", "missing_fields": []})
+        self.assertEqual(payload["caption"]["title"], "Demohuis")
+        self.assertEqual(payload["caption"]["hook"], "Van dichtbij: Demohuis")
+        self.assertEqual(payload["caption"]["cta"], "Lees het artikel op de site.")
+        self.assertEqual(payload["media"]["hero"]["alt"], "Alt NL.")
+        self.assertEqual(payload["media"]["support"][0]["caption"], "Support caption NL.")
 
     def test_social_package_media_uses_stable_fallbacks_and_keeps_support_order(self):
         article = ready_article()

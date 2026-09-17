@@ -7,7 +7,8 @@ from typing import Any
 import re
 import unicodedata
 
-from .article_access import article_taxonomy
+from .article_access import article_taxonomy, is_mapping, normalize_text
+from .locale_report import analyze_article_locale
 from .locales import DEFAULT_LOCALE, normalize_locale
 from .social_brief import SocialBrief, build_social_brief
 
@@ -32,15 +33,20 @@ def build_social_caption(article: Article, locale: str = "fr") -> SocialCaption:
     """Build a deterministic, human-editable caption proposal for one article."""
     requested_locale = normalize_locale(locale)
     brief = build_social_brief(article)
-    source_locale = _caption_source_locale(brief, requested_locale)
-    title = _localized_value(brief, source_locale, "title")
-    dek = _localized_value(brief, source_locale, "dek")
+    source_locale = _caption_source_locale(article, requested_locale)
+    title = _localized_value(article, brief, source_locale, "title")
+    dek = _localized_value(article, brief, source_locale, "dek")
+    locale_status = (
+        analyze_article_locale(article, requested_locale).status
+        if requested_locale != DEFAULT_LOCALE
+        else brief.locale_status.status
+    )
 
     return SocialCaption(
         slug=brief.slug,
         requested_locale=requested_locale,
         source_locale=source_locale,
-        locale_status=brief.locale_status.status,
+        locale_status=locale_status,
         title=title,
         hook=_build_hook(title, source_locale),
         caption=_build_caption(title, dek),
@@ -64,13 +70,18 @@ def social_caption_to_dict(caption: SocialCaption) -> dict[str, Any]:
     }
 
 
-def _caption_source_locale(brief: SocialBrief, requested_locale: str) -> str:
-    if requested_locale == "en" and (brief.title_en or brief.dek_en):
-        return "en"
+def _caption_source_locale(article: Article, requested_locale: str) -> str:
+    if requested_locale != DEFAULT_LOCALE and (
+        _raw_localized_value(article, requested_locale, "title")
+        or _raw_localized_value(article, requested_locale, "dek")
+    ):
+        return requested_locale
     return DEFAULT_LOCALE
 
 
-def _localized_value(brief: SocialBrief, locale: str, field: str) -> str:
+def _localized_value(article: Article, brief: SocialBrief, locale: str, field: str) -> str:
+    if locale not in {DEFAULT_LOCALE, "en"}:
+        return _raw_localized_value(article, locale, field)
     if field == "title":
         return brief.title_en if locale == "en" else brief.title_fr
     if field == "dek":
@@ -78,10 +89,20 @@ def _localized_value(brief: SocialBrief, locale: str, field: str) -> str:
     return ""
 
 
+def _raw_localized_value(article: Article, locale: str, field: str) -> str:
+    content = article.get("content")
+    selected = content.get(locale) if is_mapping(content) else None
+    return normalize_text(selected.get(field)) if is_mapping(selected) else ""
+
+
 def _build_hook(title: str, locale: str) -> str:
     if not title:
         return ""
-    prefix = "À découvrir" if locale == "fr" else "Look closer"
+    prefix = {
+        "fr": "À découvrir",
+        "en": "Look closer",
+        "nl": "Van dichtbij",
+    }.get(locale, "À découvrir")
     return f"{prefix}: {title}"
 
 
@@ -94,6 +115,8 @@ def _build_caption(title: str, dek: str) -> str:
 def _build_cta(locale: str) -> str:
     if locale == "en":
         return "Read the article on the site."
+    if locale == "nl":
+        return "Lees het artikel op de site."
     return "Lire l'article sur le site."
 
 
