@@ -56,6 +56,9 @@ python -m tools.editorial_manager social-next --json
 python -m tools.editorial_manager social-next --status needs-review --locale-status fr-only
 python -m tools.editorial_manager social-workflow
 python -m tools.editorial_manager social-workflow --locale en --status needs-review --locale-status fr-only
+python -m tools.editorial_manager reel-pilot <slug> --locale fr
+python -m tools.editorial_manager reel-pilot <slug> --locale en --public-base-url https://theodore-aspeel.github.io/artnouveau-site
+python -m tools.editorial_manager validate-reel-pilot path/to/reel-pilot.json
 python -m tools.editorial_manager validate-social-package research/social-package-example.json
 ```
 
@@ -109,6 +112,8 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `social-next` filters: accepts `--status candidate|needs-review|blocked`, `--locale-status en-ready|en-partial|fr-only`, and `--has-hero yes|no`.
 - `social-workflow`: prepares a small local handoff for the first matching social publication candidate. It reuses `social-next` selection and `social-package` payload building, then prints the selected article, caption draft, media paths, article links, reasons, and follow-up local commands.
 - `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, the locale readiness statuses exposed by `--help`, and `--has-hero yes|no`. It also accepts `--locale fr|en|nl` for the caption/package locale.
+- `reel-pilot <slug> --locale fr|en|nl`: emits a read-only 9:16 Reel pilot contract built from the existing social package and reviewed article text. It includes three hook alternatives when the source article provides them, a 24-second storyboard, media roles, a tracked URL, measurement fields and explicit human gates. It does not render, upload or publish.
+- `validate-reel-pilot <path>`: validates the consumer-facing Reel handoff boundary, including its format, review gates and negative automation capabilities.
 - `validate-social-package <path>`: validates an exported `social-package` JSON payload against the minimal handoff contract intended for a first local n8n prototype.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.

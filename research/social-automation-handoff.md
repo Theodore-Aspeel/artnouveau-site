@@ -53,6 +53,21 @@ A first local n8n prototype should treat the CLI output as its only input payloa
 
 This keeps n8n replaceable. Another automation tool can consume the same JSON without changing article data or site rendering.
 
+## Reel pilot layer
+
+The next read-only layer is available without changing the stable social-package
+contract:
+
+```bash
+python -m tools.editorial_manager reel-pilot \
+  maison-coilliot-lille-hector-guimard \
+  --locale fr
+```
+
+It emits `artnouveau.reel_pilot@1`: a 9:16 pilot storyboard, three source-bound
+hooks, media roles, a tracked target URL, measurement fields and explicit human
+gates. It still does not render or publish. See `research/reel-pilot-contract.md`.
+
 ## First Local n8n Prototype
 
 The first prototype is a learning workflow, not a publishing workflow. It should be possible to run it on a local machine, inspect each node, and delete it without changing the website.

@@ -363,6 +363,54 @@ class CliTests(unittest.TestCase):
         self.assertIn("readiness", payload)
         self.assertIn("reasons", payload)
 
+    def test_reel_pilot_command_outputs_review_only_contract(self):
+        article = {
+            "slug": "demo",
+            "status": "ready",
+            "format": "long",
+            "publication": {"order": 1},
+            "media": {"hero": {"src": "assets/images/demo.png"}},
+            "facts": {"location": {"city": "Lille", "country": "France"}},
+            "taxonomy": {"style_key": "art_nouveau"},
+            "content": {
+                "fr": {
+                    "title": "Demo",
+                    "dek": "Demo dek.",
+                    "epigraph": "Demo epigraph.",
+                    "sections": [
+                        {"heading": "Heading one", "body": "A"},
+                        {"heading": "Heading two", "body": "B"},
+                    ],
+                    "seo": {"meta_description": "Demo meta."},
+                    "media": {"hero_alt": "Demo alt."},
+                },
+                "en": {
+                    "title": "Demo EN",
+                    "dek": "Demo dek EN.",
+                    "sections": [{"heading": "A", "body": "B"}],
+                    "seo": {"meta_description": "Demo meta EN."},
+                    "media": {"hero_alt": "Demo alt EN."},
+                },
+            },
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with redirect_stdout(output):
+                exit_code = main([
+                    "reel-pilot",
+                    "demo",
+                    "--public-base-url",
+                    "https://example.com/project",
+                ])
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(payload["contract"]["name"], "artnouveau.reel_pilot")
+        self.assertEqual(payload["slug"], "demo")
+        self.assertTrue(payload["link_plan"]["tracked_url"].startswith("https://example.com/project/fr/"))
+        self.assertFalse(payload["automation_limits"]["renders_video"])
+
     def test_social_package_next_outputs_first_matching_package(self):
         articles = [
             {
