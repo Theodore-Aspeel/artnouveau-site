@@ -167,7 +167,7 @@ for (const locale of publicLocales) {
     `${filePath} should include final twitter:description`
   );
   assert.ok(
-    html.includes(`<meta property="og:image" content="${absolutePublicUrl('/assets/images/articles/maison-coilliot-lille-hector-guimard.png')}">`),
+    html.includes(`<meta property="og:image" content="${absolutePublicUrl('/assets/images/articles/maison-coilliot-facade-complete-christophe-aspel.jpg')}">`),
     `${filePath} should expose an absolute og:image URL`
   );
   assert.ok(
