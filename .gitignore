@@ -3,6 +3,7 @@
 
 # Build output
 /dist/
+/video-spikes/maison-coilliot/output/
 
 # IDE and local agent settings
 /.idea/
