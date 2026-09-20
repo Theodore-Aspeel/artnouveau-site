@@ -8,6 +8,7 @@ from tools.editorial_manager.editor_server import (
     import_filename,
     resolve_static_path,
     route_slug,
+    run_editor_pipeline_status,
     run_editor_publication,
 )
 
@@ -78,6 +79,17 @@ class EditorServerTests(unittest.TestCase):
         self.assertIn("/api/backups/restore", EDITOR_HTML)
         self.assertIn("Une sauvegarde locale", EDITOR_HTML)
 
+    def test_editor_html_contains_read_only_pipeline_view(self):
+        self.assertIn("Parcours de l’article", EDITOR_HTML)
+        self.assertIn("Prochaine action", EDITOR_HTML)
+        self.assertIn("Aucune étape n’est validée automatiquement", EDITOR_HTML)
+        self.assertIn("/pipeline-status", EDITOR_HTML)
+        self.assertIn("pipelineStageLabel", EDITOR_HTML)
+        self.assertIn("Contenu et vérifications", EDITOR_HTML)
+        self.assertIn("Mise en ligne Instagram", EDITOR_HTML)
+        self.assertIn("Validation humaine requise", EDITOR_HTML)
+        self.assertIn("dernière version enregistrée", EDITOR_HTML)
+
     def test_editor_html_prepares_local_draft_preview(self):
         self.assertIn('data-preview-locale="${escapeAttr(locale.code)}"', EDITOR_HTML)
         self.assertIn('editorDraft", "1"', EDITOR_HTML)
@@ -129,6 +141,41 @@ class EditorServerTests(unittest.TestCase):
             write=False,
             approved=False,
         )
+
+    @patch("tools.editorial_manager.editor_server.build_pipeline_status")
+    @patch("tools.editorial_manager.editor_server.load_media_rights_registry")
+    @patch("tools.editorial_manager.editor_server.find_payload_article")
+    @patch("tools.editorial_manager.editor_server.load_article_payload")
+    def test_editor_pipeline_status_returns_read_only_payload(self, load_payload, find_article, load_registry, build_status):
+        load_payload.return_value = {"articles": []}
+        article = {"slug": "demo"}
+        find_article.return_value = article
+        load_registry.return_value = {"collections": []}
+        build_status.return_value = {"slug": "demo", "read_only": True, "current_stage": "publication"}
+
+        result = run_editor_pipeline_status("demo")
+
+        self.assertTrue(result["ok"])
+        self.assertTrue(result["pipeline"]["read_only"])
+        build_status.assert_called_once()
+        self.assertIs(build_status.call_args.args[0], article)
+        self.assertIs(build_status.call_args.args[1], load_registry.return_value)
+
+    @patch("tools.editorial_manager.editor_server.find_payload_article", return_value=None)
+    @patch("tools.editorial_manager.editor_server.load_article_payload", return_value={"articles": []})
+    def test_editor_pipeline_status_rejects_unknown_article(self, _load_payload, _find_article):
+        result = run_editor_pipeline_status("missing")
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["code"], "unknown-article")
+
+    @patch("tools.editorial_manager.editor_server.load_article_payload", side_effect=ValueError("invalid data"))
+    def test_editor_pipeline_status_reports_calculation_error(self, _load_payload):
+        result = run_editor_pipeline_status("demo")
+
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["code"], "pipeline-status-failed")
+        self.assertIn("invalid data", result["error"])
 
     def test_article_template_reads_local_draft_preview_only_when_requested(self):
         script = Path("src/assets/scripts/article-template.js").read_text(encoding="utf-8")
