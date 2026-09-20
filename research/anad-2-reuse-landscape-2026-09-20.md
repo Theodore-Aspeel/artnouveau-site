@@ -50,7 +50,7 @@ Les stars sont un signal important de découverte et de maturité, mais ne rempl
 | A | [GoogleChrome/lighthouse-ci](https://github.com/GoogleChrome/lighthouse-ci) | QA SEO/performance CI | ~7.1k stars, Apache-2.0 | **92** | **REUSE** |
 | A | [dimsemenov/PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) | galerie / lightbox | ~25.3k stars, MIT, framework-independent | **91** | **REUSE** |
 | A/B | [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) | agents / SEO | ~17.3k stars, MIT, 25 skills + 18 agents | **90** | **REUSE / INSPIRE** |
-| B | [hunvreus/pagescms](https://github.com/hunvreus/pagescms) | CMS Git | ~4.0k stars, MIT, GitHub-first | **88** | **ADAPT / pilote** |
+| B | [hunvreus/pagescms](https://github.com/hunvreus/pagescms) | CMS Git | ~4.0k stars, MIT, GitHub-first, JSON + médias | **90** | **ADAPT / pilote** |
 | B | [remotion-dev/remotion](https://github.com/remotion-dev/remotion) | vidéo déterministe | ~59.9k stars, très actif, Agent Skills/templates/WebMCP | **92** | **REUSE plus tard** |
 | B | [dequelabs/axe-core](https://github.com/dequelabs/axe-core) | accessibilité | ~7.5k stars, MPL-2.0, actif | **87** | **REUSE avec Playwright** |
 | B | [unclecode/crawl4ai](https://github.com/unclecode/crawl4ai) | crawl / recherche | ~84.0k stars, Apache-2.0, actif | **86** | **ADAPT si besoin de crawl massif** |
@@ -144,14 +144,15 @@ Lighthouse CI permet des assertions automatisées sur les commits et peut bloque
 
 ## 5. CMS / outil éditorial
 
-### Pages CMS — 88/100 — ADAPT / pilote
+### Pages CMS — 90/100 — ADAPT / pilote
 
 Snapshot :
 - ~4.0k stars ;
 - MIT ;
 - GitHub-first ;
 - conçu pour sites statiques ;
-- gestion de contenu et médias directement dans le repository.
+- gestion de contenu et médias directement dans le repository ;
+- schéma de configuration vérifié : formats `json`, `yaml`, `toml`, frontmatter, datagrid, code et raw pris en charge.
 
 Le code confirme une architecture par collections, champs et médias. Le projet gère des formats structurés/frontmatter ; il mérite un spike spécifique pour vérifier la compatibilité exacte avec la structure imbriquée de `src/data/articles.json`.
 
