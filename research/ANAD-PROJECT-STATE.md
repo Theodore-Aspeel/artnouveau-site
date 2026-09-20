@@ -86,6 +86,7 @@ Les statistiques d'un Reel et les conversions vers le site ne sont pas entièrem
 - **D08 VALIDÉ — 20-09-2026** — Positionnement de travail : `ANAD — Art Nouveau et Art Déco en Europe · Publication photographique et patrimoniale de Christophe Aspel`. Identité visuelle photographie-first ; ivoire/encre/bronze comme cadre éditorial, sans filtre sur les photographies ; continuité typographique avec le site.
 - **D09 VALIDÉ — 20-09-2026** — Reels ponctuels uniquement lorsqu'ils apportent une valeur distincte ; article/carrousel peuvent être publiés sans Reel. Aucun nombre artificiel de slides ; post simple préférable à un faux carrousel.
 - **D10 VALIDÉ — 20-09-2026** — Fonds d'écran : piste expérimentale différée, mini-série limitée possible après validation artistique et droits ; aucune dépendance au premier cycle Coilliot.
+- **D11 VALIDÉ — 20-09-2026** — Politique **REUSE FIRST** : avant tout nouvel outil, agent, workflow, template, pipeline ou développement significatif, effectuer un scan des capacités existantes et des dépôts GitHub matures, puis décider explicitement **REUSE / ADAPT / INSPIRE / BUILD**. Les stars/adoption, maintenance, tests, compatibilité, coût, sécurité et licence sont examinés de façon proportionnée. Référence : `research/anad-2-reuse-first-policy.md`.
 
 ## 7. Organisation des discussions et transmission
 
@@ -107,5 +108,6 @@ Ne pas recopier des spécifications volumineuses ici : conserver leurs documents
 - `research/publication-gate-flow.md`
 - `research/reel-pilot-contract.md`
 - `research/social-automation-handoff.md`
+- `research/anad-2-reuse-first-policy.md`
 
 Dernière revue : synthèse des documents GitHub accessibles au 2026-09-20 et décisions de pilotage confirmées par Théodore. Ce registre ne remplace pas un contrôle de la branche actuelle, du déploiement ni des données de compte externes.
