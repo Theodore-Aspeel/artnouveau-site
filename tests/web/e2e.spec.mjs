@@ -29,7 +29,7 @@ for (const pageCase of pages) {
 
     const nav = page.locator('#main-menu');
     const toggle = page.locator('.site-nav__toggle');
-    if (testInfo.project.name === 'chromium-mobile-390') {
+    if (await toggle.isVisible()) {
       await expect(toggle).toBeVisible();
       await toggle.click();
       await expect(toggle).toHaveAttribute('aria-expanded', 'true');

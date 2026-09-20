@@ -426,8 +426,8 @@ main {
 }
 
 .btn--primary {
-  background: var(--an-accent);
-  border-color: var(--an-accent);
+  background: #845f26;
+  border-color: #845f26;
   color: #fffaf3;
 }
 
