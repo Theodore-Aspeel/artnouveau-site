@@ -11,9 +11,9 @@ Cette mise à jour prévaut sur les lignes plus anciennes du présent fichier lo
 
 - **Maison Coilliot — VÉRIFIÉ** : PR #25 fusionnée ; vraies photographies de Christophe intégrées ; anciennes vues d'autres bâtiments retirées ; gate visuel humain clos ; article maintenu en `draft`, aucune publication.
 - **Mesure — EN COURS** : PR #26 fusionnée ; protocole T0/J+1/J+7/J+30 documenté. Metricool connecté. Plausible supporté par le code mais inactif en production ; GA4 non connecté.
-- **Search Console — EN COURS** : PR #27 fusionnée ; fichier de vérification Google déployé. La propriété URL-prefix existe côté Google mais reste à valider par l'utilisateur dans Search Console avant rattachement GSC Wizard.
+- **Search Console — VÉRIFIÉ pour la propriété** : propriété URL-prefix `https://theodore-aspeel.github.io/artnouveau-site/` validée côté Google et rattachée à GSC Wizard avec niveau propriétaire. Le sitemap public est lisible (51 URL), mais **NON SOUMIS** car il contient actuellement les 14 articles `draft` ; ne pas accélérer leur indexation avant décision de visibilité SEO.
 - **Transmission — RÉALISÉE** : `research/ANAD-HANDOFF-2026-09-20.md` intégré comme archive historique via PR #28 ; l'ancienne PR #24 a été fermée comme remplacée.
-- **Priorité immédiate P0** : valider Search Console, rattacher la propriété à GSC Wizard, vérifier sitemap/indexation, puis tester le parcours Instagram → article et établir T0.
+- **Priorité immédiate P0** : corriger le gate SEO des brouillons avant toute soumission du sitemap ; ensuite vérifier indexation, tester le parcours Instagram → article et établir T0.
 
 ## 1. Finalité et doctrine
 
