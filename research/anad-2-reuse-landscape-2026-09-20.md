@@ -51,7 +51,7 @@ Les stars sont un signal important de découverte et de maturité, mais ne rempl
 | A | [dimsemenov/PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) | galerie / lightbox | ~25.3k stars, MIT, framework-independent | **91** | **REUSE** |
 | A/B | [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) | agents / SEO | ~17.3k stars, MIT, 25 skills + 18 agents | **90** | **REUSE / INSPIRE** |
 | B | [hunvreus/pagescms](https://github.com/hunvreus/pagescms) | CMS Git | ~4.0k stars, MIT, GitHub-first | **88** | **ADAPT / pilote** |
-| B | [remotion-dev/remotion](https://github.com/remotion-dev/remotion) | vidéo déterministe | ~59.9k stars, très actif, skills/templates agents | **88** | **REUSE plus tard** |
+| B | [remotion-dev/remotion](https://github.com/remotion-dev/remotion) | vidéo déterministe | ~59.9k stars, très actif, Agent Skills/templates/WebMCP | **92** | **REUSE plus tard** |
 | B | [dequelabs/axe-core](https://github.com/dequelabs/axe-core) | accessibilité | ~7.5k stars, MPL-2.0, actif | **87** | **REUSE avec Playwright** |
 | B | [unclecode/crawl4ai](https://github.com/unclecode/crawl4ai) | crawl / recherche | ~84.0k stars, Apache-2.0, actif | **86** | **ADAPT si besoin de crawl massif** |
 | B | [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) | social scheduling | ~36.1k stars, AGPL-3.0, API + agent | **84** | **WATCH / ADAPT après pilote Metricool** |
@@ -226,14 +226,16 @@ ANAD utilise déjà `sharp` dans ses devDependencies. C'est un exemple réussi d
 
 ## 7. Reels / vidéo
 
-### Remotion — 88/100 — REUSE PLUS TARD
+### Remotion — 92/100 — REUSE PLUS TARD
 
 Snapshot :
 - ~59.9k stars ;
 - très actif ;
 - vidéo programmatique React ;
 - templates, composants, captions, transitions ;
-- documentation dédiée aux **Agent Skills** et prompts.
+- documentation dédiée aux **Agent Skills**, prompts et templates ;
+- **WebMCP** documenté pour contrôler Remotion Studio avec un agent ;
+- création de projet scriptable pensée explicitement pour les coding agents.
 
 Conclusion importante : notre ancien prototype Remotion insatisfaisant ne signifie pas que l'écosystème Remotion est mauvais. Nous avons utilisé une approche maison trop étroite.
 
