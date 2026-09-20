@@ -57,6 +57,31 @@ Les stars sont un signal important de découverte et de maturité, mais ne rempl
 | B | [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) | social scheduling | ~36.1k stars, AGPL-3.0, API + agent | **84** | **WATCH / ADAPT après pilote Metricool** |
 | B | [umami-software/umami](https://github.com/umami-software/umami) | analytics | ~38.9k stars, MIT, actif, MCP disponible | **82** | **WATCH / REUSE si analytics site nécessaire** |
 
+## 3 bis. Bibliothèques générales d'agents / skills
+
+Ce scan change la méthode de découverte elle-même : avant de chercher un agent spécialisé isolé, ANAD peut interroger des catalogues déjà massifs et maintenus.
+
+| Projet | Snapshot GitHub | Intérêt ANAD | Score | Décision |
+| --- | --- | --- | ---: | --- |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | ~97.6k stars, MIT, très actif | skills d'ingénierie production-grade pour agents | **96** | **REUSE comme catalogue/référentiel** |
+| [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | ~51.0k stars, MIT | CRO, SEO, analytics, copywriting, growth | **94** | **REUSE / INSPIRE pour marketing** |
+| [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | ~34.6k stars, MIT, 1000+ skills | catalogue multi-agent compatible Codex/Claude/Gemini/Cursor | **94** | **REUSE comme index de découverte** |
+| [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) | ~26.2k stars, MIT, 380+ skills | engineering, marketing, product, research, business | **91** | **REUSE comme catalogue** |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | ~54.4k stars, très actif | sélection de skills, agents, plugins et tooling | **86** | **INSPIRE / découverte** |
+
+### Conséquence de méthode
+
+Avant tout futur développement, le REUSE SCAN doit désormais consulter **deux niveaux** :
+
+1. **catalogues de skills/agents** (Agent Skills, VoltAgent, Marketing Skills, Claude Skills, etc.) ;
+2. **dépôts métier spécialisés** (SEO, vidéo, CMS, QA, analytics, etc.).
+
+Cette approche est plus efficace qu'une recherche GitHub brute seule : les catalogues font déjà une partie du travail de curation.
+
+### Ordre de découverte proposé
+
+`besoin ANAD → skills déjà connectés → catalogues agents/skills → repos métier GitHub → librairies standard → BUILD seulement si écart réel`
+
 ## 4. SEO / Search Console / audit
 
 ### AgriciDaniel/claude-seo — 90/100 — REUSE / INSPIRE
