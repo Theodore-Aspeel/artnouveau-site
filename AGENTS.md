@@ -214,6 +214,26 @@ Never claim a task is complete if validation was not run, unless you explicitly 
 
 ---
 
+## Reuse-first tooling rule
+
+Before building any non-trivial new tool, integration, agent, workflow, template, media pipeline or infrastructure, perform a **REUSE FIRST** scan.
+
+Required order:
+1. check existing project capabilities and connected plugins/skills;
+2. search mature GitHub repositories and standard ecosystem libraries;
+3. compare serious candidates using adoption/popularity, recent maintenance, releases, tests/CI, compatibility, dependencies, cost, security and license where code reuse is contemplated;
+4. choose one of: **REUSE**, **ADAPT**, **INSPIRE**, or **BUILD**.
+
+Do not default to bespoke implementation when a mature external solution already covers most of the requirement.
+
+A BUILD decision for a significant capability should state why reuse/adaptation is insufficient.
+
+The cross-project policy is documented in:
+- `research/anad-2-reuse-first-policy.md`
+
+This rule does not authorize a new paid service, dependency, publication, external contact or major architecture change by itself. Existing human approval gates still apply.
+
+---
 ## Scope control
 
 Do only what was asked.
