@@ -15,6 +15,7 @@ from .editor_fields import editable_field_payload
 from .editor_backups import create_articles_backup, list_article_backups, restore_articles_backup
 from .editor_images import editor_image_path, import_editor_image, list_editor_image_options
 from .media_rights import load_media_rights_registry
+from .pipeline_status import build_pipeline_status
 from .publication_transition import publish_article
 from .editor_store import (
     build_editor_article_payload,
@@ -89,6 +90,19 @@ class EditorRequestHandler(BaseHTTPRequestHandler):
 
         if route == "/api/backups":
             self.send_json({"backups": list_article_backups()})
+            return
+
+        if route.endswith("/pipeline-status"):
+            slug = route_slug(route[: -len("/pipeline-status")], "/api/articles/")
+            if not slug:
+                self.send_json({"error": "Not found."}, HTTPStatus.NOT_FOUND)
+                return
+            result = run_editor_pipeline_status(slug)
+            if result.get("ok"):
+                self.send_json(result)
+            else:
+                status = HTTPStatus.NOT_FOUND if result.get("code") == "unknown-article" else HTTPStatus.BAD_REQUEST
+                self.send_json(result, status)
             return
 
         slug = route_slug(route, "/api/articles/")
@@ -305,6 +319,20 @@ def run_editor_publication(slug: str, request: dict[str, Any], *, write: bool) -
     }
 
 
+def run_editor_pipeline_status(slug: str) -> dict[str, Any]:
+    """Build the saved article's read-only pipeline status for the local editor."""
+    try:
+        payload = load_article_payload(ARTICLES_JSON)
+        article = find_payload_article(payload, slug)
+        if article is None:
+            return {"ok": False, "code": "unknown-article", "error": "Unknown article slug."}
+        registry = load_media_rights_registry()
+        pipeline = build_pipeline_status(article, registry, project_root=PROJECT_ROOT)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        return {"ok": False, "code": "pipeline-status-failed", "error": str(exc)}
+    return {"ok": True, "pipeline": pipeline}
+
+
 EDITOR_HTML = r"""<!doctype html>
 <html lang="fr">
 <head>
@@ -352,6 +380,17 @@ EDITOR_HTML = r"""<!doctype html>
     .backup-actions label { font-weight: 700; }
     .publication-panel { display: grid; gap: 12px; padding: 14px; border: 1px solid #c9d9cf; border-radius: 8px; background: linear-gradient(135deg, #f2f8f4, #ffffff); box-shadow: 0 8px 24px rgba(38, 51, 44, 0.05); }
     .publication-panel__header { display: grid; gap: 4px; }
+    .pipeline-panel { display: grid; gap: 12px; padding: 14px; border: 1px solid #d8cfbd; border-radius: 8px; background: linear-gradient(135deg, #fffaf0, #ffffff); box-shadow: 0 8px 24px rgba(38, 51, 44, 0.05); }
+    .pipeline-panel__header { display: flex; justify-content: space-between; gap: 12px; align-items: start; flex-wrap: wrap; }
+    .pipeline-next { display: grid; gap: 4px; padding: 11px 12px; border-left: 4px solid var(--gold); border-radius: 4px; background: #ffffff; }
+    .pipeline-stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .pipeline-stage { display: grid; gap: 6px; min-width: 0; padding: 10px; border: 1px solid #dedfd9; border-radius: 7px; background: rgba(255, 255, 255, 0.78); }
+    .pipeline-stage.current { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); background: #fffdf7; }
+    .pipeline-stage__name { font-size: 13px; font-weight: 800; line-height: 1.3; }
+    .pipeline-stage__status { width: fit-content; padding: 2px 7px; border-radius: 999px; background: #edf0eb; color: var(--muted); font-size: 11px; font-weight: 800; }
+    .pipeline-stage__status.ready, .pipeline-stage__status.completed { background: var(--success-bg); color: var(--success); }
+    .pipeline-stage__status.needs_human_approval, .pipeline-stage__status.needs_review { background: #fff4df; color: #7b4e12; }
+    .pipeline-stage__status.blocked { background: var(--error-bg); color: var(--error); }
     .publication-flow { display: grid; grid-template-columns: minmax(210px, 0.8fr) minmax(260px, 1.2fr); gap: 12px; align-items: start; }
     .publication-step { display: grid; gap: 8px; padding: 11px; border: 1px solid #dbe5dc; border-radius: 7px; background: #ffffff; }
     .publication-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -403,7 +442,8 @@ EDITOR_HTML = r"""<!doctype html>
     .message.error { border-color: #e6b7b0; background: var(--error-bg); color: var(--error); }
     .message ul { margin: 8px 0 0; padding-left: 20px; font-weight: 400; }
     .empty { color: var(--muted); }
-    @media (max-width: 920px) { main { grid-template-columns: 1fr; height: auto; min-height: 100vh; } aside { max-height: 34vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } .editor-title-row { grid-template-columns: 1fr; } .preview-actions { margin-left: 0; } .field-group, .publication-flow { grid-template-columns: 1fr; } }
+    @media (max-width: 920px) { main { grid-template-columns: 1fr; height: auto; min-height: 100vh; } aside { max-height: 34vh; border-right: 0; border-bottom: 1px solid var(--border); } .editor-pane { padding: 16px; } .editor-title-row { grid-template-columns: 1fr; } .preview-actions { margin-left: 0; } .field-group, .publication-flow { grid-template-columns: 1fr; } .pipeline-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 520px) { .pipeline-stages { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -428,6 +468,7 @@ EDITOR_HTML = r"""<!doctype html>
     let recentBackups = [];
     let currentLocaleContract = defaultLocaleContract();
     let publicationReview = null;
+    let currentPipelineStatus = null;
 
     async function api(path, options) {
       const response = await fetch(path, options);
@@ -469,7 +510,11 @@ EDITOR_HTML = r"""<!doctype html>
 
     async function openArticle(slug) {
       if (slug !== currentSlug && !confirmDiscardUnsavedChanges()) return;
-      const article = await api(`/api/articles/${encodeURIComponent(slug)}`);
+      const encodedSlug = encodeURIComponent(slug);
+      const [article, pipelineResult] = await Promise.all([
+        api(`/api/articles/${encodedSlug}`),
+        api(`/api/articles/${encodedSlug}/pipeline-status`).catch((error) => ({ ok: false, error: error.error || error.message || "Statut indisponible." })),
+      ]);
       currentSlug = slug;
       currentValues = {};
       article.fields.forEach((item) => currentValues[item.path] = item.value || "");
@@ -478,6 +523,7 @@ EDITOR_HTML = r"""<!doctype html>
       currentArticleFields = article.fields || [];
       currentLocaleContract = article.locale_contract || defaultLocaleContract();
       publicationReview = null;
+      currentPipelineStatus = pipelineResult.pipeline || { error: pipelineResult.error || "Statut indisponible." };
       currentTab = "essentiel";
       renderArticleList();
       renderEditor(article);
@@ -511,6 +557,7 @@ EDITOR_HTML = r"""<!doctype html>
             </div>
           </div>
           <div id="message" aria-live="polite"></div>
+          ${renderPipelinePanel(currentPipelineStatus)}
           ${renderPublicationPanel(article)}
           <form class="form-grid" id="articleForm">${controls}</form>
         </div>
@@ -549,6 +596,81 @@ EDITOR_HTML = r"""<!doctype html>
         });
       });
       updateSaveState();
+    }
+
+    function renderPipelinePanel(pipeline) {
+      if (!pipeline || pipeline.error) {
+        return `
+          <section class="pipeline-panel" aria-label="Parcours de l’article">
+            <div class="pipeline-panel__header">
+              <div><h3>Parcours de l’article</h3><p class="meta">Le statut n’a pas pu être calculé : ${escapeHtml((pipeline && pipeline.error) || "erreur inconnue")}</p></div>
+            </div>
+          </section>
+        `;
+      }
+      const current = (pipeline.stages || []).find((stage) => stage.id === pipeline.current_stage);
+      const stages = (pipeline.stages || []).map((stage) => `
+        <li class="pipeline-stage${stage.id === pipeline.current_stage ? " current" : ""}">
+          <span class="pipeline-stage__name">${escapeHtml(pipelineStageLabel(stage.id, stage.label))}</span>
+          <span class="pipeline-stage__status ${escapeAttr(stage.status)}">${escapeHtml(pipelineStatusLabel(stage.status))}</span>
+        </li>
+      `).join("");
+      return `
+        <section class="pipeline-panel" aria-label="Parcours de l’article">
+          <div class="pipeline-panel__header">
+            <div>
+              <h3>Parcours de l’article</h3>
+              <p class="meta">Vue en lecture seule de la dernière version enregistrée. Aucune étape n’est validée automatiquement.</p>
+            </div>
+            <span class="pill${pipeline.human_action_required ? " warning" : ""}">${pipeline.human_action_required ? "Validation humaine requise" : "Aucune validation immédiate"}</span>
+          </div>
+          <div class="pipeline-next">
+            <strong>Prochaine action${current ? ` · ${escapeHtml(pipelineStageLabel(current.id, current.label))}` : ""}</strong>
+            <span>${escapeHtml(pipelineNextAction(current))}</span>
+          </div>
+          <ol class="pipeline-stages">${stages}</ol>
+        </section>
+      `;
+    }
+
+    function pipelineStageLabel(id, fallback) {
+      return ({
+        editorial_qa: "Contenu et vérifications",
+        localization: "Versions EN et NL",
+        media_rights: "Images et droits",
+        publication: "Publication de l’article",
+        social_package: "Préparation Instagram",
+        reel_pilot: "Reel pilote",
+        distribution: "Mise en ligne Instagram",
+        measurement: "Mesure et apprentissage",
+      })[id] || fallback || id;
+    }
+
+    function pipelineStatusLabel(status) {
+      return ({
+        ready: "Prêt",
+        completed: "Terminé",
+        needs_human_approval: "À valider",
+        needs_review: "À relire",
+        blocked: "Bloqué",
+        waiting: "En attente",
+        not_started: "À commencer",
+      })[status] || status;
+    }
+
+    function pipelineNextAction(stage) {
+      if (!stage) return "Le parcours enregistré est terminé.";
+      const actions = {
+        editorial_qa: stage.status === "blocked" ? "Corriger les contrôles éditoriaux bloquants, puis recalculer le parcours." : "Relire les alertes éditoriales avec Christophe Aspel.",
+        localization: "Compléter ou relire les champs manquants en anglais et en néerlandais.",
+        media_rights: stage.status === "blocked" ? "Corriger les droits ou fichiers d’image signalés." : "Relire les avertissements concernant les images et leurs droits.",
+        publication: stage.status === "needs_human_approval" ? "Christophe relit les aperçus, choisit la date réelle, puis lance le précontrôle." : "Résoudre les points du précontrôle avant la validation de publication.",
+        social_package: stage.status === "waiting" ? "Terminer la publication de l’article avant la validation Instagram." : "Relire et valider le paquet Instagram.",
+        reel_pilot: stage.status === "waiting" ? "Conserver le storyboard en brouillon jusqu’à la publication de l’article." : "Christophe valide l’accroche et le storyboard avant tout rendu vidéo.",
+        distribution: "Après validation de la vidéo, publier manuellement avec l’URL suivie.",
+        measurement: "Après publication, relever les résultats Instagram et UTM pour apprendre du test.",
+      };
+      return actions[stage.id] || stage.next_action || "Poursuivre la prochaine étape du parcours.";
     }
 
     function renderPublicationPanel(article) {

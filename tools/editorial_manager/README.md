@@ -92,6 +92,8 @@ python -m tools.editorial_manager validate-social-package research/social-packag
   transition only after explicit human approval. It creates a local safety
   backup, validates the project and restores the original JSON on failure.
 - `editor`: exposes the same guarded transition in the local browser editor.
+  Its read-only `Parcours de l’article` panel shows the saved article's first
+  unfinished stage, the next human action and all eight pipeline stages.
   The publication panel requires saved changes, FR/EN/NL preview review, a
   real date, a successful read-only preflight, an explicit checkbox and a
   final confirmation. It updates local article data only; GitHub deployment
