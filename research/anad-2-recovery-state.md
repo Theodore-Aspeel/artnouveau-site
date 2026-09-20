@@ -165,6 +165,9 @@ Measured on 2026-09-15 after Recovery PR #1 was merged:
 - deterministic Reel pilot handoff: implemented as a read-only contract with a
   source-bound storyboard, UTM plan, measurement fields and explicit human gates;
   actual render and human review remain pending
+- unified article pipeline status: implemented as a read-only aggregation of
+  editorial QA, localization, rights, publication, social, Reel, distribution
+  and measurement stages; no workflow state is inferred or written
 - current runtime media-rights inventory: complete on
   `anad-2.0/rights-and-review-flow`; 21/21 assets cleared from the explicit
   project-owner confirmation, with no wildcard inheritance

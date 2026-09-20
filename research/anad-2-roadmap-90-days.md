@@ -98,6 +98,18 @@ Use Luna for mechanical inventories, Terra for implementation and tests, Sol for
 orchestration/editorial/SEO decisions, and Astra only for an exceptional cross-system
 problem that Sol cannot resolve reliably.
 
+## Execution checkpoint - 20 September 2026
+
+- scope, launch calendar and first Reel creative recommendation are documented;
+- the unified read-only `pipeline-status` contract identifies the first unfinished
+  stage and exact next action for each article;
+- Maison Coilliot is technically ready through editorial QA, EN/NL localization
+  and image rights;
+- the next calendar gate remains Christophe's preview review and selection of a
+  real publication date;
+- no Reel render, Instagram connection or performance automation begins before
+  the corresponding human approvals.
+
 ## Do not do early
 
 - framework or CMS migration;
@@ -107,4 +119,3 @@ problem that Sol cannot resolve reliably.
 - ten Reels before learning from the first small batch;
 - a paid SEO suite or additional database without measured need;
 - AI-generic visuals replacing original photography.
-

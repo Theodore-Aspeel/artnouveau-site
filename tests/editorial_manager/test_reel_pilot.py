@@ -64,6 +64,11 @@ class ReelPilotTests(unittest.TestCase):
             [hook["source"] for hook in payload["creative"]["hook_options"]],
             ["social_hook", "article_epigraph", "first_section_heading"],
         )
+        self.assertEqual(payload["creative"]["default_hook_id"], "hook_2")
+        self.assertEqual(
+            payload["creative"]["storyboard"][0]["on_screen_text"],
+            "Une façade change la rue.",
+        )
         self.assertEqual(len(payload["creative"]["storyboard"]), 5)
         self.assertTrue(all(
             scene["source_image"] == "assets/images/demo.png"

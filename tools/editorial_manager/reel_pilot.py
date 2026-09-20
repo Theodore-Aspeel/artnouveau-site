@@ -36,6 +36,7 @@ def build_reel_pilot(
         destination_locale=destination_locale,
     )
     status = _pilot_status(package, hooks)
+    default_hook = _default_hook(hooks)
 
     return {
         "contract": {
@@ -62,9 +63,9 @@ def build_reel_pilot(
             "safe_area_review_required": True,
         },
         "creative": {
-            "default_hook_id": hooks[0]["id"] if hooks else None,
+            "default_hook_id": default_hook["id"] if default_hook else None,
             "hook_options": hooks,
-            "storyboard": _storyboard(package, content, hooks),
+            "storyboard": _storyboard(package, content, default_hook),
             "voiceover_draft": package["caption"]["caption"],
             "caption": package["caption"],
         },
@@ -118,10 +119,10 @@ def _hook_options(package: dict[str, Any], content: dict[str, Any]) -> list[dict
 def _storyboard(
     package: dict[str, Any],
     content: dict[str, Any],
-    hooks: list[dict[str, str]],
+    default_hook: dict[str, str] | None,
 ) -> list[dict[str, Any]]:
     hero_src = package["media"]["hero"]["src"]
-    hook_text = hooks[0]["text"] if hooks else package["caption"]["title"]
+    hook_text = default_hook["text"] if default_hook else package["caption"]["title"]
     cards = [
         ("hook", 0, 3, hook_text, "slow_push_in"),
         ("observation", 3, 9, normalize_text(content.get("epigraph")), "vertical_pan"),
@@ -142,6 +143,13 @@ def _storyboard(
         for index, (role, start, end, text, motion) in enumerate(cards, start=1)
         if normalize_text(text)
     ]
+
+
+def _default_hook(hooks: list[dict[str, str]]) -> dict[str, str] | None:
+    return next(
+        (hook for hook in hooks if hook["source"] == "article_epigraph"),
+        hooks[0] if hooks else None,
+    )
 
 
 def _media_plan(package: dict[str, Any]) -> dict[str, Any]:

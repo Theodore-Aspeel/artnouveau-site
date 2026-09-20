@@ -16,6 +16,7 @@ from .media_rights import (
     load_media_rights_registry,
     render_media_rights_report,
 )
+from .pipeline_status import build_pipeline_status, render_pipeline_status
 from .publication_gate import build_publication_gate, render_publication_gate
 from .publication_plan import build_publication_plan, render_publication_plan
 from .publication_transition import publish_article, render_publication_transition
@@ -388,6 +389,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_reel_pilot_parser.add_argument("path", help="Path to a Reel pilot JSON file.")
 
+    pipeline_status_parser = subparsers.add_parser(
+        "pipeline-status",
+        help="Show the unified read-only pipeline status for one article.",
+    )
+    pipeline_status_parser.add_argument("slug", help="Article slug to inspect.")
+    pipeline_status_parser.add_argument(
+        "--locale",
+        choices=preview_locale_codes(),
+        default="fr",
+        help="Social and Reel locale to inspect. Defaults to fr.",
+    )
+    pipeline_status_parser.add_argument(
+        "--public-base-url",
+        default=DEFAULT_PUBLIC_BASE_URL,
+        help="Public site base URL, including a deployment subpath when needed.",
+    )
+    pipeline_status_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output the versioned machine-readable pipeline contract.",
+    )
+
     return parser
 
 
@@ -544,6 +567,28 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(report.to_payload(), ensure_ascii=False, indent=2))
         else:
             print(render_publication_plan(report))
+        return 0
+
+    if args.command == "pipeline-status":
+        article = find_article_by_slug(articles, args.slug)
+        if article is None:
+            parser.error(f"unknown article slug: {args.slug}")
+        try:
+            registry = load_media_rights_registry()
+            payload = build_pipeline_status(
+                article,
+                registry,
+                project_root=PROJECT_ROOT,
+                locale=args.locale,
+                public_base_url=args.public_base_url,
+            )
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Pipeline status could not be built: {exc}")
+            return 1
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            print(render_pipeline_status(payload))
         return 0
 
     if args.command == "publish-article":

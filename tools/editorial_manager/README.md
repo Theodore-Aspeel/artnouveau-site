@@ -59,6 +59,8 @@ python -m tools.editorial_manager social-workflow --locale en --status needs-rev
 python -m tools.editorial_manager reel-pilot <slug> --locale fr
 python -m tools.editorial_manager reel-pilot <slug> --locale en --public-base-url https://theodore-aspeel.github.io/artnouveau-site
 python -m tools.editorial_manager validate-reel-pilot path/to/reel-pilot.json
+python -m tools.editorial_manager pipeline-status <slug>
+python -m tools.editorial_manager pipeline-status <slug> --json
 python -m tools.editorial_manager validate-social-package research/social-package-example.json
 ```
 
@@ -114,6 +116,7 @@ python -m tools.editorial_manager validate-social-package research/social-packag
 - `social-workflow` filters: accepts `--status candidate|needs-review|blocked`, the locale readiness statuses exposed by `--help`, and `--has-hero yes|no`. It also accepts `--locale fr|en|nl` for the caption/package locale.
 - `reel-pilot <slug> --locale fr|en|nl`: emits a read-only 9:16 Reel pilot contract built from the existing social package and reviewed article text. It includes three hook alternatives when the source article provides them, a 24-second storyboard, media roles, a tracked URL, measurement fields and explicit human gates. It does not render, upload or publish.
 - `validate-reel-pilot <path>`: validates the consumer-facing Reel handoff boundary, including its format, review gates and negative automation capabilities.
+- `pipeline-status <slug>`: shows the first unfinished stage and one exact next action across editorial QA, EN/NL localization, media rights, publication, social package, Reel, distribution and measurement. `--json` emits the versioned `artnouveau.pipeline_status@1` contract. The command is read-only and never records an assumed human decision.
 - `validate-social-package <path>`: validates an exported `social-package` JSON payload against the minimal handoff contract intended for a first local n8n prototype.
 
 `check` and `publication-check` return a non-zero exit code when they find errors.
