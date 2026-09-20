@@ -5,6 +5,16 @@ Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
 Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
+## 0. Mise à jour opérationnelle du 20-09-2026 (soir)
+
+Cette mise à jour prévaut sur les lignes plus anciennes du présent fichier lorsqu'elles décrivent le même chantier.
+
+- **Maison Coilliot — VÉRIFIÉ** : PR #25 fusionnée ; vraies photographies de Christophe intégrées ; anciennes vues d'autres bâtiments retirées ; gate visuel humain clos ; article maintenu en `draft`, aucune publication.
+- **Mesure — EN COURS** : PR #26 fusionnée ; protocole T0/J+1/J+7/J+30 documenté. Metricool connecté. Plausible supporté par le code mais inactif en production ; GA4 non connecté.
+- **Search Console — EN COURS** : PR #27 fusionnée ; fichier de vérification Google déployé. La propriété URL-prefix existe côté Google mais reste à valider par l'utilisateur dans Search Console avant rattachement GSC Wizard.
+- **Transmission — RÉALISÉE** : `research/ANAD-HANDOFF-2026-09-20.md` intégré comme archive historique via PR #28 ; l'ancienne PR #24 a été fermée comme remplacée.
+- **Priorité immédiate P0** : valider Search Console, rattacher la propriété à GSC Wizard, vérifier sitemap/indexation, puis tester le parcours Instagram → article et établir T0.
+
 ## 1. Finalité et doctrine
 
 ANAD 2.0 associe le travail photographique et éditorial de Christophe Aspel, un site patrimonial Art Nouveau / Art Déco en Europe et une audience Instagram existante de **75 722 abonnés mesurés au 19-09-2026** via les données disponibles du compte connecté. Théodore pilote les dimensions techniques, stratégiques et opérationnelles.
