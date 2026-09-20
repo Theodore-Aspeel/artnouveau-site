@@ -13,7 +13,9 @@ import {
   renderStructuredDataScript,
 } from './structured-data.mjs';
 import {
+  articleRobotsDirective,
   resolvePublicationMode,
+  selectIndexableArticles,
   selectPublicArticles,
 } from './publication-policy.mjs';
 
@@ -293,12 +295,12 @@ function buildSeoLinks(routeName, locale, routeParams, contracts) {
   ].join('\n  ');
 }
 
-function applyPublicSeoLinks(content, routeName, locale, routeParams, contracts) {
+function applyPublicSeoLinks(content, routeName, locale, routeParams, contracts, robotsDirective = 'index,follow') {
   const params = routeParams || {};
   const canonicalRoute = contracts.routes.route(routeName, locale, params);
   let rewritten = content.replace(
     /<meta name="robots" content="[^"]*">/,
-    '<meta name="robots" content="index,follow">'
+    `<meta name="robots" content="${escapeAttribute(robotsDirective)}">`
   );
 
   rewritten = rewritten.replace(
@@ -482,7 +484,14 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
   rewritten = setMetaContentById(rewritten, 'twitter-title', metadata.title);
   rewritten = setMetaContentById(rewritten, 'twitter-description', metadata.description);
   rewritten = insertOrReplaceOgImage(rewritten, metadata.ogImage);
-  rewritten = applyPublicSeoLinks(rewritten, ARTICLE_PUBLIC_PAGE.routeName, locale, routeParams, contracts);
+  rewritten = applyPublicSeoLinks(
+    rewritten,
+    ARTICLE_PUBLIC_PAGE.routeName,
+    locale,
+    routeParams,
+    contracts,
+    articleRobotsDirective(article)
+  );
   rewritten = applyPublicAnalytics(rewritten);
   rewritten = applyStructuredData(rewritten, structuredData);
 
@@ -652,7 +661,7 @@ async function build() {
     }
   }
 
-  await writeSitemap(articles, contracts);
+  await writeSitemap(selectIndexableArticles(articles), contracts);
   await writeRobotsTxt();
 
   const distValidation = await validateProject({
