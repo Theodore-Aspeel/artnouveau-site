@@ -22,12 +22,18 @@
     "test:python": "python -m unittest discover tests",
     "test": "npm run build && npm run test:node && npm run test:python",
     "rights:check": "python -m tools.editorial_manager media-rights-check",
-    "quality": "npm run validate && npm run rights:check && npm test"
+    "quality": "npm run validate && npm run rights:check && npm test",
+    "spike:coilliot:render": "remotion render video-spikes/maison-coilliot/index.ts MaisonCoilliotStandardSpike video-spikes/maison-coilliot/output/maison-coilliot-standard-spike-720x1280.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p",
+    "spike:coilliot:stills": "node video-spikes/maison-coilliot/render-stills.mjs"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.526",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.526",
     "sharp": "^0.34.5"
   }
 }
