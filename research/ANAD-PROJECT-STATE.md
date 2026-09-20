@@ -3,7 +3,7 @@
 Dernière consolidation : 2026-09-20
 Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
-Statut du présent registre : document de pilotage soumis à revue par PR ; les statuts ci-dessous ne valent pas approbation de publication.
+Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
 ## 1. Finalité et doctrine
 
