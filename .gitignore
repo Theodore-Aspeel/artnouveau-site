@@ -20,7 +20,7 @@ pnpm-debug.log*
 /.editor-backups/
 /.parcel-cache/
 /.turbo/
-/.lighthouseci/
+/lighthouse-reports/
 /playwright-report/
 /test-results/
 /.sass-cache/
