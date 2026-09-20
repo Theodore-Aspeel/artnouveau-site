@@ -20,6 +20,9 @@ pnpm-debug.log*
 /.editor-backups/
 /.parcel-cache/
 /.turbo/
+/.lighthouseci/
+/playwright-report/
+/test-results/
 /.sass-cache/
 __pycache__/
 *.py[cod]

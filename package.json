@@ -17,6 +17,10 @@
     "validate": "node scripts/validate-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/preview.mjs",
+    "test:e2e": "playwright test tests/web/e2e.spec.mjs",
+    "test:a11y": "playwright test tests/web/accessibility.spec.mjs --project=chromium-desktop",
+    "test:lighthouse": "lhci autorun --config=./lighthouserc.json",
+    "qa:web": "playwright test tests/web",
     "test:node": "node --test tests/*.mjs",
     "test:publication-filter": "node --test tests/publication-policy.mjs",
     "test:python": "python -m unittest discover tests",
@@ -28,6 +32,9 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.63.0",
     "sharp": "^0.34.5"
   }
 }
