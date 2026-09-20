@@ -26,3 +26,12 @@ export function selectPublicArticles(articles, mode = PUBLICATION_MODES.LEGACY_V
 
   return [...source];
 }
+
+export function selectIndexableArticles(articles) {
+  const source = Array.isArray(articles) ? articles : [];
+  return source.filter((article) => article && article.status === 'published');
+}
+
+export function articleRobotsDirective(article) {
+  return article && article.status === 'published' ? 'index,follow' : 'noindex,follow';
+}

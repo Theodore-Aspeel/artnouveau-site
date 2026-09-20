@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { collectArticleImagePaths } from '../scripts/image-pipeline.mjs';
 import {
+  articleRobotsDirective,
   PUBLICATION_MODES,
   resolvePublicationMode,
+  selectIndexableArticles,
   selectPublicArticles,
 } from '../scripts/publication-policy.mjs';
 
@@ -30,12 +32,21 @@ assert.deepEqual(
   selectPublicArticles(fixture, PUBLICATION_MODES.PUBLISHED_ONLY).map((article) => article.slug),
   ['published-demo']
 );
+assert.deepEqual(
+  selectIndexableArticles(fixture).map((article) => article.slug),
+  ['published-demo'],
+  'only published articles may be submitted through the sitemap'
+);
+assert.equal(articleRobotsDirective(fixture[0]), 'noindex,follow');
+assert.equal(articleRobotsDirective(fixture[1]), 'index,follow');
+assert.equal(articleRobotsDirective(fixture[2]), 'noindex,follow');
 
 const mode = resolvePublicationMode(process.env.PUBLICATION_MODE);
 const sourceData = JSON.parse(fs.readFileSync('src/data/articles.json', 'utf8'));
 const publicData = JSON.parse(fs.readFileSync('dist/data/articles.json', 'utf8'));
 const expectedArticles = selectPublicArticles(sourceData.articles, mode);
 const expectedSlugs = expectedArticles.map((article) => article.slug);
+const expectedIndexableSlugs = selectIndexableArticles(expectedArticles).map((article) => article.slug);
 const publicSlugs = publicData.articles.map((article) => article.slug);
 
 assert.deepEqual(publicSlugs, expectedSlugs, 'public article data must follow the selected policy');
@@ -58,9 +69,20 @@ for (const article of sourceData.articles) {
   }
   assert.equal(
     sitemap.includes(`/articles/${article.slug}/`),
-    included,
-    `${article.slug} sitemap visibility must follow ${mode}`
+    expectedIndexableSlugs.includes(article.slug),
+    `${article.slug} sitemap visibility must follow its publication status in ${mode}`
   );
+
+  if (included) {
+    for (const locale of ['fr', 'en', 'nl']) {
+      const articlePath = path.join('dist', locale, 'articles', article.slug, 'index.html');
+      const articleHtml = fs.readFileSync(articlePath, 'utf8');
+      assert.ok(
+        articleHtml.includes(`<meta name="robots" content="${articleRobotsDirective(article)}">`),
+        `${article.slug} robots directive must follow its publication status in ${mode}`
+      );
+    }
+  }
 }
 
 const manifest = JSON.parse(fs.readFileSync('dist/assets/generated-images/manifest.json', 'utf8'));

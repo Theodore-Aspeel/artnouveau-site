@@ -174,7 +174,11 @@ for (const locale of publicLocales) {
     html.includes(`<meta property="og:url" content="${absolutePublicUrl(`/${locale}/articles/${sampleArticle.slug}/`)}">`),
     `${filePath} should expose an absolute og:url`
   );
-  assert.match(html, /<meta name="robots" content="index,follow">/, `${filePath} should be indexable`);
+  assert.match(
+    html,
+    new RegExp(`<meta name="robots" content="${sampleArticle.status === 'published' ? 'index,follow' : 'noindex,follow'}">`),
+    `${filePath} robots directive should follow the article publication status`
+  );
   assert.ok(html.includes(`href="${publicRoute('/favicon.ico')}"`), `${filePath} should use the deployment path for favicon.ico`);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
   assert.ok(html.includes(`href="${publicRoute(`/${locale}/articles/${sampleArticle.slug}/`)}"`), `${filePath} should link to its public route`);
