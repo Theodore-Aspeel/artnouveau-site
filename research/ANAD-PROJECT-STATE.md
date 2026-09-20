@@ -13,7 +13,9 @@ Cette mise à jour prévaut sur les lignes plus anciennes du présent fichier lo
 - **Mesure — EN COURS** : PR #26 fusionnée ; protocole T0/J+1/J+7/J+30 documenté. Metricool connecté. Plausible supporté par le code mais inactif en production ; GA4 non connecté.
 - **Search Console — VÉRIFIÉ pour la propriété** : propriété URL-prefix `https://theodore-aspeel.github.io/artnouveau-site/` validée côté Google et rattachée à GSC Wizard avec niveau propriétaire. Le sitemap public est lisible (51 URL), mais **NON SOUMIS** car il contient actuellement les 14 articles `draft` ; ne pas accélérer leur indexation avant décision de visibilité SEO.
 - **Transmission — RÉALISÉE** : `research/ANAD-HANDOFF-2026-09-20.md` intégré comme archive historique via PR #28 ; l'ancienne PR #24 a été fermée comme remplacée.
-- **Priorité immédiate P0** : corriger le gate SEO des brouillons avant toute soumission du sitemap ; ensuite vérifier indexation, tester le parcours Instagram → article et établir T0.
+- **Priorité immédiate P0** : terminer Search Console/mesure et installer la première couche REUSE FIRST de QA (Playwright + axe-core + Lighthouse CI), puis effectuer le dry run du premier cycle Coilliot. Le gate SEO des drafts est désormais réalisé.
+
+- **REUSE FIRST — VÉRIFIÉ / EN COURS** : politique fusionnée via PR #30 ; benchmark transversal fusionné via PR #31. Architecture d'adoption jusqu'au 05-10 : Playwright + axe-core + Lighthouse CI en première vague ; Unlighthouse séparé car Node >=22.18 ; Pages CMS en spike sans migration ; Remotion réévalué via ses Agent Skills/templates/WebMCP lorsqu'un Reel redevient utile.
 
 ## 1. Finalité et doctrine
 
@@ -109,5 +111,7 @@ Ne pas recopier des spécifications volumineuses ici : conserver leurs documents
 - `research/reel-pilot-contract.md`
 - `research/social-automation-handoff.md`
 - `research/anad-2-reuse-first-policy.md`
+- `research/anad-2-reuse-landscape-2026-09-20.md`
+- `research/anad-2-reuse-adoption-plan-2026-10-05.md`
 
 Dernière revue : synthèse des documents GitHub accessibles au 2026-09-20 et décisions de pilotage confirmées par Théodore. Ce registre ne remplace pas un contrôle de la branche actuelle, du déploiement ni des données de compte externes.
