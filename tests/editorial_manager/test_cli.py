@@ -13,6 +13,24 @@ from tools.editorial_manager.publication_transition import PublicationTransition
 
 
 class CliTests(unittest.TestCase):
+    def test_pipeline_status_command_outputs_unified_json(self):
+        article = {"slug": "demo"}
+        payload = {
+            "contract": {"name": "artnouveau.pipeline_status", "version": 1},
+            "slug": "demo",
+        }
+        output = io.StringIO()
+
+        with patch("tools.editorial_manager.cli.load_articles", return_value=[article]):
+            with patch("tools.editorial_manager.cli.load_media_rights_registry", return_value={}):
+                with patch("tools.editorial_manager.cli.build_pipeline_status", return_value=payload) as build:
+                    with redirect_stdout(output):
+                        exit_code = main(["pipeline-status", "demo", "--json"])
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(json.loads(output.getvalue())["slug"], "demo")
+        build.assert_called_once()
+
     def test_editor_command_starts_local_server(self):
         with patch("tools.editorial_manager.cli.run_editor_server") as run_editor_server:
             exit_code = main(["editor", "--host", "127.0.0.1", "--port", "9000", "--no-browser"])

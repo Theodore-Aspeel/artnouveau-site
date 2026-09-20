@@ -60,6 +60,11 @@ The payload includes:
 - explicit negative capabilities proving that the command cannot render,
   upload, publish, store credentials or modify the article.
 
+The creative review completed outside Work on 2026-09-19 recommends the article
+epigraph as the default Maison Coilliot hook: `Certaines façades changent tout
+de suite la tenue d’une rue.` The contract keeps all three alternatives and
+still requires Christophe's approval before rendering.
+
 ## Maison Coilliot finding
 
 The Maison Coilliot article has one image of the primary building. Its two
