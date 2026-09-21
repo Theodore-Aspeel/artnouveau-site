@@ -72,7 +72,40 @@ Deux nouveaux sujets du catalogue possèdent désormais **au moins deux composit
 
 Ces contrôles reposent sur l'ouverture des quatre JPEG présents dans `media/posts/` sur le dossier Drive de l'export, sans les copier dans GitHub. Les filigranes du compte et la présence de ces images dans l'export ne prouvent pas, à eux seuls, que Christophe est l'auteur ou dispose des autorisations nécessaires. Les autres images attribuées à ces bâtiments (respectivement six et sept au total) **n'ont pas encore été examinées visuellement**.
 
-**Bilan photographique C1 mis à jour : cinq dossiers de nouveaux sujets comportent plusieurs compositions visuellement vérifiées dans les fichiers exportés : Casina Cinese, Maison Spitzer, Maison Huot, Maison Losseau et Maison Bastin.** Aucun n'est encore un dossier source approuvé pour publication faute de lien aux originaux et de contrôle individuel des droits.
+**Bilan photographique C1 après ce contrôle : cinq dossiers de nouveaux sujets comportent plusieurs compositions visuellement vérifiées dans les fichiers exportés : Casina Cinese, Maison Spitzer, Maison Huot, Maison Losseau et Maison Bastin.** Aucun n'est encore un dossier source approuvé pour publication faute de lien aux originaux et de contrôle individuel des droits.
+
+
+## 3 ter. Nouveau contrôle de vues et triage de provenance — VÉRIFIÉ pour les JPEG et déclarations des légendes
+
+**Maison Piot / Maison des Francs-Maçons : sixième dossier source multi-compositions vérifié dans l'export.** Deux fichiers de deux publications ont été réellement ouverts et comparés : `feed #338`, 30-03-2022, `media/posts/17943669562790454.webp` (copie exportée fournie en aperçu JPEG), montre l'entrée complète et les deux reliefs latéraux ; `feed #522`, 01-03-2021, `media/posts/202103/17888731474991559.jpg`, cadre un vitrail géométrique au-dessus d'une ouverture, sans montrer l'ensemble de l'entrée précédente. **Les deux compositions sont distinctes**, associées à la Maison Piot par leurs légendes. L'appartenance de chaque détail au bâtiment est attestée par la légende de son post, non par une expertise architecturale indépendante. Sur les **9 posts non archivés et 1 post archivé (10 médias)** du groupe, seuls ces deux fichiers ont été examinés visuellement. Ni natifs HD ni titularité des droits individuels ne sont vérifiés. Le filigrane du compte ne vaut pas preuve de photographie originale.
+
+**Casa Galimberti, Milan : deux fichiers distincts examinés, mais plusieurs angles NON VÉRIFIÉS.** `feed #781` (08-07-2020, `media/posts/17870526259826346.jpg`) et `feed #786` (04-07-2020, `media/posts/17860487815991427.jpg`) présentent des éléments décoratifs différents autour d'une fenêtre et d'un balcon, mais avec une perspective et un cadrage très similaires. Ce sont deux médias **et deux décors différents**, pas une démonstration d'angles photographiques différents. Deux fichiers contrôlés sur les quatre publications du sujet ; vue de façade entière et originaux natifs inconnus.
+
+### Nouvelles notices de sujets repérés, non encore éligibles
+
+Les `F#` désignent les positions dans `posts_1.html` ; `A#` celles dans `archived_posts.html`. Le nom de ville provient de la légende/hashtags, non d'une vérification patrimoniale indépendante.
+
+| Sujet / catégorie | Posts F / A et chemins associés | Références de vérification | Limite et prochaine preuve |
+| --- | ---: | --- | --- |
+| Maison Paon, Gand | 2 / 0 ; 2 médias | F749 (19-08-2020), F810 (05-06-2020) | Même appellation dans les deux légendes, angles/doublons, auteur et identité spatiale à vérifier. |
+| Façade Art Déco, Mouscron | 3 / 0 ; 3 médias | F636 (29-11-2020), F655 et F656 (14-11-2020) | Légendes très génériques et quasi identiques : **ne pas certifier un bâtiment unique** sans inspection des photographies et adresse. |
+| Façade Art Déco, Tournai | 3 / 0 ; 3 médias | F723 (10-09-2020), F755 (14-08-2020), F761 (06-08-2020) | Regroupement lexical seulement ; ne pas fusionner avec un dossier Strauven ni certifier même façade. |
+| Façade associée à Georges De Porre, Tournai | 2 / 0 ; 2 médias | F426 (07-08-2021), F1128 (17-11-2019) | Une légende indique place Victor-Carbonnelle et l'autre le n° 5 : hypothèse de rapprochement **PROPOSÉE**, adresse et vues à vérifier sur photographies/sources. |
+| Musée La Piscine, Roubaix | 6 / 0 ; 6 médias | F392, F523, F685, F715, F732, F739 | Six occurrences mentionnant le musée, mais aucune série d'angles ni droits prouvés ; distinguer édifice, exposition et œuvres photographiées. |
+| Musée Horta, Bruxelles | **3** occurrences nominatives directes non archivées et **1** archivée ; au moins 4 médias | F360, F644, F734, A6 | Ne **pas** compter F488 (annonce sur l'Hôtel/Musée Hannon où le Musée Horta n'est cité que comme partenaire). F644 crédite explicitement une photographie à un tiers. Cette correction supplante le regroupement automatisé de 5 mentions plus haut. |
+| Hôtel Ciamberlani, Bruxelles | 1 / 0 ; 1 média | F811 (04-06-2020) | Sujet nominal autonome, multi-vues non démontré. |
+
+### Risques de droits identifiés dans les légendes, à ne pas noyer dans le volume
+
+| Sujet | Mentions explicites à isoler | Conséquence pour C1 |
+| --- | --- | --- |
+| Jardin d'hiver des Ursulines, Malines | **4/4 occurrences** F280, F350, F747, F754 comportent des crédits photographiques ou institutionnels à des tiers dans leurs légendes. | **BLOQUÉ pour présélection comme corpus photographique original de Christophe** : ne pas traiter les quatre médias comme librement réutilisables ; rechercher indépendamment les éventuels originaux de Christophe, s'ils existent. |
+| Immeuble Les Chardons, Paris | **2/2 occurrences** F371 et F602 créditent des tiers. | Photographies publiées ≠ photographies de Christophe ; ne pas intégrer comme corpus d'origine sans autorisation vérifiée. |
+| Ancienne chemiserie / magasin Niguet, Bruxelles | **3 occurrences sur 6** (F396, F432 et A9) mentionnent explicitement une photographie fournie par un tiers ; F216, F341, F365 restent sans provenance individuelle prouvée. | Scinder les images par auteur/autorisation ; ne pas extrapoler les droits du compte à l'ensemble du groupe. |
+| Maison Saint-Cyr, Bruxelles | F489 et F615 signalent un crédit/une réutilisation de photographie d'autrui dans leurs légendes ; sept médias avaient été regroupés. | Vérifier les droits média par média, même si plusieurs fichiers montrent la même façade. |
+| Maison Horta / Musée Horta | F644 crédite la photographie d'un tiers ; F488 ne photographie pas nécessairement le Musée Horta. | Corriger la catégorie avant toute présélection et ne pas attribuer un cliché crédité à Christophe. |
+
+Les mentions de crédit constituent des **indices explicites de provenance tierce**, et non une décision juridique sur la portée d'éventuelles licences ou autorisations. L'absence de crédit n'établit **jamais** l'auteur ni les droits d'un autre fichier. Les six dossiers ayant des compositions distinctes confirmées à ce stade sont : **Casina Cinese, Maison Spitzer, Maison Huot, Maison Losseau, Maison Bastin et Maison Piot**. **Zéro dossier source validé pour publication** : la correspondance avec des photographies natives/HD et les droits par fichier restent ouverts.
 
 ## 4. Confidentialité, domaine D1 et tests
 
