@@ -3425,3 +3425,36 @@ body {
   .site-footer__grid,
   .site-footer__grid--home { grid-template-columns: 1fr; }
 }
+
+
+/* D1 accessibility contrast pass: preserve the palette with AA-safe roles. */
+:root {
+  --an-accent: #704316;
+  --an-muted: #49443d;
+}
+
+.home-hero__text { background: #171714; }
+
+.home-curated .section__kicker,
+.home-curated__eyebrow,
+.home-curated__meta,
+.home-rhythm .section__kicker,
+.home-rhythm__label,
+.page-about .about-editorial__kicker,
+.page-about .about-trust__label,
+.page-about .about-trust__card-label,
+.page-about .about-editorial__cta-label,
+.page-about .about-studio__route span,
+.article-header__category,
+.article-tpl__facts:not(.article-tpl__facts--editorial) .article-tpl__block-label {
+  color: #e3b982;
+}
+
+.home-rhythm .section__lede,
+.home-rhythm__intro,
+.home-rhythm__item-meta {
+  color: #d8d0c5;
+}
+
+.page-about .about-studio__portrait figcaption { background: #704316; }
+.article-tpl__facts--editorial .article-tpl__block-label { color: #704316; }
