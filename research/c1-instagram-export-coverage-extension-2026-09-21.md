@@ -2,6 +2,8 @@
 
 Date : 2026-09-21. Statut : **RÉALISÉ — extraction ciblée et rapprochement des HTML ; VÉRIFIÉ pour les décomptes et correspondances indiqués ; EN COURS pour le catalogue nominatif exhaustif et les droits**.
 
+**État cumulatif postérieur à cette étape :** l'audit ciblé des séries Warocqué, Wattrelos et Maison Paon a porté le total à **neuf nouveaux sujets avec plusieurs compositions visuellement vérifiées** (copies exportées uniquement). Consulter `research/c1-instagram-multiview-series-audit-2026-09-21.md` pour les 16 médias examinés et leurs familles de cadrage ; le bilan à six dossiers plus bas décrit l'étape précédente, pas le total actualisé. Origine et droits des fichiers natifs toujours non vérifiés.
+
 Ce document **complète** `research/c1-instagram-inventory-2026-09-21.md` (baseline Metricool sur `main`) et `research/c1-instagram-export-first-pass-2026-09-21.md` (premier lot de l'export sur cette branche). Il précise une limite désormais résolue dans le premier lot : les entrées sans chemin `media/posts/` sont des publications archivées avec des médias rangés sous `media/archived_posts/`, et non nécessairement des images manquantes. Les nombres par bâtiment ci-dessous sont des **repérages qualifiés**, pas des statistiques exhaustives du feed ou des droits prouvés.
 
 ## 1. Réconciliation de l'export officiel : trois vues d'un même historique
