@@ -26,6 +26,20 @@ function columnCount(value) {
   return value.split(' ').filter(Boolean).length;
 }
 
+async function revealAndWaitForImages(page, selector) {
+  const images = page.locator(selector);
+  const count = await images.count();
+
+  for (let index = 0; index < count; index += 1) {
+    await images.nth(index).scrollIntoViewIfNeeded();
+  }
+
+  await expect.poll(
+    () => images.evaluateAll((items) => items.every((image) => image.complete && image.naturalWidth > 0)),
+    { timeout: 15_000 },
+  ).toBeTruthy();
+}
+
 test('D1 produit la série comparative avant et après', async ({ page }, testInfo) => {
   test.setTimeout(90_000);
   const viewport = VIEWPORT_LABELS[testInfo.project.name] || testInfo.project.name;
@@ -60,6 +74,11 @@ test('D1 produit la série comparative avant et après', async ({ page }, testIn
     const response = await page.goto(reviewPage.local, { waitUntil: 'networkidle' });
     expect(response?.ok()).toBeTruthy();
     await expect(page.locator('h1')).toBeVisible();
+
+    if (reviewPage.name === 'author') {
+      await page.locator('#portfolio').scrollIntoViewIfNeeded();
+      await revealAndWaitForImages(page, '.about-studio-portfolio__grid img');
+    }
 
     const overflow = await page.evaluate(() => ({
       clientWidth: document.documentElement.clientWidth,
