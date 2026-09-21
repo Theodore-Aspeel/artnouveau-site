@@ -2,12 +2,21 @@ import { expect, test } from '@playwright/test';
 
 const ORIGIN = 'https://artnouveauetdeco.com';
 const COILLIOT_PATH = '/fr/articles/maison-coilliot-lille-hector-guimard/';
+const COILLIOT_SLUG = 'maison-coilliot-lille-hector-guimard';
 
 const pages = [
   { name: 'accueil FR', path: '/fr/', canonical: '/fr/' },
   { name: 'accueil EN', path: '/en/', canonical: '/en/' },
   { name: 'Maison Coilliot FR', path: COILLIOT_PATH, canonical: COILLIOT_PATH },
   { name: 'about FR', path: '/fr/about/', canonical: '/fr/about/' },
+  { name: 'about EN', path: '/en/about/', canonical: '/en/about/' },
+  { name: 'about NL', path: '/nl/about/', canonical: '/nl/about/' },
+];
+
+const authorPathways = [
+  { locale: 'fr', aria: 'Liens vers le portfolio et le contact de l’auteur', portfolio: 'Portfolio', contact: 'Contact' },
+  { locale: 'en', aria: 'Links to the author’s portfolio and contact', portfolio: 'Portfolio', contact: 'Contact' },
+  { locale: 'nl', aria: 'Links naar het portfolio en het contact van de auteur', portfolio: 'Portfolio', contact: 'Contact' },
 ];
 
 for (const pageCase of pages) {
@@ -40,12 +49,34 @@ for (const pageCase of pages) {
   });
 }
 
+test('la preview legacy conserve la langue dans les liens auteur', async ({ page }) => {
+  await page.goto(`/article.html?slug=${COILLIOT_SLUG}&previewLocale=en`, { waitUntil: 'networkidle' });
+
+  await expect(page.locator('.article-tpl__byline-link')).toHaveAttribute('href', 'about.html?previewLocale=en');
+  const links = page.locator('.article-tpl__author-links');
+  await expect(links.getByText('Portfolio', { exact: true })).toHaveAttribute('href', 'about.html?previewLocale=en#portfolio');
+  await expect(links.getByText('Contact', { exact: true })).toHaveAttribute('href', 'about.html?previewLocale=en#contact');
+});
+
 test('Maison Coilliot conserve son hero et son noindex', async ({ page }) => {
   await page.goto(COILLIOT_PATH, { waitUntil: 'networkidle' });
 
   await expect(page.locator('.article-intake__image')).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+for (const pathway of authorPathways) {
+  test(`Maison Coilliot expose les parcours auteur en ${pathway.locale}`, async ({ page }) => {
+    const aboutPath = `/${pathway.locale}/about/`;
+    await page.goto(`/${pathway.locale}/articles/${COILLIOT_SLUG}/`, { waitUntil: 'networkidle' });
+
+    await expect(page.locator('.article-tpl__byline-link')).toHaveAttribute('href', aboutPath);
+    const links = page.locator('.article-tpl__author-links');
+    await expect(links).toHaveAttribute('aria-label', pathway.aria);
+    await expect(links.getByText(pathway.portfolio, { exact: true })).toHaveAttribute('href', `${aboutPath}#portfolio`);
+    await expect(links.getByText(pathway.contact, { exact: true })).toHaveAttribute('href', `${aboutPath}#contact`);
+  });
+}
 
 test('les pages statiques publiques restent indexables', async ({ page }) => {
   for (const path of ['/fr/', '/fr/about/']) {
