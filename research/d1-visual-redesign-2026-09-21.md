@@ -1,8 +1,9 @@
 # ANAD 2.0 - D1 refonte visuelle complète
 
 Date : 2026-09-21  
-Statut : **EN COURS - implémentation enregistrée, revue humaine et validation CI finales attendues**  
+Statut : **PRÊT POUR REVUE HUMAINE - implémentation et CI validées**  
 Branche : `anad-2.0/d1-visual-redesign`  
+PR draft : [#43](https://github.com/Theodore-Aspeel/artnouveau-site/pull/43)  
 Base : `anad-2.0/d1-variant-b` au commit `e909e1e09ae4d77a8d47ba2b56b9dcab4dbd0b30`
 
 ## Décision appliquée
@@ -13,12 +14,12 @@ Une seule direction a été développée. BMAD n'a pas été relancé et aucune 
 
 ## État des livrables
 
-- **RÉALISÉ** : branche dédiée créée depuis le HEAD exact de la variante B.
+- **RÉALISÉ** : branche dédiée créée depuis le HEAD exact de la variante B et PR draft #43 ouverte sans remplacer la PR #42.
 - **RÉALISÉ** : accueil, auteur/portfolio, article, navigation, pied de page, mobile et tablette recomposés.
 - **RÉALISÉ** : parcours auteur restauré dans les pages d'article par appel effectif du composant éditorial existant.
 - **RÉALISÉ** : lanceur Windows `preview-windows.cmd`.
-- **RÉALISÉ** : test Playwright de revue groupée couvrant accueil, auteur et Maison Coilliot aux largeurs 390, 768 et desktop, avec captures avant/après dans l'artefact CI.
-- **EN COURS** : CI Quality de la branche.
+- **RÉALISÉ** : revue Playwright couvrant accueil, auteur et Maison Coilliot aux largeurs 390, 768 et desktop.
+- **VALIDÉ** : workflow Quality #86 au commit `14573453a9841b028da3b91343ace150c9e4d05c`.
 - **À VALIDER** : appréciation artistique et choix humain de fusion.
 - **NON RÉALISÉ** : déploiement public, publication d'article ou fusion.
 
@@ -37,6 +38,18 @@ Décision **ADAPT** : les composants de la variante B, les helpers de routes et 
 - `tests/web/d1-visual-review.spec.mjs` : matrice comparative 3 pages x 3 largeurs.
 - `preview-windows.cmd` : prévisualisation locale Windows.
 
+## Vérifications
+
+[Workflow Quality #86](https://github.com/Theodore-Aspeel/artnouveau-site/actions/runs/35646626203) :
+
+- `quality` : succès ;
+- `pages-profile` : succès ;
+- `publication-filter` : succès ;
+- `lighthouse` : succès ;
+- `browser-qa` : succès, parcours et contrôles axe-core inclus.
+
+Les [captures comparatives et traces navigateur](https://github.com/Theodore-Aspeel/artnouveau-site/actions/runs/35646626203/artifacts/10660239325) couvrent les trois pages aux trois largeurs. Les [rapports Lighthouse](https://github.com/Theodore-Aspeel/artnouveau-site/actions/runs/35646626203/artifacts/10660720694) sont archivés séparément. Les artefacts expirent le 2026-10-05 selon la rétention GitHub actuelle.
+
 ## Prévisualisation Windows
 
 1. Récupérer la branche.
@@ -53,6 +66,6 @@ Décision **ADAPT** : les composants de la variante B, les helpers de routes et 
 - Aucun média ajouté et aucune image IA.
 - Aucun déploiement ni service externe supplémentaire.
 
-## Limites connues
+## Limite connue
 
-La baseline « avant » des captures est la version publique stable afin d'obtenir un comparatif reproductible dans la CI. Si cette URL externe est temporairement indisponible, le test joint un diagnostic texte, mais la capture et les contrôles de la version « après » restent obligatoires. Les résultats définitifs sont consignés après le run Quality.
+La baseline « avant » des captures est la version publique stable afin d'obtenir un comparatif reproductible dans la CI ; elle ne constitue pas une prévisualisation hébergée de la variante B. Si cette URL externe est temporairement indisponible lors d'une exécution future, le test joint un diagnostic texte, tandis que les captures et contrôles de la version « après » restent obligatoires.
