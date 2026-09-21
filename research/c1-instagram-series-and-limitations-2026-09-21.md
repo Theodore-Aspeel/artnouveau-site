@@ -60,6 +60,18 @@ Le présent rapport complète sans les remplacer le registre validé sur `main`,
 
 **Conclusion opérationnelle :** nous avons une **shortlist de dix sujets dont plusieurs compositions visuelles sont démontrées dans l'export**, mais **zéro dossier photographique natif complet et approuvé**. La prochaine preuve utile est un rapprochement groupé avec les originaux du photographe et les autorisations, sans demander de micro-validation après chaque JPEG ; on peut continuer en parallèle le classement documentaire des autres publications du même export.
 
-## 3. Périmètre et vérifications
+## 3. Évaluation du travail restant — ESTIMATION, pas un calendrier
+
+Le terme « passe » dépend du niveau de contrôle demandé. Pour éviter de présenter une approximation comme un état d'avancement vérifié, séparer systématiquement les trois niveaux suivants :
+
+| Niveau d'achèvement C1 | Ce qui reste et estimation | Limite de l'estimation |
+| --- | --- | --- |
+| **Inventaire par publication** | Le fonds identifié comprend **1 431 entrées historiques** ; le classement complet `bâtiment identifié / sujet générique ou ambigu / objet ou œuvre / autre` reste à produire. **Environ 2 à 4 passes structurées supplémentaires** de regroupement puis revue des cas ambigus sont envisageables. | Il s'agit d'une estimation de méthode si l'on passe du repérage manuel au classement systématique ; **aucun catalogue ligne par ligne exhaustif n'est actuellement validé**. Les légendes imprécises peuvent laisser des cas non identifiables après ces passes. |
+| **Examen visuel de tous les médias photo** | **1 190 + 270 = 1 460 chemins d'images** dans les dossiers de posts et d'archives. Au rythme du présent contrôle ciblé de **18 fichiers par lot**, une inspection de l'ensemble correspond à **environ 80 lots de cet ordre** avant déduction des images déjà examinées et du dédoublonnage. | Un lot de 18 est un **ordre de grandeur observé**, ni un plafond technique ni une promesse. Des regroupements par sujet et des comparaisons de doublons peuvent réduire les opérations ; les médias Reels (72 chemins observés) nécessitent un examen audiovisuel séparé, et certains médias peuvent être déjà présents ou répétés. |
+| **Dossiers photographiques réutilisables pour le site** | **Nombre de passes impossible à déterminer** à partir des seuls HTML/JPEG exportés. Il faut retrouver les originaux, identifier le photographe et les droits **pour chaque média**, puis obtenir la validation humaine groupée des dossiers retenus. | **BLOQUÉ pour une validation de publication** tant que les sources natives et les autorisations ne sont pas attestées ; ce blocage **n'empêche pas** de terminer le classement documentaire privé C1. |
+
+**Portée temporelle :** aucune date d'achèvement n'est garantie par cette estimation. Ne pas confondre « 2 à 4 passes pour classifier les légendes » avec « 2 à 4 passes pour certifier 1 460 photographies et leurs droits ». Pour une livraison exploitable plus rapide, terminer d'abord l'index et auditer les ensembles multi-vues ; la couverture visuelle intégrale peut ensuite être menée indépendamment si elle est réellement nécessaire.
+
+## 4. Périmètre et vérifications
 
 **RÉALISÉ :** 18/18 copies examinées dans ce lot et rapprochées de leurs légendes ; aucune copie privée, planche-contact ou légende brute complète n'a été déposée dans GitHub. Les rapports précédents restent inchangés, à l'exception de renvois documentaires explicites si nécessaire. Aucune modification d'article, code/runtime, statut de publication, droit validé ni document/checkpoint du pilote D1. Aucune installation ou dépense ; PR C1 non fusionnée. Les tests npm ne sont pas exécutés pour ce changement purement documentaire.
