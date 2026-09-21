@@ -56,8 +56,9 @@ assert.equal(i18n.t('home.footer.body'), 'Een auteurspublicatie over Europese st
 assert.equal(i18n.t('home.footer.copyright'), '\u00a9 2026 Art Nouveau en Art Deco in Europa.');
 assert.equal(i18n.articleCountLabel(1, 'nl'), 'artikel');
 assert.equal(i18n.articleCountLabel(2, 'nl'), 'artikelen');
-assert.equal(i18n.t('about.meta.title', null, 'nl'), 'Over \u00b7 Art Nouveau en Art Deco in Europa');
-assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Van het detail vertrekken en daarna terugkeren naar de stad');
+assert.equal(i18n.t('about.meta.title', null, 'nl'), 'Christophe Aspel, auteur-fotograaf \u00b7 Portfolio');
+assert.equal(i18n.t('article.author.links.aria', null, 'nl'), 'Links naar het portfolio en het contact van de auteur');
+assert.equal(i18n.t('about.hero.title', null, 'nl'), 'Christophe Aspel, fotograferen om plaatsen te verbinden');
 assert.equal(i18n.t('about.trust.title', null, 'nl'), 'Discrete feitelijke nauwkeurigheid, zonder overbodig apparaat');
 assert.equal(i18n.t('about.card.method.title', null, 'nl'), 'Van het terrein vertrekken en daarna kaderen');
 assert.equal(i18n.t('about.cta.label', null, 'nl'), 'Redactioneel contact');
