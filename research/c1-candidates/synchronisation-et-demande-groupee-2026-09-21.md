@@ -37,7 +37,7 @@ Vérification comparative des 1 431 lignes du ZIP : **seule** la valeur `visual_
 2. **Fichiers réellement inspectés** : décompte directement tiré des audits fichier par fichier : **18/18 pour les trois sujets de ce lot** (5 Villino + 7 Bastin + 6 Warocqué). Les **36 drapeaux de publications** du catalogue ne sont **pas** un décompte global de fichiers médias inspectés.
 3. **Compositions distinctes** : **5 pour Villino Florio, 5 familles pour Maison Bastin, au moins 5 familles pour Warocqué**, toutes à lire avec leur description et les reprises possibles dans les fiches.
 4. **Prises de vue natives indépendantes : INCONNUES.** Un recadrage et un retraitement peuvent générer plusieurs JPEG ; différences de hash et nombre de familles visuelles ne tranchent pas.
-5. **Droit de nouvelle réutilisation vérifié : AUCUN** pour les 18 médias du lot, faute de sources natives, d'auteur individuel et d'autorisation documentée. Ne rien changer à `research/media-rights.json` par présomption.
+5. **Droit de nouvelle réutilisation vérifié : AUCUN** pour les 18 médias du lot : l'auteur individuel et les permissions applicables restent à confirmer auprès de Christophe. L'absence de fichiers natifs distincts n'est pas un motif de blocage pour un usage web adapté des copies. Ne rien changer à `research/media-rights.json` par présomption.
 
 
 ## 3. Trois sélections web candidates — 18 copies expertisées, 14 retenues (PROPOSÉ)
