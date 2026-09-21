@@ -5,6 +5,12 @@ Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
 Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
+## 0D. C1 — Export Instagram officiel reçu et lisible (21-09-2026)
+
+**VÉRIFIÉ :** l'archive officielle du compte `@artnouveauetdeco`, déposée décompressée dans un dossier Google Drive privé, est accessible via le connecteur. Les fichiers HTML de publications historiques, Reels, Stories, posts archivés, commentaires et insights sont présents avec leurs dossiers de médias. L'obstacle de couverture des données Metricool (deux posts retournés seulement) est **LEVÉ pour l'inventaire des médias exportés** : des années d'historique sont disponibles, mais leur analyse et leur déduplication restent **EN COURS**, pas « catalogue terminé ». Les photos publiées de l'export ne démontrent pas les originaux natifs HD ni les droits des éventuels tiers.
+
+**PROPOSÉ — prochaines étapes C1 sans Work :** normaliser les publications HTML et leurs chemins médias, regrouper par bâtiment, vérifier les séries multi-vues et tenter le raccord prudent des commentaires aux posts ; demander les originaux uniquement après présélection. Résultats de lecture, comptages exploratoires et limites : `research/c1-instagram-export-2026-09-21.md`. L'ancien `research/c1-instagram-inventory-2026-09-21.md` reste l'état initial historique *avant* l'export. Ne pas publier d'identifiants de Drive privés, médias non approuvés ni commentaires/identifiants de tiers dans GitHub. D1/checkpoint inchangés.
+
 ## 0C. Routage des rôles BMAD et des modèles — PROPOSÉ pour les prochaines sessions (21-09-2026)
 
 **Recherche ciblée RÉALISÉE, politique d'adoption PROPOSÉE** : BMAD fournit des agents/skills UX, analyse, architecture, développement et aide à choisir le workflow ; il ne sélectionne pas automatiquement un modèle de calcul à faible coût pour chaque sous-agent Work. La configuration des sous-agents peut hériter du modèle et de l'effort du parent lorsque ces paramètres ne sont pas explicitement définis. Les routeurs GitHub examinés (RouteLLM, LiteLLM, Semantic Router, Claude Code Router) ciblent des appels API ou des passerelles locales et **ne sont pas des extensions vérifiées du quota Work/ChatGPT** ; aucune installation ni clé API supplémentaire autorisée. Politique et sources : `research/anad-model-agent-routing-2026-09-21.md`.
