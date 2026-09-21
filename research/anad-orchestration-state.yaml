@@ -1,0 +1,45 @@
+schema: anad.orchestration_state@1
+status: proposed
+priority_decision: D12
+architecture_decision:
+  id: AD-ANAD-ORCH
+  status: validated_by_theodore_2026-09-21
+  model: github_state_plus_work_coordination_plus_codex_execution_with_selective_bmad_patterns
+source_commit: 4ecc6aced7a01ec8d802847007d6bb7ee88e82f6
+canonical_brief: research/anad-2-execution-reset-2026-09-21.md
+active_tracks:
+  - id: D1
+    status: proposed
+    depends_on: []
+    mission: research/missions/orchestration-d1-pilot.md
+    artifacts: []
+    evidence: []
+    blockers: []
+    human_validation: pending
+  - id: C1
+    status: proposed
+    depends_on: []
+    mission: research/anad-2-execution-reset-2026-09-21.md
+    artifacts: []
+    evidence: []
+    blockers: []
+    human_validation: not_requested
+permissions:
+  publish: false
+  spend: false
+  external_contact: false
+  merge_or_modify_main: false
+  install_full_bmad: false
+  deploy_public_previews: false
+  create_d1_isolated_workspaces: true
+  edit_d1_isolated_workspaces: true
+last_checkpoint:
+  stage: checkpoint_prepared_d1_not_started
+  timestamp: "2026-09-21"
+metrics:
+  manual_transfers: 0
+  human_reminders: 0
+  human_review_minutes: null
+notes:
+  - "This file is a proposed branch checkpoint, not yet the canonical main checkpoint. Do not treat branch content as approved implementation."
+  - "Actual pilot execution requires a separate Work/Codex run. Orchestration across Work and Codex has not yet been verified."
