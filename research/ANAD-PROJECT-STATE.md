@@ -5,6 +5,14 @@ Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
 Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
+## 0B. D13 — Pilote d'orchestration D1 : BMAD réel, autonomie GitHub proportionnée (21-09-2026)
+
+**VALIDÉ pour préparation par Théodore.** L'architecture GitHub (état durable) + Work/Codex (exécution) demeure la base, mais **aucune supériorité de nos workflows ANAD maison par rapport à BMAD n'est démontrée**. Le pilote D1 doit essayer effectivement des skills/workflows officiels de BMAD-METHOD dans un environnement isolé, puis mesurer leur apport, pas seulement s'en inspirer ni recopier leurs prompts à la main. Installation ciblée locale/sandbox autorisée si elle n'ajoute ni dépense ni dépendance de production ; version/commandes, succès et limites à documenter. Ne pas installer globalement BMAD ni présumer d'un runtime multi-app persistant.
+
+**Permissions élargies :** branches, commits/push, CI et PR draft autorisés sans micro-validation ; les PR documentaires/QA non éditoriales et bornées peuvent être fusionnées après CI verte et revue technique, sans push direct sur main. Pour les deux variantes visuelles D1, choix groupé de Théodore avant fusion de changements d'apparence du site public. Vérifier si une PR déclenche une preview publique : elle ne doit exposer aucun média ou fait professionnel non approuvé. Pas de publication sociale/éditoriale, changement de statut d'article, nouveau coût, contact externe ou divulgation de ressources non approuvées sans accord humain séparé.
+
+**Checkpoint et mission en préparation** : `research/anad-orchestration-state.yaml`, `research/missions/orchestration-d1-pilot.md`. Une branche de préparation ou une PR ne prouve pas l'exécution : D1 demeure **PROPOSÉ / NON DÉMARRÉ** tant qu'aucun run Work/Codex n'a été effectivement lancé. D12 demeure la priorité produit : D1 + C1, pas de cycle Coilliot imposé.
+
 ## 0A. Priorité centrale ACTUALISÉE le 21-09-2026 — prévaut sur les priorités plus anciennes
 
 **D12 VALIDÉ — changement de séquence par Théodore.** Suspendre la pression de lancement du premier cycle Coilliot : l'article et ses vraies photos sont finalisés, mais il reste en `draft/noindex` et sa diffusion n'est pas la prochaine échéance. Priorité immédiate = **construire un système répétable de découverte de bâtiments/photo dans Instagram → corpus original vérifié → article/site → carrousel et Reel facultatif → validation groupée → éventuelle publication**. Ne pas recommencer le même gate Coilliot ni demander un nouveau jalon de mesure pour commencer ce travail.
