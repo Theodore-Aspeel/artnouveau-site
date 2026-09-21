@@ -5,6 +5,12 @@ Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
 Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
+## 0C. Routage des rôles BMAD et des modèles — PROPOSÉ pour les prochaines sessions (21-09-2026)
+
+**Recherche ciblée RÉALISÉE, politique d'adoption PROPOSÉE** : BMAD fournit des agents/skills UX, analyse, architecture, développement et aide à choisir le workflow ; il ne sélectionne pas automatiquement un modèle de calcul à faible coût pour chaque sous-agent Work. La configuration des sous-agents peut hériter du modèle et de l'effort du parent lorsque ces paramètres ne sont pas explicitement définis. Les routeurs GitHub examinés (RouteLLM, LiteLLM, Semantic Router, Claude Code Router) ciblent des appels API ou des passerelles locales et **ne sont pas des extensions vérifiées du quota Work/ChatGPT** ; aucune installation ni clé API supplémentaire autorisée. Politique et sources : `research/anad-model-agent-routing-2026-09-21.md`.
+
+**Ne pas interrompre ni redémarrer D1 en cours** pour optimiser a posteriori son modèle ; sa capture indique GPT-5.6 Sol Moyen pour le parent, quatre sous-agents terminés et quota Work temporairement épuisé, sans preuve du modèle propre à chaque sous-agent ni de la livraison finale. Avant les **prochaines** missions, préciser rôle BMAD, modèle/effort réellement disponibles dans l'interface, nombre limité de sous-agents, et journaliser consommation observable et résultats. Pas de modification du checkpoint D1 à partir d'une autre discussion.
+
 ## 0B. D13 — Pilote d'orchestration D1 : BMAD réel, autonomie GitHub proportionnée (21-09-2026)
 
 **VALIDÉ pour préparation par Théodore.** L'architecture GitHub (état durable) + Work/Codex (exécution) demeure la base, mais **aucune supériorité de nos workflows ANAD maison par rapport à BMAD n'est démontrée**. Le pilote D1 doit essayer effectivement des skills/workflows officiels de BMAD-METHOD dans un environnement isolé, puis mesurer leur apport, pas seulement s'en inspirer ni recopier leurs prompts à la main. Installation ciblée locale/sandbox autorisée si elle n'ajoute ni dépense ni dépendance de production ; version/commandes, succès et limites à documenter. Ne pas installer globalement BMAD ni présumer d'un runtime multi-app persistant.
