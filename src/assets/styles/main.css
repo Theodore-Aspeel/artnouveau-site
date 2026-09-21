@@ -3458,3 +3458,6 @@ body {
 
 .page-about .about-studio__portrait figcaption { background: #704316; }
 .article-tpl__facts--editorial .article-tpl__block-label { color: #704316; }
+
+
+.about-studio-portfolio .about-editorial__kicker { color: var(--an-accent); }
