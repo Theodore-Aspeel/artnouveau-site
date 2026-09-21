@@ -13,6 +13,7 @@
   const articleJsonPath = script?.dataset.articleJson || '../../data/articles.json';
   const imageBase = dataset.imageBase ?? '../../';
   const homeHref = script?.dataset.homeHref || '../index.html';
+  const aboutHref = script?.dataset.aboutHref || '../about.html';
   const galleryHref = script?.dataset.galleryHref || '../index.html#galerie';
   const articleHrefBase = script?.dataset.articleHrefBase || 'article.html?slug=';
   const articleHrefSuffix = script?.dataset.articleHrefSuffix || '';
@@ -738,7 +739,11 @@
 
     if (bylineText) {
       dl.appendChild(make('dt', '', t('article.author')));
-      dl.appendChild(make('dd', '', bylineText));
+      const bylineValue = make('dd', 'article-tpl__byline');
+      const bylineLink = make('a', 'article-tpl__byline-link', bylineText);
+      bylineLink.href = previewHref(aboutHref);
+      bylineValue.appendChild(bylineLink);
+      dl.appendChild(bylineValue);
     }
 
     if (publishedOn) {
@@ -771,6 +776,15 @@
     }
 
     editorialBlock.appendChild(make('p', 'article-tpl__rigor-note', t('article.editorial.rigorNote')));
+    const authorLinks = make('nav', 'article-tpl__author-links');
+    authorLinks.setAttribute('aria-label', t('article.author.links.aria'));
+    const portfolioLink = make('a', '', t('about.localNav.portfolio'));
+    portfolioLink.href = previewHref(aboutHref + '#portfolio');
+    authorLinks.appendChild(portfolioLink);
+    const contactLink = make('a', '', t('about.localNav.contact'));
+    contactLink.href = previewHref(aboutHref + '#contact');
+    authorLinks.appendChild(contactLink);
+    editorialBlock.appendChild(authorLinks);
     sidebar.appendChild(editorialBlock);
   }
 

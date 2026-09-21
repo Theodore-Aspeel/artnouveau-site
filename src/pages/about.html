@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="about.meta.title">À propos · Art Nouveau et Art Déco en Europe</title>
-  <meta name="description" content="Pourquoi ce site existe, comment il regarde les villes, et ce qu’il cherche à préserver dans les détails d’Art Nouveau et d’Art Déco." data-i18n-attr="content:about.meta.description">
+  <title data-i18n="about.meta.title">Christophe Aspel, auteur-photographe · Portfolio</title>
+  <meta name="description" content="Christophe Aspel, auteur-photographe, présente son portfolio de façades et de détails d’Art Nouveau et d’Art Déco en Europe." data-i18n-attr="content:about.meta.description">
   <meta name="robots" content="noindex,follow">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="Art Nouveau et Art Déco en Europe">
-  <meta property="og:title" content="À propos · Art Nouveau et Art Déco en Europe" data-i18n-attr="content:about.meta.title">
-  <meta property="og:description" content="Pourquoi ce site existe, comment il regarde les villes, et ce qu’il cherche à préserver dans les détails d’Art Nouveau et d’Art Déco." data-i18n-attr="content:about.meta.description">
+  <meta property="og:title" content="Christophe Aspel, auteur-photographe · Portfolio" data-i18n-attr="content:about.meta.title">
+  <meta property="og:description" content="Christophe Aspel, auteur-photographe, présente son portfolio de façades et de détails d’Art Nouveau et d’Art Déco en Europe." data-i18n-attr="content:about.meta.description">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="À propos · Art Nouveau et Art Déco en Europe" data-i18n-attr="content:about.meta.title">
-  <meta name="twitter:description" content="Pourquoi ce site existe, comment il regarde les villes, et ce qu’il cherche à préserver dans les détails d’Art Nouveau et d’Art Déco." data-i18n-attr="content:about.meta.description">
+  <meta name="twitter:title" content="Christophe Aspel, auteur-photographe · Portfolio" data-i18n-attr="content:about.meta.title">
+  <meta name="twitter:description" content="Christophe Aspel, auteur-photographe, présente son portfolio de façades et de détails d’Art Nouveau et d’Art Déco en Europe." data-i18n-attr="content:about.meta.description">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/icon.png">
   <link rel="stylesheet" href="../assets/styles/main.css">
 </head>
-<body>
+<body data-asset-base="../">
   <header class="site-header">
     <div class="container">
       <p class="site-title">Art Nouveau et Art Déco</p>
@@ -65,10 +65,20 @@
       <div class="container">
         <div class="about-editorial">
           <div class="about-editorial__text">
-            <span class="about-editorial__kicker" data-i18n="home.nav.about">À propos</span>
+            <span class="about-editorial__kicker" data-i18n="about.identity.role">Auteur-photographe</span>
             <span class="about-editorial__rule" aria-hidden="true"></span>
 
-            <h1 class="about-editorial__title" id="about-title" data-i18n="about.hero.title">Partir du détail, puis revenir à la ville</h1>
+            <h1 class="about-editorial__title" id="about-title" data-i18n="about.hero.title">Christophe Aspel, un regard d’auteur sur les villes</h1>
+
+            <p class="about-editorial__identity" data-i18n="about.identity.intro">
+              Christophe Aspel est l’auteur-photographe du projet Art Nouveau et Art Déco.
+            </p>
+
+            <nav class="about-local-nav" aria-label="Sur cette page" data-i18n-attr="aria-label:about.localNav.aria">
+              <a href="#portfolio" data-i18n="about.localNav.portfolio">Voir le portfolio</a>
+              <a href="#demarche" data-i18n="about.localNav.process">Comprendre la démarche</a>
+              <a href="#contact" data-i18n="about.localNav.contact">Contacter</a>
+            </nav>
 
             <div class="about-editorial__body">
               <p data-i18n="about.hero.paragraph1">
@@ -135,7 +145,7 @@
               </div>
             </section>
 
-            <div class="about-editorial__cta">
+            <div class="about-editorial__cta" id="contact">
               <p class="about-editorial__cta-label" data-i18n="about.cta.label">Contact éditorial</p>
               <p class="about-editorial__cta-text" data-i18n="about.cta.text">
                 Instagram prolonge le site par les photographies, les repérages et les notations de terrain. C’est aussi le canal de contact éditorial le plus direct pour une correction, une précision factuelle ou un crédit à compléter.
@@ -152,15 +162,74 @@
           </div>
 
           <div class="about-editorial__visual">
-            <img
-              src="../assets/images/site/author/author-portrait-2026.jpg"
-              alt="Portrait de l'auteur du projet Art Nouveau et Art Déco"
-              data-i18n-attr="alt:about.image.alt"
-              class="about-editorial__img"
-              loading="eager"
-            >
+            <figure class="about-editorial__portrait">
+              <img
+                src="../assets/images/site/author/author-portrait-2026.jpg"
+                alt="Portrait de l'auteur du projet Art Nouveau et Art Déco"
+                data-i18n-attr="alt:about.image.alt"
+                class="about-editorial__img"
+                loading="eager"
+              >
+              <figcaption data-i18n="about.image.caption">Christophe Aspel, auteur et photographe du projet.</figcaption>
+            </figure>
           </div>
         </div>
+
+        <section class="about-portfolio" id="portfolio" aria-labelledby="portfolio-title">
+          <header class="about-portfolio__header">
+            <p class="about-portfolio__kicker" data-i18n="about.portfolio.label">Portfolio photographique</p>
+            <h2 id="portfolio-title" data-i18n="about.portfolio.title">Trois lieux, trois manières d’entrer dans le détail</h2>
+            <p data-i18n="about.portfolio.intro">Cette sélection reprend des photographies déjà présentes dans le corpus. Chaque image ouvre directement le récit du bâtiment.</p>
+          </header>
+
+          <div class="about-portfolio__grid">
+            <a class="about-portfolio__item about-portfolio__item--lead" href="article.html?slug=maison-coilliot-lille-hector-guimard">
+              <figure>
+                <img src="../assets/images/articles/maison-coilliot-facade-complete-christophe-aspel.jpg" alt="Façade de la Maison Coilliot à Lille" data-i18n-attr="alt:about.portfolio.coilliot.alt" data-responsive-image-source="assets/images/articles/maison-coilliot-facade-complete-christophe-aspel.jpg" data-responsive-image-sizes="(max-width: 700px) 100vw, (max-width: 1020px) 100vw, 60vw" loading="lazy">
+                <figcaption>
+                  <span data-i18n="about.portfolio.coilliot.city">Lille</span>
+                  <strong data-i18n="about.portfolio.coilliot.title">Maison Coilliot</strong>
+                  <span data-i18n="about.portfolio.read">Voir les photographies et lire l’article</span>
+                </figcaption>
+              </figure>
+            </a>
+
+            <a class="about-portfolio__item" href="article.html?slug=maison-aux-tulipes-bratislava-jeno-schiller">
+              <figure>
+                <img src="../assets/images/articles/maison-aux-tulipes-bratislava-jeno-schiller.png" alt="Maison aux tulipes à Bratislava" data-i18n-attr="alt:about.portfolio.tulips.alt" data-responsive-image-source="assets/images/articles/maison-aux-tulipes-bratislava-jeno-schiller.png" data-responsive-image-sizes="(max-width: 700px) 100vw, (max-width: 1020px) 50vw, 32vw" loading="lazy">
+                <figcaption>
+                  <span data-i18n="about.portfolio.tulips.city">Bratislava</span>
+                  <strong data-i18n="about.portfolio.tulips.title">Maison aux tulipes</strong>
+                  <span data-i18n="about.portfolio.read">Voir les photographies et lire l’article</span>
+                </figcaption>
+              </figure>
+            </a>
+
+            <a class="about-portfolio__item" href="article.html?slug=aquarium-de-milan-1906">
+              <figure>
+                <img src="../assets/images/articles/aquarium-de-milan-1906.png" alt="Aquarium de Milan" data-i18n-attr="alt:about.portfolio.milan.alt" data-responsive-image-source="assets/images/articles/aquarium-de-milan-1906.png" data-responsive-image-sizes="(max-width: 700px) 100vw, (max-width: 1020px) 50vw, 32vw" loading="lazy">
+                <figcaption>
+                  <span data-i18n="about.portfolio.milan.city">Milan</span>
+                  <strong data-i18n="about.portfolio.milan.title">Aquarium de Milan</strong>
+                  <span data-i18n="about.portfolio.read">Voir les photographies et lire l’article</span>
+                </figcaption>
+              </figure>
+            </a>
+          </div>
+        </section>
+
+        <section class="about-process" id="demarche" aria-labelledby="about-process-title">
+          <header class="about-process__header">
+            <p class="about-portfolio__kicker" data-i18n="about.process.label">Du terrain au récit</p>
+            <h2 id="about-process-title" data-i18n="about.process.title">Un parcours qui part toujours du bâtiment</h2>
+          </header>
+          <ol class="about-process__steps">
+            <li><span>01</span><strong data-i18n="about.process.step1.title">Repérer</strong><p data-i18n="about.process.step1.body">Un bâtiment, une façade ou un détail retient le regard dans la ville.</p></li>
+            <li><span>02</span><strong data-i18n="about.process.step2.title">Photographier</strong><p data-i18n="about.process.step2.body">Les vues d’ensemble et les détails construisent une lecture du lieu.</p></li>
+            <li><span>03</span><strong data-i18n="about.process.step3.title">Documenter</strong><p data-i18n="about.process.step3.body">Les repères vérifiables complètent les observations sans combler les lacunes.</p></li>
+            <li><span>04</span><strong data-i18n="about.process.step4.title">Partager</strong><p data-i18n="about.process.step4.body">L’article relie les photographies, le contexte et les chemins vers d’autres lieux.</p></li>
+          </ol>
+        </section>
       </div>
     </section>
   </main>
@@ -212,6 +281,7 @@
 
   <script src="../assets/scripts/locale-config.js"></script>
   <script src="../assets/scripts/i18n.js"></script>
+  <script src="../assets/scripts/image-manifest.js"></script>
   <script src="../assets/scripts/main.js"></script>
 </body>
 </html>

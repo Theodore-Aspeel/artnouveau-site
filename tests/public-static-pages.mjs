@@ -4,6 +4,7 @@ import fs from 'node:fs';
 const articleData = JSON.parse(fs.readFileSync('src/data/articles.json', 'utf8'));
 const publicLocales = ['fr', 'en', 'nl'];
 const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
+const articleTemplateScript = fs.readFileSync('src/assets/scripts/article-template.js', 'utf8');
 const publicBasePath = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '');
 const siteOrigin = (process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com').replace(/\/+$/, '');
 
@@ -11,13 +12,30 @@ const EXPECTED_PAGES = [
   ['fr', 'home', 'dist/fr/index.html', 'Regarder d\u2019abord. Nommer ensuite.'],
   ['en', 'home', 'dist/en/index.html', 'Look first. Name later.'],
   ['nl', 'home', 'dist/nl/index.html', 'Eerst kijken. Daarna benoemen.'],
-  ['fr', 'about', 'dist/fr/about/index.html', 'Partir du d\u00e9tail, puis revenir \u00e0 la ville'],
-  ['en', 'about', 'dist/en/about/index.html', 'Start from the detail, then return to the city'],
-  ['nl', 'about', 'dist/nl/about/index.html', 'Van het detail vertrekken en daarna terugkeren naar de stad'],
+  ['fr', 'about', 'dist/fr/about/index.html', 'Christophe Aspel, un regard d\u2019auteur sur les villes'],
+  ['en', 'about', 'dist/en/about/index.html', 'Christophe Aspel, an author\u2019s eye on cities'],
+  ['nl', 'about', 'dist/nl/about/index.html', 'Christophe Aspel, een auteursblik op steden'],
   ['fr', 'mentions', 'dist/fr/mentions/index.html', 'Un cadre simple, lisible, sans appareil inutile'],
   ['en', 'mentions', 'dist/en/mentions/index.html', 'A simple, readable frame, without unnecessary apparatus'],
   ['nl', 'mentions', 'dist/nl/mentions/index.html', 'Een eenvoudig en leesbaar kader, zonder overbodig apparaat'],
 ];
+
+const PORTFOLIO_ITEMS = [
+  { slug: 'maison-coilliot-lille-hector-guimard', image: 'maison-coilliot-facade-complete-christophe-aspel.jpg' },
+  { slug: 'maison-aux-tulipes-bratislava-jeno-schiller', image: 'maison-aux-tulipes-bratislava-jeno-schiller.png' },
+  { slug: 'aquarium-de-milan-1906', image: 'aquarium-de-milan-1906.png' },
+];
+
+const ABOUT_METADATA = {
+  fr: ['Christophe Aspel, auteur-photographe \u00b7 Portfolio', 'Christophe Aspel, auteur-photographe, pr\u00e9sente son portfolio de fa\u00e7ades et de d\u00e9tails d\u2019Art Nouveau et d\u2019Art D\u00e9co en Europe.'],
+  en: ['Christophe Aspel, author-photographer \u00b7 Portfolio', 'Christophe Aspel, author-photographer, presents his portfolio of Art Nouveau and Art Deco facades and details across Europe.'],
+  nl: ['Christophe Aspel, auteur-fotograaf \u00b7 Portfolio', 'Christophe Aspel, auteur-fotograaf, presenteert zijn portfolio met gevels en details van art nouveau en art deco in Europa.'],
+};
+
+assert.ok(
+  fs.readFileSync('dist/about.html', 'utf8').includes('data-asset-base=""'),
+  'legacy About should resolve responsive assets from the dist root'
+);
 
 function escapeHtml(value) {
   return String(value)
@@ -118,6 +136,9 @@ assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /data-responsive-ima
 assert.match(galleryScript, /publicRoutes\.article\(currentLocale\(\), normalizedSlug\)/);
 assert.match(galleryScript, /publicRoutes\.home\(currentLocale\(\)\)/);
 assert.match(galleryScript, /SiteImageManifest/);
+assert.match(articleTemplateScript, /bylineLink\.href = previewHref\(aboutHref\)/);
+assert.match(articleTemplateScript, /aboutHref \+ '#portfolio'/);
+assert.match(articleTemplateScript, /aboutHref \+ '#contact'/);
 
 for (const locale of publicLocales) {
   const homeHtml = fs.readFileSync(`dist/${locale}/index.html`, 'utf8');
@@ -125,6 +146,41 @@ for (const locale of publicLocales) {
   assert.ok(homeHtml.includes(`href="${publicRoute(`/${locale}/about/`)}"`), `dist/${locale}/index.html should link to localized about`);
   assert.ok(homeHtml.includes(`href="${publicRoute(`/${locale}/mentions/`)}"`), `dist/${locale}/index.html should link to localized mentions`);
   assert.doesNotMatch(homeHtml, /href="(?:index|about|mentions)\.html/, `dist/${locale}/index.html should not target legacy page links`);
+}
+
+for (const locale of publicLocales) {
+  const aboutHtml = fs.readFileSync(`dist/${locale}/about/index.html`, 'utf8');
+  const [metaTitle, metaDescription] = ABOUT_METADATA[locale];
+  assert.ok(aboutHtml.includes('id="portfolio"'), `dist/${locale}/about/index.html should expose the portfolio anchor`);
+  assert.ok(aboutHtml.includes('id="demarche"'), `dist/${locale}/about/index.html should expose the process anchor`);
+  assert.ok(aboutHtml.includes('id="contact"'), `dist/${locale}/about/index.html should expose the contact anchor`);
+  assert.ok(aboutHtml.includes(`<title data-i18n="about.meta.title">${metaTitle}</title>`), `dist/${locale}/about/index.html should identify the author-photographer in its title`);
+  assert.ok(aboutHtml.includes(`<meta name="description" content="${metaDescription}"`), `dist/${locale}/about/index.html should describe the photographic portfolio`);
+
+  for (const anchor of ['portfolio', 'demarche', 'contact']) {
+    assert.ok(
+      aboutHtml.includes(`href="#${anchor}"`),
+      `dist/${locale}/about/index.html should link its local navigation to #${anchor}`
+    );
+  }
+
+  assert.ok(aboutHtml.includes('src="../../assets/scripts/image-manifest.js"'), `dist/${locale}/about/index.html should load the responsive image helper`);
+  assert.ok(aboutHtml.includes('data-asset-base="../../"'), `dist/${locale}/about/index.html should expose the localized asset base`);
+
+  for (const item of PORTFOLIO_ITEMS) {
+    assert.ok(
+      aboutHtml.includes(`href="${publicRoute(`/${locale}/articles/${item.slug}/`)}"`),
+      `dist/${locale}/about/index.html should link ${item.slug} to its localized article route`
+    );
+    assert.ok(
+      aboutHtml.includes(`src="../../assets/images/articles/${item.image}"`),
+      `dist/${locale}/about/index.html should emit the localized portfolio image URL for ${item.image}`
+    );
+    assert.ok(
+      aboutHtml.includes(`data-responsive-image-source="assets/images/articles/${item.image}"`),
+      `dist/${locale}/about/index.html should register ${item.image} for responsive rendering`
+    );
+  }
 }
 
 for (const locale of publicLocales) {
@@ -181,6 +237,10 @@ for (const locale of publicLocales) {
   );
   assert.ok(html.includes(`href="${publicRoute('/favicon.ico')}"`), `${filePath} should use the deployment path for favicon.ico`);
   assert.ok(html.includes(`data-article-slug="${sampleArticle.slug}"`), `${filePath} should pass the slug without query parameters`);
+  assert.ok(
+    html.includes(`data-about-href="${publicRoute(`/${locale}/about/`)}"`),
+    `${filePath} should pass the localized author and portfolio route to the renderer`
+  );
   assert.ok(html.includes(`href="${publicRoute(`/${locale}/articles/${sampleArticle.slug}/`)}"`), `${filePath} should link to its public route`);
   assert.ok(html.includes(`src="../../../assets/scripts/image-manifest.js"`), `${filePath} should load the image manifest helper`);
   assert.ok(html.includes(`href="${publicRoute(`/fr/articles/${sampleArticle.slug}/`)}"`), `${filePath} should keep article context for FR language link`);
