@@ -48,8 +48,24 @@ const expectedArticles = selectPublicArticles(sourceData.articles, mode);
 const expectedSlugs = expectedArticles.map((article) => article.slug);
 const expectedIndexableSlugs = selectIndexableArticles(expectedArticles).map((article) => article.slug);
 const publicSlugs = publicData.articles.map((article) => article.slug);
+const portfolioSlugs = [
+  'maison-coilliot-lille-hector-guimard',
+  'maison-aux-tulipes-bratislava-jeno-schiller',
+  'aquarium-de-milan-1906',
+];
 
 assert.deepEqual(publicSlugs, expectedSlugs, 'public article data must follow the selected policy');
+
+for (const locale of ['fr', 'en', 'nl']) {
+  const aboutHtml = fs.readFileSync(path.join('dist', locale, 'about', 'index.html'), 'utf8');
+  for (const slug of portfolioSlugs) {
+    assert.equal(
+      aboutHtml.includes(`/${locale}/articles/${slug}/`),
+      expectedSlugs.includes(slug),
+      `${slug} portfolio visibility must follow ${mode}`
+    );
+  }
+}
 assert.ok(sourceData.articles.length > 0, 'the source corpus must remain available');
 assert.ok(
   sourceData.articles.some((article) => article.status === 'draft'),

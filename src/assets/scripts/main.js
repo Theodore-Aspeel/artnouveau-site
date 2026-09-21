@@ -1,6 +1,7 @@
 const toggle = document.querySelector('.site-nav__toggle');
 const menu = document.querySelector('.site-nav__list');
 const i18n = window.SiteI18n;
+const imageManifest = window.SiteImageManifest;
 
 function t(key, params) {
   return i18n && typeof i18n.t === 'function' ? i18n.t(key, params) : key;
@@ -65,6 +66,13 @@ function initPreviewLocaleToggle() {
 applyStaticI18n();
 applyPreviewLocaleLinks();
 initPreviewLocaleToggle();
+
+if (imageManifest && typeof imageManifest.load === 'function') {
+  const assetBasePath = document.body?.dataset.assetBase || '';
+  imageManifest.load({ basePath: assetBasePath }).then(() => {
+    imageManifest.applyDeclarativeImages?.(document, { basePath: assetBasePath });
+  });
+}
 
 if (toggle && menu) {
   toggle.addEventListener('click', () => {

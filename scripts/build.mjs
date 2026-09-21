@@ -66,7 +66,18 @@ const PUBLIC_BASE_PATH = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH ||
 const ANALYTICS = getAnalyticsConfig(process.env);
 const PUBLICATION_MODE = resolvePublicationMode(process.env.PUBLICATION_MODE);
 
-function rewritePageForDist(relativeTargetPath, content) {
+function filterPortfolioArticles(content, articles) {
+  const availableSlugs = new Set((Array.isArray(articles) ? articles : []).map(getArticleSlug).filter(Boolean));
+  return content.replace(
+    /<a class="(?:about-portfolio__item|about-studio-shot)[^"]*" href="article\.html\?slug=([^"]+)">[\s\S]*?<\/a>/g,
+    (card, slug) => availableSlugs.has(slug) ? card : ''
+  );
+}
+
+function rewritePageForDist(relativeTargetPath, content, articles = []) {
+  if (relativeTargetPath === 'about.html') {
+    content = filterPortfolioArticles(content, articles);
+  }
   if (relativeTargetPath === 'index.html') {
     return content
       .replaceAll('../assets/styles/main.css', 'assets/styles/main.css')
@@ -77,8 +88,9 @@ function rewritePageForDist(relativeTargetPath, content) {
 
   if (relativeTargetPath === 'about.html') {
     return content
+      .replace('<body data-asset-base="../">', '<body data-asset-base="">')
       .replaceAll('../assets/styles/main.css', 'assets/styles/main.css')
-      .replaceAll('../assets/images/site/', 'assets/images/site/')
+      .replaceAll('../assets/images/', 'assets/images/')
       .replaceAll('../assets/scripts/', 'assets/scripts/');
   }
 
@@ -398,16 +410,20 @@ function replaceSimplePublicLinks(content, locale, routeName, contracts, routePa
     .replaceAll('href="index.html"', `href="${routes.home(locale)}"`)
     .replaceAll('href="about.html"', `href="${routes.about(locale)}"`)
     .replaceAll('href="mentions.html"', `href="${routes.mentions(locale)}"`)
-    .replaceAll('href="' + currentRoute + '#galerie"', `href="${currentRoute}#galerie"`);
+    .replaceAll('href="' + currentRoute + '#galerie"', `href="${currentRoute}#galerie"`)
+    .replace(/href="article\.html\?slug=([a-z0-9-]+)"/g, (match, slug) => `href="${routes.article(locale, slug)}"`);
 }
 
-function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale, contracts) {
+function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale, contracts, articles = []) {
   const relativeRoot = relativeRootFromDistPath(relativeTargetPath);
+  if (routeName === 'about') {
+    content = filterPortfolioArticles(content, articles);
+  }
   let rewritten = applyStaticI18n(content, locale, contracts.i18n);
 
   rewritten = replaceSimplePublicLinks(rewritten, locale, routeName, contracts)
     .replaceAll('../assets/styles/main.css', `${relativeRoot}assets/styles/main.css`)
-    .replaceAll('../assets/images/site/', `${relativeRoot}assets/images/site/`)
+    .replaceAll('../assets/images/', `${relativeRoot}assets/images/`)
     .replaceAll('../assets/scripts/', `${relativeRoot}assets/scripts/`)
     .replaceAll("../data/articles.json", `${relativeRoot}data/articles.json`);
 
@@ -418,6 +434,11 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     rewritten = rewritten.replace(
       '<body class="page-home">',
       `<body class="page-home" data-article-data-url="${relativeRoot}data/articles.json" data-asset-base="${relativeRoot}">`
+    );
+  } else if (routeName === 'about') {
+    rewritten = rewritten.replace(
+      '<body data-asset-base="../">',
+      `<body data-asset-base="${relativeRoot}">`
     );
   }
 
@@ -471,6 +492,7 @@ function rewritePublicArticlePageForDist(relativeTargetPath, content, locale, ar
     .replaceAll('data-article-json="../data/articles.json"', `data-article-json="${relativeRoot}data/articles.json"`)
     .replaceAll('data-image-base="../"', `data-image-base="${relativeRoot}"`)
     .replaceAll('data-home-href="index.html"', `data-home-href="${routes.home(locale)}"`)
+    .replaceAll('data-about-href="about.html"', `data-about-href="${routes.about(locale)}"`)
     .replaceAll('data-gallery-href="index.html#galerie"', `data-gallery-href="${routes.home(locale)}#galerie"`)
     .replace(
       'data-article-href-base="article.html?slug="',
@@ -629,7 +651,7 @@ async function build() {
     const source = path.join(ROOT, job.from);
     const target = path.join(DIST, job.to);
     const raw = await fs.readFile(source, 'utf8');
-    const rewritten = applyDeploymentConfig(applyDeploymentAssetPaths(rewritePageForDist(job.to, raw)));
+    const rewritten = applyDeploymentConfig(applyDeploymentAssetPaths(rewritePageForDist(job.to, raw, articles)));
     await ensureParentDir(target);
     await fs.writeFile(target, rewritten, 'utf8');
   }
@@ -641,7 +663,7 @@ async function build() {
       const source = path.join(ROOT, job.from);
       const target = path.join(DIST, relativeTargetPath);
       const raw = await fs.readFile(source, 'utf8');
-      const rewritten = rewritePublicPageForDist(job.routeName, relativeTargetPath, raw, locale, contracts);
+      const rewritten = rewritePublicPageForDist(job.routeName, relativeTargetPath, raw, locale, contracts, articles);
       await ensureParentDir(target);
       await fs.writeFile(target, rewritten, 'utf8');
     }
