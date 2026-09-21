@@ -60,6 +60,20 @@ Méthode : regroupements explicites par appellation et variantes déjà trouvée
 
 **Contrôles à effectuer dans le cadre C1 :** pour chaque sujet, vérifier un à un les fichiers d'export et leur identité spatiale, repérer les images identiques réutilisées, puis rechercher la correspondance avec les vrais fichiers natifs et les autorisations individuelles. La présence d'un JPEG dans l'export officiel établit la présence d'une **copie exportée**, non l'original HD, l'auteur, la titularité ni un feu vert de publication. Les légendes contenant des crédits de photographes tiers imposent une vérification spécifique. Un nom d'architecte, une année de construction, une attribution et une adresse tirés des légendes restent **à confirmer par recherche documentaire indépendante** avant rédaction.
 
+
+## 3 bis. Contrôle visuel additionnel de quatre JPEG de l'export — VÉRIFIÉ
+
+Deux nouveaux sujets du catalogue possèdent désormais **au moins deux compositions distinctes effectivement examinées**, en plus des trois sujets déjà vérifiés dans le premier lot :
+
+| Sujet | Publications et fichiers de l'export comparés | Observation visuelle directement contrôlée | Portée de la preuve |
+| --- | --- | --- | --- |
+| **Maison Losseau, Mons** | feed #483 (06-04-2021, `media/posts/17937998227486818.jpg`) et feed #499 (19-03-2021, `media/posts/202103/17905530085745430.jpg`) | #483 montre un gros plan d'une verrière colorée ornée de motifs floraux ; #499 montre le décor floral doré d'une porte/grille vitrée. Ce sont **deux compositions clairement distinctes**, associées au même sujet par leurs légendes. | **Deux vues distinctes de détails** vérifiées dans les copies exportées. Aucune vue d'ensemble ni preuve de natifs HD, d'auteur ou de droits issue de ce seul contrôle. |
+| **Maison Bastin / Maison des Médecins** | feed #394 (14-11-2021, `media/posts/17925798670840061.jpg`) et feed #717 (15-09-2020, `media/posts/18161997109033317.jpg`) | #394 montre la façade entière et son oriel ; #717 un gros plan de ce même élément en saillie et de son balcon. **Deux cadrages différents, avec recoupement architectural visible**. | **Deux vues distinctes**, dont une façade entière et un détail vérifiés sur des copies Instagram ; originaux HD, auteur et droits non vérifiés. |
+
+Ces contrôles reposent sur l'ouverture des quatre JPEG présents dans `media/posts/` sur le dossier Drive de l'export, sans les copier dans GitHub. Les filigranes du compte et la présence de ces images dans l'export ne prouvent pas, à eux seuls, que Christophe est l'auteur ou dispose des autorisations nécessaires. Les autres images attribuées à ces bâtiments (respectivement six et sept au total) **n'ont pas encore été examinées visuellement**.
+
+**Bilan photographique C1 mis à jour : cinq dossiers de nouveaux sujets comportent plusieurs compositions visuellement vérifiées dans les fichiers exportés : Casina Cinese, Maison Spitzer, Maison Huot, Maison Losseau et Maison Bastin.** Aucun n'est encore un dossier source approuvé pour publication faute de lien aux originaux et de contrôle individuel des droits.
+
 ## 4. Confidentialité, domaine D1 et tests
 
 Cet enrichissement GitHub ne contient **aucun HTML brut, fichier photo/vidéo, commentaire brut, métrique privée ou export complet des légendes**. Il ne crée aucun fichier dans le runtime du site, ne modifie ni le premier inventaire intégré à `main` ni les documents/checkpoints D1, ne fusionne ni ne publie quoi que ce soit. Les tests de build et validation npm ne sont pas requis pour ce lot **strictement documentaire** ; seule la lecture de retour du nouveau document sur la branche est prévue.
