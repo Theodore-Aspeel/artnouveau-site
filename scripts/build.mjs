@@ -88,7 +88,7 @@ function rewritePageForDist(relativeTargetPath, content, articles = []) {
 
   if (relativeTargetPath === 'about.html') {
     return content
-      .replace('<body data-asset-base="../">', '<body data-asset-base="">')
+      .replace('data-asset-base="../"', 'data-asset-base=""')
       .replaceAll('../assets/styles/main.css', 'assets/styles/main.css')
       .replaceAll('../assets/images/', 'assets/images/')
       .replaceAll('../assets/scripts/', 'assets/scripts/');
