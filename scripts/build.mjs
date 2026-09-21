@@ -437,8 +437,8 @@ function rewritePublicPageForDist(routeName, relativeTargetPath, content, locale
     );
   } else if (routeName === 'about') {
     rewritten = rewritten.replace(
-      '<body data-asset-base="../">',
-      `<body data-asset-base="${relativeRoot}">`
+      'data-asset-base="../"',
+      `data-asset-base="${relativeRoot}"`
     );
   }
 
