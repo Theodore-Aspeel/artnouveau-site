@@ -1,5 +1,19 @@
 # Maison Coilliot - protocole de mesure du premier cycle
 
+## Mise à jour opérationnelle du 21 septembre 2026
+
+Le statut ci-dessous remplace les passages datés du 20 septembre relatifs à Search Console et au lien Coilliot ; conserver le reste comme baseline historique.
+
+- **Search Console — VÉRIFIÉ pour l'accès, EN COURS pour le sitemap** : propriété URL-prefix validée et rattachée à GSC Wizard. Sitemap soumis le 21 septembre, mais GSC indique encore `isPending=true` / « Impossible de récupérer le sitemap » ; 0 URL découverte dans l'interface. Le lecteur public GSC Wizard récupère 9 URL statiques, 0 article `draft`. Cause non déterminée : attendre le détail du rapport et vérifier le Content-Type HTTP avant toute correction technique ou nouvelle soumission.
+- **Coilliot — VÉRIFIÉ côté liens publics, sans publication** : slug `maison-coilliot-lille-hector-guimard`, statut `draft`, page `noindex,follow`. Liens UTM Story et profil testés en HTTP 200, canonical sans paramètres UTM. Les UTM n'impliquent **aucune mesure effective de sessions** tant qu'aucun analytics site n'est activé.
+- **R1 QA — VÉRIFIÉ** : PR #33 fusionnée et déployée ; Playwright, axe-core, Lighthouse CI disponibles. L'article n'a pas été publié.
+
+Liens exacts pour le dry run (ne pas diffuser avant approbation) :
+
+- Story : `https://theodore-aspeel.github.io/artnouveau-site/fr/articles/maison-coilliot-lille-hector-guimard/?utm_source=instagram&utm_medium=organic_social&utm_campaign=anad_maison_coilliot&utm_content=story_link`
+- Profil : `https://theodore-aspeel.github.io/artnouveau-site/fr/articles/maison-coilliot-lille-hector-guimard/?utm_source=instagram&utm_medium=organic_social&utm_campaign=anad_maison_coilliot&utm_content=profile_link`
+
+
 Date : 2026-09-20  
 Statut : **EN COURS** pour le chantier mesure. Les constats techniques ci-dessous sont **VÉRIFIÉS** lorsqu'une preuve est indiquée. Les choix d'instrumentation non encore approuvés restent **PROPOSÉS**.
 
@@ -124,7 +138,7 @@ Ne pas utiliser `anad_reel_...` pour ce cycle sauf s'il s'agit réellement d'un 
 
 Exemple de destination FR :
 
-`https://theodore-aspeel.github.io/artnouveau-site/fr/articles/maison-coilliot-lille/?utm_source=instagram&utm_medium=organic_social&utm_campaign=anad_maison_coilliot&utm_content=story_link`
+`https://theodore-aspeel.github.io/artnouveau-site/fr/articles/maison-coilliot-lille-hector-guimard/?utm_source=instagram&utm_medium=organic_social&utm_campaign=anad_maison_coilliot&utm_content=story_link`
 
 Le lien exact doit être testé après le déploiement et avant toute diffusion.
 
