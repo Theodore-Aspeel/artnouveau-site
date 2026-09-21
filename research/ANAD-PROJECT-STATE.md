@@ -5,6 +5,18 @@ Dépôt : `Theodore-Aspeel/artnouveau-site`
 Référence du code public : `main`
 Statut du présent registre : VALIDÉ et intégré à `main` (PR #23) ; les statuts ci-dessous ne valent pas approbation de publication.
 
+## 0A. Priorité centrale ACTUALISÉE le 21-09-2026 — prévaut sur les priorités plus anciennes
+
+**D12 VALIDÉ — changement de séquence par Théodore.** Suspendre la pression de lancement du premier cycle Coilliot : l'article et ses vraies photos sont finalisés, mais il reste en `draft/noindex` et sa diffusion n'est pas la prochaine échéance. Priorité immédiate = **construire un système répétable de découverte de bâtiments/photo dans Instagram → corpus original vérifié → article/site → carrousel et Reel facultatif → validation groupée → éventuelle publication**. Ne pas recommencer le même gate Coilliot ni demander un nouveau jalon de mesure pour commencer ce travail.
+
+**P0 — Deux chantiers actifs en parallèle, pas davantage :** (D1) expérience du site, présentation explicite de Christophe auteur-photographe, portfolio/contact professionnel et parcours photo avec deux previews visuelles concrètes, reprise de briques GitHub pertinentes ; (C1) inventaire des publications Instagram accessibles et shortlist de bâtiments réellement documentés par plusieurs originaux. Commencer Remotion/templates de carrousel en M1 à partir de leurs premiers livrables ; ensuite seulement relier toute la chaîne sur un **nouveau dossier source** en P1. Préserver GitHub/AGENTS.md, les droits, les QA existantes, le site vanilla et la règle REUSE FIRST.
+
+**Capacités vérifiées :** Metricool permet de lire certaines publications avec légende/lien/miniature/stats, mais pas de garantir l'accès à tous les médias de chaque carrousel ou aux originaux HD ; aucune automatisation d'inventaire exhaustif n'est acquise. La page About actuelle n'explicite pas suffisamment le profil et les possibilités professionnelles de Christophe. Playwright/axe/Lighthouse CI sont **déjà intégrés et VÉRIFIÉS** : ils servent à tester les prochains travaux, pas à ouvrir un nouveau chantier d'installation. Search Console/sitemap est un suivi non bloquant : la capture du propriétaire montre HTTP 200 et `Content-Type: application/xml` ; l'état de lecture Google reste à surveiller, sans reconstruire le sitemap.
+
+**Budget de temps :** le 5 octobre est un repère de préparation, pas un objectif de travail quotidien ; viser des revues humaines groupées d'environ 15–30 minutes par lot. Aucune dépense, publication ou nouvelle exposition publique de ressources sans validation distincte.
+
+**Document d'exécution à suivre :** `research/anad-2-execution-reset-2026-09-21.md`. Les sections datées du 20-09 et le plan `anad-2-reuse-adoption-plan-2026-10-05.md` restent historiques lorsque leur priorité Coilliot ou leur échéancier contredit D12. Statuts des nouveaux lots : **D1/C1 PROPOSÉS, non exécutés ; M1/P1 NON DÉMARRÉS**.
+
 ## 0. Mise à jour opérationnelle du 20-09-2026 (soir)
 
 Cette mise à jour prévaut sur les lignes plus anciennes du présent fichier lorsqu'elles décrivent le même chantier.
