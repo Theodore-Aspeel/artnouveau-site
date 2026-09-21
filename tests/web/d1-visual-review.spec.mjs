@@ -94,6 +94,7 @@ test('D1 produit la série comparative avant et après', async ({ page }, testIn
 
   await page.goto('/fr/about/', { waitUntil: 'networkidle' });
   await expect(page.locator('#portfolio')).toBeVisible();
+  await revealAndWaitForImages(page, '.about-studio-portfolio__grid img');
   const layout = await page.evaluate(() => ({
     portfolio: getComputedStyle(document.querySelector('.about-studio-portfolio__grid')).gridTemplateColumns,
     imagesLoaded: [...document.querySelectorAll('.about-studio-portfolio__grid img')]
