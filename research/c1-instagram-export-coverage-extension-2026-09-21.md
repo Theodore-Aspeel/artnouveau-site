@@ -1,0 +1,65 @@
+# ANAD 2.0 — C1 : rapprochement archives et extension du catalogue par sujet
+
+Date : 2026-09-21. Statut : **RÉALISÉ — extraction ciblée et rapprochement des HTML ; VÉRIFIÉ pour les décomptes et correspondances indiqués ; EN COURS pour le catalogue nominatif exhaustif et les droits**.
+
+Ce document **complète** `research/c1-instagram-inventory-2026-09-21.md` (baseline Metricool sur `main`) et `research/c1-instagram-export-first-pass-2026-09-21.md` (premier lot de l'export sur cette branche). Il précise une limite désormais résolue dans le premier lot : les entrées sans chemin `media/posts/` sont des publications archivées avec des médias rangés sous `media/archived_posts/`, et non nécessairement des images manquantes. Les nombres par bâtiment ci-dessous sont des **repérages qualifiés**, pas des statistiques exhaustives du feed ou des droits prouvés.
+
+## 1. Réconciliation de l'export officiel : trois vues d'un même historique
+
+- `your_instagram_activity/media/posts.html` : **1 431 entrées de premier niveau datées** (et non les 46 420 conteneurs imbriqués). C'est la vue de l'historique principal incluant les archives.
+- `your_instagram_activity/media/posts_1.html` : **1 162 entrées datées**, avec **1 190 chemins de médias distincts** `media/posts/` (1 152 entrées avec un chemin, dix entrées avec plusieurs).
+- `your_instagram_activity/media/archived_posts.html` : **269 entrées datées**, avec **270 chemins de médias distincts** `media/archived_posts/` (268 entrées avec un média, une avec deux).
+- **VÉRIFIÉ : chacune des 269 entrées du fichier d'archives correspond à une et une seule des 269 entrées supplémentaires dans `posts.html`**, en rapprochant date civile et début de légende normalisé ; aucune des 269 n'est orpheline ou ambiguë avec cette clé. La distribution des entrées archivées est : 2019 : 249 ; 2020 : 11 ; 2021 : 6 ; 2022 : 2 ; 2024 : 1.
+- Ainsi, **1 162 + 269 = 1 431 entrées historiques datées**, classées comme non archivées ou archivées dans **l'export à cette date**. Ce ne sont pas 1 431 publications actuellement visibles dans la grille Instagram ; leur statut en ligne n'a pas fait l'objet d'un contrôle Instagram temps réel.
+- Dans `posts.html`, **1 190 chemins de médias de `posts_1.html` sont déjà présents**, auxquels s'ajoutent 11 chemins `media/posts/` ; un des onze est associé à une entrée archivée du 24-06-2019 (légende « Hairdresser »). **Ne pas additionner les 1 201 chemins du fichier détaillé aux 1 190 du fichier simplifié**, et ne pas présumer que les dix autres fichiers supplémentaires constituent dix publications supplémentaires. L'archive a son répertoire de médias distinct, ce qui rend les anciennes mentions « 268 posts sans médias » **obsolètes** en tant que diagnostic de fichiers absents.
+- `reels.html` : **69 repères datés** et **72 chemins de médias distincts** ont été observés. Les 93 occurrences du conteneur HTML ne sont **pas** 93 Reels individuels : certaines sont imbriquées. Un contrôle de liaison Reel → post photo et du contenu audiovisuel reste à effectuer ; ne pas additionner ces 69 à la population des 1 431 sans analyse de chevauchement.
+
+Clé d'audit interne : `feed #N` désigne le N-ième bloc de publication daté dans `posts_1.html` ; `archive #N` désigne le N-ième bloc daté dans `archived_posts.html`. **Aucun de ces ordinaux ne doit être présenté comme un ID ou permalink Instagram.** Les liens Metricool déjà consignés dans l'inventaire initial restent les seuls permaliens individuellement établis dans les premiers lots.
+
+## 2. Extension vérifiable du catalogue par identité de bâtiment
+
+Méthode : regroupements explicites par appellation et variantes déjà trouvées dans les légendes ; exclusion des simples mentions d'un architecte pouvant désigner plusieurs bâtiments. Les comptes et références concernent les **occurrences identifiées**, donc des minima d'inventaire qui peuvent évoluer avec la résolution des légendes génériques. `Médias` = nombre de chemins associés aux occurrences du groupe, **ni nombre d'angles distincts ni nombre d'originaux natifs**.
+
+| Bâtiment ou ensemble identifié par légende | Non archivées | Archivées | Médias associés | Repères vérifiables et état |
+| --- | ---: | ---: | ---: | --- |
+| Maison Piot / Maison des Francs-Maçons | 9 | 1 | 10 | feed #338, #522 ; archive #17. Nouveau sujet, images et droits à examiner. |
+| Maison Bastin / Maison des Médecins | 7 | 0 | 7 | feed #394, #717. Nouveau sujet ; lieux/angles à confirmer sur fichiers. |
+| Maison Losseau, Mons | 6 | 0 | 6 | feed #483, #499 ; légende de #499 explicitement consacrée à l'entrée. Nouveau sujet. |
+| Maison De Poore | 4 | 1 | 5 | feed #153, #551 ; archive #106. Identité de lieu et fichiers à vérifier avant sélection. |
+| Maison Bacot / Maison Pirnay / Maison Gentry | 4 | 1 | 5 | feed #400, #569 ; archive #14. Variantes dénommées conjointement dans la légende ; lieu et corpus à contrôler. |
+| Casa Galimberti, Milan | 4 | 0 | 4 | feed #781, #786. Nouveau sujet, vues non contrôlées. |
+| Casa Campani, Milan | 3 | 0 | 3 | feed #457, #626. Ne pas confondre avec Casa Campanini, qui est un autre sujet du corpus GitHub. |
+| Anciens magasins Waucquez / Centre de la bande dessinée, Bruxelles | 4 | 0 | 4 | feed #670, #693. Nouveau sujet, quatre occurrences identifiées. |
+| Jardin d'hiver des Ursulines, Malines | 4 | 0 | 4 | feed #280, #350. #280 mentionne explicitement des « vues » précédemment partagées ; les images distinctes restent à vérifier. |
+| Maison personnelle d'Édouard Frankinet | 2 | 0 | 2 | feed #512, #543. Identification et lieu exact à corroborer. |
+| Villa Olga, Blankenberge | 2 | 0 | 2 | feed #595, #663. Nouveau sujet ; doublon potentiel à examiner. |
+| Immeuble Les Chardons, Paris | 2 | 0 | 2 | feed #371, #602. Les deux légendes remercient un tiers : **droits à examiner en priorité, pas une ressource réputée appartenir à Christophe**. |
+| Palau de la Música Catalana / Palais de la Musique Catalane, Barcelone | 4 | 0 | 4 | feed #110, #128. Nouveau sujet ; vue intérieure et lieu à confirmer pour chaque image. |
+| Teatro / Théâtre Kursaal Santalucia, Bari | 3 | 0 | 3 | feed #123, #127. Nouveau sujet ; variantes d'appellation rapprochées. |
+| Palazzo della Gazzetta, Bari | 1 | 0 | 3 | feed #152. Trois médias du même post, mais la légende parle de vestiges et crédite un tiers pour des informations ; vérifier les photos et l'identification de chacune. |
+| Maison Huot, Nancy | 6 | 0 | 6 | feed #9, #28, #60, #82, #85, #87. **Deux compositions distinctes réellement vérifiées au lot précédent**, 4 autres images à comparer ; nouveau sujet. |
+| Casina Cinese / Palazzina Cinese, Palerme | 3 | 0 | 5 | feed #12, #29, #31. **Trois compositions intérieures distinctes vérifiées** au lot précédent ; nouveau sujet. |
+| Maison Spitzer, Budapest | 2 | 0 | 4 | feed #59, #150. **Trois compositions distinctes vérifiées** au lot précédent ; nouveau sujet. |
+| Villino Florio, Palerme | 5 | 0 | 5 | feed #5, #13, #17, #18, #27. Nouveau sujet ; distinctivité des cinq images non vérifiée. |
+| Maison Saint-Cyr, Bruxelles | 7 | 0 | 7 | feed #49, #205, #217, #237, #489, #615, #707. Nouvelle piste ; au moins une légende attribue explicitement une photo à un tiers. |
+| Maison Cauchie, Bruxelles | 9 | 0 | 9 | Plusieurs occurrences `Maison Cauchie` ; exclure les légendes sur **d'autres œuvres de Paul Cauchie**. Nouveau sujet, droits hétérogènes possibles. |
+| Maison Coilliot, Lille | 9 | 2 | 11 | feed #62, #215 ; archive #7, #70. **Article existant et hors nouvelle shortlist C1.** |
+| Maison Delune | 15 | 2 | 17 | feed #10, #251 ; archive #2, #27. **Attention : « Château Feys / Château Solbosch » et maison de l'architecte Ernest Delune pour un maître verrier ne sont pas nécessairement le même bâtiment.** Le chiffre est un ensemble de mentions Delune à **scinder par adresse/identité** avant toute utilisation comme série photographique. Sujet(s) déjà couverts en partie par l'article existant, ne pas assimiler les dix-sept fichiers à un seul bâtiment. |
+| Palais de la Sécession, Vienne | 12 | 1 | 13 | feed #313, #327 ; archive #45. Article existant. |
+| Maison des Hiboux, Saint-Gilles | **3** | 0 | **3** | feed #271, #393, #1120. Le premier lot ne comptait que la mention française exacte #1120 ; deux légendes en anglais « Les Hiboux house » ont été rapprochées. **Article existant**, pas nouveau sujet. |
+| Maison aux Tulipes, Bratislava | 1 confirmée | 1 candidate à réconcilier | 1 + 1 candidate | feed #1124 ; archive #262 « Tulip house » : le nom générique seul ne permet pas de certifier le même bâtiment. Article existant. |
+| Ancienne chemiserie / magasin Niguet, Bruxelles | 5 | 1 | 6 | feed #216, #341 ; archive #9. La légende archivée crédite explicitement une source tierce pour sa photo ; nouveau sujet, droits non présumés. |
+| Chalet des Bruyères | 1 | 0 | 2 | feed #620 : publication multi-médias ; nouveau sujet à vérifier visuellement. |
+| Pavillon aquarium de l'École de Nancy | 1 | 0 | 6 | feed #72 : publication multi-médias, six images associées, angles et sources non inspectés ; nouveau sujet. |
+
+**Corrections et avertissements par rapport aux recherches approximatives :** les trois mentions de « Maison des Hiboux » incluent deux intitulés en anglais ; une même référence à « Paul Cauchie » ne prouve pas qu'il s'agit de la Maison Cauchie ; une légende qui compare la librairie de Gand à la Maison Bergeret ne constitue pas un post photographique de la Maison Bergeret. Le regroupement « Delune » doit être **scindé**, car plusieurs bâtiments peuvent partager ce nom d'architecte et des appellations proches. La Maison Strauven à Tournai doit être distinguée de la Maison Saint-Cyr à Bruxelles et, à Tournai, l'adresse Van Cutsem 19 de l'adresse 27/29. Aucun compte global d'occurrences issu d'une requête libre sur « Strauven » n'est validé par bâtiment.
+
+## 3. Choix de prochains contrôles C1 (PROPOSÉ, aucun usage autorisé)
+
+**Nouvelles pistes additionnelles à inspecter visuellement par sous-ensemble** : Maison Losseau (porte d'entrée + vues), Maison Piot (10 chemins), Maison Bastin (7), Maison Bacot/Pirnay/Gentry (5), Jardin d'hiver des Ursulines (4), Villa Olga (2) et Chalet des Bruyères (2). Ce sont des **candidats de preuve**, non un classement éditorial ni une confirmation d'angles ou de droits. Les trois premiers dossiers visuellement contrôlés du premier lot (Casina Cinese, Spitzer, Huot) restent les seuls de cet inventaire pour lesquels plusieurs cadrages photographiques ont réellement été examinés.
+
+**Contrôles à effectuer dans le cadre C1 :** pour chaque sujet, vérifier un à un les fichiers d'export et leur identité spatiale, repérer les images identiques réutilisées, puis rechercher la correspondance avec les vrais fichiers natifs et les autorisations individuelles. La présence d'un JPEG dans l'export officiel établit la présence d'une **copie exportée**, non l'original HD, l'auteur, la titularité ni un feu vert de publication. Les légendes contenant des crédits de photographes tiers imposent une vérification spécifique. Un nom d'architecte, une année de construction, une attribution et une adresse tirés des légendes restent **à confirmer par recherche documentaire indépendante** avant rédaction.
+
+## 4. Confidentialité, domaine D1 et tests
+
+Cet enrichissement GitHub ne contient **aucun HTML brut, fichier photo/vidéo, commentaire brut, métrique privée ou export complet des légendes**. Il ne crée aucun fichier dans le runtime du site, ne modifie ni le premier inventaire intégré à `main` ni les documents/checkpoints D1, ne fusionne ni ne publie quoi que ce soit. Les tests de build et validation npm ne sont pas requis pour ce lot **strictement documentaire** ; seule la lecture de retour du nouveau document sur la branche est prévue.
