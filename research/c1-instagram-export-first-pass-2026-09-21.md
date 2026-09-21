@@ -1,5 +1,7 @@
 # ANAD 2.0 — C1 : premier lot vérifié de l'export officiel Instagram
 
+> **CORRECTION DU PRÉREQUIS PHOTOGRAPHIQUE — VALIDÉE le 21-09-2026 :** Christophe ne conserve pas d'originaux photographiques historiques dans une photothèque distincte d'Instagram. Les anciennes demandes de fichiers RAW/JPEG natifs ou les formulations faisant de leur absence un blocage absolu sont **OBSOLÈTES** ; ne pas lancer de nouvelle extraction de l'archive ni rechercher une photothèque séparée. Les copies privées Instagram sont la source disponible ; une exploitation web de taille adaptée est **techniquement envisageable** selon la qualité de chaque copie, sous réserve de validation **individuelle de la provenance et des droits** puis d'une **autorisation humaine de publication distincte**. Pour les trois séries Villino Florio, Maison Bastin et rue Warocqué, le référentiel opérationnel à jour est constitué des fiches et de `research/c1-candidates/synchronisation-et-demande-groupee-2026-09-21.md` sur cette branche C1. Le présent rapport conserve ses observations et limites historiques indépendantes de cette correction.
+
 Date : 2026-09-21. Statut : **EN COURS — lot A chiffré VÉRIFIÉ, lot B échantillonné VÉRIFIÉ, lot C structure VÉRIFIÉE**. Ce document complète, sans remplacer, `research/c1-instagram-inventory-2026-09-21.md`.
 
 ## Périmètre et précautions
