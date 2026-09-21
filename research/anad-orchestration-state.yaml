@@ -1,0 +1,50 @@
+schema: anad.orchestration_state@1
+status: preparation_in_progress
+priority_decision: D12
+architecture_decision:
+  id: AD-ANAD-ORCH
+  status: validated_by_theodore_2026-09-21
+  model: github_state_plus_work_codex_execution_with_real_bmad_pilot
+source_commit: 4ecc6aced7a01ec8d802847007d6bb7ee88e82f6
+canonical_brief: research/anad-2-execution-reset-2026-09-21.md
+active_tracks:
+  - id: D1
+    status: proposed
+    depends_on: []
+    mission: research/missions/orchestration-d1-pilot.md
+    artifacts: []
+    evidence: []
+    blockers: []
+    human_validation: pending
+  - id: C1
+    status: proposed
+    depends_on: []
+    mission: research/anad-2-execution-reset-2026-09-21.md
+    artifacts: []
+    evidence: []
+    blockers: []
+    human_validation: not_requested
+permissions:
+  publish: false
+  spend: false
+  external_contact: false
+  direct_push_to_main: false
+  inspect_and_trial_official_bmad_in_isolated_d1_workspace: true
+  install_bmad_globally_or_in_main: false
+  create_branches_and_push_d1_work: true
+  create_draft_pr_for_technical_review: true
+  publish_preview_from_approved_existing_assets_only: true
+  merge_documentation_or_qa_non_editorial_after_green_ci: true
+  merge_d1_visual_change_before_grouped_human_choice: false
+  create_d1_isolated_workspaces: true
+  edit_d1_isolated_workspaces: true
+last_checkpoint:
+  stage: checkpoint_prepared_d1_not_started
+  timestamp: "2026-09-21"
+metrics:
+  manual_transfers: 0
+  human_reminders: 0
+  human_review_minutes: null
+notes:
+  - "Checkpoint prepared in a working branch; only a merged, verified main version is canonical. Documentation/QA non-editorial PRs may be merged after green CI; no direct push main. A PR may trigger a publicly accessible preview: verify that no unreleased content or unapproved media is exposed."
+  - "Actual official BMAD usage and Work/Codex handoffs require an execution run. Native ANAD agent methods have NOT been shown superior to BMAD; record evidence, not assumptions."
