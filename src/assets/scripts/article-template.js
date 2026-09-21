@@ -728,6 +728,8 @@
     sidebar.appendChild(block);
   }
 
+  appendEditorialBlock();
+
   function appendEditorialBlock() {
     if (!hasEditorialMeta) {
       return;
