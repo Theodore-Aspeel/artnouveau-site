@@ -45,3 +45,15 @@ Rapport de recherche approfondie fourni au pilotage le 22 septembre : **RÉALIS�
 4. **Nouveau checkpoint obligatoire** avant le prochain Work ou dès qu'un premier article prêt et la charte sont livrés/validés, selon le premier événement ; la discussion centrale signale ce seuil, vérifie les liens/preuves et demande validation des éventuels changements de priorité, d'architecture ou de périmètre.
 
 **Aucune fusion ni déploiement ni changement de statut éditorial par ce checkpoint.**
+
+## Addendum au checkpoint : premier dossier éditorial livré (22-09-2026)
+
+**JALON ATTEINT — RÉALISÉ / VÉRIFIÉ dans le périmètre privé consulté.** La charte éditoriale v1.1 a été **VALIDÉE pour la préproduction**. Le pôle éditorial a livré un premier dossier consacré au **n° 32 des Habitations Marconi, Forest** : quatre copies JPEG autonomes, documentation patrimoniale, manifeste des vues et droits, article EN/FR/NL, légendes et textes alternatifs individualisés. Le dossier privé et ses deux documents spécialisés ont été consultés par le pilotage ; les quatre copies sont présentes individuellement dans leur dossier photographique privé. Les contrôles de dimensions et empreintes SHA-256 sont documentés sur les fichiers **avant** dépôt Drive, tandis que le contrôle post-dépôt porte sur les tailles et les métadonnées du dossier, non sur un nouveau hash distant.
+
+**Correction documentaire :** les quatre photographies du lot concernent le seul immeuble n° 32, attribué à Léon Govaerts par la notice régionale Urban 29216. Les immeubles d'Émile Hellemans et d'Henri Jacobs appartiennent au contexte de l'ensemble mais ne sont pas photographiés dans cette série. Les textes ont été recentrés sur ce périmètre ; la distinction entre la correspondance visuelle et la source patrimoniale est documentée dans le livrable privé.
+
+**PROPOSÉ pour relecture humaine :** article dans les trois langues, choix d'une vue générale en ouverture puis entrée et détail, quatrième photographie d'entrée conservée comme variante de réserve. **NON VALIDÉS :** publication de chacune des quatre photos, crédits définitifs, choix visuel final, validation éditoriale de diffusion, intégration technique et publication. Cette livraison ne change pas le statut des quatorze articles actuellement existants dans le site.
+
+**Effet sur le gate précédent :** la dépendance « charte + premier dossier prêt pour relecture privée » est désormais satisfaite. Les dépendances encore ouvertes sont la revue artistique réelle de la maquette D1 PR #46, le choix d'une branche D1 de référence pour toute correction et la validation spécifique des droits avant toute exposition publique. Le pôle éditorial peut continuer les autres dossiers en parallèle sans déléguer son travail à Work. Le prochain Work ne doit pas recommencer la recherche historique ou le tri photographique Marconi.
+
+Le checkpoint **ne fusionne pas la PR documentaire en cours**, n'ajoute aucun lien Drive privé, photographie, métadonnée privée d'image ou texte d'article au dépôt public et ne vaut aucune approbation de mise en ligne.
