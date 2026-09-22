@@ -3008,6 +3008,16 @@ main {
   }
 }
 
+@media (min-width: 701px) and (max-width: 800px) {
+  .mag-header__toggle {
+    display: none;
+  }
+
+  .mag-header__nav .site-nav__list {
+    display: flex;
+  }
+}
+
 @media (max-width: 700px) {
   .mag-header__bar {
     grid-template-columns: 1fr auto;
