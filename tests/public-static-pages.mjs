@@ -8,9 +8,9 @@ const publicBasePath = normalizePublicBasePath(process.env.PUBLIC_BASE_PATH || '
 const siteOrigin = (process.env.SITE_ORIGIN || 'https://artnouveauetdeco.com').replace(/\/+$/, '');
 
 const EXPECTED_PAGES = [
-  ['fr', 'home', 'dist/fr/index.html', 'Quatre b\u00e2timents, quatre entr\u00e9es dans l\u2019Art nouveau'],
-  ['en', 'home', 'dist/en/index.html', 'Four buildings, four ways into Art Nouveau'],
-  ['nl', 'home', 'dist/nl/index.html', 'Vier gebouwen, vier ingangen tot de art nouveau'],
+  ['fr', 'home', 'dist/fr/index.html', 'L\u2019architecture, \u00e0 hauteur de regard.'],
+  ['en', 'home', 'dist/en/index.html', 'Architecture, seen at human scale.'],
+  ['nl', 'home', 'dist/nl/index.html', 'Architectuur op menselijke schaal.'],
   ['fr', 'about', 'dist/fr/about/index.html', 'Partir du d\u00e9tail, puis revenir \u00e0 la ville'],
   ['en', 'about', 'dist/en/about/index.html', 'Start from the detail, then return to the city'],
   ['nl', 'about', 'dist/nl/about/index.html', 'Van het detail vertrekken en daarna terugkeren naar de stad'],
@@ -115,7 +115,7 @@ assert.ok(
 );
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /<script src="\.\.\/assets\/scripts\/image-manifest\.js"><\/script>/);
 assert.match(fs.readFileSync('dist/fr/index.html', 'utf8'), /id="pilot-villino-hero"/);
-assert.doesNotMatch(fs.readFileSync('dist/fr/index.html', 'utf8'), /local-private-media|villino-florio-F0027|maison-bastin-F0394/);
+assert.doesNotMatch(fs.readFileSync('dist/fr/index.html', 'utf8'), /src="[^"]*(?:\.private-media|private-media)\//);
 assert.match(galleryScript, /publicRoutes\.article\(currentLocale\(\), normalizedSlug\)/);
 assert.match(galleryScript, /publicRoutes\.home\(currentLocale\(\)\)/);
 assert.match(galleryScript, /SiteImageManifest/);

@@ -22,98 +22,107 @@
 <body class="page-home">
   <header class="mag-header">
     <div class="mag-header__bar">
-      <a class="mag-header__wordmark" href="index.html" aria-label="Art Nouveau et Art Déco, home" data-i18n-attr="aria-label:home.aria.siteHome">Art Nouveau et Art Déco</a>
+      <a class="mag-header__wordmark" href="index.html" aria-label="Art Nouveau et Art Déco, home" data-i18n-attr="aria-label:home.aria.siteHome">
+        <span class="mag-header__monogram">ANAD</span>
+        <span class="mag-header__name">Art Nouveau et Art Déco</span>
+      </a>
       <button class="site-nav__toggle mag-header__toggle" aria-expanded="false" aria-controls="main-menu" data-i18n="nav.menu" data-i18n-attr="aria-label:nav.open">Menu</button>
+      <nav class="mag-header__nav" aria-label="Main navigation" data-i18n-attr="aria-label:home.aria.mainNav">
+        <ul class="site-nav__list" id="main-menu" role="list">
+          <li><a href="#journal" data-i18n="home.mag.nav.buildings">Buildings</a></li>
+          <li><a href="#cities" data-i18n="home.mag.nav.cities">Cities</a></li>
+          <li><a href="about.html" data-i18n="home.nav.about">About</a></li>
+          <li><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        </ul>
+      </nav>
       <div class="site-nav__language" aria-label="Language" data-i18n-attr="aria-label:nav.language">
         <a href="index.html?previewLocale=en" data-preview-locale-link="en" lang="en">EN</a>
         <a href="index.html?previewLocale=fr" data-preview-locale-link="fr" lang="fr">FR</a>
         <a href="index.html?previewLocale=nl" data-preview-locale-link="nl" lang="nl">NL</a>
       </div>
     </div>
-    <nav class="mag-header__nav" aria-label="Main navigation" data-i18n-attr="aria-label:home.aria.mainNav">
-      <ul class="site-nav__list" id="main-menu" role="list">
-        <li><a href="#dossiers" data-i18n="home.mag.nav.buildings">Buildings</a></li>
-        <li><a href="#explore" data-i18n="home.mag.nav.cities">Cities</a></li>
-        <li><a href="#explore" data-i18n="home.mag.nav.themes">Themes</a></li>
-        <li><a href="about.html" data-i18n="home.nav.about">About</a></li>
-        <li><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-      </ul>
-    </nav>
   </header>
 
   <main>
     <section class="mag-lead" aria-labelledby="lead-title">
-      <a class="mag-lead__media mag-private-slot" id="pilot-villino-hero" href="#villino-florio" aria-label="Discover Villino Florio" data-i18n-attr="aria-label:home.mag.villino.aria">
+      <div class="mag-lead__media mag-private-slot" id="pilot-villino-hero" data-private-media="villino-florio-F0027-facade.jpg">
         <span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span>
-      </a>
+      </div>
       <div class="mag-lead__copy">
+        <p class="mag-issue">No. 01 <span aria-hidden="true">/</span> Palermo</p>
         <p class="mag-kicker" data-i18n="home.mag.featured">Featured building · Palermo</p>
         <h1 id="lead-title" data-i18n="home.mag.villino.title">Villino Florio</h1>
         <p class="mag-lead__dek" data-i18n="home.mag.villino.dek">An Art Nouveau residence designed by Ernesto Basile</p>
         <p class="mag-lead__intro" data-i18n="home.mag.villino.intro">An exterior staircase leads towards an asymmetrical facade of towers, arches and varied rooflines. In Palermo, Villino Florio brings several architectural forms together in a distinctive expression of Italian Liberty.</p>
-        <a class="mag-read-link" href="#villino-florio" data-i18n="home.mag.openDossier">Open the photographic dossier</a>
-        <p class="mag-lead__credit" data-i18n="home.mag.credit">Photography by Christophe Aspel</p>
+        <span class="mag-read-link mag-read-link--muted" data-i18n="home.mag.status.preparation">Dossier in preparation</span>
       </div>
+      <div class="mag-lead__folio" aria-hidden="true">01</div>
     </section>
 
-    <section class="mag-section" id="dossiers" aria-labelledby="dossiers-title">
-      <header class="mag-section__header">
-        <p class="mag-kicker" data-i18n="home.mag.selection">The pilot selection</p>
-        <h2 id="dossiers-title" data-i18n="home.mag.dossiers.title">Four buildings, four ways into Art Nouveau</h2>
-        <p data-i18n="home.mag.dossiers.intro">Architecture comes first: complete facades, material details and concise historical context.</p>
-      </header>
-
-      <div class="mag-grid">
-        <article class="mag-story mag-story--coilliot">
-          <a class="mag-story__image" href="article.html?slug=maison-coilliot-lille-hector-guimard" data-article-slug="maison-coilliot-lille-hector-guimard"><img src="../assets/images/articles/maison-coilliot-facade-complete-christophe-aspel.jpg" alt="The complete facade of Maison Coilliot, designed by Hector Guimard, in Lille." data-i18n-attr="alt:home.mag.coilliot.alt" loading="lazy" decoding="async"></a>
-          <div class="mag-story__copy">
-            <p class="mag-story__meta" data-i18n="home.mag.coilliot.meta">Lille · France · 1898–1900</p>
-            <h3><a href="article.html?slug=maison-coilliot-lille-hector-guimard" data-article-slug="maison-coilliot-lille-hector-guimard" data-i18n="home.mag.coilliot.title">Maison Coilliot</a></h3>
-            <p data-i18n="home.mag.coilliot.dek">Hector Guimard turns a narrow commercial facade into a total composition of architecture, lettering and craft.</p>
-          </div>
-        </article>
-
-        <article class="mag-story mag-story--hiboux">
-          <a class="mag-story__image" href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles"><img src="../assets/images/articles/maison-des-hiboux-saint-gilles.png" alt="The Art Nouveau facade of Maison des Hiboux in Saint-Gilles." data-i18n-attr="alt:home.mag.hiboux.alt" loading="lazy" decoding="async"></a>
-          <div class="mag-story__copy">
-            <p class="mag-story__meta" data-i18n="home.mag.hiboux.meta">Saint-Gilles · Belgium · 1899</p>
-            <h3><a href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles" data-i18n="home.mag.hiboux.title">Maison des Hiboux</a></h3>
-            <p data-i18n="home.mag.hiboux.dek">Two sculpted owls, geometric windows, ironwork and sgraffito give this Brussels facade its identity.</p>
-          </div>
-        </article>
-
-        <article class="mag-story mag-story--villino" id="villino-florio">
-          <a class="mag-story__image mag-private-slot" id="pilot-villino-secondary" href="#dossier-status"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></a>
-          <div class="mag-story__copy">
-            <p class="mag-story__meta" data-i18n="home.mag.villino.meta">Palermo · Italy · Liberty</p>
-            <h3><a href="#dossier-status" data-i18n="home.mag.villino.title">Villino Florio</a></h3>
-            <p data-i18n="home.mag.villino.cardDek">Ernesto Basile composes towers, arches and rooflines around a monumental exterior stair.</p>
-            <span class="mag-story__status" data-i18n="home.mag.status.preparation">Article page not yet redesigned</span>
-          </div>
-        </article>
-
-        <article class="mag-story mag-story--bastin" id="maison-bastin">
-          <a class="mag-story__image mag-private-slot" id="pilot-bastin-hero" href="#dossier-status"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></a>
-          <div class="mag-story__copy">
-            <p class="mag-story__meta" data-i18n="home.mag.bastin.meta">Charleroi · Belgium · 1908</p>
-            <h3><a href="#dossier-status" data-i18n="home.mag.bastin.title">Maison des Médecins</a></h3>
-            <p data-i18n="home.mag.bastin.dek">Polychrome brickwork, stained glass and a projecting bay window shape an elaborate Art Nouveau facade.</p>
-            <span class="mag-story__status" data-i18n="home.mag.status.preparation">Article page not yet redesigned</span>
-          </div>
-        </article>
-      </div>
+    <section class="mag-opening" aria-labelledby="opening-title">
+      <p class="mag-kicker" data-i18n="home.mag.selection">The journal</p>
+      <h2 id="opening-title" data-i18n="home.mag.dossiers.title">Architecture, seen at human scale.</h2>
+      <p data-i18n="home.mag.dossiers.intro">A facade first. Then the materials, signs and details that give each place its character.</p>
     </section>
 
-    <section class="mag-explore" id="explore" aria-labelledby="explore-title">
-      <div class="mag-explore__heading"><p class="mag-kicker" data-i18n="home.mag.explore.kicker">Explore the magazine</p><h2 id="explore-title" data-i18n="home.mag.explore.title">Follow a city. Notice a material. Meet an architect.</h2></div>
-      <div class="mag-explore__columns">
-        <div><h3 data-i18n="home.mag.explore.cities">Cities</h3><ul><li>Lille</li><li>Saint-Gilles</li><li>Palermo</li><li>Charleroi</li></ul></div>
-        <div><h3 data-i18n="home.mag.explore.themes">Themes</h3><ul><li>Art Nouveau</li><li>Liberty</li><li data-i18n="home.mag.theme.facades">Facades</li><li data-i18n="home.mag.theme.craft">Decorative craft</li></ul></div>
-        <div><h3 data-i18n="home.mag.explore.architects">Architects</h3><ul><li>Hector Guimard</li><li>Édouard Pelseneer</li><li>Ernesto Basile</li><li>François Guianotte</li></ul></div>
-      </div>
+    <section class="mag-journal" id="journal" aria-label="Selected photographic stories" data-i18n-attr="aria-label:home.aria.curatedGrid">
+      <article class="mag-feature mag-feature--coilliot">
+        <a class="mag-feature__primary" href="article.html?slug=maison-coilliot-lille-hector-guimard" data-article-slug="maison-coilliot-lille-hector-guimard"><img src="../assets/images/articles/maison-coilliot-facade-complete-christophe-aspel.jpg" alt="The complete facade of Maison Coilliot, designed by Hector Guimard, in Lille." data-i18n-attr="alt:home.mag.coilliot.alt" loading="lazy" decoding="async"></a>
+        <div class="mag-feature__copy">
+          <p class="mag-story__meta" data-i18n="home.mag.coilliot.meta">Lille · France · 1898–1900</p>
+          <h2><a href="article.html?slug=maison-coilliot-lille-hector-guimard" data-article-slug="maison-coilliot-lille-hector-guimard" data-i18n="home.mag.coilliot.title">Maison Coilliot</a></h2>
+          <p data-i18n="home.mag.coilliot.dek">Hector Guimard turns a narrow commercial facade into a total composition of architecture, lettering and craft.</p>
+          <a class="mag-text-link" href="article.html?slug=maison-coilliot-lille-hector-guimard" data-article-slug="maison-coilliot-lille-hector-guimard" data-i18n="home.mag.openDossier">Open the photographic dossier</a>
+        </div>
+        <div class="mag-feature__details" aria-label="Maison Coilliot details">
+          <img src="../assets/images/articles/maison-coilliot-enseigne-signature-hector-guimard.jpg" alt="The Coilliot name and Hector Guimard's signature within the decorative facade." loading="lazy" decoding="async">
+          <img src="../assets/images/articles/maison-coilliot-enseigne-ceramique-lave-emaillee.jpg" alt="Decorative lettering advertising ceramics and enamelled lava on the facade." loading="lazy" decoding="async">
+        </div>
+      </article>
+
+      <article class="mag-feature mag-feature--hiboux">
+        <div class="mag-feature__pair">
+          <a href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles"><img src="../assets/images/articles/maison-des-hiboux-saint-gilles.png" alt="The Art Nouveau facade of Maison des Hiboux in Saint-Gilles." data-i18n-attr="alt:home.mag.hiboux.alt" loading="lazy" decoding="async"></a>
+          <a href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles"><img src="../assets/images/articles/gros-plan-sur-le-sgraffito-de-la-maison-des-hiboux-bruxelles.png" alt="Detail of the sgraffito above the entrance of Maison des Hiboux." loading="lazy" decoding="async"></a>
+        </div>
+        <div class="mag-feature__copy">
+          <p class="mag-story__meta" data-i18n="home.mag.hiboux.meta">Saint-Gilles · Belgium · 1899</p>
+          <h2><a href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles" data-i18n="home.mag.hiboux.title">Maison des Hiboux</a></h2>
+          <p data-i18n="home.mag.hiboux.dek">Two sculpted owls, geometric windows, ironwork and sgraffito give this Brussels facade its identity.</p>
+          <a class="mag-text-link" href="article.html?slug=maison-des-hiboux-saint-gilles" data-article-slug="maison-des-hiboux-saint-gilles" data-i18n="home.mag.openDossier">Open the photographic dossier</a>
+        </div>
+      </article>
     </section>
 
-    <aside class="mag-status" id="dossier-status"><p data-i18n="home.mag.status.note">This first visual milestone redesigns the homepage only. Existing article pages remain unchanged; the Villino Florio and Maison des Médecins dossiers are shown here for private design review and do not yet have finished article pages.</p></aside>
+    <section class="mag-private-dossier" id="villino-florio" aria-labelledby="villino-title">
+      <header class="mag-private-dossier__header"><div><p class="mag-story__meta" data-i18n="home.mag.villino.meta">Palermo · Italy · Liberty</p><h2 id="villino-title" data-i18n="home.mag.villino.title">Villino Florio</h2></div><p data-i18n="home.mag.villino.cardDek">Ernesto Basile composes towers, arches and rooflines around a monumental exterior stair.</p></header>
+      <div class="mag-sequence mag-sequence--villino">
+        <div class="mag-private-slot" data-private-media="villino-florio-F0005-escalier.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+        <div class="mag-private-slot" data-private-media="villino-florio-F0013-cheminee.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+        <div class="mag-private-slot" data-private-media="villino-florio-F0018-vitrail.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+      </div>
+      <p class="mag-dossier-note"><span data-i18n="home.mag.status.preparation">Dossier in preparation</span> · <span data-i18n="home.mag.status.privateReview">Private visual review</span></p>
+    </section>
+
+    <section class="mag-private-dossier mag-private-dossier--bastin" id="maison-bastin" aria-labelledby="bastin-title">
+      <header class="mag-private-dossier__header"><div><p class="mag-story__meta" data-i18n="home.mag.bastin.meta">Charleroi · Belgium · 1908</p><h2 id="bastin-title" data-i18n="home.mag.bastin.title">Maison des Médecins</h2></div><p data-i18n="home.mag.bastin.dek">Polychrome brickwork, stained glass and a projecting bay window shape an elaborate Art Nouveau facade.</p></header>
+      <div class="mag-bastin-layout">
+        <div class="mag-private-slot mag-bastin-layout__hero" data-private-media="maison-bastin-F0394-facade.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+        <div class="mag-bastin-layout__details">
+          <div class="mag-private-slot" data-private-media="maison-bastin-F0717-oriel.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+          <div class="mag-private-slot" data-private-media="maison-bastin-F0729-vitrail.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+          <div class="mag-private-slot" data-private-media="maison-bastin-F0746-interieur.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+          <div class="mag-private-slot" data-private-media="maison-bastin-F0751-portes.jpg"><span data-i18n="home.mag.privateFallback">Private photograph available in the local review</span></div>
+        </div>
+      </div>
+      <p class="mag-dossier-note"><span data-i18n="home.mag.status.preparation">Dossier in preparation</span> · <span data-i18n="home.mag.status.privateReview">Private visual review</span></p>
+    </section>
+
+    <section class="mag-cities" id="cities" aria-labelledby="cities-title">
+      <p class="mag-kicker" data-i18n="home.mag.explore.kicker">Explore the magazine</p>
+      <h2 id="cities-title" data-i18n="home.mag.explore.title">Follow a city. Notice a material. Meet an architect.</h2>
+      <div class="mag-cities__list" aria-label="Cities represented in this first editorial selection"><span>Lille <small>France</small></span><span>Saint-Gilles <small>Belgium</small></span><span>Palermo <small>Italy</small></span><span>Charleroi <small>Belgium</small></span></div>
+    </section>
   </main>
 
   <footer class="mag-footer"><p class="mag-footer__brand">Art Nouveau et Art Déco</p><p data-i18n="home.mag.footer">A photographic magazine by Christophe Aspel.</p><div><a href="about.html" data-i18n="home.nav.about">About</a><a href="mentions.html" data-i18n="home.footer.legal">Legal &amp; contact</a><a href="https://www.instagram.com/artnouveauetdeco" target="_blank" rel="noopener noreferrer">Instagram</a></div></footer>

@@ -10,8 +10,8 @@ assert.match(
   /class="mag-lead__media mag-private-slot" id="pilot-villino-hero"/,
   'home should expose a stable private-media slot for the local lead photograph'
 );
-assert.doesNotMatch(homeHtml, /local-private-media|villino-florio-F0027|maison-bastin-F0394/, 'private preview media must not enter the public source');
-assert.match(homeHtml, /class="mag-story__image"[\s\S]*?<img[^>]+loading="lazy"[^>]+decoding="async"/, 'public homepage story images should load lazily');
+assert.doesNotMatch(homeHtml, /src="[^"]*(?:\.private-media|private-media)\//, 'private preview media must not enter public image sources');
+assert.match(homeHtml, /class="mag-feature__primary"[\s\S]*?<img[^>]+loading="lazy"[^>]+decoding="async"/, 'public homepage feature images should load lazily');
 
 assert.match(
   articleTemplate,

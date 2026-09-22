@@ -45,7 +45,7 @@ assert.equal(i18n.t('article.localeFallback.nlOnly'), 'Alleen in het Frans');
 assert.equal(i18n.t('article.localeFallback.nlOnlyMessage'), 'Dit artikel is voorlopig alleen in het Frans beschikbaar.');
 assert.equal(i18n.t('gallery.all'), 'Alle');
 assert.equal(i18n.t('home.hero.title'), 'Eerst kijken. Daarna benoemen.');
-assert.equal(i18n.t('home.mag.dossiers.title'), 'Vier gebouwen, vier ingangen tot de art nouveau');
+assert.equal(i18n.t('home.mag.dossiers.title'), 'Architectuur op menselijke schaal.');
 assert.equal(i18n.t('home.mag.villino.dek'), 'Een art-nouveauresidentie ontworpen door Ernesto Basile');
 assert.equal(i18n.t('home.mag.footer'), 'Een fotografisch magazine van Christophe Aspel.');
 assert.equal(i18n.t('home.curated.title'), 'Drie directe ingangen');
@@ -73,8 +73,8 @@ assert.equal(i18n.t('error404.title', null, 'nl'), 'Pagina niet gevonden');
 assert.equal(i18n.t('error404.cta', null, 'nl'), 'Terug naar home');
 
 const homeHtml = fs.readFileSync('src/pages/index.html', 'utf8');
-assert.match(homeHtml, /id="dossiers"[^>]+aria-labelledby="dossiers-title"/);
-assert.match(homeHtml, /id="explore"[^>]+aria-labelledby="explore-title"/);
+assert.match(homeHtml, /id="journal"[^>]+aria-label="Selected photographic stories"/);
+assert.match(homeHtml, /id="cities"[^>]+aria-labelledby="cities-title"/);
 assert.match(homeHtml, /id="pilot-villino-hero"/);
 assert.match(homeHtml, /data-preview-locale-link="nl"/);
 
