@@ -57,3 +57,17 @@ Rapport de recherche approfondie fourni au pilotage le 22 septembre : **RÉALIS�
 **Effet sur le gate précédent :** la dépendance « charte + premier dossier prêt pour relecture privée » est désormais satisfaite. Les dépendances encore ouvertes sont la revue artistique réelle de la maquette D1 PR #46, le choix d'une branche D1 de référence pour toute correction et la validation spécifique des droits avant toute exposition publique. Le pôle éditorial peut continuer les autres dossiers en parallèle sans déléguer son travail à Work. Le prochain Work ne doit pas recommencer la recherche historique ou le tri photographique Marconi.
 
 Le checkpoint **ne fusionne pas la PR documentaire en cours**, n'ajoute aucun lien Drive privé, photographie, métadonnée privée d'image ou texte d'article au dépôt public et ne vaut aucune approbation de mise en ligne.
+
+## Addendum : Maison Piot — deuxième dossier éditorial privé livré (22-09-2026)
+
+**RÉALISÉ / VÉRIFIÉ dans le périmètre Drive consulté :** le pôle éditorial a livré Maison Piot (Liège), six fichiers JPEG photographiques autonomes, plus une planche illustrative séparée, ainsi qu'un manifeste, une fiche historique, un article EN/FR/NL, six légendes et six textes alternatifs par langue. Aucun de ces fichiers privés n'est déposé dans cette PR.
+
+**Documentation :** maison du 17 rue de Sélys datée de 1904, architecte Victor Rogister selon les références réunies par le pôle ; deux reliefs féminins distincts, l'un au coq, l'autre à la chouette. L'interprétation symbolique jour/nuit est attribuée à une source spécialisée, non déduite du surnom « Maison des Francs-Maçons ». L'attribution sculpturale à Oscar Berchmans est mentionnée avec ses sources, sans prétendre à une signature visible sur les photographies. Tout fait historique et tout choix éditorial restent soumis à la relecture préalable à diffusion.
+
+**Sélection PROPOSÉE, non artistiquement validée :** photographie générale en ouverture, puis porte, inscription/date, baie supérieure et les deux reliefs distincts. Le manifeste garde les six originaux inchangés et exclut la planche dérivée de la galerie documentaire. La planche présente une extension `.png` alors que son format binaire réel est JPEG ; ne pas la traiter comme un PNG valide ni l'utiliser publiquement sans clarification des droits.
+
+**NON VALIDÉS :** droits individuels de publication, crédit définitif, utilisation publique de la planche, ordre de galerie et texte définitifs. Le pôle éditorial n'a modifié ni le code ni le registre public des droits.
+
+**Adaptation du gate humain à la demande de Théodore :** les Docs sont les pièces de contrôle éditorial, **pas l'interface de validation artistique**. Ne pas exiger de validation du rythme des articles à la seule lecture des documents. Après revue de la maquette #46 et choix d'une seule base D1, préparer une **prévisualisation privée navigable** des vraies pages d'articles Marconi/Piot, sans images privées dans Git, CI ou preview publique. La visualisation privée n'est ni la permission d'une intégration publique ni une autorisation de publier. Le pôle éditorial peut préparer d'autres dossiers indépendamment de Work.
+
+**Checkpoint suivant** : avant la prochaine mission Work, ou à toute modification substantielle du périmètre, de la base D1 ou des droits.
