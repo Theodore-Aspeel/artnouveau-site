@@ -3177,7 +3177,7 @@ main {
 /* D1 preproduction direction: quiet photographic journal. */
 .page-home {
   --mag-ink: #171713;
-  --mag-muted: #66645d;
+  --mag-muted: #504e48;
   --mag-line: rgba(23, 23, 19, .2);
   --mag-paper: #f2efe8;
   --mag-panel: #e7e1d6;
@@ -3555,6 +3555,10 @@ main {
 
 .mag-private-dossier:not(.mag-private-dossier--bastin) .mag-private-slot > span {
   color: #d9d5cb;
+}
+
+.mag-private-dossier:not(.mag-private-dossier--bastin) .mag-story__meta {
+  color: #d9d5cb !important;
 }
 
 .mag-dossier-note {
