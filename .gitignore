@@ -3,6 +3,8 @@
 
 # Build output
 /dist/
+/.private-media/
+/private-review/
 
 # IDE and local agent settings
 /.idea/

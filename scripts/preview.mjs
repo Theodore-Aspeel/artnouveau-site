@@ -15,6 +15,8 @@ const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.ico': 'image/x-icon',
+  '.jpeg': 'image/jpeg',
+  '.jpg': 'image/jpeg',
   '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
@@ -67,6 +69,10 @@ try {
 if (!(await pathExists(DIST))) {
   console.error('ERROR\nMissing dist/ directory after build.\n');
   process.exit(1);
+}
+
+if (process.env.PRIVATE_PREVIEW === '1') {
+  await import('./prepare-private-preview.mjs');
 }
 
 const server = http.createServer(async (req, res) => {

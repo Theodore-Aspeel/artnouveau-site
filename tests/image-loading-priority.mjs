@@ -7,9 +7,11 @@ const galleryScript = fs.readFileSync('src/assets/scripts/gallery.js', 'utf8');
 
 assert.match(
   homeHtml,
-  /class="home-hero__image"[\s\S]*?loading="eager"[\s\S]*?fetchpriority="high"[\s\S]*?decoding="async"/,
-  'home hero image should be explicit LCP candidate: eager, high priority, async decoding'
+  /class="mag-lead__media mag-private-slot" id="pilot-villino-hero"/,
+  'home should expose a stable private-media slot for the local lead photograph'
 );
+assert.doesNotMatch(homeHtml, /src="[^"]*(?:\.private-media|private-media)\//, 'private preview media must not enter public image sources');
+assert.match(homeHtml, /class="mag-feature__primary"[\s\S]*?<img[^>]+loading="lazy"[^>]+decoding="async"/, 'public homepage feature images should load lazily');
 
 assert.match(
   articleTemplate,

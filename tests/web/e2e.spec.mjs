@@ -54,15 +54,26 @@ test('les pages statiques publiques restent indexables', async ({ page }) => {
   }
 });
 
-test('captures de revue sur les vues stables candidates', async ({ page }, testInfo) => {
+test('captures de revue de la nouvelle page d’accueil', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'chromium-tablet-768', 'Le lot demande quatre captures 390/desktop.');
 
-  const viewport = testInfo.project.name === 'chromium-mobile-390' ? '390' : 'desktop';
-  for (const [name, path] of [['accueil', '/fr/'], ['coilliot', COILLIOT_PATH]]) {
-    await page.goto(path, { waitUntil: 'networkidle' });
-    await testInfo.attach(`${name}-${viewport}`, {
-      body: await page.screenshot({ fullPage: true }),
-      contentType: 'image/png',
-    });
+  const viewport = testInfo.project.name === 'chromium-mobile-390' ? 'mobile-390' : 'desktop-1365';
+  await page.goto('/en/', { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page.locator('h1')).toBeVisible();
+
+  for (const image of await page.locator('img').all()) {
+    await image.scrollIntoViewIfNeeded();
   }
+  await page.waitForFunction(() => [...document.images].every((image) => image.complete && image.naturalWidth > 0));
+  await page.evaluate(() => window.scrollTo(0, 0));
+
+  await testInfo.attach(`homepage-${viewport}-first-screen`, {
+    body: await page.screenshot({ fullPage: false, animations: 'disabled' }),
+    contentType: 'image/png',
+  });
+  await testInfo.attach(`homepage-${viewport}-full`, {
+    body: await page.screenshot({ fullPage: true, animations: 'disabled' }),
+    contentType: 'image/png',
+  });
 });

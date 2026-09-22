@@ -22,7 +22,6 @@ assert.deepEqual(
   expectedSiteImages,
   [
     'assets/images/site/author/author-portrait-2026.jpg',
-    'assets/images/site/saint-gilles-brussels.png',
   ],
   'site image collection should stay limited to images referenced by public pages'
 );
