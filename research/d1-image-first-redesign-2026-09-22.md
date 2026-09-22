@@ -1,9 +1,11 @@
 # ANAD 2.0 - D1 direction image-first
 
 Date : 2026-09-22  
-Statut : **EN COURS - implémentation locale réalisée, validation navigateur/CI et revue humaine attendues**  
-Branche : `anad-2.0/d1-image-first`  
+Statut : **PRÊT POUR REVUE HUMAINE - implémentation et contrôles techniques terminés**
+Branche : `anad-2.0/d1-image-first`
 Base technique : PR #43, commit `9f725dc97099503f8d46df82648f104ec6667b81`
+PR draft : #44
+HEAD vérifié : `523c23dbad6b1656f18078c4f84122fc3e287029`
 
 ## PROPOSÉ
 
@@ -35,16 +37,20 @@ Décision **ADAPT** : HTML/CSS/JS vanilla, routes localisées, helpers article, 
 - Validation de contenu : succès local.
 - Contrôle du registre de droits public : 24/24 ressources prêtes, aucune anomalie.
 - Build public : succès, 14/14 articles en mode `legacy-visible`.
+- Tests Node : 24/24 réussis ; tests Python : 207/207 réussis.
 - Export Drive : 12 images incorporées récupérables et mappées aux douze libellés.
 - Frontière de confidentialité : `.private-media/` ignoré ; `dist/private/` produit uniquement avec `PRIVATE_PREVIEW=1`.
+- Workflow Quality #90 : succès complet sur le HEAD vérifié (`quality`, `publication-filter`, `pages-profile`, `browser-qa` et `lighthouse`).
+- Playwright/axe : succès en CI après correction ciblée des contrastes ; captures comparatives accueil, auteur et article aux largeurs 390, 768 et 1365 px dans l'artefact `browser-qa-artifacts`.
+- Lighthouse CI : succès ; rapports conservés dans l'artefact `lighthouse-reports`.
 
 ## BLOQUÉ / RÉSERVES
 
 - Les images privées sont des extractions DOCX, donc potentiellement recompressées.
 - Leur provenance et leurs droits individuels ne sont pas validés pour publication.
-- Le navigateur Chromium local n'a pas pu être téléchargé dans l'environnement Work ; les captures publiques et les contrôles navigateur doivent donc être produits par la CI GitHub. Les captures privées restent à produire dans le paquet local, hors CI.
+- Le téléchargement de Chromium a été bloqué dans l'environnement Work. Les contrôles navigateur et captures publiques ont donc été exécutés par la CI GitHub, avec succès.
+- Aucune capture contenant les photographies privées n'a été envoyée dans GitHub ou ses artefacts. La démonstration de ces images reste interactive et locale dans le paquet de revue Windows.
 
 ## VALIDATION HUMAINE
 
 La réussite technique ne vaut pas validation artistique. Théodore doit examiner ensemble l'accueil, le portfolio, un article public et le parcours privé de la série bleue avant toute fusion.
-
