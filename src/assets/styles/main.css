@@ -3931,3 +3931,18 @@ body {
   .home-curated__image,
   .about-studio-shot img { transition: none; }
 }
+
+/* The previous dark-theme accent roles are now rendered on light paper. */
+.home-curated .section__kicker,
+.home-curated__eyebrow,
+.home-curated__meta,
+.home-rhythm .section__kicker,
+.home-rhythm__label,
+.page-about .about-editorial__kicker,
+.page-about .about-trust__label,
+.page-about .about-trust__card-label,
+.page-about .about-editorial__cta-label,
+.article-header__category,
+.article-tpl__facts:not(.article-tpl__facts--editorial) .article-tpl__block-label {
+  color: var(--photo-blue-dark);
+}
