@@ -62,6 +62,12 @@ test('captures de revue de la nouvelle page d’accueil', async ({ page }, testI
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator('h1')).toBeVisible();
 
+  for (const image of await page.locator('img').all()) {
+    await image.scrollIntoViewIfNeeded();
+  }
+  await page.waitForFunction(() => [...document.images].every((image) => image.complete && image.naturalWidth > 0));
+  await page.evaluate(() => window.scrollTo(0, 0));
+
   await testInfo.attach(`homepage-${viewport}-first-screen`, {
     body: await page.screenshot({ fullPage: false, animations: 'disabled' }),
     contentType: 'image/png',
