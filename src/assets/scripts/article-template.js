@@ -490,8 +490,6 @@
     intakeHeader.appendChild(make('div', 'article-epigraph', articleEpigraph));
   }
 
-  intake.appendChild(intakeHeader);
-
   if (primaryImage) {
     const figure = make('figure', 'article-intake__figure');
     const image = document.createElement('img');
@@ -516,6 +514,8 @@
 
     intake.appendChild(figure);
   }
+
+  intake.appendChild(intakeHeader);
 
   shell.appendChild(intake);
 
@@ -592,6 +592,8 @@
     body.appendChild(grid);
   }
 
+  appendSupportGallery();
+
   if (sections.length) {
     sections.forEach((section, index) => {
       const sec = make('section', 'article-body__section');
@@ -603,14 +605,7 @@
       });
       body.appendChild(sec);
 
-      if (index === 0 && articleFormat !== 'article-court') {
-        appendSupportGallery();
-      }
     });
-  }
-
-  if (!sections.length || articleFormat === 'article-court') {
-    appendSupportGallery();
   }
 
   const resources = access.getArticleResources(article, locale);

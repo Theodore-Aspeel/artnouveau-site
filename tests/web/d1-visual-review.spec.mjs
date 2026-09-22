@@ -7,9 +7,9 @@ const VIEWPORT_LABELS = {
 };
 
 const EXPECTED_PORTFOLIO_COLUMNS = {
-  'chromium-mobile-390': 2,
-  'chromium-tablet-768': 12,
-  'chromium-desktop': 12,
+  'chromium-mobile-390': 1,
+  'chromium-tablet-768': 1,
+  'chromium-desktop': 1,
 };
 
 const REVIEW_PAGES = [
@@ -40,7 +40,7 @@ async function revealAndWaitForImages(page, selector) {
   ).toBeTruthy();
 }
 
-test('D1 produit la série comparative avant et après', async ({ page }, testInfo) => {
+test('D1 image-first produit la série comparative avant et après', async ({ page }, testInfo) => {
   test.setTimeout(90_000);
   const viewport = VIEWPORT_LABELS[testInfo.project.name] || testInfo.project.name;
 
@@ -105,4 +105,14 @@ test('D1 produit la série comparative avant et après', async ({ page }, testIn
   const responsiveSources = page.locator('.about-studio-portfolio__grid picture source[data-responsive-image-format]');
   await expect(responsiveSources.first()).toHaveAttribute('srcset', /assets\/generated-images\//);
   expect(await responsiveSources.count()).toBeGreaterThanOrEqual(2);
+
+  await page.goto('/fr/articles/maison-coilliot-lille-hector-guimard/', { waitUntil: 'networkidle' });
+  await expect(page.locator('.article-intake__figure')).toBeVisible();
+  const photographicOrder = await page.evaluate(() => {
+    const intake = document.querySelector('.article-intake');
+    const figure = intake?.querySelector('.article-intake__figure');
+    const header = intake?.querySelector('.article-intake__header');
+    return Boolean(intake && figure && header && [...intake.children].indexOf(figure) < [...intake.children].indexOf(header));
+  });
+  expect(photographicOrder).toBeTruthy();
 });

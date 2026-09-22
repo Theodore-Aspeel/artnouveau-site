@@ -408,6 +408,7 @@ function replaceSimplePublicLinks(content, locale, routeName, contracts, routePa
     )
     .replaceAll('href="index.html#galerie"', `href="${routes.home(locale)}#galerie"`)
     .replaceAll('href="index.html"', `href="${routes.home(locale)}"`)
+    .replaceAll('href="about.html#portfolio"', `href="${routes.about(locale)}#portfolio"`)
     .replaceAll('href="about.html"', `href="${routes.about(locale)}"`)
     .replaceAll('href="mentions.html"', `href="${routes.mentions(locale)}"`)
     .replaceAll('href="' + currentRoute + '#galerie"', `href="${currentRoute}#galerie"`)

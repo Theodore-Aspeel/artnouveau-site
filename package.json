@@ -17,6 +17,7 @@
     "validate": "node scripts/validate-content.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/preview.mjs",
+    "preview:private": "node scripts/preview.mjs",
     "test:e2e": "playwright test tests/web/e2e.spec.mjs",
     "test:a11y": "playwright test tests/web/accessibility.spec.mjs --project=chromium-desktop",
     "test:lighthouse": "lhci autorun --config=./lighthouserc.json",
