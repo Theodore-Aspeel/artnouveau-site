@@ -15,7 +15,7 @@ if not exist node_modules (
   if errorlevel 1 goto :error
 )
 
-start "" "http://localhost:4173/fr/"
+set "OPEN_BROWSER=1"
 call npm run preview
 exit /b %errorlevel%
 

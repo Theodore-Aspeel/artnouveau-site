@@ -15,12 +15,15 @@ const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.ico': 'image/x-icon',
+  '.jpeg': 'image/jpeg',
+  '.jpg': 'image/jpeg',
   '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
   '.txt': 'text/plain; charset=utf-8',
   '.webmanifest': 'application/manifest+json; charset=utf-8',
+  '.webp': 'image/webp',
 };
 
 function resolveRequestPath(urlPath) {
@@ -57,8 +60,49 @@ async function runBuild() {
   });
 }
 
+async function preparePrivatePreview() {
+  if (process.env.PRIVATE_PREVIEW !== '1') return;
+
+  await new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [path.join(ROOT, 'scripts', 'prepare-private-preview.mjs')], {
+      cwd: ROOT,
+      env: process.env,
+      stdio: 'inherit',
+    });
+
+    child.on('error', reject);
+    child.on('exit', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`private preview preparation failed with exit code ${code}`));
+    });
+  });
+}
+
+function openBrowser(url) {
+  if (process.env.OPEN_BROWSER !== '1') return;
+
+  let command;
+  let args;
+
+  if (process.platform === 'win32') {
+    command = 'cmd';
+    args = ['/c', 'start', '', url];
+  } else if (process.platform === 'darwin') {
+    command = 'open';
+    args = [url];
+  } else {
+    command = 'xdg-open';
+    args = [url];
+  }
+
+  const child = spawn(command, args, { detached: true, stdio: 'ignore' });
+  child.on('error', () => {});
+  child.unref();
+}
+
 try {
   await runBuild();
+  await preparePrivatePreview();
 } catch (error) {
   console.error('ERROR\nPreview aborted because the build failed.\n');
   process.exit(1);
@@ -104,5 +148,8 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Preview server running at http://localhost:${PORT}`);
+  const route = process.env.PRIVATE_PREVIEW === '1' ? '/private/' : '/fr/';
+  const url = `http://localhost:${PORT}${route}`;
+  console.log(`Preview server running at ${url}`);
+  openBrowser(url);
 });
