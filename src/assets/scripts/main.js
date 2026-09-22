@@ -1,6 +1,7 @@
 const toggle = document.querySelector('.site-nav__toggle');
 const menu = document.querySelector('.site-nav__list');
 const i18n = window.SiteI18n;
+const publicRoutes = window.SitePublicRoutes;
 
 function t(key, params) {
   return i18n && typeof i18n.t === 'function' ? i18n.t(key, params) : key;
@@ -65,6 +66,14 @@ function initPreviewLocaleToggle() {
 applyStaticI18n();
 applyPreviewLocaleLinks();
 initPreviewLocaleToggle();
+
+document.querySelectorAll('[data-article-slug]').forEach((link) => {
+  if (!publicRoutes || typeof publicRoutes.article !== 'function') return;
+  const locale = i18n && typeof i18n.previewLocale === 'function'
+    ? (i18n.previewLocale() || i18n.defaultLocale || 'fr')
+    : (document.documentElement.lang || 'fr');
+  link.setAttribute('href', publicRoutes.article(locale, link.dataset.articleSlug));
+});
 
 if (toggle && menu) {
   toggle.addEventListener('click', () => {
