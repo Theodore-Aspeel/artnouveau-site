@@ -3504,6 +3504,12 @@ main {
   color: var(--mag-ink);
 }
 
+.mag-private-dossier--bastin .mag-story__meta,
+.mag-private-dossier--bastin .mag-dossier-note {
+  color: #3e3c37 !important;
+  opacity: 1;
+}
+
 .mag-private-dossier__header {
   display: grid;
   grid-template-columns: 1fr minmax(240px, .4fr);
@@ -3545,6 +3551,10 @@ main {
 
 .mag-sequence .mag-private-slot > img {
   background: #2d302d;
+}
+
+.mag-private-dossier:not(.mag-private-dossier--bastin) .mag-private-slot > span {
+  color: #d9d5cb;
 }
 
 .mag-dossier-note {
